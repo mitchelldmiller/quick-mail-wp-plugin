@@ -1,0 +1,146 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Quick Mail v1.00\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-11-30 08:06:21+0000\n"
+"PO-Revision-Date: 2014-11-30 08:18:47+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: CSL v1.x\n"
+"X-Poedit-Language: \n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: \n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: quick-mail.php:32
+#@ quick-mail
+msgid "Error: Incomplete User Profile"
+msgstr "Error: Perfil de Usario Incompleto"
+
+#: quick-mail.php:36
+#@ quick-mail
+msgid "System error"
+msgstr "Error del sistema"
+
+#: quick-mail.php:64
+#@ quick-mail
+msgid "Error moving file to"
+msgstr "Archivo de error mvil a"
+
+#: quick-mail.php:69
+#@ quick-mail
+msgid "File Upload Error"
+msgstr "Error de carga de archivo"
+
+#: quick-mail.php:55
+#@ quick-mail
+msgid "Missing temporary directory"
+msgstr "Falta el directorio temporal"
+
+#: quick-mail.php:74
+#@ quick-mail
+msgid "Error sending mail"
+msgstr "Error al enviar correo"
+
+#: quick-mail.php:77
+#@ quick-mail
+msgid "Message Sent"
+msgstr "Mensaje enviado"
+
+#: quick-mail.php:80
+#@ quick-mail
+msgid "Error Deleting Upload"
+msgstr "Error Eliminar Upload"
+
+#. translators: plugin header field 'Name'
+#: quick-mail.php:0
+#: quick-mail.php:94
+#: quick-mail.php:147
+#@ quick-mail
+msgid "Quick Mail"
+msgstr "Correo Rapido"
+
+#: quick-mail.php:114
+#@ quick-mail
+msgid "To"
+msgstr "Para"
+
+#: quick-mail.php:115
+#@ quick-mail
+msgid "Enter mail address"
+msgstr "Introducir dirección de correo"
+
+#: quick-mail.php:118
+#: quick-mail.php:119
+#@ quick-mail
+msgid "Subject"
+msgstr "Asunto"
+
+#: quick-mail.php:123
+#@ quick-mail
+msgid "Attachment"
+msgstr "Accesorio"
+
+#: quick-mail.php:128
+#@ quick-mail
+msgid "Message"
+msgstr "Mensaje"
+
+#: quick-mail.php:129
+#@ quick-mail
+msgid "Enter your message"
+msgstr "Introduzca su mensaje"
+
+#: quick-mail.php:133
+#@ quick-mail
+msgid "Send Mail"
+msgstr "Enviar Correo"
+
+#. translators: plugin header field 'Author'
+#: quick-mail.php:0
+#@ quick-mail
+msgid "Mitchell D. Miller"
+msgstr "Mitchell D. Miller"
+
+#. translators: plugin header field 'Description'
+#: quick-mail.php:0
+#@ quick-mail
+msgid "send email with attachment from WordPress"
+msgstr "enviar correo electrónico con el accesorio de WordPress"
+
+#. translators: plugin header field 'Version'
+#: quick-mail.php:0
+#@ quick-mail
+msgid "1.00"
+msgstr "1.00"
+
+#: quick-mail.php:110
+#@ quick-mail
+msgid "From"
+msgstr "De"
+
+#: quick-mail.php:28
+#@ quick-mail
+msgid "Uploads are disabled"
+msgstr "Uploads are disabled"
+
+#. translators: plugin header field 'PluginURI'
+#: quick-mail.php:0
+#@ quick-mail
+msgid "http://wheredidmybraingo.com/how-to-send-email-from-wordpress-admin/"
+msgstr "http://wheredidmybraingo.com/how-to-send-email-from-wordpress-admin/"
+
+#. translators: plugin header field 'AuthorURI'
+#: quick-mail.php:0
+#@ quick-mail
+msgid "http://mitchelldmiller.com/"
+msgstr "http://mitchelldmiller.com/"
+

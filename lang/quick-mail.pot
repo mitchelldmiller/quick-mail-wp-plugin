@@ -1,0 +1,116 @@
+# Welcome to Quick Mail Translations
+msgid ""
+msgstr ""
+"Project-Id-Version: Quick Mail v1.00\n"
+"POT-Creation-Date: 2014-11-30 08:06:21+0000\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Mitchell D. Miller http://mitchelldmiller.com/contact/ \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: quick-mail.php:32
+msgid "Error: Incomplete User Profile"
+msgstr ""
+
+#: quick-mail.php:36
+msgid "System error"
+msgstr ""
+
+#: quick-mail.php:64
+msgid "Error moving file to"
+msgstr ""
+
+#: quick-mail.php:69
+msgid "File Upload Error"
+msgstr ""
+
+#: quick-mail.php:55
+msgid "Missing temporary directory"
+msgstr ""
+
+#: quick-mail.php:74
+msgid "Error sending mail"
+msgstr ""
+
+#: quick-mail.php:77
+msgid "Message Sent"
+msgstr ""
+
+#: quick-mail.php:80
+msgid "Error Deleting Upload"
+msgstr ""
+
+#. translators: plugin header field 'Name'
+#: quick-mail.php:0
+#: quick-mail.php:94
+#: quick-mail.php:147
+msgid "Quick Mail"
+msgstr ""
+
+#: quick-mail.php:114
+msgid "To"
+msgstr ""
+
+#: quick-mail.php:115
+msgid "Enter mail address"
+msgstr ""
+
+#: quick-mail.php:118
+#: quick-mail.php:119
+msgid "Subject"
+msgstr ""
+
+#: quick-mail.php:123
+msgid "Attachment"
+msgstr ""
+
+#: quick-mail.php:128
+msgid "Message"
+msgstr ""
+
+#: quick-mail.php:129
+msgid "Enter your message"
+msgstr ""
+
+#: quick-mail.php:133
+msgid "Send Mail"
+msgstr ""
+
+#. translators: plugin header field 'Author'
+#: quick-mail.php:0
+msgid "Mitchell D. Miller"
+msgstr ""
+
+#. translators: plugin header field 'AuthorURI'
+#: quick-mail.php:0
+msgid "http://mitchelldmiller.com/"
+msgstr ""
+
+#. translators: plugin header field 'Description'
+#: quick-mail.php:0
+#@ quick-mail
+msgid "send email with attachment from WordPress"
+msgstr ""
+
+#. translators: plugin header field 'Version'
+#: quick-mail.php:0
+#@ quick-mail
+msgid "1.00"
+msgstr ""
+
+#: quick-mail.php:110
+#@ quick-mail
+msgid "From"
+msgstr ""
+
+#: quick-mail.php:28
+#@ quick-mail
+msgid "Uploads are disabled"
+msgstr ""
+
+#. translators: plugin header field 'PluginURI'
+#: quick-mail.php:0
+#@ quick-mail
+msgid "http://wheredidmybraingo.com/how-to-send-email-from-wordpress-admin/"
+msgstr ""

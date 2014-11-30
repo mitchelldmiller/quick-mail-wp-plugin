@@ -1,0 +1,50 @@
+@CHARSET "UTF-8";
+/* quick-mail.css 1.00 Nov 25 2014 */
+
+.quick-mail-title {
+	font: 24px/32px normal Georgia,serif;
+}
+
+.quick-mail-title:before {
+	content: "\f119";
+	display: inline-block;
+	font: normal 30px/1 'dashicons';
+	vertical-align: top;
+}
+
+table#quick-mail {
+	background-color: #eec;
+	border-radius: 20%;
+	margin:2em;
+	width: 80%;
+}
+
+h2,
+td {
+	color: #000;
+	font-weight: bold;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+}
+
+td:nth-of-type(2) {
+	color: #c33;
+}
+
+td.quick-mail {
+	font: 14px bold Georgia,serif;
+	text-align: right;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+}
+
+td.quick-mail-message {
+	font: 14px bold Georgia,serif;
+	text-align: right;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+	vertical-align: top;
+}
+
+input[type="submit"] {
+	border-radius: 10%;
+	font-weight:bold;
+	padding: 1em;
+}

@@ -1,6 +1,6 @@
 === Quick Mail ===
 Contributors: braniac
-Tags: email, admin, mail
+Tags: email, admin, mail, attachment, Spanish
 Requires at least: 2.9.0
 Tested up to: 4.0
 Stable tag: trunk
@@ -27,7 +27,7 @@ Saves message and subject on form to send repeat messages.
 
 = Who can send mail? =
 
-* Users with [manage_options](http://codex.wordpress.org/Roles_and_Capabilities#manage_options) capability.
+* Users must be able to [publish a post](http://codex.wordpress.org/Roles_and_Capabilities#publish_posts) to send an email.
 
 * User profile must include first name, last name, email address.
 
@@ -37,6 +37,8 @@ Saves message and subject on form to send repeat messages.
 
 * Email addresses cannot be selected or saved. Message and sender are saved for reuse until window is closed.
 
+* See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/how-to-send-email-from-wordpress-admin/) for more info.
+
 == Screenshots ==
 
 1. Data entry form
@@ -45,16 +47,23 @@ Saves message and subject on form to send repeat messages.
 
 == Changelog ==
 
-= 1.0 =
-* First version
+= 1.0.0 =
+* First version on GitHub
+
+= 1.0.1
+* Updated Readme and minor edit
 
 == Upgrade Notice ==
 
-= 1.0 =
-* No upgrades are available
+= 1.0.1 =
+* Updated Readme and minor edit
+
+== License ==
+
+This plugin is free for personal or commercial use. If you like it, you can thank me and support future development with a [small donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY "Donate with PayPal"). Thank you :)
 
 == Translators and Programmers ==
 
-* A .pot file is included for translators.
+* A .pot file is included for translators. See [WordPress Translation Tools](https://make.wordpress.org/polyglots/handbook/tools/) for more info.
 
-* A Spanish translation is included
+* Spanish translation included

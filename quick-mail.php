@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: send email with attachment from WordPress
-Version: 1.00
+Version: 1.0.1
 Author: Mitchell D. Miller
 Author URI: http://mitchelldmiller.com/
 Plugin URI: http://wheredidmybraingo.com/how-to-send-email-from-wordpress-admin/
@@ -102,7 +102,7 @@ function quick_mail_form()
 		<?php if ( ! empty( $you->user_firstname ) && ! empty( $you->user_lastname ) && ! empty( $you->user_email ) ) : ?>
 			<form method="post" enctype="multipart/form-data" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 				<?php wp_nonce_field( 'quick-mail', 'quick-mail', false, true ); ?>
-				<?php if ( ! empty( $no_uploads ) || ! empty( $$_POST['quick-mail-uploads'] ) ) : ?>
+				<?php if ( ! empty( $no_uploads ) || ! empty( $_POST['quick-mail-uploads'] ) ) : ?>
 				<input type="hidden" name="quick-mail-uploads" value="No">
 				<?php endif; ?>
 				<table id="quick-mail" class="form-table">

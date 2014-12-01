@@ -22,12 +22,20 @@ Saves message and subject on form to send repeat messages.
 
 __Who can send mail?__
 
-* Users with [manage_options](http://codex.wordpress.org/Roles_and_Capabilities#manage_options) capability.
+* Users must be able to [publish a post](http://codex.wordpress.org/Roles_and_Capabilities#publish_posts) to send an email.
 
 * User profile must include first name, last name, email address.
+
+* See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/how-to-send-email-from-wordpress-admin/) for more info.
 
 __Limitations__
 
 * HTML and multiple line breaks are removed from message by [sanitize_text_field](http://codex.wordpress.org/Function_Reference/sanitize_text_field).
 
 * Email addresses cannot be selected or saved. Message and sender are saved for reuse until window is closed.
+
+__Translators and Programmers__
+
+* A .pot file is included for translators. See [WordPress Translation Tools](https://make.wordpress.org/polyglots/handbook/tools/) for more info.
+
+* Spanish translation is included

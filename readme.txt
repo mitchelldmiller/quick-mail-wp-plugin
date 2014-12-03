@@ -1,8 +1,8 @@
 === Quick Mail ===
-Contributors: braniac
+Contributors: brainiac
 Tags: email, admin, mail, attachment, Spanish
 Requires at least: 2.9.0
-Tested up to: 4.0
+Tested up to: 4.0.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -57,6 +57,9 @@ Saves message and subject on form to send repeat messages.
 
 = 1.0.1 =
 * Updated Readme and minor edit
+
+= 1.0.2 =
+* add filter to change minimum Role. Props: [@lumpysimon](https://github.com/lumpysimon/)
 
 == License ==
 

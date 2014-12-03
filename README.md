@@ -24,6 +24,8 @@ __Who can send mail?__
 
 * Users must be able to [publish a post](http://codex.wordpress.org/Roles_and_Capabilities#publish_posts) to send an email.
 
+* Minimum role can changed by adding a filter. Props: [@lumpysimon](https://github.com/lumpysimon/)
+
 * User profile must include first name, last name, email address.
 
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/how-to-send-email-from-wordpress-admin/) for more info.

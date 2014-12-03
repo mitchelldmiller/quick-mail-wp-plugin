@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: send email with attachment from WordPress
-Version: 1.0.1
+Version: 1.0.2
 Author: Mitchell D. Miller
 Author URI: http://mitchelldmiller.com/
 Plugin URI: http://wheredidmybraingo.com/how-to-send-email-from-wordpress-admin/

@@ -14,6 +14,10 @@ Options to select a site user as mail recipient.
 
 Saves message and subject on form to send repeat messages.
 
+More info: [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/)
+
+Update info: [Quick Mail 1.1.1 Update](http://wheredidmybraingo.com/quick-mail-1-1-1-update/)
+
 ### Installation ###
 
 1. Download the plugin and unpack in your /wp-content/plugins/ directory

@@ -24,9 +24,9 @@ User options for sending email to site users or others.
 
 Site options for administrators to hide their profile, and limit access to user list.
 
-* See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for more info.
+More info: [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/)
 
-* See [Quick Mail 1.1.1 Update](http://wheredidmybraingo.com/quick-mail-1-1-1-update/) for update info.
+Update info: [Quick Mail 1.1.1 Update](http://wheredidmybraingo.com/quick-mail-1-1-1-update/)
 
 == Installation ==
 
@@ -65,7 +65,6 @@ Site options for administrators to hide their profile, and limit access to user 
 = 1.1.1 =
 * temp upload dir: use [sys_get_temp_dir](http://php.net/manual/en/function.sys-get-temp-dir.php) if [upload_tmp_dir](http://php.net/manual/en/ini.core.php#ini.upload-tmp-dir) is undefined.
 * uninstall deletes plugin options.
-* tested with WordPress 4.1.2
 
 = 1.1.0 =
 * Send email to site users, without typing address.

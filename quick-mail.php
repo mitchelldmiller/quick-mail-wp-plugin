@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: send email with attachment from WordPress
-Version: 1.1.0
+Version: 1.1.1
 Author: Mitchell D. Miller
 Author URI: http://wheredidmybraingo.com/
 Plugin URI: http://wheredidmybraingo.com/wordpress-plugin-quick-mail-send-email-from-wordpress/
@@ -143,23 +143,11 @@ function quick_mail_form() {
 		$message = sanitize_text_field( htmlspecialchars_decode( stripslashes( $_POST['message'] ) ) );
 		if ( empty( $error ) ) {
 			if ( ! empty( $_FILES['attachment'] ) ) {
-				if ( ( 0 == $_FILES['attachment']['error'] ) && ( 0 < $_FILES['attachment']['size'] ) ) {
-					$temp = ini_get('upload_tmp_dir');
-					if ( empty( $temp) ) {
-						if ( is_dir( DIRECTORY_SEPARATOR . 'tmp' )) {
-							$temp = DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR; // Linux, Unix, MacOs
-						}
-						elseif ( false !== getenv( 'TEMP' )) {
-							$temp = getenv( 'TEMP' ); // Windows
-						}
-						elseif ( false !== getenv( 'TMP' )) {
-							$temp = getenv( 'TMP' ); // Windows
-						}
-						else {
-							$error = __( 'Missing temporary directory', 'quick-mail' );
-						}
-					}
-					if ( empty( $error ) ) {
+				if ( ( 0 == $_FILES['attachment']['error'] ) && ( 0 < $_FILES['attachment']['size'] ) && ( 250 > strlen( $_FILES['attachment']['name'] ) ) ) {
+					$temp = qm_get_temp_path(); // @since 1.1.1
+					if ( ! is_dir( $temp ) || ! is_writable( $temp ) ) {
+						$error = __( 'Missing temporary directory', 'quick-mail' );
+					} else {
 						$file = "{$temp}{$_FILES['attachment']['name']}";
 						if ( move_uploaded_file( $_FILES['attachment']['tmp_name'], $file ) ) {
 							array_push( $attachments, $file );
@@ -168,9 +156,12 @@ function quick_mail_form() {
 							$error = __( 'Error moving file to', 'quick-mail' ) . " : {$file}";
 						}
 					}
-				}
-				elseif ( 4 != $_FILES['attachment']['error'] ) {
-					$error = __( 'File Upload Error', 'quick-mail' ); // Error 4 = No file was uploaded
+				} elseif ( 4 != $_FILES['attachment']['error'] ) {
+					if ( 1 == $_FILES['attachment']['error'] || 2 == $_FILES['attachment']['error'] ) {
+						$error = __( 'Uploaded file was too large', 'quick-mail' );
+					} else {
+					$error = __( 'File Upload Error', 'quick-mail' );
+					}
 				}
 			} // end if has attachment
 		} // end if valid email address
@@ -454,9 +445,40 @@ function init_quick_mail_translation() {
 	load_plugin_textdomain( 'quick-mail', '', dirname( __FILE__ ) . '/lang' );
 } // end init_quick_mail_translation
 
+/**
+ *	find system temp path
+ *
+ *	test order: upload_tmp_dir, sys_get_temp_dir()
+ *
+ *	@since 1.1.1
+ *
+ *	@return string path or empty string if not found
+ */
+function qm_get_temp_path()
+{
+	$path = ini_get( 'upload_tmp_dir' );
+	if ( ! empty( $path ) ) {
+		return trailingslashit( $path );
+	}
+
+	return trailingslashit( sys_get_temp_dir() );
+} // end qm_get_temp_path
+
+/**
+ * delete options when plugin is uninstalled
+ *
+ * @since 1.1.1
+ */
+function unload_quick_mail_plugin() {
+	delete_option( 'show_quick_mail_users' );
+	delete_option( 'hide_quick_mail_admin' );
+	delete_option( 'editors_quick_mail_privilege' );
+} // end unload_quick_mail_plugin
+
 add_action( 'admin_init', 'init_quick_mail' );
 add_action( 'admin_menu', 'init_quick_mail_menu' );
 add_action( 'plugins_loaded', 'init_quick_mail_translation' );
+add_action( 'deactivated_plugin', 'unload_quick_mail_plugin', 10, 0 );
 if ( 'Y' == get_option( 'editors_quick_mail_privilege', 'N' ) ) {
 	add_filter('quick_mail_setup_capability', 'let_editor_set_quick_mail_option');
 }

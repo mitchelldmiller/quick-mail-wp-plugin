@@ -3,8 +3,8 @@ Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Tags: email, admin, mail, attachment, Spanish
 Requires at least: 2.9.0
-Tested up to: 4.0.1
-Stable tag: 1.1.0
+Tested up to: 4.1.1
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,11 +16,17 @@ Send a quick email from WordPress Admin. Adds Quick Mail to Tools menu.
 
 Mail is sent with user's name and email. One file can be attached to message.
 
+Recipient domain is verified before mail is sent.
+
 Saves message and subject on form to send repeat messages.
 
 User options for sending email to site users or others.
 
 Site options for administrators to hide their profile, and limit access to user list.
+
+More info: [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/)
+
+Update info: [Quick Mail 1.1.1 Update](http://wheredidmybraingo.com/quick-mail-1-1-1-update/)
 
 == Installation ==
 
@@ -50,13 +56,15 @@ Site options for administrators to hide their profile, and limit access to user 
 
 * Message and sender are saved for reuse until window is closed.
 
-* See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/how-to-send-email-from-wordpress-admin/) for more info.
-
 == Screenshots ==
 
 1. Selecting users on Quick Mail data entry form
 
 == Changelog ==
+
+= 1.1.1 =
+* temp upload dir: use [sys_get_temp_dir](http://php.net/manual/en/function.sys-get-temp-dir.php) if [upload_tmp_dir](http://php.net/manual/en/ini.core.php#ini.upload-tmp-dir) is undefined.
+* uninstall deletes plugin options.
 
 = 1.1.0 =
 * Send email to site users, without typing address.
@@ -73,6 +81,9 @@ Site options for administrators to hide their profile, and limit access to user 
 
 == Upgrade Notice ==
 
+= 1.1.1 =
+* Upgrade if you were unable to upload attachments.
+
 = 1.1.0 =
 * Upgrade recommended.
 * Sends mail to users without typing addresses.
@@ -83,7 +94,7 @@ Site options for administrators to hide their profile, and limit access to user 
 
 == License ==
 
-This plugin is free for personal or commercial use. If you like it, you can thank me and support future development with a [small donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY "Donate with PayPal"). Thank you :)
+This plugin is free for personal or commercial use. You can thank me and support future development with a [small donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY "Donate with PayPal"). Thank you :)
 
 == Translators and Programmers ==
 

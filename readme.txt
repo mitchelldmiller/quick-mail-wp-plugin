@@ -3,7 +3,7 @@ Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Tags: email, admin, mail, attachment, Spanish
 Requires at least: 2.9.0
-Tested up to: 4.1
+Tested up to: 4.1.1
 Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -23,6 +23,10 @@ Saves message and subject on form to send repeat messages.
 User options for sending email to site users or others.
 
 Site options for administrators to hide their profile, and limit access to user list.
+
+* See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for more info.
+
+* See [Quick Mail 1.1.1 Update](http://wheredidmybraingo.com/quick-mail-1-1-1-update/) for update info.
 
 == Installation ==
 
@@ -51,8 +55,6 @@ Site options for administrators to hide their profile, and limit access to user 
 * One recipient and one attachment per email.
 
 * Message and sender are saved for reuse until window is closed.
-
-* See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for more info.
 
 == Screenshots ==
 

@@ -124,3 +124,4 @@ This plugin is free for personal or commercial use. You can thank me and support
 
 * Includes Spanish translation.
 
+

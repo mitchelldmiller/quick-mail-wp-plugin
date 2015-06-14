@@ -1,10 +1,10 @@
 # Welcome to Quick Mail Translations
 msgid ""
 msgstr ""
-"Project-Id-Version: Quick Mail v1.1.1\n"
+"Project-Id-Version: Quick Mail v1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-11-30 08:06:21+0000\n"
-"PO-Revision-Date: 2015-03-08 15:47:26+0000\n"
+"PO-Revision-Date: 2015-05-25 13:03:26+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgid "Error: Incomplete User Profile"
 msgstr ""
 
 #: quick-mail.php:221
-msgid "System error"
+msgid "Login Expired. Refresh Page."
 msgstr ""
 
 #: quick-mail.php:247
@@ -196,7 +196,7 @@ msgstr ""
 
 #. translators: plugin header field 'Version'
 #: quick-mail.php:0
-msgid "1.1.2"
+msgid "1.2.0"
 msgstr ""
 
 #: quick-mail.php:311

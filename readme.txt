@@ -1,25 +1,42 @@
 === Quick Mail ===
-Contributors: braniac
+Contributors: brainiac
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Tags: email, admin, mail, attachment, Spanish
 Requires at least: 2.9.0
-Tested up to: 4.0
-Stable tag: trunk
+Tested up to: 4.2.2
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Adds "Quick Mail" to Tools. Sends email with optional file attachment from logged-in user's credentials. Fast, simple. Spanish translation.
+Adds "Quick Mail" to Tools. Send text or html email with file attachment from user's credentials. Fast, simple. Spanish translation.
 
 == Description ==
 
+>Quick Mail is the easiest way to send an email with an attachment from to another WordPress user on your site. Quick Mail 1.2.0 is the easiest way to send a complete Web page, or HTML snippet from WordPress.
+
 Send a quick email from WordPress Admin. Adds Quick Mail to Tools menu.
 
-No options. Mail is sent with user's name and email. One file can be attached to message.
+Mail is sent with user's name and email. One file can be attached to message.
+
+Sends text or html mails. Content type is determined from message.
+
+Recipient domain is verified before mail is sent.
 
 Saves message and subject on form to send repeat messages.
 
+Saves last five email addresses entered on form.
+
+User options for sending email to site users or others.
+
+Site options for administrators to hide their profile, and limit access to user list.
+
+* See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
+
+* See [Quick Mail 1.2.0 Sends HTML Mail](http://wheredidmybraingo.com/quick-mail-1-2-0-sends-html-mail/) for update info.
+
 == Installation ==
 
-1. Download the plugin and unpack in your /wp-content/plugins/ directory
+1. Download the plugin and unpack in your /wp-content/plugins directory
 
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
@@ -27,43 +44,83 @@ Saves message and subject on form to send repeat messages.
 
 = Who can send mail? =
 
-* Users must be able to [publish a post](http://codex.wordpress.org/Roles_and_Capabilities#publish_posts) to send an email.
+* Users must be able to [publish a post](http://codex.wordpress.org/Roles_and_Capabilities#publish_posts) to send an email. Minimum permission can be changed with a filter.
 
 * User profile must include first name, last name, email address.
 
+= Selecting Recipients =
+
+* Options to send mail to any user, or limit to users with first and last names on their profile.
+
+* Users need permission to [list users](http://codex.wordpress.org/Roles_and_Capabilities#list_users), to view user list or change options. Minimum permission can be changed with an option or filter.
+
 = Limitations =
 
-* HTML and multiple line breaks are removed from message by [sanitize_text_field](http://codex.wordpress.org/Function_Reference/sanitize_text_field).
+* One recipient and one attachment per email.
 
-* Email addresses cannot be selected or saved. Message and sender are saved for reuse until window is closed.
-
-* See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/how-to-send-email-from-wordpress-admin/) for more info.
+* Up to 5 manually entered recipients are saved in HTML Storage.
 
 == Screenshots ==
 
-1. Data entry form
+1. Selecting users on Quick Mail data entry form
 
-2. **Quick Mail** on Tools
+2. Selecting recent email addresses
 
 == Changelog ==
 
-= 1.0.0 =
-* First version on GitHub
+= 1.2.0 =
+* Send HTML mail.
+* Message text is not filtered.
+* Manually entered email addresses are saved.
+* Improved install / uninstall.
+* Default options are "show admin" and "show all users." Works on sites with one user.
+* Moved plugin functions into a class.
+* Tested with WordPress 4.2.2
 
-= 1.0.1
-* Updated Readme and minor edit
+= 1.1.1 =
+* temp upload dir: use [sys_get_temp_dir](http://php.net/manual/en/function.sys-get-temp-dir.php) if [upload_tmp_dir](http://php.net/manual/en/ini.core.php#ini.upload-tmp-dir) is undefined.
+* uninstall deletes plugin options.
+* tested with WordPress 4.1.2
+
+= 1.1.0 =
+* Send email to site users, without typing address.
+* Limit access to user list and administrator profile.
+* Verify recipient domain on manual entry.
+* Removed form background.
+
+= 1.0.2 =
+* Minimum role can changed by adding a filter. Props: [@lumpysimon](https://github.com/lumpysimon/)
+* Fixed typos.
+
+= 1.0.1 =
+* First version on WordPress Plugin Repository
 
 == Upgrade Notice ==
 
-= 1.0.1 =
-* Updated Readme and minor edit
+= 1.2.0 =
+* Upgrade recommended.
+* Send HTML mail.
+* Saves five manually entered email addresses.
+* Improved install / uninstall.
+
+= 1.1.1 =
+* Upgrade if you were unable to upload attachments.
+
+= 1.1.0 =
+* Upgrade recommended.
+* Sends mail to users without typing addresses.
+* Validates email domain on manually entered email address.
+
+= 1.0.2 =
+* Upgrade if you want to add a filter to change the minimum role.
 
 == License ==
 
-This plugin is free for personal or commercial use. If you like it, you can thank me and support future development with a [small donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY "Donate with PayPal"). Thank you :)
+This plugin is free for personal or commercial use. You can thank me and support future development with a [small donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY "Donate with PayPal"). Thank you :)
 
 == Translators and Programmers ==
 
 * A .pot file is included for translators. See [WordPress Translation Tools](https://make.wordpress.org/polyglots/handbook/tools/) for more info.
 
-* Spanish translation included
+* Includes Spanish translation.
+

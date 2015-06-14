@@ -1,16 +1,22 @@
 quick-mail-wp-plugin
 ====================
 
-Quick Mail WordPress plugin sends email with attachment from WordPress admin.
+Adds "Quick Mail" to Tools menu. Send text or html email with file attachment from user's credentials. Fast, simple. Spanish translation.
 
 Description
 -----------
 
-Send a quick email from WordPress Admin. Adds Quick Mail to WordPress Tools menu.
+>Quick Mail is the easiest way to send an email with an attachment from to another WordPress user on your site. Quick Mail 1.2.0 is the easiest way to send a complete Web page, or HTML snippet from WordPress.
 
-No options. Mail is sent with user's name and email. One file can be attached to message.
+Mail is sent with user's name and email. One file can be attached to message.
+
+Options to select a site user as mail recipient.
 
 Saves message and subject on form to send repeat messages.
+
+Recipient domain is verified before mail is sent.
+
+Site options for administrators to hide their profile, and limit access to user list.
 
 ### Installation ###
 
@@ -26,13 +32,15 @@ __Who can send mail?__
 
 * User profile must include first name, last name, email address.
 
-* See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/how-to-send-email-from-wordpress-admin/) for more info.
+* Overview: [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/how-to-send-email-from-wordpress-admin/).
+
+* Current Version: [Quick Mail 1.2.0 Sends HTML Mail](http://wheredidmybraingo.com/quick-mail-1-2-0-sends-html-mail/) 
 
 __Limitations__
 
-* HTML and multiple line breaks are removed from message by [sanitize_text_field](http://codex.wordpress.org/Function_Reference/sanitize_text_field).
+* One recipient and one attachment per email.
 
-* Email addresses cannot be selected or saved. Message and sender are saved for reuse until window is closed.
+* Up to 5 manually entered recipients are saved in HTML Storage.
 
 __Translators and Programmers__
 

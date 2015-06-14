@@ -1,5 +1,11 @@
 @CHARSET "UTF-8";
-/* quick-mail.css 1.1.0A */
+/* Welcome to quick-mail.css 1.1.4 */
+
+#qm_error {
+	color: #c33;
+	font: 14px bold Georgia,serif;
+	text-align: center;
+}
 
 .quick-mail-title {
 	font: 24px/32px normal Georgia,serif;
@@ -14,12 +20,11 @@
 
 table#quick-mail {
 	background-color: transparent;
-	margin:2em;
+	margin: 2em;
 	width: 80%;
 }
 
-h2,
-td {
+h2, td {
 	color: #000;
 	font-weight: bold;
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
@@ -59,8 +64,14 @@ option {
 	color: #000;
 }
 
+option:first-child {
+	font-weight: bold;
+	text-align: center;
+}
+
 optgroup {
 	background-color: #eee;
 	color: #000;
 	font-family: Georgia, serif;
 }
+

@@ -3,30 +3,36 @@ Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Tags: email, admin, mail, attachment, Spanish
 Requires at least: 2.9.0
-Tested up to: 4.1.1
-Stable tag: 1.1.1
+Tested up to: 4.2.2
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Adds "Quick Mail" to Tools. Send email with file attachment using logged-in user's credentials. Fast, simple. Spanish translation.
+Adds "Quick Mail" to Tools. Send text or html email with file attachment from user's credentials. Fast, simple. Spanish translation.
 
 == Description ==
+
+>Quick Mail is the easiest way to send an email with an attachment from to another WordPress user on your site. Quick Mail 1.2.0 is the easiest way to send a complete Web page, or HTML snippet from WordPress.
 
 Send a quick email from WordPress Admin. Adds Quick Mail to Tools menu.
 
 Mail is sent with user's name and email. One file can be attached to message.
 
+Sends text or html mails. Content type is determined from message.
+
 Recipient domain is verified before mail is sent.
 
 Saves message and subject on form to send repeat messages.
+
+Saves last five email addresses entered on form.
 
 User options for sending email to site users or others.
 
 Site options for administrators to hide their profile, and limit access to user list.
 
-More info: [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/)
+* See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-Update info: [Quick Mail 1.1.1 Update](http://wheredidmybraingo.com/quick-mail-1-1-1-update/)
+* See [Quick Mail 1.2.0 Sends HTML Mail](http://wheredidmybraingo.com/quick-mail-1-2-0-sends-html-mail/) for update info.
 
 == Installation ==
 
@@ -50,21 +56,31 @@ Update info: [Quick Mail 1.1.1 Update](http://wheredidmybraingo.com/quick-mail-1
 
 = Limitations =
 
-* HTML and multiple line breaks are removed from message by [sanitize_text_field](http://codex.wordpress.org/Function_Reference/sanitize_text_field).
-
 * One recipient and one attachment per email.
 
-* Message and sender are saved for reuse until window is closed.
+* Up to 5 manually entered recipients are saved in HTML Storage.
 
 == Screenshots ==
 
 1. Selecting users on Quick Mail data entry form
 
+2. Selecting recent email addresses
+
 == Changelog ==
+
+= 1.2.0 =
+* Send HTML mail.
+* Message text is not filtered.
+* Manually entered email addresses are saved.
+* Improved install / uninstall.
+* Default options are "show admin" and "show all users." Works on sites with one user.
+* Moved plugin functions into a class.
+* Tested with WordPress 4.2.2
 
 = 1.1.1 =
 * temp upload dir: use [sys_get_temp_dir](http://php.net/manual/en/function.sys-get-temp-dir.php) if [upload_tmp_dir](http://php.net/manual/en/ini.core.php#ini.upload-tmp-dir) is undefined.
 * uninstall deletes plugin options.
+* tested with WordPress 4.1.2
 
 = 1.1.0 =
 * Send email to site users, without typing address.
@@ -80,6 +96,12 @@ Update info: [Quick Mail 1.1.1 Update](http://wheredidmybraingo.com/quick-mail-1
 * First version on WordPress Plugin Repository
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+* Upgrade recommended.
+* Send HTML mail.
+* Saves five manually entered email addresses.
+* Improved install / uninstall.
 
 = 1.1.1 =
 * Upgrade if you were unable to upload attachments.
@@ -101,3 +123,5 @@ This plugin is free for personal or commercial use. You can thank me and support
 * A .pot file is included for translators. See [WordPress Translation Tools](https://make.wordpress.org/polyglots/handbook/tools/) for more info.
 
 * Includes Spanish translation.
+
+

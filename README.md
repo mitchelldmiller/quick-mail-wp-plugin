@@ -6,7 +6,7 @@ Adds "Quick Mail" to Tools menu. Send text or html email with file attachment fr
 Description
 -----------
 
->Quick Mail is the easiest way to send an email with an attachment from to another WordPress user on your site. Quick Mail 1.2.0 is the easiest way to send a complete Web page, or HTML snippet from WordPress.
+>Quick Mail is the easiest way to send an email with an attachment to another WordPress user on your site.
 
 Mail is sent with user's name and email. One file can be attached to message.
 

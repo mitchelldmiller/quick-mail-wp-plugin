@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: email, admin, mail, attachment, Spanish
 Requires at least: 2.9.0
 Tested up to: 4.2.2
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Adds "Quick Mail" to Tools. Send text or html email with file attachment from us
 
 == Description ==
 
->Quick Mail is the easiest way to send an email with an attachment to another WordPress user on your site.
+>Quick Mail is the easiest way to send an email with an attachment to a WordPress user on your site. 
 
 Send a quick email from WordPress Admin. Adds Quick Mail to Tools menu.
 
@@ -68,6 +68,12 @@ Site options for administrators to hide their profile, and limit access to user 
 
 == Changelog ==
 
+= 1.2.1 =
+* Maintenance release.
+* Fixed error flash when mail is loaded.
+* Fixed capability check for admin.
+* Fixed nested quotes on form.
+
 = 1.2.0 =
 * Send HTML mail.
 * Message text is not filtered.
@@ -96,6 +102,10 @@ Site options for administrators to hide their profile, and limit access to user 
 * First version on WordPress Plugin Repository
 
 == Upgrade Notice ==
+
+= 1.2.1 =
+* Upgrade recommended.
+* Fixed three bugs.
 
 = 1.2.0 =
 * Upgrade recommended.

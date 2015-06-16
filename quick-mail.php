@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Adds Quick Mail to Tools menu. Send an email with attachment using a list of users or enter a name.
-Version: 1.2.0
+Version: 1.2.1
 Author: Mitchell D. Miller
 Author URI: http://wheredidmybraingo.com/about/
 Plugin URI: http://wheredidmybraingo.com/quick-mail-1-2-0-sends-html-mail/
@@ -434,7 +434,7 @@ class QuickMail {
 		$check_editor = ('Y' == get_option( 'editors_quick_mail_privilege', 'N' ) ) ? 'checked="checked"' : '';
 ?>
 <h2 class="quick-mail-title"><?php _e( 'Quick Mail Options', 'quick-mail' ); ?></h2>
-<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
+<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 <table class="form-table">
 <tr><th class="recipients"><?php _e( 'User Display', 'quick-mail' ); ?></th></tr>
 <tr><td id="qm_saved"></td></tr>
@@ -506,8 +506,10 @@ echo ' ', $names, ' ', __( 'matching users', 'quick-mail' );
 	 * @param int $id User ID.
 	 */
 	protected function qm_is_admin($id) {
+		global $table_prefix;
 		$meta = get_user_meta($id);
-		$cap = unserialize( $meta['wp_capabilities'][0] );
+		$field = $table_prefix . 'capabilities';
+		$cap = unserialize( $meta[$field][0] );
 		return isset( $cap['administrator'] );
 	} // end qm_is_admin
 

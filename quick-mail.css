@@ -1,5 +1,8 @@
 @CHARSET "UTF-8";
-/* Welcome to quick-mail.css 1.1.4 */
+/* Welcome to quick-mail.css 1.1.5 */
+#qm-validate {
+	display: none;
+}
 
 #qm_error {
 	color: #c33;
@@ -74,4 +77,3 @@ optgroup {
 	color: #000;
 	font-family: Georgia, serif;
 }
-

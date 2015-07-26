@@ -34,7 +34,7 @@ __Who can send mail?__
 
 * Overview: [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/how-to-send-email-from-wordpress-admin/).
 
-* Current Version: [Quick Mail 1.2.0 Sends HTML Mail](http://wheredidmybraingo.com/quick-mail-1-2-0-sends-html-mail/) 
+* Current Version: [Get Quick Mail 1.2.2](http://wheredidmybraingo.com/get-quick-mail-1-2-2/) for update info.
 
 __Limitations__
 

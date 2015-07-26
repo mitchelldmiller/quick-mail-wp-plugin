@@ -2,10 +2,10 @@
 /*
 Plugin Name: Quick Mail
 Description: Adds Quick Mail to Tools menu. Send an email with attachment using a list of users or enter a name.
-Version: 1.2.1
+Version: 1.2.2
 Author: Mitchell D. Miller
 Author URI: http://wheredidmybraingo.com/about/
-Plugin URI: http://wheredidmybraingo.com/quick-mail-1-2-0-sends-html-mail/
+Plugin URI: http://wheredidmybraingo.com/get-quick-mail-1-2-2/
 Text Domain: quick-mail
 Domain Path: /lang
 */
@@ -320,13 +320,13 @@ class QuickMail {
 	?>
 		<h2 class="quick-mail-title"><?php _e( 'Quick Mail', 'quick-mail' ); ?></h2>
 			<?php if ( ! empty( $no_uploads ) ) : ?>
-				<div class="update-nag"><p><?php echo $no_uploads; ?></p></div>
+				<div class="update-nag notice is-dismissible"><p><?php echo $no_uploads; ?></p></div>
 			<?php elseif ( ! empty( $success ) ) : ?>
-				<div id="success" class="updated"><p><?php echo $success; ?></p></div>
+				<div id="success" class="updated notice is-dismissible"><p><?php echo $success; ?></p></div>
 			<?php elseif ( ! empty( $error ) ) : ?>
-				<div id="qm_error" class="error"><p><?php echo $error; ?></p></div>
+				<div id="qm_error" class="error notice is-dismissible"><p><?php echo $error; ?></p></div>
 			<?php endif; ?>
-				<div id="qm-validate" class="error"><p><?php _e( 'Invalid mail address', 'quick-mail' ); ?></p></div>
+				<div id="qm-validate" class="error notice is-dismissible"><p><?php _e( 'Invalid mail address', 'quick-mail' ); ?></p></div>
 			<?php if ( ! empty( $you->user_firstname ) && ! empty( $you->user_lastname ) && ! empty( $you->user_email ) ) : ?>
 				<form name="Hello" id="Hello" method="post" enctype="multipart/form-data" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 					<?php wp_nonce_field( 'quick-mail', 'quick-mail', false, true ); ?>

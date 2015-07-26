@@ -1,4 +1,4 @@
-// Quick Mail: quick-mail.js 1.21
+// Quick Mail: quick-mail.js 1.22
 
 function setInfo(item, info)
 {
@@ -165,12 +165,6 @@ jQuery(document).ready(function() {
 			return false;
 		}
 	});
-	if (jQuery('#success').length) {
-		jQuery('#success').fadeOut( 10000, function() {});
-	}
-	if (jQuery('#qm_error').length) {
-		jQuery('#qm_error').fadeOut( 10000, function() {	});
-	}
 
 	jQuery('#email').blur(function() {
 		jQuery('#qm-validate').hide();

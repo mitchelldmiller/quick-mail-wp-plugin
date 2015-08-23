@@ -3,8 +3,8 @@ Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Tags: email, admin, mail, attachment, Spanish
 Requires at least: 4.2
-Tested up to: 4.2.3
-Stable tag: 1.2.2
+Tested up to: 4.3
+Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Adds "Quick Mail" to Tools. Send text or html email with file attachment from us
 
 == Description ==
 
->Quick Mail is the easiest way to send an email with an attachment to a WordPress user on your site. 
+>Quick Mail is the easiest way to send an email with an attachment to a WordPress user on your site.
 
 Send a quick email from WordPress Admin. Adds Quick Mail to Tools menu.
 
@@ -29,10 +29,6 @@ Saves last five email addresses entered on form.
 User options for sending email to site users or others.
 
 Site options for administrators to hide their profile, and limit access to user list.
-
-* See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
-
-* See [Get Quick Mail 1.2.2](http://wheredidmybraingo.com/get-quick-mail-1-2-2/) for update info.
 
 == Installation ==
 
@@ -60,6 +56,12 @@ Site options for administrators to hide their profile, and limit access to user 
 
 * Up to 5 manually entered recipients are saved in HTML Storage.
 
+= Tech Info =
+
+* Introduction: [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/)
+
+* Update info: [Quick Mail 1.2.3 Update for WordPress 4.3](http://wheredidmybraingo.com/quick-mail-1-2-3-update-for-wordpress-4-3/)
+
 == Screenshots ==
 
 1. Selecting users on Quick Mail data entry form
@@ -68,9 +70,12 @@ Site options for administrators to hide their profile, and limit access to user 
 
 == Changelog ==
 
+= 1.2.3 =
+* Requires WordPress 4.2 or greater for dismissible messages.
+* Tested with WordPress 4.3
+
 = 1.2.2 =
 * Status messages must be dismissed by user. Messages vanished after 4 seconds in previous versions.
-* Improved data entry on phones.
 * Tested with WordPress 4.23
 
 = 1.2.1 =
@@ -108,10 +113,13 @@ Site options for administrators to hide their profile, and limit access to user 
 
 == Upgrade Notice ==
 
+= 1.2.3 =
+* Upgrade recommended.
+* Complies with WordPress 4.3 plugin changes.
+
 = 1.2.2 =
 * Upgrade recommended.
-* Replaced vanishing notices with dismissible notices.
-* Improved data entry on phones.
+* Improved status messages.
 
 = 1.2.1 =
 * Upgrade recommended.
@@ -136,7 +144,7 @@ Site options for administrators to hide their profile, and limit access to user 
 
 == License ==
 
-This plugin is free for personal or commercial use. You can thank me and support future development with a [small donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY "Donate with PayPal"). Thank you :)
+This plugin is free for personal or commercial use. You can support future development with a [small donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY "Donate with PayPal"). Thank you :)
 
 == Translators and Programmers ==
 

@@ -1,10 +1,7 @@
-# Welcome to Quick Mail Translations
-msgid ""
-msgstr ""
-"Project-Id-Version: Quick Mail v1.2.1\n"
+"Project-Id-Version: Quick Mail v1.2.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-11-30 08:06:21+0000\n"
-"PO-Revision-Date: 2015-06-15 16:46:00+0000\n"
+"PO-Revision-Date: 2015-08-23 01:29:42+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,72 +18,73 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Textdomain-Support: yes"
 
-#: quick-mail.php:217
+#: quick-mail.php:274
 msgid "Error: Incomplete User Profile"
 msgstr ""
 
-#: quick-mail.php:221
+#: quick-mail.php:278
 msgid "Login Expired. Refresh Page."
 msgstr ""
 
-#: quick-mail.php:247
+#: quick-mail.php:315
 msgid "Error moving file to"
 msgstr ""
 
-#: quick-mail.php:254
+#: quick-mail.php:322
 msgid "File Upload Error"
 msgstr ""
 
-#: quick-mail.php:240
+#: quick-mail.php:308
 msgid "Missing temporary directory"
 msgstr ""
 
-#: quick-mail.php:262
+#: quick-mail.php:330
 msgid "Error sending mail"
 msgstr ""
 
-#: quick-mail.php:265
+#: quick-mail.php:333
 msgid "Message Sent"
 msgstr ""
 
-#: quick-mail.php:268
+#: quick-mail.php:336
 msgid "Error Deleting Upload"
 msgstr ""
 
 #. translators: plugin header field 'Name'
 #: quick-mail.php:0
-#: quick-mail.php:284
-#: quick-mail.php:490
+#: quick-mail.php:352
+#: quick-mail.php:559
 msgid "Quick Mail"
 msgstr ""
 
-#: quick-mail.php:305
+#: quick-mail.php:373
 msgid "To"
 msgstr ""
 
-#: quick-mail.php:125
-#: quick-mail.php:157
+#: quick-mail.php:182
+#: quick-mail.php:214
 msgid "Enter mail address"
 msgstr ""
 
-#: quick-mail.php:316
-#: quick-mail.php:317
+#: quick-mail.php:384
+#: quick-mail.php:385
 msgid "Subject"
 msgstr ""
 
-#: quick-mail.php:321
+#: quick-mail.php:389
 msgid "Attachment"
 msgstr ""
 
-#: quick-mail.php:326
+#: quick-mail.php:394
 msgid "Message"
 msgstr ""
 
-#: quick-mail.php:327
+#: quick-mail.php:293
+#: quick-mail.php:395
 msgid "Enter your message"
 msgstr ""
 
-#: quick-mail.php:331
+#: quick-mail.php:399
 msgid "Send Mail"
 msgstr ""
 
@@ -95,97 +93,87 @@ msgstr ""
 msgid "Mitchell D. Miller"
 msgstr ""
 
-#: quick-mail.php:301
+#: quick-mail.php:369
 msgid "From"
 msgstr ""
 
-#: quick-mail.php:213
+#: quick-mail.php:270
 msgid "Uploads are disabled"
 msgstr ""
 
-#. translators: plugin header field 'PluginURI'
-#: quick-mail.php:0
-msgid "http://wheredidmybraingo.com/wordpress-plugin-quick-mail-send-email-from-wordpress/"
-msgstr ""
-
-#. translators: plugin header field 'AuthorURI'
-#: quick-mail.php:0
-msgid "http://wheredidmybraingo.com/"
-msgstr ""
-
-#: quick-mail.php:351
-#: quick-mail.php:361
-#: quick-mail.php:371
+#: quick-mail.php:419
+#: quick-mail.php:429
+#: quick-mail.php:439
 msgid "Option Updated"
 msgstr ""
 
-#: quick-mail.php:399
+#: quick-mail.php:467
 msgid "Quick Mail Options"
 msgstr ""
 
-#: quick-mail.php:403
+#: quick-mail.php:470
 msgid "User Display"
 msgstr ""
 
-#: quick-mail.php:406
+#: quick-mail.php:473
 msgid "Show All Users"
 msgstr ""
 
-#: quick-mail.php:413
+#: quick-mail.php:480
 msgid "Show Users with Names"
 msgstr ""
 
-#: quick-mail.php:421
+#: quick-mail.php:488
 msgid "Do Not Show Users"
 msgstr ""
 
-#: quick-mail.php:438
+#: quick-mail.php:505
 msgid "Save Options"
 msgstr ""
 
-#: quick-mail.php:229
-#: quick-mail.php:292
+#: quick-mail.php:286
+#: quick-mail.php:360
 msgid "Invalid mail address"
 msgstr ""
 
-#: quick-mail.php:407
+#: quick-mail.php:474
 msgid "Show all users sorted by nickname."
 msgstr ""
 
-#: quick-mail.php:408
-#: quick-mail.php:415
+#: quick-mail.php:475
+#: quick-mail.php:482
 msgid "matching users"
 msgstr ""
 
-#: quick-mail.php:414
+#: quick-mail.php:481
 msgid "Show users with names, sorted by last name."
 msgstr ""
 
-#: quick-mail.php:422
+#: quick-mail.php:489
 msgid "Enter address to send mail."
 msgstr ""
 
-#: quick-mail.php:426
+#: quick-mail.php:493
 msgid "Administration"
 msgstr ""
 
-#: quick-mail.php:428
+#: quick-mail.php:495
 msgid "Hide Administrator profiles"
 msgstr ""
 
-#: quick-mail.php:429
+#: quick-mail.php:496
 msgid "User list will not include administrator profiles."
 msgstr ""
 
-#: quick-mail.php:433
+#: quick-mail.php:500
 msgid "Grant Editors access to user list"
 msgstr ""
 
-#: quick-mail.php:434
+#: quick-mail.php:501
 msgid "Modify permission to let editors see user list."
 msgstr ""
 
-#: quick-mail.php:252
+#: quick-mail.php:320
 msgid "Uploaded file was too large"
 msgstr ""
 
@@ -194,15 +182,37 @@ msgstr ""
 msgid "Adds Quick Mail to Tools menu. Send an email with attachment using a list of users or enter a name."
 msgstr ""
 
-#. translators: plugin header field 'Version'
-#: quick-mail.php:0
-msgid "1.2.1"
-msgstr ""
-
-#: quick-mail.php:311
+#: quick-mail.php:379
 msgid "Recent"
 msgstr ""
 
-#: quick-mail.php:422
+#: quick-mail.php:489
 msgid "Saves last five addresses."
+msgstr ""
+
+#. translators: plugin header field 'AuthorURI'
+#: quick-mail.php:0
+msgid "http://wheredidmybraingo.com/about/"
+msgstr ""
+
+#. translators: plugin header field 'Version'
+#: quick-mail.php:0
+msgid "1.2.3"
+msgstr ""
+
+#: quick-mail.php:113
+msgid "Quick Mail requires WordPress 4.2 or greater."
+msgstr ""
+
+#: quick-mail.php:113
+msgid "Please upgrade WordPress to use Quick Mail."
+msgstr ""
+
+#: quick-mail.php:113
+msgid "Quick Mail Cannot Be Installed"
+msgstr ""
+
+#. translators: plugin header field 'PluginURI'
+#: quick-mail.php:0
+msgid "http://wheredidmybraingo.com/quick-mail-1-2-3-update-for-wordpress-4-3/"
 msgstr ""

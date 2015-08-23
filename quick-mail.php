@@ -2,10 +2,10 @@
 /*
 Plugin Name: Quick Mail
 Description: Adds Quick Mail to Tools menu. Send an email with attachment using a list of users or enter a name.
-Version: 1.2.2
+Version: 1.2.3
 Author: Mitchell D. Miller
 Author URI: http://wheredidmybraingo.com/about/
-Plugin URI: http://wheredidmybraingo.com/get-quick-mail-1-2-2/
+Plugin URI: http://wheredidmybraingo.com/quick-mail-1-2-3-update-for-wordpress-4-3/
 Text Domain: quick-mail
 Domain Path: /lang
 */
@@ -68,13 +68,14 @@ class QuickMail {
 	 * @since 1.2.0
 	 */
 	public function __construct() {
-		add_action('admin_init', array($this, 'add_email_script') );
-		add_action( 'admin_menu', array($this, 'init_quick_mail_menu') );
-		add_action( 'plugins_loaded', array($this, 'init_quick_mail_translation') );
+		register_activation_hook( __FILE__, array($this, 'check_wp_version' ) );
+		add_action('admin_init', array($this, 'add_email_script' ) );
+		add_action( 'admin_menu', array($this, 'init_quick_mail_menu' ) );
+		add_action( 'plugins_loaded', array($this, 'init_quick_mail_translation' ) );
 		// add options
 		add_action( 'activated_plugin', array($this, 'install_quick_mail'), 10, 0 );
 
-		add_action( 'deactivated_plugin', array($this, 'unload_quick_mail_plugin'), 10, 0 );
+		add_action( 'deactivated_plugin', array($this, 'unload_quick_mail_plugin') , 10, 0 );
 		if ( 'Y' == get_option( 'editors_quick_mail_privilege', 'N' ) ) {
 			add_filter('quick_mail_setup_capability', array($this, 'let_editor_set_quick_mail_option') );
 		}
@@ -82,6 +83,36 @@ class QuickMail {
 		add_filter('wp_mail_content_type', array($this, 'set_mail_content_type') );
 		// wp_mail_content_type
 	} // end constructor
+
+	/**
+	 * Check for minimum WordPress version before installation
+	 *
+	 * @since 1.2.3
+	 */
+	function check_wp_version()
+	{
+		global $wp_version;
+		$min_version = version_compare( $wp_version, '2.9', 'lt' ) ? '9999' : apply_filters( 'quick_mail_version', '4.2' );
+		/**
+		 * Minimum version can be reduced with a filter.
+		 * Quick Mail will work on WordPress 2.9 and up, except for
+		 * dismissible boxes. See link below for more info.
+		 *
+		 * @since 1.2.3
+		 *
+		 * @var string
+		 *
+		 * @link
+		 * TODO add link
+		 */
+
+		if (version_compare( $wp_version, $min_version, '<' ) )
+		{
+			deactivate_plugins( basename( __FILE__ ) );
+			wp_die('<span style="font-size:120%">'.
+					__('Quick Mail requires WordPress 4.2 or greater.', quick-mail) . '</span><br><br>' . __('Please upgrade WordPress to use Quick Mail.', 'quick-mail'), __('Quick Mail Cannot Be Installed', quick-mail),  array( 'response' => 200, 'back_link' => true ) );
+		} // end if
+	} // end check_wp_version
 
 	/**
 	 * add options after Quick Mail is installed
@@ -318,7 +349,7 @@ class QuickMail {
 		$link = plugins_url('/qm_validate.php', __FILE__);
 		echo "<script>var qm_validate = '{$link}';</script>";
 	?>
-		<h2 class="quick-mail-title"><?php _e( 'Quick Mail', 'quick-mail' ); ?></h2>
+		<h1 id="quick-mail-title" class="quick-mail-title"><?php _e( 'Quick Mail', 'quick-mail' ); ?></h1>
 			<?php if ( ! empty( $no_uploads ) ) : ?>
 				<div class="update-nag notice is-dismissible"><p><?php echo $no_uploads; ?></p></div>
 			<?php elseif ( ! empty( $success ) ) : ?>
@@ -433,7 +464,7 @@ class QuickMail {
 		$check_admin = ('Y' == get_option( 'hide_quick_mail_admin', 'N' ) ) ? 'checked="checked"' : '';
 		$check_editor = ('Y' == get_option( 'editors_quick_mail_privilege', 'N' ) ) ? 'checked="checked"' : '';
 ?>
-<h2 class="quick-mail-title"><?php _e( 'Quick Mail Options', 'quick-mail' ); ?></h2>
+<h1 id="quick-mail-title" class="quick-mail-title"><?php _e( 'Quick Mail Options', 'quick-mail' ); ?></h1>
 <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 <table class="form-table">
 <tr><th class="recipients"><?php _e( 'User Display', 'quick-mail' ); ?></th></tr>
@@ -529,14 +560,15 @@ echo ' ', $names, ' ', __( 'matching users', 'quick-mail' );
 		$page = add_submenu_page( 'tools.php', $title, $title,
 		apply_filters( 'quick_mail_user_capability', 'publish_posts' ), 'quick_mail_form', array($this, 'quick_mail_form') );
 		add_action( 'admin_print_styles-' . $page, array($this, 'init_quick_mail_style') );
-		add_options_page( 'Quick Mail Options', $title, apply_filters( 'quick_mail_setup_capability', 'list_users' ), 'quick_mail_options', array($this, 'quick_mail_options') );
+		$page = add_options_page( 'Quick Mail Options', $title, apply_filters( 'quick_mail_setup_capability', 'list_users' ), 'quick_mail_options', array($this, 'quick_mail_options') );
+		add_action( 'admin_print_styles-' . $page, array($this, 'init_quick_mail_style') );
 	} // end init_quick_mail_menu
 
 	/**
 	 * use by admin print styles to add css to admin
 	 */
 	public function init_quick_mail_style() {
-		wp_enqueue_style( 'quick-mail', 	plugins_url('/quick-mail.css', __FILE__), array(), '1.1.1', 'all' );
+		wp_enqueue_style( 'quick-mail', 	plugins_url('/quick-mail.css', __FILE__), array(), '1.2.3', 'all' );
 	} // end init_quick_mail_style
 
 	/**

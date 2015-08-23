@@ -1,4 +1,4 @@
-// Quick Mail: quick-mail.js 1.22
+// Quick Mail: quick-mail.js 1.23
 
 function setInfo(item, info)
 {
@@ -92,7 +92,7 @@ function make_select()
 {
 	var id = new Array('', 'qmp1', 'qmp2', 'qmp3', 'qmp4', 'qmp5');
 	var control = '<select id="qm_select" onchange="load_option(this.value)">';
-    var blank = '<option value="Select" selected>Select</option>';
+	var blank = '<option value="Select" selected>Select</option>';
 	control += blank;
 	var bottom = '</select>';
 	var got = '', nothing = 'N/A';
@@ -158,6 +158,11 @@ function clear_qm_addresses()
 } // end clear_qm_addresses
 
 jQuery(document).ready(function() {
+	if (!jQuery('#quick-mail-title').length)
+	{
+		return;
+	} // do not load if not on Quick Mail form
+
 	jQuery('#qm-validate').hide();
 	jQuery('#email').bind('keypress', function(event) {
 		if (event.keyCode == 13) {

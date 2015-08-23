@@ -32,15 +32,23 @@ __Who can send mail?__
 
 * User profile must include first name, last name, email address.
 
-* Overview: [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/how-to-send-email-from-wordpress-admin/).
+__Selecting Recipients__
 
-* Current Version: [Get Quick Mail 1.2.2](http://wheredidmybraingo.com/get-quick-mail-1-2-2/) for update info.
+* Options to send mail to any user, or limit to users with first and last names on their profile.
+
+* Users need permission to [list users](http://codex.wordpress.org/Roles_and_Capabilities#list_users), to view user list or change options. Minimum permission can be changed with an option or filter.
 
 __Limitations__
 
 * One recipient and one attachment per email.
 
 * Up to 5 manually entered recipients are saved in HTML Storage.
+
+__More Info__
+
+* Introduction: [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/)
+
+* Update: [Quick Mail 1.2.3 Update for WordPress 4.3](http://wheredidmybraingo.com/quick-mail-1-2-3-update-for-wordpress-4-3/)
 
 __Translators and Programmers__
 

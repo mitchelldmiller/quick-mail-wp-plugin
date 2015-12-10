@@ -3,18 +3,18 @@ Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Tags: email, admin, mail, attachment, Spanish
 Requires at least: 4.2
-Tested up to: 4.3
+Tested up to: 4.4
 Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Adds "Quick Mail" to Tools. Send text or html email with file attachment from user's credentials. Fast, simple. Spanish translation.
+Adds "Quick Mail" to Tools. Send text or html email with a file attachment from user's credentials. Fast, simple. Spanish translation.
 
 == Description ==
 
 >Quick Mail is the easiest way to send an email with an attachment to a WordPress user on your site.
 
-Send a quick email from WordPress Admin. Adds Quick Mail to Tools menu.
+Send a quick email from WordPress Dashboard to a WordPress user, or anyone. Adds Quick Mail to Tools menu.
 
 Mail is sent with user's name and email. One file can be attached to message.
 
@@ -29,6 +29,10 @@ Saves last five email addresses entered on form.
 User options for sending email to site users or others.
 
 Site options for administrators to hide their profile, and limit access to user list.
+
+* See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
+
+* See [Quick Mail 1.2.3 Update for WordPress 4.3](http://wheredidmybraingo.com/quick-mail-1-2-3-update-for-wordpress-4-3/) for update info.
 
 == Installation ==
 
@@ -56,12 +60,6 @@ Site options for administrators to hide their profile, and limit access to user 
 
 * Up to 5 manually entered recipients are saved in HTML Storage.
 
-= Tech Info =
-
-* Introduction: [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/)
-
-* Update info: [Quick Mail 1.2.3 Update for WordPress 4.3](http://wheredidmybraingo.com/quick-mail-1-2-3-update-for-wordpress-4-3/)
-
 == Screenshots ==
 
 1. Selecting users on Quick Mail data entry form
@@ -72,11 +70,12 @@ Site options for administrators to hide their profile, and limit access to user 
 
 = 1.2.3 =
 * Requires WordPress 4.2 or greater for dismissible messages.
-* Tested with WordPress 4.3
+* Improved documentation.
+* Tested with WordPress 4.3.1, 4.4
 
 = 1.2.2 =
 * Status messages must be dismissed by user. Messages vanished after 4 seconds in previous versions.
-* Tested with WordPress 4.23
+* Tested with WordPress 4.2.3
 
 = 1.2.1 =
 * Maintenance release.
@@ -144,7 +143,7 @@ Site options for administrators to hide their profile, and limit access to user 
 
 == License ==
 
-This plugin is free for personal or commercial use. You can support future development with a [small donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY "Donate with PayPal"). Thank you :)
+This plugin is free for personal or commercial use. Please encourage future development with a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY "Donate with PayPal").
 
 == Translators and Programmers ==
 

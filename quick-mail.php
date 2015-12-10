@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Quick Mail
-Description: Adds Quick Mail to Tools menu. Send an email with attachment using a list of users or enter a name.
+Description: Adds Quick Mail to Tools menu. Send email with an attachment using a list of users or enter a name.
 Version: 1.2.3
 Author: Mitchell D. Miller
 Author URI: http://wheredidmybraingo.com/about/
@@ -72,9 +72,7 @@ class QuickMail {
 		add_action('admin_init', array($this, 'add_email_script' ) );
 		add_action( 'admin_menu', array($this, 'init_quick_mail_menu' ) );
 		add_action( 'plugins_loaded', array($this, 'init_quick_mail_translation' ) );
-		// add options
 		add_action( 'activated_plugin', array($this, 'install_quick_mail'), 10, 0 );
-
 		add_action( 'deactivated_plugin', array($this, 'unload_quick_mail_plugin') , 10, 0 );
 		if ( 'Y' == get_option( 'editors_quick_mail_privilege', 'N' ) ) {
 			add_filter('quick_mail_setup_capability', array($this, 'let_editor_set_quick_mail_option') );
@@ -86,26 +84,17 @@ class QuickMail {
 
 	/**
 	 * Check for minimum WordPress version before installation
+	 * Minimum version can be reduced with a filter.
+	 * Quick Mail will work on WordPress 2.9 and up, except for dismissible boxes. See link below for more info.
+	 *
+	 * @link http://wheredidmybraingo.com/quick-mail-1-2-3-update-for-wordpress-4-3/#qm123
 	 *
 	 * @since 1.2.3
 	 */
-	function check_wp_version()
+	public function check_wp_version()
 	{
 		global $wp_version;
 		$min_version = version_compare( $wp_version, '2.9', 'lt' ) ? '9999' : apply_filters( 'quick_mail_version', '4.2' );
-		/**
-		 * Minimum version can be reduced with a filter.
-		 * Quick Mail will work on WordPress 2.9 and up, except for
-		 * dismissible boxes. See link below for more info.
-		 *
-		 * @since 1.2.3
-		 *
-		 * @var string
-		 *
-		 * @link
-		 * TODO add link
-		 */
-
 		if (version_compare( $wp_version, $min_version, '<' ) )
 		{
 			deactivate_plugins( basename( __FILE__ ) );

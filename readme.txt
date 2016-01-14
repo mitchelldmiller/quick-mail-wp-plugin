@@ -3,8 +3,8 @@ Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Tags: email, admin, mail, attachment, Spanish
 Requires at least: 4.2
-Tested up to: 4.4
-Stable tag: 1.2.3
+Tested up to: 4.4.1
+Stable tag: 1.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,7 +32,7 @@ Site options for administrators to hide their profile, and limit access to user 
 
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail 1.2.3 Update for WordPress 4.3](http://wheredidmybraingo.com/quick-mail-1-2-3-update-for-wordpress-4-3/) for update info.
+* See [Quick Mail 1.2.4 uses WP REST API](http://wheredidmybraingo.com/quick-mail-1-2-4-uses-wp-rest-api/) for update info.
 
 == Installation ==
 
@@ -67,6 +67,12 @@ Site options for administrators to hide their profile, and limit access to user 
 2. Selecting recent email addresses
 
 == Changelog ==
+
+= 1.2.4 =
+* Improved installation on sites with a single user.
+* Uses WP REST API during installation, if available.
+* Fixed security warning for changed files.
+* Tested with WordPress 4.4.1
 
 = 1.2.3 =
 * Requires WordPress 4.2 or greater for dismissible messages.
@@ -111,6 +117,11 @@ Site options for administrators to hide their profile, and limit access to user 
 * First version on WordPress Plugin Repository
 
 == Upgrade Notice ==
+
+= 1.2.4 =
+* Upgrade recommended.
+* Improved installation.
+* Fixes security warning.
 
 = 1.2.3 =
 * Upgrade recommended.

@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Adds Quick Mail to Tools menu. Send email with an attachment using a list of users or enter a name.
-Version: 1.2.3
+Version: 1.2.4
 Author: Mitchell D. Miller
 Author URI: http://wheredidmybraingo.com/about/
 Plugin URI: http://wheredidmybraingo.com/quick-mail-1-2-3-update-for-wordpress-4-3/
@@ -49,6 +49,26 @@ class QuickMail {
 	} // end get_instance
 
 	/**
+	 * Count users with REST API
+	 *
+	 * @return int number of users with published posts / pages
+	 *
+	 * @since 1.2.4
+	 */
+	public function get_user_count()
+	{
+		$raw = wp_remote_get(get_bloginfo('wpurl') .  '/wp-json/wp/v2/users');
+		if (is_wp_error($raw) || !empty($raw['response']['code']) && $raw['response']['code'] != 200)
+		{
+			return 99;
+		} // if error
+
+		$json = json_decode($raw['body']);
+		// return count if valid response
+		return (is_array($json) && !empty($json[0]->id)) ?  count($json) : 100;
+	} // end get_user_count
+
+	/**
 	 * content type filter for wp_mail
 	 *
 	 * filters wp_mail_content_type
@@ -78,8 +98,8 @@ class QuickMail {
 			add_filter('quick_mail_setup_capability', array($this, 'let_editor_set_quick_mail_option') );
 		}
 
-		add_filter('wp_mail_content_type', array($this, 'set_mail_content_type') );
-		// wp_mail_content_type
+		add_filter( 'wp_mail_content_type', array($this, 'set_mail_content_type') );
+		add_filter( 'plugin_row_meta', array($this, 'qm_plugin_links'), 10, 2 );
 	} // end constructor
 
 	/**
@@ -113,7 +133,13 @@ class QuickMail {
 	public function install_quick_mail() {
 		add_option( 'hide_quick_mail_admin', 'N', '', 'no' );
 		add_option( 'editors_quick_mail_privilege', 'N', '', 'no'  );
-		$this->qm_update_option( 'show_quick_mail_users', 'A' );
+
+		/**
+		 * Do not show users if one user
+		 * since 1.2.4
+		 */
+		$code = (1 == $this->get_user_count()) ? 'X' : 'A';
+		$this->qm_update_option( 'show_quick_mail_users', $code );
 	} // install_quick_mail
 
 	/**
@@ -252,7 +278,7 @@ class QuickMail {
 		$file = '';
 		$attachments = array();
 		$you = wp_get_current_user();
-		$from = "From: \"{$you->user_firstname} {$you->user_lastname}\" <{$you->user_email}>";
+		$from = "From: \"{$you->user_firstname} {$you->user_lastname}\" <{$you->user_email}>\r\n";
 		if ( 'GET' == $_SERVER['REQUEST_METHOD'] && empty( $_GET['quick-mail-uploads'] ) ) {
 			$can_upload = strtolower( ini_get( 'file_uploads' ) );
 			if ( '1' != $can_upload && 'true' != $can_upload && 'on' != $can_upload ) {
@@ -584,6 +610,27 @@ echo ' ', $names, ' ', __( 'matching users', 'quick-mail' );
 		}
 		return trailingslashit( sys_get_temp_dir() );
 	} // end qm_get_temp_path
+
+
+	/**
+	 * add helpful links to plugin description. filters plugin_row_meta.
+	 *
+	 * @param array $links
+	 * @param string $file
+	 * @return array
+	 *
+	 * @since 1.2.4
+	 */
+	public function qm_plugin_links( $links, $file ) {
+		$base = plugin_basename( __FILE__ );
+		if ( $file == $base ) {
+			$links[]    =   '<a href="options-general.php?page=quick_mail_options">' . __( 'Settings', 'quick-mail' ) . '</a>';
+			$links[]    =   '<a href="https://wordpress.org/plugins/quick-mail/faq/" target="_blank">' . __( 'FAQ', 'quick-mail' ) . '</a>';
+			$links[]    =   '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
+		}
+		return $links;
+	} // end qm_plugin_links
+
 } // end class
 $quick_mail_plugin = QuickMail::get_instance();
 ?>

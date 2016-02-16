@@ -3,6 +3,9 @@ quick-mail-wp-plugin
 
 Adds "Quick Mail" to Tools menu. Send text or html email with file attachment from user's credentials. Fast, simple. Spanish translation.
 
+### Build Status
+[![Build Status](https://api.travis-ci.org/mitchelldmiller/quick-mail-wp-plugin.svg?branch=master)](https://travis-ci.org/mitchelldmiller/quick-mail-wp-plugin)
+
 Description
 -----------
 

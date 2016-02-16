@@ -2,10 +2,10 @@
 /*
 Plugin Name: Quick Mail
 Description: Adds Quick Mail to Tools menu. Send email with an attachment using a list of users or enter a name.
-Version: 1.2.4
+Version: 1.2.5
 Author: Mitchell D. Miller
 Author URI: http://wheredidmybraingo.com/about/
-Plugin URI: http://wheredidmybraingo.com/quick-mail-1-2-3-update-for-wordpress-4-3/
+Plugin URI: http://wheredidmybraingo.com/quick-mail-1-2-5-wordpress-plugin/
 Text Domain: quick-mail
 Domain Path: /lang
 */
@@ -49,24 +49,18 @@ class QuickMail {
 	} // end get_instance
 
 	/**
-	 * Count users with REST API
+	 * Does site have more than one user? Replaces get_user_count()
 	 *
-	 * @return int number of users with published posts / pages
+	 * @return bool more than one user
 	 *
-	 * @since 1.2.4
+	 * @since 1.2.5
 	 */
-	public function get_user_count()
+	public function multiple_users()
 	{
-		$raw = wp_remote_get(get_bloginfo('wpurl') .  '/wp-json/wp/v2/users');
-		if (is_wp_error($raw) || !empty($raw['response']['code']) && $raw['response']['code'] != 200)
-		{
-			return 99;
-		} // if error
-
-		$json = json_decode($raw['body']);
-		// return count if valid response
-		return (is_array($json) && !empty($json[0]->id)) ?  count($json) : 100;
-	} // end get_user_count
+		global $wpdb;
+		$sql = "select count(ID) as USERS from {$wpdb->users} where user_email != ''";
+		return 1 < intval( $wpdb->get_var($sql) );
+	} // end multiple_users
 
 	/**
 	 * content type filter for wp_mail
@@ -88,8 +82,15 @@ class QuickMail {
 	 * @since 1.2.0
 	 */
 	public function __construct() {
-		register_activation_hook( __FILE__, array($this, 'check_wp_version' ) );
-		add_action('admin_init', array($this, 'add_email_script' ) );
+		/**
+		 * if not called by WordPress, exit without error message
+		 * @since 1.2.5
+		 */
+		if ( ! function_exists( 'register_activation_hook' ) ) {
+			exit;
+		}
+		register_activation_hook( __FILE__, array($this, 'check_wp_version') );
+		add_action( 'admin_init', array($this, 'add_email_script' ) );
 		add_action( 'admin_menu', array($this, 'init_quick_mail_menu' ) );
 		add_action( 'plugins_loaded', array($this, 'init_quick_mail_translation' ) );
 		add_action( 'activated_plugin', array($this, 'install_quick_mail'), 10, 0 );
@@ -115,16 +116,16 @@ class QuickMail {
 	{
 		global $wp_version;
 		$min_version = version_compare( $wp_version, '2.9', 'lt' ) ? '9999' : apply_filters( 'quick_mail_version', '4.2' );
-		if (version_compare( $wp_version, $min_version, '<' ) )
+		if (version_compare( $wp_version, $min_version, 'lt' ) )
 		{
 			deactivate_plugins( basename( __FILE__ ) );
 			wp_die('<span style="font-size:120%">'.
-					__('Quick Mail requires WordPress 4.2 or greater.', quick-mail) . '</span><br><br>' . __('Please upgrade WordPress to use Quick Mail.', 'quick-mail'), __('Quick Mail Cannot Be Installed', quick-mail),  array( 'response' => 200, 'back_link' => true ) );
+					__( 'Quick Mail requires WordPress 4.2 or greater.', 'quick-mail' ) . '</span><br><br>' . __('Please upgrade WordPress to use Quick Mail.', 'quick-mail'), __('Quick Mail Cannot Be Installed', 'quick-mail' ),  array( 'response' => 200, 'back_link' => true ) );
 		} // end if
 	} // end check_wp_version
 
 	/**
-	 * add options after Quick Mail is installed
+	 * add options when Quick Mail is activated
 	 *
 	 * add options, do not autoload them.
 	 *
@@ -138,12 +139,12 @@ class QuickMail {
 		 * Do not show users if one user
 		 * since 1.2.4
 		 */
-		$code = (1 == $this->get_user_count()) ? 'X' : 'A';
+		$code = $this->multiple_users() ? 'A' : 'X';
 		$this->qm_update_option( 'show_quick_mail_users', $code );
 	} // install_quick_mail
 
 	/**
-	 * delete options when Quick Mail is uninstalled
+	 * delete options when Quick Mail is deactivated
 	 *
 	 * delete global and user options
 	 *
@@ -170,7 +171,7 @@ class QuickMail {
 	 */
 	public function add_email_script()
 	{
-		wp_enqueue_script('qmScript', plugins_url('/quick-mail.js', __FILE__), array('jquery'), '1.1.2', false );
+		wp_enqueue_script( 'qmScript', plugins_url('/quick-mail.js', __FILE__), array('jquery'), '1.1.2', false );
 	} // end add_email_script
 
 	/**
@@ -180,10 +181,10 @@ class QuickMail {
 	 * @param int $id user ID
 	 * @return void displays input
 	 */
-	public function quick_mail_recipient_input($to, $id) {
+	public function quick_mail_recipient_input( $to, $id ) {
 		$template = '<input value="%s" id="email" name="email" type="email" required size="35" placeholder="%s" tabindex="1" autofocus>';
-		$option = $this->qm_get_option('show_quick_mail_users', 'A');
-		if ($option != 'X') {
+		$option = $this->qm_get_option( 'show_quick_mail_users', 'A' );
+		if ( 'X' != $option ) {
 			// check if site permissions were changed
 			if ( 'Y' != get_option( 'editors_quick_mail_privilege', 'N' ) ) {
 				// only admins can see list
@@ -193,15 +194,15 @@ class QuickMail {
 			} // end admin check
 		} // end if wants user list
 
-		if ($option != 'A' && $option != 'N') {
+		if ( 'A' != $option && 'N' != $option ) {
 			echo sprintf($template, $to, __( 'Enter mail address', 'quick-mail' ) );
 			return;
 		}
-		$args = ($option == 'A') ?
+		$args = ( 'A' == $option ) ?
 		array('orderby' => 'user_nicename', 'count_total' => true) :
 		array('count_total' => true);
-		$hide_admin = get_option('hide_quick_mail_admin', 'N');
-		$user_query = new \WP_User_Query($args);
+		$hide_admin = get_option( 'hide_quick_mail_admin', 'N' );
+		$user_query = new \WP_User_Query( $args );
 		$users = array();
 		foreach ( $user_query->results as $user ) {
 			if ( 'Y' == $hide_admin ) {
@@ -212,13 +213,13 @@ class QuickMail {
 				}
 			} // end admin test
 
-			if ($option == 'A') {
-				$users[] = ucfirst("{$user->user_nicename}\t{$user->user_email}");
+			if ( 'A' == $option ) {
+				$users[] = ucfirst( "{$user->user_nicename}\t{$user->user_email}" );
 			} // end if all users
 			else {
-				$last = ucfirst(get_user_meta( $user->ID, 'last_name', true ));
+				$last = ucfirst( get_user_meta( $user->ID, 'last_name', true ) );
 				$first = get_user_meta( $user->ID, 'first_name', true );
-				if ( ! empty($first) && ! empty($last) && ! empty($user->user_email) ) {
+				if ( ! empty( $first ) && ! empty( $last ) && ! empty( $user->user_email ) ) {
 					$users[] = "{$last}\t{$first}\t{$user->ID}\t{$user->user_email}";
 				} // end if valid name
 			} // end else named only
@@ -226,7 +227,7 @@ class QuickMail {
 
 		$j = count($users);
 		if (1 > $j) {
-			echo sprintf($template, $to, __( 'Enter mail address', 'quick-mail' ) );
+			echo sprintf( $template, $to, __( 'Enter mail address', 'quick-mail' ) );
 			return;
 		} // end if no matches
 
@@ -303,12 +304,12 @@ class QuickMail {
 			}
 
 			$subject = sanitize_text_field( htmlspecialchars_decode( stripslashes( $_POST['subject'] ) ) );
-			$message = urldecode(stripslashes($_POST['message']));
-			if ( 2 > strlen($message) ) {
+			$message = urldecode( stripslashes( $_POST['message'] ) );
+			if ( 2 > strlen( $message ) ) {
 				$error = __( 'Enter your message', 'quick-mail' );
 			} // end if no message
 
-			if ( '<' == substr($message, 0, 1) ) {
+			if ( '<' == substr( $message, 0, 1 ) ) {
 				$this->content_type = 'text/html';
 			} else {
 				$this->content_type = 'text/plain';
@@ -389,7 +390,7 @@ class QuickMail {
 							<td><?php echo $this->quick_mail_recipient_input( $to, $you->ID ); ?></td>
 						</tr>
 						<?php
-						if ( 'X' == $this->qm_get_option('show_quick_mail_users', 'A') ) : ?>
+						if ( 'X' == $this->qm_get_option( 'show_quick_mail_users', 'A' ) ) : ?>
 						<tr id="qm_row">
 							<td class="quick-mail"><?php _e( 'Recent', 'quick-mail' ); ?>:</td>
 							<td id="qm_choice"></td>
@@ -427,7 +428,7 @@ class QuickMail {
 	public function quick_mail_options() {
 		global $wpdb;
 		$updated = false;
-		if ( ! empty($_POST['show_quick_mail_users']) && 1 == strlen($_POST['show_quick_mail_users']) ) {
+		if ( ! empty( $_POST['show_quick_mail_users'] ) && 1 == strlen( $_POST['show_quick_mail_users'] ) ) {
 			$previous = $this->qm_get_option( 'show_quick_mail_users', 'A' );
 			if ( $previous != $_POST['show_quick_mail_users'] ) {
 				$this->qm_update_option( 'show_quick_mail_users', $_POST['show_quick_mail_users'] );
@@ -437,9 +438,9 @@ class QuickMail {
 		}
 		if ( ! empty($_POST['showing_quick_mail_admin']) ) {
 			$previous = get_option( 'hide_quick_mail_admin', 'N' );
-			$current = empty($_POST['hide_quick_mail_admin']) ? 'N' : 'Y';
-			if ($current != $previous) {
-				update_option('hide_quick_mail_admin', $current);
+			$current = empty( $_POST['hide_quick_mail_admin'] ) ? 'N' : 'Y';
+			if ( $current != $previous ) {
+				update_option( 'hide_quick_mail_admin', $current );
 				if ( ! $updated ) {
 					echo '<div class="updated">', _e('Option Updated', 'quick-mail'), '</div>';
 					$updated = true;
@@ -449,7 +450,7 @@ class QuickMail {
 			$previous = get_option( 'editors_quick_mail_privilege', 'N' );
 			$current = empty($_POST['editors_quick_mail_privilege']) ? 'N' : 'Y';
 			if ($current != $previous) {
-				update_option('editors_quick_mail_privilege', $current);
+				update_option( 'editors_quick_mail_privilege', $current );
 				if ( ! $updated ) {
 					echo '<div class="updated">', _e('Option Updated', 'quick-mail'), '</div>';
 				}
@@ -457,7 +458,7 @@ class QuickMail {
 		} // end if admin
 
 		$user_query = new \WP_User_Query( array('count_total' => true) );
-		$hide_admin = get_option('hide_quick_mail_admin', 'N');
+		$hide_admin = get_option( 'hide_quick_mail_admin', 'N' );
 		$total = 0; // $user_query->get_total() is wrong, if we are skipping admins
 		$names = 0;
 		foreach ( $user_query->results as $user ) {
@@ -473,11 +474,11 @@ class QuickMail {
 			} // end if
 		} // end for
 
-		$check_all = ('A' == $this->qm_get_option( 'show_quick_mail_users', 'A' ) ) ? 'checked="checked"' : '';
-		$check_names = ('N' == $this->qm_get_option( 'show_quick_mail_users', 'A' ) ) ? 'checked="checked"' : '';
-		$check_none = ('X' == $this->qm_get_option( 'show_quick_mail_users', 'A' ) ) ? 'checked="checked"' : '';
-		$check_admin = ('Y' == get_option( 'hide_quick_mail_admin', 'N' ) ) ? 'checked="checked"' : '';
-		$check_editor = ('Y' == get_option( 'editors_quick_mail_privilege', 'N' ) ) ? 'checked="checked"' : '';
+		$check_all    = ( 'A' == $this->qm_get_option( 'show_quick_mail_users', 'A' ) ) ? 'checked="checked"' : '';
+		$check_names  = ( 'N' == $this->qm_get_option( 'show_quick_mail_users', 'A' ) ) ? 'checked="checked"' : '';
+		$check_none   = ( 'X' == $this->qm_get_option( 'show_quick_mail_users', 'A' ) ) ? 'checked="checked"' : '';
+		$check_admin  = ( 'Y' == get_option( 'hide_quick_mail_admin', 'N' ) ) ? 'checked="checked"' : '';
+		$check_editor = ( 'Y' == get_option( 'editors_quick_mail_privilege', 'N' ) ) ? 'checked="checked"' : '';
 ?>
 <h1 id="quick-mail-title" class="quick-mail-title"><?php _e( 'Quick Mail Options', 'quick-mail' ); ?></h1>
 <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
@@ -529,9 +530,9 @@ echo ' ', $names, ' ', __( 'matching users', 'quick-mail' );
 	 * @param string $qm_default Default value
 	 * @return string Option value or default
 	 */
-	public function qm_get_option($key, $qm_default) {
+	public function qm_get_option( $key, $qm_default ) {
 		global $current_user;
-		$value = get_user_meta($current_user->ID, $key, true);
+		$value = get_user_meta( $current_user->ID, $key, true );
 		return ( ! empty($value) ) ? $value : $qm_default;
 	} // end qm_get_option
 
@@ -541,7 +542,7 @@ echo ' ', $names, ' ', __( 'matching users', 'quick-mail' );
 	 * @param string $key
 	 * @param string $value
 	 */
-	public function qm_update_option($key, $value) {
+	public function qm_update_option( $key, $value ) {
 		global $current_user;
 		update_user_meta( $current_user->ID, $key, $value );
 	} // end qm_update_option
@@ -551,9 +552,9 @@ echo ' ', $names, ' ', __( 'matching users', 'quick-mail' );
 	 *
 	 * @param int $id User ID.
 	 */
-	protected function qm_is_admin($id) {
+	protected function qm_is_admin( $id ) {
 		global $table_prefix;
-		$meta = get_user_meta($id);
+		$meta = get_user_meta( $id );
 		$field = $table_prefix . 'capabilities';
 		$cap = unserialize( $meta[$field][0] );
 		return isset( $cap['administrator'] );
@@ -563,7 +564,7 @@ echo ' ', $names, ' ', __( 'matching users', 'quick-mail' );
 	 * used with quick_mail_setup_capability filter, to let editors see user list
 	 *
 	 */
-	public function let_editor_set_quick_mail_option($role) {
+	public function let_editor_set_quick_mail_option( $role ) {
 		return 'edit_others_posts';
 	} // end let_editor_set_quick_mail_option
 
@@ -624,9 +625,9 @@ echo ' ', $names, ' ', __( 'matching users', 'quick-mail' );
 	public function qm_plugin_links( $links, $file ) {
 		$base = plugin_basename( __FILE__ );
 		if ( $file == $base ) {
-			$links[]    =   '<a href="options-general.php?page=quick_mail_options">' . __( 'Settings', 'quick-mail' ) . '</a>';
-			$links[]    =   '<a href="https://wordpress.org/plugins/quick-mail/faq/" target="_blank">' . __( 'FAQ', 'quick-mail' ) . '</a>';
-			$links[]    =   '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
+			$links[] = '<a href="options-general.php?page=quick_mail_options">' . __( 'Settings', 'quick-mail' ) . '</a>';
+			$links[] = '<a href="https://wordpress.org/plugins/quick-mail/faq/" target="_blank">' . __( 'FAQ', 'quick-mail' ) . '</a>';
+			$links[] = '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
 		}
 		return $links;
 	} // end qm_plugin_links

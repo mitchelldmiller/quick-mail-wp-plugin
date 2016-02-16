@@ -1,5 +1,5 @@
 @CHARSET "UTF-8";
-/* Welcome to quick-mail.css 1.2.3 */
+/* Welcome to quick-mail.css */
 #qm-validate {
 	display: none;
 }
@@ -58,7 +58,7 @@ th.recipients {
 
 input[type="submit"] {
 	border-radius: 10%;
-	font-weight:bold;
+	font-weight: bold;
 	padding: 1em;
 }
 
@@ -67,16 +67,11 @@ option {
 	color: #000;
 }
 
-option:first-child {
-	font-weight: bold;
-	text-align: center;
-}
-
 optgroup {
 	background-color: #eee;
 	color: #000;
 	font-family: Georgia, serif;
+	font-weight:bold;
 }
 
 @media only screen and (max-width: 739px) { td.quick-mail, td.quick-mail-message { text-align: left; } }
-

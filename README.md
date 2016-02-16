@@ -48,7 +48,7 @@ __More Info__
 
 * Introduction: [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/)
 
-* See [Quick Mail 1.2.4 uses WP REST API](http://wheredidmybraingo.com/quick-mail-1-2-4-uses-wp-rest-api/) for update info.
+* See [Quick Mail 1.2.5 WordPress Plugin Works on More Sites](http://wheredidmybraingo.com/quick-mail-1-2-5-wordpress-plugin/) for update info.
 
 __Translators and Programmers__
 

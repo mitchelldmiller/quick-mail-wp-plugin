@@ -24,20 +24,33 @@
 
 <p>Adds "Quick Mail" to Tools menu. Send text or html email with file attachment from user's credentials. Fast, simple. Spanish translation.</p>
 
+<h3>
+<a id="build-status" class="anchor" href="#build-status" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Build Status</h3>
+
+<p><a href="https://travis-ci.org/mitchelldmiller/quick-mail-wp-plugin"><img src="https://api.travis-ci.org/mitchelldmiller/quick-mail-wp-plugin.svg?branch=master" alt="Build Status"></a></p>
+
 <h2>
 <a id="description" class="anchor" href="#description" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Description</h2>
 
 <blockquote>
-<p>Quick Mail is the easiest way to send an email with an attachment to another WordPress user on your site.</p>
+<p>Quick Mail is the easiest way to send an email with an attachment to a WordPress user on your site.</p>
 </blockquote>
+
+<p>Send a quick email from WordPress Dashboard to a WordPress user, or anyone. Adds Quick Mail to Tools menu.</p>
 
 <p>Mail is sent with user's name and email. One file can be attached to message.</p>
 
-<p>Options to select a site user as mail recipient.</p>
+<p>Sends text or html mails. Content type is determined from message.</p>
+
+<p>Option to validate recipient domain before mail is sent.</p>
+
+<p>Validates international domains if <a href="http://php.net/manual/en/function.idn-to-ascii.php">idn_to_ascii</a> is available to convert domain to domain to <a href="https://tools.ietf.org/html/rfc3492">Punycode</a></p>
 
 <p>Saves message and subject on form to send repeat messages.</p>
 
-<p>Recipient domain is verified before mail is sent.</p>
+<p>Saves last five email addresses entered on form.</p>
+
+<p>User options for sending email to site users or others.</p>
 
 <p>Site options for administrators to hide their profile, and limit access to user list.</p>
 
@@ -73,11 +86,47 @@
 <li><p>Up to 5 manually entered recipients are saved in HTML Storage.</p></li>
 </ul>
 
+<p><strong>Address Validation</strong></p>
+
+<ul>
+<li><p>Address validation is an option to check recipient domain on manually entered addresses.</p></li>
+<li>
+<p>International (non-ASCII) domains must be converted to <a href="https://tools.ietf.org/html/rfc3492">punycode</a> with <a href="http://php.net/manual/en/function.idn-to-ascii.php">idn_to_acii</a>.</p>
+
+<p>Unfortunately, <code>idn_to_ascii</code> is not available on all systems.</p>
+</li>
+<li>
+<p>"Cannot verify international domains because idn_to_ascii function not found"</p>
+
+<p>This is displayed when Quick Mail cannot verify domains containing non-ASCII characters.</p>
+</li>
+<li>
+<p><a href="http://php.net/manual/en/function.checkdnsrr.php">checkdnsrr</a> is used to check a domain for an <a href="http://www.google.com/support/enterprise/static/postini/docs/admin/en/activate/mx_faq.html">MX record</a>.</p>
+
+<p>An MX record tells senders how to send mail to the domain.</p>
+</li>
+</ul>
+
+<p><strong>Mail Errors</strong></p>
+
+<ul>
+<li>
+<p>Quick Mail sends email with <a href="https://developer.wordpress.org/reference/functions/wp_mail/">wp_mail</a>.</p>
+
+<p><code>wp_mail</code> error messages are displayed, if there is a problem.</p>
+</li>
+<li>
+<p>"You must provide at least one recipient email address."</p>
+
+<p><code>wp_mail</code> rejected an address. Seen when Quick Mail verification is off.</p>
+</li>
+</ul>
+
 <p><strong>More Info</strong></p>
 
 <ul>
 <li><p>Introduction: <a href="http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/">How to Send Email from WordPress Admin</a></p></li>
-<li><p>See <a href="http://wheredidmybraingo.com/quick-mail-1-2-5-wordpress-plugin/">Quick Mail 1.2.5 WordPress Plugin Works on More Sites</a> for update info.</p></li>
+<li><p>See <a href="http://wheredidmybraingo.com/quick-mail-1-3-0-supports-international-mail/">Quick Mail 1.3.0 Supports International Mail</a> for update info.</p></li>
 </ul>
 
 <p><strong>Translators and Programmers</strong></p>

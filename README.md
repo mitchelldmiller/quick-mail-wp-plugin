@@ -9,15 +9,23 @@ Adds "Quick Mail" to Tools menu. Send text or html email with file attachment fr
 Description
 -----------
 
->Quick Mail is the easiest way to send an email with an attachment to another WordPress user on your site.
+>Quick Mail is the easiest way to send an email with an attachment to a WordPress user on your site.
+
+Send a quick email from WordPress Dashboard to a WordPress user, or anyone. Adds Quick Mail to Tools menu.
 
 Mail is sent with user's name and email. One file can be attached to message.
 
-Options to select a site user as mail recipient.
+Sends text or html mails. Content type is determined from message.
+
+Option to validate recipient domain before mail is sent.
+
+Validates international domains if [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php) is available to convert domain to domain to [Punycode](https://tools.ietf.org/html/rfc3492)
 
 Saves message and subject on form to send repeat messages.
 
-Recipient domain is verified before mail is sent.
+Saves last five email addresses entered on form.
+
+User options for sending email to site users or others.
 
 Site options for administrators to hide their profile, and limit access to user list.
 
@@ -47,11 +55,41 @@ __Limitations__
 
 * Up to 5 manually entered recipients are saved in HTML Storage.
 
+__Address Validation__
+
+* Address validation is an option to check recipient domain on manually entered addresses.
+
+* International (non-ASCII) domains must be converted to [punycode](https://tools.ietf.org/html/rfc3492) with [idn_to_acii](http://php.net/manual/en/function.idn-to-ascii.php).
+
+
+  Unfortunately, `idn_to_ascii` is not available on all systems.
+
+* "Cannot verify international domains because idn_to_ascii function not found"
+
+  This is displayed when Quick Mail cannot verify domains containing non-ASCII characters.
+
+* [checkdnsrr](http://php.net/manual/en/function.checkdnsrr.php) is used to check a domain for an [MX record](http://www.google.com/support/enterprise/static/postini/docs/admin/en/activate/mx_faq.html).
+
+
+  An MX record tells senders how to send mail to the domain.
+
+__Mail Errors__
+
+* Quick Mail sends email with [wp_mail](https://developer.wordpress.org/reference/functions/wp_mail/).
+
+
+  `wp_mail` error messages are displayed, if there is a problem.
+
+* "You must provide at least one recipient email address."
+
+
+   `wp_mail` rejected an address. Seen when Quick Mail verification is off.
+
 __More Info__
 
 * Introduction: [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/)
 
-* See [Quick Mail 1.2.5 WordPress Plugin Works on More Sites](http://wheredidmybraingo.com/quick-mail-1-2-5-wordpress-plugin/) for update info.
+* See [Quick Mail 1.3.0 Supports International Mail](http://wheredidmybraingo.com/quick-mail-1-3-0-supports-international-mail/) for update info.
 
 __Translators and Programmers__
 

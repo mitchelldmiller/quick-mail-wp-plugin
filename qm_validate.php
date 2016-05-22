@@ -28,13 +28,13 @@ function qm_bye() {
 		exit;
 	} // end if not logged in
 
-	if (isset($_REQUEST['email'])) {
-		$email = urldecode( $_REQUEST['email'] );
+
+	if ( !empty( $_REQUEST['email'] ) && !empty( $_REQUEST['quick-mail-verify'] ) ) {
 		header('Content-type: text/plain');
-		if ( ! filter_var( $email, FILTER_VALIDATE_EMAIL ) || ! QuickMailUtil::qm_valid_email_domain( $email ) ) {
-			echo 'error';
-		} else {
+		if ( QuickMailUtil::qm_valid_email_domain( $_REQUEST['email'], $_REQUEST['quick-mail-verify'] ) ) {
 			echo 'OK';
+		} else {
+			echo 'error';
 		}
 	} else  {
 		qm_bye();

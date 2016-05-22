@@ -1,10 +1,10 @@
 === Quick Mail ===
 Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
-Tags: email, admin, mail, attachment, Spanish
-Requires at least: 4.2
-Tested up to: 4.4.2
-Stable tag: 1.2.5
+Tags: email, admin, mail, idn, attachment, Spanish
+Requires at least: 4.4
+Tested up to: 4.5.2
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,9 @@ Mail is sent with user's name and email. One file can be attached to message.
 
 Sends text or html mails. Content type is determined from message.
 
-Recipient domain is verified before mail is sent.
+Option to validate recipient domain before mail is sent.
+
+Validates international domains if [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php) is available to convert domain to domain to [Punycode](https://tools.ietf.org/html/rfc3492)
 
 Saves message and subject on form to send repeat messages.
 
@@ -32,7 +34,7 @@ Site options for administrators to hide their profile, and limit access to user 
 
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail 1.2.5 WordPress Plugin Works on More Sites](http://wheredidmybraingo.com/quick-mail-1-2-5-wordpress-plugin/) for update info.
+* See [Quick Mail 1.3.0 Supports International Mail](http://wheredidmybraingo.com/quick-mail-1-3-0-supports-international-mail/) for update info.
 
 == Installation ==
 
@@ -60,6 +62,36 @@ Site options for administrators to hide their profile, and limit access to user 
 
 * Up to 5 manually entered recipients are saved in HTML Storage.
 
+= Address Validation =
+
+* Address validation is an option to check recipient domain on manually entered addresses.
+
+* International (non-ASCII) domains must be converted to [punycode](https://tools.ietf.org/html/rfc3492) with [idn_to_acii](http://php.net/manual/en/function.idn-to-ascii.php).
+
+
+  Unfortunately, `idn_to_ascii` is not available on all systems.
+
+* "Cannot verify international domains because idn_to_ascii function not found"
+
+  This is displayed when Quick Mail cannot verify domains containing non-ASCII characters.
+
+* [checkdnsrr](http://php.net/manual/en/function.checkdnsrr.php) is used to check a domain for an [MX record](http://www.google.com/support/enterprise/static/postini/docs/admin/en/activate/mx_faq.html).
+
+
+  An MX record tells senders how to send mail to the domain.
+
+= Mail Errors =
+
+* Quick Mail sends email with [wp_mail](https://developer.wordpress.org/reference/functions/wp_mail/).
+
+
+  `wp_mail` error messages are displayed, if there is a problem.
+
+* "You must provide at least one recipient email address."
+
+
+   `wp_mail` rejected an address. Seen when Quick Mail verification is off.
+
 == Screenshots ==
 
 1. Selecting users on Quick Mail data entry form
@@ -67,6 +99,11 @@ Site options for administrators to hide their profile, and limit access to user 
 2. Selecting recent email addresses
 
 == Changelog ==
+
+= 1.3.0 =
+ * Replaced automatic domain validation with option.
+ * Validates international domains if [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php) is available.
+ * Tested with WordPress 4.5.2
 
 = 1.2.5 =
  * Replaced WP REST API usage with database query.
@@ -122,6 +159,11 @@ Site options for administrators to hide their profile, and limit access to user 
 * First version on WordPress Plugin Repository
 
 == Upgrade Notice ==
+
+= 1.3.0 =
+* Upgrade recommended.
+* Recognizes international domains.
+* Recipient domain validation is optional.
 
 = 1.2.5 =
 * Upgrade only needed to change the user list style.

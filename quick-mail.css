@@ -1,6 +1,6 @@
 @CHARSET "UTF-8";
 /* Welcome to quick-mail.css */
-#qm-validate {
+#qm-validate, #qm_row {
 	display: none;
 }
 
@@ -71,7 +71,7 @@ optgroup {
 	background-color: #eee;
 	color: #000;
 	font-family: Georgia, serif;
-	font-weight:bold;
+	font-weight: bold;
 }
 
 @media only screen and (max-width: 739px) { td.quick-mail, td.quick-mail-message { text-align: left; } }

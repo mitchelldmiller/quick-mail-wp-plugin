@@ -22,7 +22,7 @@ Sends text or html mails. Content type is determined from message.
 
 Option to validate recipient domain before mail is sent.
 
-Validates international domains if [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php) is available to convert domain to domain to [Punycode](https://tools.ietf.org/html/rfc3492)
+Validates international domains if [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php) is available to convert domain to [Punycode](https://tools.ietf.org/html/rfc3492).
 
 Saves message and subject on form to send repeat messages.
 
@@ -38,7 +38,7 @@ Site options for administrators to hide their profile, and limit access to user 
 
 == Installation ==
 
-1. Download the plugin and unpack in your /wp-content/plugins directory
+1. Download the plugin and unpack in your `/wp-content/plugins` directory
 
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
@@ -66,7 +66,7 @@ Site options for administrators to hide their profile, and limit access to user 
 
 * Address validation is an option to check recipient domain on manually entered addresses.
 
-* International (non-ASCII) domains must be converted to [punycode](https://tools.ietf.org/html/rfc3492) with [idn_to_acii](http://php.net/manual/en/function.idn-to-ascii.php).
+* International (non-ASCII) domains must be converted to [punycode](https://tools.ietf.org/html/rfc3492) with [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php).
 
 
   Unfortunately, `idn_to_ascii` is not available on all systems.

@@ -4,19 +4,19 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: email, admin, mail, idn, attachment, Spanish
 Requires at least: 4.4
 Tested up to: 4.5.2
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Adds "Quick Mail" to Tools. Send text or html email with a file attachment from user's credentials. Fast, simple. Spanish translation.
+Adds "Quick Mail" to Tools. Send text or html email with file attachments from user's credentials. Fast, simple. Spanish translation.
 
 == Description ==
 
->Quick Mail is the easiest way to send an email with an attachment to a WordPress user on your site.
+>Quick Mail is the easiest way to send an email with attachments to a WordPress user on your site.
 
 Send a quick email from WordPress Dashboard to a WordPress user, or anyone. Adds Quick Mail to Tools menu.
 
-Mail is sent with user's name and email. One file can be attached to message.
+Mail is sent with user's name and email. Multiple files can be attached to message.
 
 Sends text or html mails. Content type is determined from message.
 
@@ -58,7 +58,7 @@ Site options for administrators to hide their profile, and limit access to user 
 
 = Limitations =
 
-* One recipient and one attachment per email.
+* One recipient per email.
 
 * Up to 5 manually entered recipients are saved in HTML Storage.
 
@@ -99,6 +99,10 @@ Site options for administrators to hide their profile, and limit access to user 
 2. Selecting recent email addresses
 
 == Changelog ==
+
+= 1.3.1 =
+ * Fixed mail validation error.
+ * Added multiple file upload.
 
 = 1.3.0 =
  * Replaced automatic domain validation with option.
@@ -160,6 +164,11 @@ Site options for administrators to hide their profile, and limit access to user 
 
 == Upgrade Notice ==
 
+= 1.3.1 =
+* Upgrade recommended.
+* Fixed mail validation error.
+* Added multiple file upload.
+
 = 1.3.0 =
 * Upgrade recommended.
 * Recognizes international domains.
@@ -209,6 +218,9 @@ This plugin is free for personal or commercial use. Please encourage future deve
 
 == Translators and Programmers ==
 
-* A .pot file is included for translators. See [WordPress Translation Tools](https://make.wordpress.org/polyglots/handbook/tools/) for more info.
+* A .pot file is included for translators.
 
 * Includes Spanish translation.
+
+* See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.
+

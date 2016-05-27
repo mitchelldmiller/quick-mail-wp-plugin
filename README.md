@@ -9,11 +9,11 @@ Adds "Quick Mail" to Tools menu. Send text or html email with file attachment fr
 Description
 -----------
 
->Quick Mail is the easiest way to send an email with an attachment to a WordPress user on your site.
+>Quick Mail is the easiest way to send an email with file attachments to a WordPress user on your site.
 
 Send a quick email from WordPress Dashboard to a WordPress user, or anyone. Adds Quick Mail to Tools menu.
 
-Mail is sent with user's name and email. One file can be attached to message.
+Mail is sent with user's name and email. Multiple files can be attached to message.
 
 Sends text or html mails. Content type is determined from message.
 
@@ -51,7 +51,7 @@ __Selecting Recipients__
 
 __Limitations__
 
-* One recipient and one attachment per email.
+* One recipient per email.
 
 * Up to 5 manually entered recipients are saved in HTML Storage.
 
@@ -93,6 +93,13 @@ __More Info__
 
 __Translators and Programmers__
 
-* A .pot file is included for translators. See [WordPress Translation Tools](https://make.wordpress.org/polyglots/handbook/tools/) for more info.
+* A .pot file is included for translators.
 
 * Includes Spanish translation.
+
+* See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.
+
+__License__
+
+This plugin is free for personal or commercial use. 
+

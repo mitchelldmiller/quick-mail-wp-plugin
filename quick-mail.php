@@ -2,10 +2,10 @@
 /*
 Plugin Name: Quick Mail
 Description: Adds Quick Mail to Tools menu. Send email with an attachment using a list of users or enter a name.
-Version: 1.3.0
+Version: 1.3.1
 Author: Mitchell D. Miller
-Author URI: http://mitchelldmiller.com/
-Plugin URI: http://wheredidmybraingo.com/quick-mail-1-3-0-supports-international-mail/
+Author URI: http://mitchelldmiller.com
+Plugin URI: http://quickmail.xyz
 Text Domain: quick-mail
 Domain Path: /lang
 */
@@ -35,7 +35,7 @@ class QuickMail {
     * @var string
     * @since 1.3.0
     */
-   public static $pointer_name = 'quickmail_130';
+   public static $pointer_name = 'quickmail_131';
 
    /**
     * Returns an instance.
@@ -391,10 +391,6 @@ jQuery(document).ready( function() {
          $subject = sanitize_text_field( $subject );
          if (! preg_match('/(\S+)/', $subject ) ) {
             $error = __( 'No subject', 'quick-mail' );
-         } elseif ( 'Y' == $verify ) {
-            if ( ! checkdnsrr( $domain, 'MX' ) ) {
-               $error = __( 'Invalid mail address', 'quick-mail' );
-            }
          } // end subject check
 
          $message = urldecode( stripslashes( $_POST['message'] ) );
@@ -409,30 +405,40 @@ jQuery(document).ready( function() {
             $this->content_type = 'text/plain';
          } // end set content type
 
-         if ( empty( $error ) ) {
-            if ( ! empty( $_FILES['attachment'] ) ) {
-               if ( ( 0 == $_FILES['attachment']['error'] ) && ( 0 < $_FILES['attachment']['size'] ) && ( 250 > strlen( $_FILES['attachment']['name'] ) ) ) {
+         if ( empty( $error ) && !empty( $_FILES ) && !empty( $_FILES['attachment']['name'][0] ) && 1 < count( $_FILES['attachment']['name'] ) ) {
+            if ( $_FILES['attachment']['name'][0] == $_FILES['attachment']['name'][1] ) {
+               $error = __( 'Duplicate files uploaded', 'quick-mail' );
+              } // end if duplicate
+        } // end duplicate check
+
+         if ( empty( $error ) && !empty( $_FILES['attachment'] ) && !empty( $_FILES['attachment']['name'][0] ) ) {
+            $j = count($_FILES['attachment']['name']);
+            for ($i = 0; $i < $j; $i++) {
+               if ( empty( $_FILES['attachment']['name'][$i] ) ) {
+                  continue;
+                }
+               if ( ( 0 == $_FILES['attachment']['error'][$i] ) && ( 0 < $_FILES['attachment']['size'][$i] ) && ( 250 > strlen( $_FILES['attachment']['name'][$i] ) ) ) {
                   $temp = $this->qm_get_temp_path(); // @since 1.1.1
                   if ( ! is_dir( $temp ) || ! is_writable( $temp ) ) {
                      $error = __( 'Missing temporary directory', 'quick-mail' );
                   } else {
-                     $file = "{$temp}{$_FILES['attachment']['name']}";
-                     if ( move_uploaded_file( $_FILES['attachment']['tmp_name'], $file ) ) {
+                     $file = "{$temp}{$_FILES['attachment']['name'][$i]}";
+                     if ( move_uploaded_file( $_FILES['attachment']['tmp_name'][$i], $file ) ) {
                         array_push( $attachments, $file );
                      }
                      else {
                         $error = __( 'Error moving file to', 'quick-mail' ) . " : {$file}";
                      }
                   }
-               } elseif ( 4 != $_FILES['attachment']['error'] ) {
-                  if ( 1 == $_FILES['attachment']['error'] || 2 == $_FILES['attachment']['error'] ) {
+               } elseif ( 4 != $_FILES['attachment']['error'][$i] ) {
+                  if ( 1 == $_FILES['attachment']['error'][$i] || 2 == $_FILES['attachment']['error'][$i] ) {
                      $error = __( 'Uploaded file was too large', 'quick-mail' );
                   } else {
-                  $error = __( 'File Upload Error', 'quick-mail' );
+                     $error = __( 'File Upload Error', 'quick-mail' );
                   }
                }
             } // end if has attachment
-         } // end if valid email address
+         } // end if valid email address and has attachment
 
          if ( empty( $error ) ) {
             if ( ! wp_mail( $to, $subject, $message, $from, $attachments ) ) {
@@ -512,19 +518,19 @@ jQuery(document).ready( function() {
                   <?php if ( empty( $no_uploads ) && empty( $_POST['quick-mail-uploads'] ) ) : ?>
       <tr>
          <td class="quick-mail"><?php _e( 'Attachment', 'quick-mail' ); ?>:</td>
-         <td><input id="attachment" name="attachment" type="file" tabindex="3"></td>
+         <td><input name="attachment[]" type="file" multiple="multiple" tabindex="3"></td>
       </tr>
                   <?php endif; ?>
       <tr>
          <td class="quick-mail-message"><?php _e( 'Message', 'quick-mail' ); ?>:</td>
          <td><textarea id="message" name="message"
                placeholder="<?php _e( 'Enter your message', 'quick-mail' ); ?>"
-               required rows="4" cols="35" tabindex="4"><?php echo htmlspecialchars( $message, ENT_QUOTES ); ?></textarea></td>
+               required rows="4" cols="35" tabindex="10"><?php echo htmlspecialchars( $message, ENT_QUOTES ); ?></textarea></td>
       </tr>
       <tr>
          <td>&nbsp;</td>
          <td class="submit"><input type="submit" id="submit" name="submit"
-            title="<?php _e( 'Send Mail', 'quick-mail' ); ?>" tabindex="5"
+            title="<?php _e( 'Send Mail', 'quick-mail' ); ?>" tabindex="99"
             value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></td>
       </tr>
    </table>

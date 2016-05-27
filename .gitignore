@@ -2,3 +2,10 @@
 .settings/
 .buildpath
 .project
+
+# ignore Eclipse
+*.swp
+
+# ignore Mac
+.DS_Store
+._*

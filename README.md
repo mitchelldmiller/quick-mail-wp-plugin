@@ -91,12 +91,6 @@ __Mail Errors__
 
    `wp_mail` rejected an address. Seen when Quick Mail verification is off.
 
-__More Info__
-
-* Introduction: [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/)
-
-* See [Quick Mail 1.3.2 Improves Multiple File Upload, Translations](http://wheredidmybraingo.com/quick-mail-1-3-2-improves-multiple-file-upload-translations/) for update info.
-
 __Translators and Programmers__
 
 * A .pot file is included for translators.

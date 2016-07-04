@@ -231,6 +231,6 @@ Quick Mail is free for personal or commercial use. Please encourage future devel
 
 * A .pot file is included for translators.
 
-* Includes Spanish translation.
+* Includes French and Spanish translations.
 
 * See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.

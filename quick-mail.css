@@ -1,6 +1,6 @@
 @CHARSET "UTF-8";
 /* Welcome to quick-mail.css */
-#qm-validate, #qm_row {
+#qm-validate, #qm_row, #qm-second, #qm-third, #qm-fourth, #qm-fifth, #qm-sixth {
 	display: none;
 }
 

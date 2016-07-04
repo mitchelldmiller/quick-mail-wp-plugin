@@ -1,7 +1,6 @@
 <?php
 /**
  * @package QuickMail
- * @version 1.3.1
  */
 
 /**

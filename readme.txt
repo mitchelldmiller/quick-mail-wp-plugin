@@ -1,14 +1,14 @@
 === Quick Mail ===
 Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
-Tags: email, admin, mail, idn, attachment, Spanish
+Tags: email, admin, mail, idn, attachment, Spanish, French
 Requires at least: 4.4
-Tested up to: 4.5.2
-Stable tag: 1.3.1
+Tested up to: 4.5.3
+Stable tag: 1.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Adds "Quick Mail" to Tools. Send text or html email with file attachments from user's credentials. Fast, simple. Spanish translation.
+Adds "Quick Mail" to Tools. Send text or html email with file attachments from user's credentials. French and Spanish translations.
 
 == Description ==
 
@@ -16,7 +16,7 @@ Adds "Quick Mail" to Tools. Send text or html email with file attachments from u
 
 Send a quick email from WordPress Dashboard to a WordPress user, or anyone. Adds Quick Mail to Tools menu.
 
-Mail is sent with user's name and email. Multiple files can be attached to message.
+Mail is sent with user's name and email. Multiple files from up to six directories (folders) can be attached to a message.
 
 Sends text or html mails. Content type is determined from message.
 
@@ -34,7 +34,7 @@ Site options for administrators to hide their profile, and limit access to user 
 
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail 1.3.0 Supports International Mail](http://wheredidmybraingo.com/quick-mail-1-3-0-supports-international-mail/) for update info.
+* See [Quick Mail 1.3.2 Improves Multiple File Upload, Translations](http://wheredidmybraingo.com/quick-mail-1-3-2-improves-multiple-file-upload-translations/) for update info.
 
 == Installation ==
 
@@ -61,6 +61,8 @@ Site options for administrators to hide their profile, and limit access to user 
 * One recipient per email.
 
 * Up to 5 manually entered recipients are saved in HTML Storage.
+
+* Multiple files can be uploaded from up to 6 folders (directories).
 
 = Address Validation =
 
@@ -100,6 +102,10 @@ Site options for administrators to hide their profile, and limit access to user 
 
 == Changelog ==
 
+= 1.3.2 =
+ * Multiple files can be uploaded from up to 6 folders (directories)
+ * Fixed translations, added French. Props [@verbre](https://wordpress.org/support/profile/verbre)
+ 
 = 1.3.1 =
  * Fixed mail validation error.
  * Added multiple file upload.
@@ -164,6 +170,11 @@ Site options for administrators to hide their profile, and limit access to user 
 
 == Upgrade Notice ==
 
+= 1.3.2 =
+* Upgrade needed for translations.
+* Upgrade needed to upload file attachments from multiple directories.
+* Multiple file attachments can uploaded from up to six folders (directories)
+
 = 1.3.1 =
 * Upgrade recommended.
 * Fixed mail validation error.
@@ -214,7 +225,7 @@ Site options for administrators to hide their profile, and limit access to user 
 
 == License ==
 
-This plugin is free for personal or commercial use. Please encourage future development with a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY "Donate with PayPal").
+Quick Mail is free for personal or commercial use. Please encourage future development with a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY "Donate with PayPal").
 
 == Translators and Programmers ==
 
@@ -223,4 +234,3 @@ This plugin is free for personal or commercial use. Please encourage future deve
 * Includes Spanish translation.
 
 * See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.
-

@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Adds Quick Mail to Tools menu. Send email with an attachment using a list of users or enter a name.
-Version: 1.3.1
+Version: 1.3.2
 Author: Mitchell D. Miller
 Author URI: http://mitchelldmiller.com
 Plugin URI: http://quickmail.xyz
@@ -412,26 +412,28 @@ jQuery(document).ready( function() {
         } // end duplicate check
 
          if ( empty( $error ) && !empty( $_FILES['attachment'] ) && !empty( $_FILES['attachment']['name'][0] ) ) {
-            $j = count($_FILES['attachment']['name']);
+			$uploads = array_merge_recursive($_FILES['attachment'], $_FILES['second'], $_FILES['third'],
+											$_FILES['fourth'], $_FILES['fifth'], $_FILES['sixth'] );
+            $j = count($uploads['name']);
             for ($i = 0; $i < $j; $i++) {
-               if ( empty( $_FILES['attachment']['name'][$i] ) ) {
+               if ( empty( $uploads['name'][$i] ) ) {
                   continue;
                 }
-               if ( ( 0 == $_FILES['attachment']['error'][$i] ) && ( 0 < $_FILES['attachment']['size'][$i] ) && ( 250 > strlen( $_FILES['attachment']['name'][$i] ) ) ) {
+               if ( ( 0 == $uploads['error'][$i] ) && ( 0 < $uploads['size'][$i] ) && ( 250 > strlen( $uploads['name'][$i] ) ) ) {
                   $temp = $this->qm_get_temp_path(); // @since 1.1.1
                   if ( ! is_dir( $temp ) || ! is_writable( $temp ) ) {
                      $error = __( 'Missing temporary directory', 'quick-mail' );
                   } else {
-                     $file = "{$temp}{$_FILES['attachment']['name'][$i]}";
-                     if ( move_uploaded_file( $_FILES['attachment']['tmp_name'][$i], $file ) ) {
+                     $file = "{$temp}{$uploads['name'][$i]}";
+                     if ( move_uploaded_file( $uploads['tmp_name'][$i], $file ) ) {
                         array_push( $attachments, $file );
                      }
                      else {
                         $error = __( 'Error moving file to', 'quick-mail' ) . " : {$file}";
                      }
                   }
-               } elseif ( 4 != $_FILES['attachment']['error'][$i] ) {
-                  if ( 1 == $_FILES['attachment']['error'][$i] || 2 == $_FILES['attachment']['error'][$i] ) {
+               } elseif ( 4 != $uploads['error'][$i] ) {
+                  if ( 1 == $uploads['error'][$i] || 2 == $uploads['error'][$i] ) {
                      $error = __( 'Uploaded file was too large', 'quick-mail' );
                   } else {
                      $error = __( 'File Upload Error', 'quick-mail' );
@@ -518,7 +520,27 @@ jQuery(document).ready( function() {
                   <?php if ( empty( $no_uploads ) && empty( $_POST['quick-mail-uploads'] ) ) : ?>
       <tr>
          <td class="quick-mail"><?php _e( 'Attachment', 'quick-mail' ); ?>:</td>
-         <td><input name="attachment[]" type="file" multiple="multiple" tabindex="3"></td>
+         <td><input id="qm-first" name="attachment[]" type="file" multiple="multiple" tabindex="3"></td>
+      </tr>
+	  <tr id="qm-second">
+         <td class="quick-mail"><?php _e( 'Attachment', 'quick-mail' ); ?>:</td>
+         <td><input id="qm-second-file" name="second[]" type="file" multiple="multiple" tabindex="4"></td>
+      </tr>
+      <tr id="qm-third">
+         <td class="quick-mail"><?php _e( 'Attachment', 'quick-mail' ); ?>:</td>
+         <td><input id="qm-third-file" name="third[]" type="file" multiple="multiple" tabindex="5"></td>
+      </tr>
+      <tr id="qm-fourth">
+         <td class="quick-mail"><?php _e( 'Attachment', 'quick-mail' ); ?>:</td>
+         <td><input id="qm-fourth-file" name="fourth[]" type="file" multiple="multiple" tabindex="6"></td>
+      </tr>
+      <tr id="qm-fifth">
+         <td class="quick-mail"><?php _e( 'Attachment', 'quick-mail' ); ?>:</td>
+         <td><input id="qm-fifth-file" name="fifth[]" type="file" multiple="multiple" tabindex="7"></td>
+      </tr>
+      <tr id="qm-sixth">
+         <td class="quick-mail"><?php _e( 'Attachment', 'quick-mail' ); ?>:</td>
+         <td><input id="qm-sixth-file" name="sixth[]" type="file" multiple="multiple" tabindex="8"></td>
       </tr>
                   <?php endif; ?>
       <tr>
@@ -764,7 +786,7 @@ echo $verify_note;
     * load translations
     */
    public function init_quick_mail_translation() {
-      load_plugin_textdomain( 'quick-mail', '', dirname( __FILE__ ) . '/lang' );
+   	  load_plugin_textdomain( 'quick-mail', false, basename( dirname( __FILE__ ) ) . '/lang' );
    } // end init_quick_mail_translation
 
    /**

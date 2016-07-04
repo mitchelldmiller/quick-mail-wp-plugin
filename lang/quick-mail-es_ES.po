@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Quick Mail v1.3.1\n"
+"Project-Id-Version: Quick Mail v1.3.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-05-27 15:58:50+0000\n"
+"PO-Revision-Date: 2016-05-30 23:52:42+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -30,45 +30,45 @@ msgstr "Error: Perfil de Usario Incompleto"
 msgid "Login Expired. Refresh Page."
 msgstr "Inicio de sesión caducado. Actualice la página."
 
-#: quick-mail.php:430
+#: quick-mail.php:433
 #@ quick-mail
 msgid "Error moving file to"
 msgstr "Archivo de error mvil a"
 
-#: quick-mail.php:437
+#: quick-mail.php:440
 #@ quick-mail
 msgid "File Upload Error"
 msgstr "Error de carga de archivo"
 
-#: quick-mail.php:423
+#: quick-mail.php:426
 #@ quick-mail
 msgid "Missing temporary directory"
 msgstr "Falta el directorio temporal"
 
-#: quick-mail.php:445
+#: quick-mail.php:448
 #@ quick-mail
 msgid "Error sending mail"
 msgstr "Error al enviar correo"
 
-#: quick-mail.php:448
+#: quick-mail.php:451
 #@ quick-mail
 msgid "Message Sent"
 msgstr "Mensaje enviado"
 
-#: quick-mail.php:451
+#: quick-mail.php:454
 #@ quick-mail
 msgid "Error Deleting Upload"
 msgstr "Error Eliminar Upload"
 
 #. translators: plugin header field 'Name'
 #: quick-mail.php:0
-#: quick-mail.php:467
-#: quick-mail.php:748
+#: quick-mail.php:470
+#: quick-mail.php:771
 #@ quick-mail
 msgid "Quick Mail"
 msgstr "Correo Rápido"
 
-#: quick-mail.php:501
+#: quick-mail.php:504
 #@ quick-mail
 msgid "To"
 msgstr "Para"
@@ -79,29 +79,34 @@ msgstr "Para"
 msgid "Enter mail address"
 msgstr "Introducir dirección de correo"
 
-#: quick-mail.php:512
-#: quick-mail.php:516
+#: quick-mail.php:515
+#: quick-mail.php:519
 #@ quick-mail
 msgid "Subject"
 msgstr "Asunto"
 
-#: quick-mail.php:520
+#: quick-mail.php:523
+#: quick-mail.php:527
+#: quick-mail.php:531
+#: quick-mail.php:535
+#: quick-mail.php:539
+#: quick-mail.php:543
 #@ quick-mail
 msgid "Attachment"
 msgstr "Accesorio"
 
-#: quick-mail.php:525
+#: quick-mail.php:548
 #@ quick-mail
 msgid "Message"
 msgstr "Mensaje"
 
-#: quick-mail.php:527
+#: quick-mail.php:550
 #@ quick-mail
 msgid "Enter your message"
 msgstr "Introduzca su mensaje"
 
-#: quick-mail.php:533
-#: quick-mail.php:534
+#: quick-mail.php:556
+#: quick-mail.php:557
 #@ quick-mail
 msgid "Send Mail"
 msgstr "Enviar Correo"
@@ -112,7 +117,7 @@ msgstr "Enviar Correo"
 msgid "Mitchell D. Miller"
 msgstr "Mitchell D. Miller"
 
-#: quick-mail.php:497
+#: quick-mail.php:500
 #@ quick-mail
 msgid "From"
 msgstr "De"
@@ -122,108 +127,108 @@ msgstr "De"
 msgid "Uploads are disabled"
 msgstr "Uploads are disabled"
 
-#: quick-mail.php:554
-#: quick-mail.php:564
-#: quick-mail.php:574
-#: quick-mail.php:583
+#: quick-mail.php:577
+#: quick-mail.php:587
+#: quick-mail.php:597
+#: quick-mail.php:606
 #@ quick-mail
 msgid "Option Updated"
 msgstr "Opción actualizada"
 
-#: quick-mail.php:631
+#: quick-mail.php:654
 #@ quick-mail
 msgid "Quick Mail Options"
 msgstr "Opciones de correo rápido"
 
-#: quick-mail.php:635
+#: quick-mail.php:658
 #@ quick-mail
 msgid "User Display"
 msgstr "Pantalla de usuario"
 
-#: quick-mail.php:643
+#: quick-mail.php:666
 #@ quick-mail
 msgid "Show All Users"
 msgstr "Mostrar todos los usuarios"
 
-#: quick-mail.php:652
+#: quick-mail.php:675
 #@ quick-mail
 msgid "Show Users with Names"
 msgstr "Mostrar usuarios con nombres"
 
-#: quick-mail.php:615
-#: quick-mail.php:661
+#: quick-mail.php:638
+#: quick-mail.php:684
 #@ quick-mail
 msgid "Do Not Show Users"
 msgstr "No Mostrar usuarios"
 
-#: quick-mail.php:692
+#: quick-mail.php:715
 #@ quick-mail
 msgid "Save Options"
 msgstr "Guardar las opciones"
 
 #: quick-mail.php:387
-#: quick-mail.php:483
+#: quick-mail.php:486
 #@ quick-mail
 msgid "Invalid mail address"
 msgstr "Dirección de correo es no válido"
 
-#: quick-mail.php:644
+#: quick-mail.php:667
 #@ quick-mail
 msgid "Show all users sorted by nickname."
 msgstr "Mostrar todos los usuarios ordenados por apodo."
 
-#: quick-mail.php:645
-#: quick-mail.php:654
+#: quick-mail.php:668
+#: quick-mail.php:677
 #@ quick-mail
 msgid "matching users"
 msgstr "usuarios que empareja"
 
-#: quick-mail.php:653
+#: quick-mail.php:676
 #@ quick-mail
 msgid "Show users with names, sorted by last name."
 msgstr "Mostrar usuarios con nombres, ordenados por apellido."
 
-#: quick-mail.php:662
+#: quick-mail.php:685
 #@ quick-mail
 msgid "Enter address to send mail."
 msgstr "Introduzca la dirección para enviar correo."
 
-#: quick-mail.php:666
+#: quick-mail.php:689
 #@ quick-mail
 msgid "Administration"
 msgstr "Administración"
 
-#: quick-mail.php:670
+#: quick-mail.php:693
 #@ quick-mail
 msgid "Hide Administrator profiles"
 msgstr "Ocultar perfiles de administración"
 
-#: quick-mail.php:671
+#: quick-mail.php:694
 #@ quick-mail
 msgid "User list will not include administrator profiles."
 msgstr "Lista de usuarios no incluirá perfiles de administración."
 
-#: quick-mail.php:677
+#: quick-mail.php:700
 #@ quick-mail
 msgid "Grant Editors access to user list"
 msgstr "Grant Editores acceso a la lista de usuarios"
 
-#: quick-mail.php:678
+#: quick-mail.php:701
 #@ quick-mail
 msgid "Modify permission to let editors see user list."
 msgstr "Modificar permisos a editores ver lista de usuarios."
 
-#: quick-mail.php:435
+#: quick-mail.php:438
 #@ quick-mail
 msgid "Uploaded file was too large"
 msgstr "Archivo subido era demasiado grande"
 
-#: quick-mail.php:507
+#: quick-mail.php:510
 #@ quick-mail
 msgid "Recent"
 msgstr "Recientes"
 
-#: quick-mail.php:662
+#: quick-mail.php:685
 #@ quick-mail
 msgid "Saves last five addresses."
 msgstr "Ahorra el último cinco direcciones."
@@ -244,23 +249,23 @@ msgstr "Quick Mail no se puede instalar"
 msgid "Adds Quick Mail to Tools menu. Send email with an attachment using a list of users or enter a name."
 msgstr "Agrega el Correo Rápido al menú de herramientas. Enviar correo electrónico con un anexo con una lista de usuarios o introduzca un nombre."
 
-#: quick-mail.php:683
+#: quick-mail.php:706
 #@ quick-mail
 msgid "Verify recipient email domains."
 msgstr "Comprobar dominios de correo electrónico destinatario."
 
-#: quick-mail.php:800
+#: quick-mail.php:823
 #@ quick-mail
 msgid "Settings"
 msgstr "Configuración"
 
-#: quick-mail.php:621
-#: quick-mail.php:801
+#: quick-mail.php:644
+#: quick-mail.php:824
 #@ quick-mail
 msgid "FAQ"
 msgstr "Preguntas más frecuentes"
 
-#: quick-mail.php:802
+#: quick-mail.php:825
 #@ quick-mail
 msgid "Support"
 msgstr "Apoyo"
@@ -275,57 +280,57 @@ msgstr "Error de correo"
 msgid "No subject"
 msgstr "No tema"
 
-#: quick-mail.php:613
+#: quick-mail.php:636
 #@ quick-mail
 msgid "Checks domain with"
 msgstr "Dominio de cheques con"
 
-#: quick-mail.php:615
+#: quick-mail.php:638
 #@ quick-mail
 msgid "when"
 msgstr "cuando"
 
-#: quick-mail.php:616
+#: quick-mail.php:639
 #@ quick-mail
 msgid "is selected"
 msgstr "se ha seleccionado"
 
-#: quick-mail.php:617
+#: quick-mail.php:640
 #@ quick-mail
 msgid "Verifies domain with"
 msgstr "Comprueba dominio con"
 
-#: quick-mail.php:624
+#: quick-mail.php:647
 #@ quick-mail
 msgid "function not found"
 msgstr "función que no se encuentra"
 
-#: quick-mail.php:625
+#: quick-mail.php:648
 #@ quick-mail
 msgid "Cannot verify international domains"
 msgstr "No puede verificar dominios internacionales"
 
-#: quick-mail.php:625
+#: quick-mail.php:648
 #@ quick-mail
 msgid "because"
 msgstr "porque"
 
-#: quick-mail.php:626
+#: quick-mail.php:649
 #@ quick-mail
 msgid "Please read"
 msgstr "Por favor lea"
 
-#: quick-mail.php:612
+#: quick-mail.php:635
 #@ quick-mail
 msgid "http://php.net/manual/en/function.checkdnsrr.php"
 msgstr "http://php.net/manual/es/function.checkdnsrr.php"
 
-#: quick-mail.php:620
+#: quick-mail.php:643
 #@ quick-mail
 msgid "https://wordpress.org/plugins/quick-mail/faq/"
 msgstr "https://es.wordpress.org/plugins/quick-mail/faq/"
 
-#: quick-mail.php:622
+#: quick-mail.php:645
 #@ quick-mail
 msgid "http://php.net/manual/en/function.idn-to-ascii.php"
 msgstr "http://php.net/manual/es/function.idn-to-ascii.php"
@@ -362,14 +367,14 @@ msgstr "http://quickmail.xyz"
 msgid "http://mitchelldmiller.com"
 msgstr "http://mitchelldmiller.com"
 
-#. translators: plugin header field 'Version'
-#: quick-mail.php:0
-#@ quick-mail
-msgid "1.3.1"
-msgstr "1.3.1"
-
 #: quick-mail.php:410
 #@ quick-mail
 msgid "Duplicate files uploaded"
 msgstr "Archivos duplicados subidos"
+
+#. translators: plugin header field 'Version'
+#: quick-mail.php:0
+#@ quick-mail
+msgid "1.3.2"
+msgstr "1.3.2"
 

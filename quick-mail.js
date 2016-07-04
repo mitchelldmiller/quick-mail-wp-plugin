@@ -1,4 +1,4 @@
-// Quick Mail: quick-mail.js 1.3.0
+// Quick Mail: quick-mail.js 1.3.2
 
 function setInfo(item, info)
 {
@@ -193,6 +193,18 @@ jQuery(document).ready(function() {
          jQuery('#qm-validate').hide();
       }
    });
+   
+   jQuery('#qm-first').click(function() {
+	      if (jQuery('#qm_error').is(':visible') ) {
+	         jQuery('#qm_error').hide();
+	      }
+	      if (jQuery('#success').is(':visible') ) {
+	         jQuery('#success').hide();
+	      }
+	      if (jQuery('#qm-validate').is(':visible') ) {
+	         jQuery('#qm-validate').hide();
+	      }
+	});
 
    jQuery('#email').keydown(function() {
       if (jQuery('#qm_error').is(':visible') ) {
@@ -234,6 +246,42 @@ jQuery(document).ready(function() {
          }
       } );
 
+   });
+   
+   /////
+   jQuery('#qm-first').change(function() {
+	   if (this.value != '') {
+		   jQuery('#qm-second').show();
+		   jQuery('#qm-second').focus();
+	   }
+   });
+   
+   jQuery('#qm-second-file').change(function() {
+	   if (this.value != '') {
+		   jQuery('#qm-third').show();
+		   jQuery('#qm-third').focus();
+	   }
+   });
+   
+   jQuery('#qm-third-file').change(function() {
+	   if (this.value != '') {
+		   jQuery('#qm-fourth').show();
+		   jQuery('#qm-fourth').focus();
+	   }
+   });
+   
+   jQuery('#qm-fourth-file').change(function() {
+	   if (this.value != '') {
+		   jQuery('#qm-fifth').show();
+		   jQuery('#qm-fifth').focus();
+	   }
+   });
+   
+   jQuery('#qm-fifth-file').change(function() {
+	   if (this.value != '') {
+		   jQuery('#qm-sixth').show();
+		   jQuery('#qm-sixth').focus();
+	   }
    });
 
    jQuery("#Hello").submit(function( event ) {

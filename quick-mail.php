@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Adds Quick Mail to Tools menu. Send email with an attachment using a list of users or enter a name.
-Version: 1.3.2
+Version: 1.3.3
 Author: Mitchell D. Miller
 Author URI: http://mitchelldmiller.com
 Plugin URI: http://quickmail.xyz
@@ -496,7 +496,7 @@ jQuery(document).ready( function() {
       value="<?php echo $verify; ?>">
    <table id="quick-mail" class="form-table">
       <tr>
-         <td class="quick-mail"><?php _e( 'From', 'quick-mail' ); ?>:</td>
+         <td class="quick-mail"><input type="hidden" name="qm-invalid" id="qm-invalid" value="0"><?php _e( 'From', 'quick-mail' ); ?>:</td>
          <td><?php echo htmlspecialchars( substr( $from, 6 ), ENT_QUOTES ); ?></td>
       </tr>
       <tr>

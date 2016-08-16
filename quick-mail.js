@@ -1,4 +1,4 @@
-// Quick Mail: quick-mail.js 1.3.2
+// Quick Mail: quick-mail.js 1.3.3
 
 function setInfo(item, info)
 {
@@ -151,6 +151,7 @@ jQuery(document).ready(function() {
    } // do not load if not on Quick Mail form
 
    jQuery('#qm-validate').hide();
+   jQuery('#qm-invalid').val('0');
    jQuery('#email').bind('keypress', function(event) {
       if (event.keyCode == 13) {
          jQuery('#email').blur();
@@ -232,6 +233,7 @@ jQuery(document).ready(function() {
       if ((info == '') || (last_valid == info)) { return true; }
       jQuery.get(qm_validate, { email : info, 'quick-mail-verify' : val_option }, function(data) {
          if (data == 'OK') {
+        	 	jQuery('#qm-invalid').val('0');
             if (jQuery('#qm-validate').is(':visible') ) {
                jQuery('#qm-validate').hide();
             }
@@ -242,13 +244,13 @@ jQuery(document).ready(function() {
             }
          } else {
             jQuery('#qm-validate').show();
+            jQuery('#qm-invalid').val('1');
             return false;
          }
       } );
 
    });
    
-   /////
    jQuery('#qm-first').change(function() {
 	   if (this.value != '') {
 		   jQuery('#qm-second').show();
@@ -285,15 +287,16 @@ jQuery(document).ready(function() {
    });
 
    jQuery("#Hello").submit(function( event ) {
-      if (jQuery('#qm-validate').is(':visible') ) {
+	   if (jQuery('#qm-invalid').val() == '1') {
          event.preventDefault();
+         jQuery('#qm-validate').show();
          jQuery('#email').focus();
          jQuery('#email').select();
          return false;
       } // end if error message is visible
 
       if (jQuery('#qm_row').length && !addInfo()) 	{
-         console.log('error saving HTML storage');
+         console.log('Error saving HTML storage');
       }
    });
 

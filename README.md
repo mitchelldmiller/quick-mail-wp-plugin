@@ -31,13 +31,13 @@ Site options for administrators to hide their profile, and limit access to user 
 
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail 1.3.2 Improves Multiple File Upload, Translations](http://wheredidmybraingo.com/quick-mail-1-3-2-improves-multiple-file-upload-translations/) for update info.
+* See [Quick Mail 1.3.3 for WordPress 4.6](http://wheredidmybraingo.com/quick-mail-1-3-3-for-wordpress-4-6/) for update info.
 
 ### Installation ###
 
-1. Download the plugin and unpack in your `/wp-content/plugins/` directory
+1. Download the plugin and unpack in your `/wp-content/plugins/` directory.
 
-1. Activate the plugin through the 'Plugins' menu in WordPress
+1. Activate the plugin through the 'Plugins' menu in WordPress.
 
 ### Frequently Asked Questions ###
 

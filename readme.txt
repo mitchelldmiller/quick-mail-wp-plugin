@@ -3,8 +3,8 @@ Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Tags: email, admin, mail, idn, attachment, Spanish, French
 Requires at least: 4.4
-Tested up to: 4.5.3
-Stable tag: 1.3.2
+Tested up to: 4.6
+Stable tag: 1.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,7 +34,7 @@ Site options for administrators to hide their profile, and limit access to user 
 
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail 1.3.2 Improves Multiple File Upload, Translations](http://wheredidmybraingo.com/quick-mail-1-3-2-improves-multiple-file-upload-translations/) for update info.
+* See [Quick Mail 1.3.3 for WordPress 4.6](http://wheredidmybraingo.com/quick-mail-1-3-3-for-wordpress-4-6/) for update info.
 
 == Installation ==
 
@@ -70,7 +70,6 @@ Site options for administrators to hide their profile, and limit access to user 
 
 * International (non-ASCII) domains must be converted to [punycode](https://tools.ietf.org/html/rfc3492) with [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php).
 
-
   Unfortunately, `idn_to_ascii` is not available on all systems.
 
 * "Cannot verify international domains because idn_to_ascii function not found"
@@ -78,7 +77,6 @@ Site options for administrators to hide their profile, and limit access to user 
   This is displayed when Quick Mail cannot verify domains containing non-ASCII characters.
 
 * [checkdnsrr](http://php.net/manual/en/function.checkdnsrr.php) is used to check a domain for an [MX record](http://www.google.com/support/enterprise/static/postini/docs/admin/en/activate/mx_faq.html).
-
 
   An MX record tells senders how to send mail to the domain.
 
@@ -101,6 +99,10 @@ Site options for administrators to hide their profile, and limit access to user 
 2. Selecting recent email addresses
 
 == Changelog ==
+
+= 1.3.3 =
+ * Fixed: invalid email address was saved to recent addresses
+ * Tested with WordPress 4.6
 
 = 1.3.2 =
  * Multiple files can be uploaded from up to 6 folders (directories)
@@ -166,9 +168,12 @@ Site options for administrators to hide their profile, and limit access to user 
 * Fixed typos.
 
 = 1.0.1 =
-* First version on WordPress Plugin Repository
+* First version on WordPress Plugin Repository.
 
 == Upgrade Notice ==
+
+= 1.3.3 =
+* Upgrade only needed to fix invalid email address saved to recent addresses.
 
 = 1.3.2 =
 * Upgrade needed for translations.
@@ -231,6 +236,6 @@ Quick Mail is free for personal or commercial use. Please encourage future devel
 
 * A .pot file is included for translators.
 
-* Includes French and Spanish translations.
+* Includes Spanish and French translations.
 
 * See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.

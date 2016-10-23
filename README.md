@@ -6,29 +6,36 @@ Adds "Quick Mail" to Tools. Send text or html email with file attachments from u
 ### Build Status
 [![Build Status](https://api.travis-ci.org/mitchelldmiller/quick-mail-wp-plugin.svg?branch=master)](https://travis-ci.org/mitchelldmiller/quick-mail-wp-plugin)
 
+[![WordPress rating](https://img.shields.io/wordpress/plugin/r/akismet.svg?maxAge=2592000)]()
+
 Description
 -----------
 
 >Quick Mail is the easiest way to send an email with attachments to a WordPress user on your site.
 
-Send a quick email from WordPress Dashboard to a WordPress user, or anyone. Adds Quick Mail to Tools menu.
+Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds Quick Mail to Tools menu.
 
-Mail is sent with user's name and email. Multiple files from up to six directories (folders) can be attached to a message.
+User options for sending email to site users or others. Mail is sent with user's name and email. Multiple files from up to six directories (folders) can be attached to a message.
 
-Sends text or html mails. Content type is determined from message.
+__Features__
 
-Option to validate recipient domain before mail is sent.
+* Sends text or html mails to multiple recipients. Content type is determined from message.
 
-Validates international domains if [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php) is available to convert domain to [Punycode](https://tools.ietf.org/html/rfc3492).
+* Multiple recipients can be selected from users or entered manually.
 
-Saves message and subject on form to send repeat messages.
+* Saves message and subject on form to send repeat messages.
 
-Saves last five email addresses entered on form.
+* Saves last 12 email addresses entered on form.
 
-User options for sending email to site users or others.
+* Share a WordPress draft by copying / pasting its code into a message.
 
-Site options for administrators to hide their profile, and limit access to user list.
+* Option to validate recipient domains with [checkdnserr](http://php.net/manual/en/function.checkdnsrr.php) before mail is sent.
 
+* Validates international domains if [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php) is available to convert domain to [Punycode](https://tools.ietf.org/html/rfc3492).
+
+* Site options for administrators to hide their profile, and limit access to user list.
+
+### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
 * See [Quick Mail 1.3.3 for WordPress 4.6](http://wheredidmybraingo.com/quick-mail-1-3-3-for-wordpress-4-6/) for update info.
@@ -55,11 +62,16 @@ __Selecting Recipients__
 
 __Limitations__
 
-* One recipient per email.
-
-* Up to 5 manually entered recipients are saved in HTML Storage.
+* Up to 12 manually entered recipients are saved in HTML Storage.
 
 * Multiple files can be uploaded from up to 6 folders (directories).
+
+* "Uploads are disabled" on mobile devices.
+
+Some devices cannot upload files. According to [Modernizr](https://modernizr.com/download#fileinput-inputtypes-setclasses) :
+> iOS < 6 and some android version don't support this
+
+File uploads are disabled for ancient IOS 5 devices. Please [add a support message](https://wordpress.org/support/plugin/quick-mail) if uploads are disabled on your phone or tablet, so I can remove the upload button if your device is detected.
 
 __Address Validation__
 
@@ -102,4 +114,5 @@ __Translators and Programmers__
 __License__
 
 This plugin is free for personal or commercial use. 
+
 

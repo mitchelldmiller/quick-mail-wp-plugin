@@ -6,7 +6,7 @@ Adds "Quick Mail" to Tools. Send text or html email with file attachments from u
 ### Build Status
 [![Build Status](https://api.travis-ci.org/mitchelldmiller/quick-mail-wp-plugin.svg?branch=master)](https://travis-ci.org/mitchelldmiller/quick-mail-wp-plugin)
 
-[![WordPress rating](https://img.shields.io/wordpress/plugin/r/akismet.svg?maxAge=2592000)]()
+[![WordPress rating](https://img.shields.io/wordpress/plugin/r/quick-mail.svg?maxAge=2592000)]()
 
 Description
 -----------
@@ -38,7 +38,7 @@ __Features__
 ### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail 1.3.3 for WordPress 4.6](http://wheredidmybraingo.com/quick-mail-1-3-3-for-wordpress-4-6/) for update info.
+* See [Send Email from WordPress with Quick Mail](http://wheredidmybraingo.com/send-email-from-wordpress-with-quick-mail/) for update info.
 
 ### Installation ###
 

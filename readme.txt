@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: email, admin, mail, idn, attachment, multisite, Spanish, French
 Requires at least: 4.4
 Tested up to: 4.6.1
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -117,6 +117,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 * added multiple recipients
 * supports multisite
 
+= 2.0.1 =
+* fixed duplicate attachment error
+
 = Earlier versions =
 
 Please refer to the separate changelog.txt for changes of previous versions.
@@ -124,6 +127,9 @@ Please refer to the separate changelog.txt for changes of previous versions.
 == Upgrade Notice ==
 
 = 2.0.0 =
+* Upgrade recommended.
+
+= 2.0.1 =
 * Upgrade recommended.
 
 == License ==

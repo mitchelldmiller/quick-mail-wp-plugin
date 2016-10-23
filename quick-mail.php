@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Adds Quick Mail to Tools menu. Send email with an attachment using a list of users or enter a name.
-Version: 2.0.0
+Version: 2.0.1
 Author: Mitchell D. Miller
 Author URI: http://wheredidmybraingo.com/
 Plugin URI: http://wheredidmybraingo.com/tag/quick-mail/
@@ -681,9 +681,18 @@ jQuery(document).ready( function() {
          if ( empty( $error ) && !empty( $_FILES['attachment'] ) && !empty( $_FILES['attachment']['name'][0] ) ) {
 			$uploads = array_merge_recursive($_FILES['attachment'], $_FILES['second'], $_FILES['third'],
 											$_FILES['fourth'], $_FILES['fifth'], $_FILES['sixth'] );
-			$ntest = count( array_unique( $uploads['name'] ) );
-            $j = count( $uploads['name'] );
-            if ( $ntest != $j ) {
+			
+			$dup = false;
+			$j = count( $uploads['name'] );
+			for ($i = 0; ($i < $j) && ($dup == false); $i++) {
+				for ($k = $i + 1; $k < $j; $k++) {
+					if ( !empty($uploads['name'][$k] ) && $uploads['name'][$k] == $uploads['name'][$i] ) {
+						$dup = true;
+					} // end if
+				} // end for
+			} // end for
+			
+            if ( $dup ) {
             		$error = __( 'Duplicate attachments', 'quick-mail' );
             } // end if duplicate attachments
 			for ($i = 0; ($i < $j) && empty($error); $i++) {

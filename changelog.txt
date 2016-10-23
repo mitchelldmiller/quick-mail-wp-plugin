@@ -1,0 +1,70 @@
+== Quick Mail Changelog ==
+= 1.3.3 =
+ * Fixed: invalid email address was saved to recent addresses
+ * Tested with WordPress 4.6
+
+= 1.3.2 =
+ * Multiple files can be uploaded from up to 6 folders (directories)
+ * Fixed translations, added French. Props [@verbre](https://wordpress.org/support/profile/verbre)
+ 
+= 1.3.1 =
+ * Fixed mail validation error.
+ * Added multiple file upload.
+
+= 1.3.0 =
+ * Replaced automatic domain validation with option.
+ * Validates international domains if [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php) is available.
+ * Tested with WordPress 4.5.2
+
+= 1.2.5 =
+ * Replaced WP REST API usage with database query.
+ * Improved user list CSS.
+ * Tested with WordPress 4.4.2
+
+= 1.2.4 =
+* Improved installation on sites with a single user.
+* Uses WP REST API during installation, if available.
+* Fixed security warning for changed files.
+* Tested with WordPress 4.4.1
+
+= 1.2.3 =
+* Requires WordPress 4.2 or greater for dismissible messages.
+* Improved documentation.
+* Tested with WordPress 4.3.1, 4.4
+
+= 1.2.2 =
+* Status messages must be dismissed by user. Messages vanished after 4 seconds in previous versions.
+* Tested with WordPress 4.2.3
+
+= 1.2.1 =
+* Maintenance release.
+* Fixed error flash when mail is loaded.
+* Fixed capability check for admin.
+* Fixed nested quotes on form.
+
+= 1.2.0 =
+* Send HTML mail.
+* Message text is not filtered.
+* Manually entered email addresses are saved.
+* Improved install / uninstall.
+* Default options are "show admin" and "show all users." Works on sites with one user.
+* Moved plugin functions into a class.
+* Tested with WordPress 4.2.2
+
+= 1.1.1 =
+* temp upload dir: use [sys_get_temp_dir](http://php.net/manual/en/function.sys-get-temp-dir.php) if [upload_tmp_dir](http://php.net/manual/en/ini.core.php#ini.upload-tmp-dir) is undefined.
+* uninstall deletes plugin options.
+* tested with WordPress 4.1.2
+
+= 1.1.0 =
+* Send email to site users, without typing address.
+* Limit access to user list and administrator profile.
+* Verify recipient domain on manual entry.
+* Removed form background.
+
+= 1.0.2 =
+* Minimum role can changed by adding a filter. Props: [@lumpysimon](https://github.com/lumpysimon/)
+* Fixed typos.
+
+= 1.0.1 =
+* First version on WordPress Plugin Repository.

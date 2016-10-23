@@ -1,40 +1,46 @@
 === Quick Mail ===
 Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
-Tags: email, admin, mail, idn, attachment, Spanish, French
+Tags: email, admin, mail, idn, attachment, multisite, Spanish, French
 Requires at least: 4.4
-Tested up to: 4.6
-Stable tag: 1.3.3
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tested up to: 4.6.1
+Stable tag: 2.0.0
+License: GPLv3
+License URI: http://www.gnu.org/licenses/gpl.html
 
 Adds "Quick Mail" to Tools. Send text or html email with file attachments from user's credentials. French and Spanish translations.
 
 == Description ==
 
->Quick Mail is the easiest way to send an email with attachments to a WordPress user on your site.
+>Quick Mail is the easiest way to send an email with attachments to WordPress users on your site. Compatible with multisite.
 
-Send a quick email from WordPress Dashboard to a WordPress user, or anyone. Adds Quick Mail to Tools menu.
+Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds Quick Mail to Tools menu.
 
-Mail is sent with user's name and email. Multiple files from up to six directories (folders) can be attached to a message.
+User options for sending email to site users or others. Mail is sent with user's name and email. Multiple files from up to six directories (folders) can be attached to a message.
 
-Sends text or html mails. Content type is determined from message.
+= Features =
 
-Option to validate recipient domain before mail is sent.
+* Sends text or html mails to multiple recipients. Content type is determined from message.
 
-Validates international domains if [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php) is available to convert domain to [Punycode](https://tools.ietf.org/html/rfc3492).
+* Multiple recipients can be selected from users or entered manually.
 
-Saves message and subject on form to send repeat messages.
+* Saves message and subject on form to send repeat messages.
 
-Saves last five email addresses entered on form.
+* Saves last 12 email addresses entered on form.
 
-User options for sending email to site users or others.
+* Share a WordPress draft by copying / pasting its code into a message.
 
-Site options for administrators to hide their profile, and limit access to user list.
+* Option to validate recipient domains with [checkdnserr](http://php.net/manual/en/function.checkdnsrr.php) before mail is sent.
+
+* Validates international domains if [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php) is available to convert domain to [Punycode](https://tools.ietf.org/html/rfc3492).
+
+* Site options for administrators to hide their profile, and limit access to user list.
+
+= Learn More =
 
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail 1.3.3 for WordPress 4.6](http://wheredidmybraingo.com/quick-mail-1-3-3-for-wordpress-4-6/) for update info.
+* See [Send Email from WordPress with Quick Mail](http://wheredidmybraingo.com/send-email-from-wordpress-with-quick-mail) for update info.
 
 == Installation ==
 
@@ -58,11 +64,16 @@ Site options for administrators to hide their profile, and limit access to user 
 
 = Limitations =
 
-* One recipient per email.
-
-* Up to 5 manually entered recipients are saved in HTML Storage.
+* Up to 12 manually entered recipients are saved in HTML Storage.
 
 * Multiple files can be uploaded from up to 6 folders (directories).
+
+* "Uploads are disabled" on mobile devices.
+
+Some devices cannot upload files. According to [Modernizr](https://modernizr.com/download#fileinput-inputtypes-setclasses) :
+> iOS < 6 and some android version don't support this
+
+File uploads are disabled for ancient IOS 5 devices. Please [add a support message](https://wordpress.org/support/plugin/quick-mail) if uploads are disabled on your phone or tablet, so I can remove the upload button if your device is detected.
 
 = Address Validation =
 
@@ -96,137 +107,24 @@ Site options for administrators to hide their profile, and limit access to user 
 
 1. Selecting users on Quick Mail data entry form
 
-2. Selecting recent email addresses
+2. Multiple attachments from different folders (directories)
+
+3. Selecting saved recipients
 
 == Changelog ==
 
-= 1.3.3 =
- * Fixed: invalid email address was saved to recent addresses
- * Tested with WordPress 4.6
+= 2.0.0 =
+* added multiple recipients
+* supports multisite
 
-= 1.3.2 =
- * Multiple files can be uploaded from up to 6 folders (directories)
- * Fixed translations, added French. Props [@verbre](https://wordpress.org/support/profile/verbre)
- 
-= 1.3.1 =
- * Fixed mail validation error.
- * Added multiple file upload.
+= Earlier versions =
 
-= 1.3.0 =
- * Replaced automatic domain validation with option.
- * Validates international domains if [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php) is available.
- * Tested with WordPress 4.5.2
-
-= 1.2.5 =
- * Replaced WP REST API usage with database query.
- * Improved user list CSS.
- * Tested with WordPress 4.4.2
-
-= 1.2.4 =
-* Improved installation on sites with a single user.
-* Uses WP REST API during installation, if available.
-* Fixed security warning for changed files.
-* Tested with WordPress 4.4.1
-
-= 1.2.3 =
-* Requires WordPress 4.2 or greater for dismissible messages.
-* Improved documentation.
-* Tested with WordPress 4.3.1, 4.4
-
-= 1.2.2 =
-* Status messages must be dismissed by user. Messages vanished after 4 seconds in previous versions.
-* Tested with WordPress 4.2.3
-
-= 1.2.1 =
-* Maintenance release.
-* Fixed error flash when mail is loaded.
-* Fixed capability check for admin.
-* Fixed nested quotes on form.
-
-= 1.2.0 =
-* Send HTML mail.
-* Message text is not filtered.
-* Manually entered email addresses are saved.
-* Improved install / uninstall.
-* Default options are "show admin" and "show all users." Works on sites with one user.
-* Moved plugin functions into a class.
-* Tested with WordPress 4.2.2
-
-= 1.1.1 =
-* temp upload dir: use [sys_get_temp_dir](http://php.net/manual/en/function.sys-get-temp-dir.php) if [upload_tmp_dir](http://php.net/manual/en/ini.core.php#ini.upload-tmp-dir) is undefined.
-* uninstall deletes plugin options.
-* tested with WordPress 4.1.2
-
-= 1.1.0 =
-* Send email to site users, without typing address.
-* Limit access to user list and administrator profile.
-* Verify recipient domain on manual entry.
-* Removed form background.
-
-= 1.0.2 =
-* Minimum role can changed by adding a filter. Props: [@lumpysimon](https://github.com/lumpysimon/)
-* Fixed typos.
-
-= 1.0.1 =
-* First version on WordPress Plugin Repository.
+Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
 
-= 1.3.3 =
-* Upgrade only needed to fix invalid email address saved to recent addresses.
-
-= 1.3.2 =
-* Upgrade needed for translations.
-* Upgrade needed to upload file attachments from multiple directories.
-* Multiple file attachments can uploaded from up to six folders (directories)
-
-= 1.3.1 =
+= 2.0.0 =
 * Upgrade recommended.
-* Fixed mail validation error.
-* Added multiple file upload.
-
-= 1.3.0 =
-* Upgrade recommended.
-* Recognizes international domains.
-* Recipient domain validation is optional.
-
-= 1.2.5 =
-* Upgrade only needed to change the user list style.
-* Improved installation on single user sites.
-
-= 1.2.4 =
-* Upgrade recommended.
-* Improved installation.
-* Fixes security warning.
-
-= 1.2.3 =
-* Upgrade recommended.
-* Complies with WordPress 4.3 plugin changes.
-
-= 1.2.2 =
-* Upgrade recommended.
-* Improved status messages.
-
-= 1.2.1 =
-* Upgrade recommended.
-* Fixed three bugs.
-
-= 1.2.0 =
-* Upgrade recommended.
-* Send HTML mail.
-* Saves five manually entered email addresses.
-* Improved install / uninstall.
-
-= 1.1.1 =
-* Upgrade if you were unable to upload attachments.
-
-= 1.1.0 =
-* Upgrade recommended.
-* Sends mail to users without typing addresses.
-* Validates email domain on manually entered email address.
-
-= 1.0.2 =
-* Upgrade if you want to add a filter to change the minimum role.
 
 == License ==
 

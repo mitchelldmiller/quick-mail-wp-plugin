@@ -1,16 +1,23 @@
 @CHARSET "UTF-8";
-/* Welcome to quick-mail.css */
-#qm-validate, #qm_row, #qm-second, #qm-third, #qm-fourth, #qm-fifth, #qm-sixth {
+/* Welcome to quick-mail.css 2.0.6 */
+#qm-validate, #qm_row, #qm_cc_row, #qm_cc_changed, #qm-duplicate,
+.qm-second, .qm-third, .qm-fourth, .qm-fifth, .qm-sixth {
+	display: none;
+}
+.qm-row-second, .qm-row-third, .qm-row-fourth, .qm-row-fifth, .qm-row-sixth {
 	display: none;
 }
 
 #qm_error {
 	color: #c33;
-	font: 14px bold Georgia,serif;
+	font: bold 16px bold Georgia,serif;
 	text-align: center;
 }
 
-.quick-mail-title {
+.qm-vtop {
+   vertical-align: top !important;
+}
+.quick-mail-title, .quick-mail-noscript {
 	font: 24px/32px normal Georgia,serif;
 }
 
@@ -27,51 +34,55 @@ table#quick-mail {
 	width: 80%;
 }
 
+table#quick-mail.form-table td { padding-bottom: 0; }
+
 h1, h2, td {
 	color: #000;
 	font-weight: bold;
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
 }
 
-td:nth-of-type(2) {
+table#quick-mail td:nth-of-type(2) {
 	color: #c33;
 }
 
 td.quick-mail {
-	font: 14px bold Georgia,serif;
-	text-align: right;
+	font: bold 16px/16px Georgia,serif;
+    margin-bottom: 0;
+    padding-bottom: 0;
+	/* text-align: right; */
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
-}
-
-td.quick-mail-message {
-	font: 14px bold Georgia,serif;
-	text-align: right;
-	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
-	vertical-align: top;
 }
 
 th.recipients {
-	font: 18px/14px bold Georgia,serif;
+	font: 18px/24px bold Georgia,serif;
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
 	vertical-align: top;
 }
 
+span.qm-total { color: #000; }
+span.qm-admin { color: #c33; }
 input[type="submit"] {
 	border-radius: 10%;
 	font-weight: bold;
 	padding: 1em;
 }
 
-option {
+select#qm-primary, select#qm-secondary {
+	background-color: #fff;
+}
+
+select#qm-primary optgroup.qmog, select#qm-secondary optgroup.qmog {
+   background-color: #add8e6;
+   color: #000;
+   font-family: Georgia, serif;
+   font-weight: bold;
+   opacity: 0.7;
+}
+
+select#qm-primary option.qmopt, select#qm-secondary option.qmopt, optgroup.qmog option.qmopt {
 	background-color: #fff;
 	color: #000;
 }
 
-optgroup {
-	background-color: #eee;
-	color: #000;
-	font-family: Georgia, serif;
-	font-weight: bold;
-}
-
-@media only screen and (max-width: 739px) { td.quick-mail, td.quick-mail-message { text-align: left; } }
+/* @media only screen and (max-width: 739px) { td.quick-mail, td.quick-mail-message { text-align: left; } } */

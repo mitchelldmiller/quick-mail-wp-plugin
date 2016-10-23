@@ -6,6 +6,7 @@ Adds "Quick Mail" to Tools. Send text or html email with file attachments from u
 ### Build Status
 [![Build Status](https://api.travis-ci.org/mitchelldmiller/quick-mail-wp-plugin.svg?branch=master)](https://travis-ci.org/mitchelldmiller/quick-mail-wp-plugin)
 
+### WordPress Rating
 [![WordPress rating](https://img.shields.io/wordpress/plugin/r/quick-mail.svg?maxAge=2592000)]()
 
 Description

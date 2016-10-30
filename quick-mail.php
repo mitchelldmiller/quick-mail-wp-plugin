@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: Quick Mail
-Description: Adds Quick Mail to Tools menu. Send email with an attachment using a list of users or enter a name.
-Version: 2.0.1
+Description: Adds Quick Mail to Tools menu. Send email with an attachment from dashboard, using a list of users or enter a name.
+Version: 2.0.2
 Author: Mitchell D. Miller
 Author URI: http://wheredidmybraingo.com/
 Plugin URI: http://wheredidmybraingo.com/tag/quick-mail/
@@ -446,104 +446,104 @@ jQuery(document).ready( function() {
    } // end quick_mail_recipient_input
    
 	public function quick_mail_cc_input( $to, $cc, $id ) {
-   	$template = '<input value="%s" id="qm-cc" name="qm-cc" type="text" size="35" tabindex="2" placeholder="%s">';
-   	$blog = is_multisite() ? get_current_blog_id() : 0;
-   	$option = $this->qm_get_display_option( $blog );
-   	if ( !$this->multiple_matching_users( $option, $blog ) ) {
-   		$option = 'X';
-   	} // end if since 1.4.0
-   	
-   	if ( 'X' != $option ) {
-   		// check if site permissions were changed
-   		$editors = '';
-   		if ( is_multisite() ) {
-   			$editors = get_blog_option( $blog, 'editors_quick_mail_privilege', 'N' );
-   		} else {
-   			$editors = get_option( 'editors_quick_mail_privilege', 'N' );
-   		} // end if multisite
-   		 
-   		if ( 'Y' != $editors ) {
-   			if ( ! $this->qm_is_admin( $id, $blog ) ) {
-   				$option = 'X';
-   			} // end if not admin
-   		} // end if editors not allowed to see list
-   	} // end if wants user list
+	   	$template = '<input value="%s" id="qm-cc" name="qm-cc" type="text" size="35" tabindex="2" placeholder="%s">';
+	   	$blog = is_multisite() ? get_current_blog_id() : 0;
+	   	$option = $this->qm_get_display_option( $blog );
+	   	if ( !$this->multiple_matching_users( $option, $blog ) ) {
+	   		$option = 'X';
+	   	} // end if since 1.4.0
+	   	
+	   	if ( 'X' != $option ) {
+	   		// check if site permissions were changed
+	   		$editors = '';
+	   		if ( is_multisite() ) {
+	   			$editors = get_blog_option( $blog, 'editors_quick_mail_privilege', 'N' );
+	   		} else {
+	   			$editors = get_option( 'editors_quick_mail_privilege', 'N' );
+	   		} // end if multisite
+	   		 
+	   		if ( 'Y' != $editors ) {
+	   			if ( ! $this->qm_is_admin( $id, $blog ) ) {
+	   				$option = 'X';
+	   			} // end if not admin
+	   		} // end if editors not allowed to see list
+	   	} // end if wants user list
    
-   	if ( 'A' != $option && 'N' != $option ) {
-   		echo sprintf($template, $cc, __( 'Enter mail address', 'quick-mail' ) );
-   		return;
-   	}
-   	$you = wp_get_current_user(); // from
-   	$args = ( 'A' == $option ) ?
-   	array('orderby' => 'user_nicename', 'count_total' => true) :
-   	array('count_total' => true);
-   	$hide_admin = '';
-   	if ( is_multisite() ) {
-   		$hide_admin = get_blog_option( $blog, 'hide_quick_mail_admin', 'N' );
-   	} else {
-   		$hide_admin = get_option( 'hide_quick_mail_admin', 'N' );
-   	} // end if
-   	$user_query = new \WP_User_Query( $args );
-   	$users = array();
-   	foreach ( $user_query->results as $user ) {
-   		if ( 'Y' == $hide_admin && $this->qm_is_admin( $user->ID, $blog ) ) {
-   			continue;
-   		} // end admin test
-   		
-   		if ( $user->user_email == $you->user_email ) {
-   			continue;
-   		} // end if user
-   
-   		if ( 'A' == $option ) {
-   			$users[] = ucfirst( "{$user->user_nicename}\t{$user->user_email}" );
-   		} // end if all users
-   		else {
-   			$last = ucfirst( get_user_meta( $user->ID, 'last_name', true ) );
-   			$first = get_user_meta( $user->ID, 'first_name', true );
-   			if ( ! empty( $first ) && ! empty( $last ) && ! empty( $user->user_email ) ) {
-   				$users[] = "{$last}\t{$first}\t{$user->ID}\t{$user->user_email}";
-   			} // end if valid name
-   		} // end else named only
-   	} // end for
-   
-   	$j = count( $users );
-   	if ( 2 > $j ) {
-   		echo sprintf( $template, $cc, __( 'Enter mail address', 'quick-mail' ) );
-   		return;
-   	} // end if one match
-   
-   	sort( $users );
-   	$letter = '';
-   	ob_start();
-   	echo '<select name="qm-cc[]" id="qm-secondary" multiple tabindex="3" onchange="return is_qm_cc_dup(this.value)"><option class="qmopt" value="" selected>Select</option>';
-   	for ( $i = 0; $i < $j; $i++ ) {
-   		$row = explode( "\t", $users[$i] );
-   		if ($option == 'A') 	{
-   			$address = urlencode("\"{$row[0]}\" <{$row[1]}>");
-   		}
-   		else {
-   			$address = urlencode("\"{$row[1]} {$row[0]}\" <{$row[3]}>");
-   		} // end if
-   
-   		if ( $letter != $row[0][0] ) {
-   			if ( ! empty($letter) ) {
-   				echo '</optgroup>';
-   			} // end if not first letter group
-   			$letter = $row[0][0];
-   			echo "<optgroup class='qmog' label='{$letter}'>";
-   		} // end if first letter changed
-   
-   		if ( 'A' == $option ) {
-   			$selected = ($row[1] != $cc) ? ' ' : ' selected ';
-   			echo "<option{$selected}value='{$address}' class='qmopt'>{$row[0]}</option>";
-   		}
-   		else {
-   			$selected = ($row[3] != $cc) ? ' ' : ' selected ';
-   			echo "<option{$selected}value='{$address}' class='qmopt'>{$row[1]} {$row[0]}</option>";
-   		}
-   	} // end for
-   	echo '</optgroup></select>';
-   	return ob_get_clean();
+	   	if ( 'A' != $option && 'N' != $option ) {
+	   		echo sprintf($template, $cc, __( 'Enter mail address', 'quick-mail' ) );
+	   		return;
+	   	}
+	   	$you = wp_get_current_user(); // from
+	   	$args = ( 'A' == $option ) ?
+	   	array('orderby' => 'user_nicename', 'count_total' => true) :
+	   	array('count_total' => true);
+	   	$hide_admin = '';
+	   	if ( is_multisite() ) {
+	   		$hide_admin = get_blog_option( $blog, 'hide_quick_mail_admin', 'N' );
+	   	} else {
+	   		$hide_admin = get_option( 'hide_quick_mail_admin', 'N' );
+	   	} // end if
+	   	$user_query = new \WP_User_Query( $args );
+	   	$users = array();
+	   	foreach ( $user_query->results as $user ) {
+	   		if ( 'Y' == $hide_admin && $this->qm_is_admin( $user->ID, $blog ) ) {
+	   			continue;
+	   		} // end admin test
+	   		
+	   		if ( $user->user_email == $you->user_email ) {
+	   			continue;
+	   		} // end if user
+	   
+	   		if ( 'A' == $option ) {
+	   			$users[] = ucfirst( "{$user->user_nicename}\t{$user->user_email}" );
+	   		} // end if all users
+	   		else {
+	   			$last = ucfirst( get_user_meta( $user->ID, 'last_name', true ) );
+	   			$first = get_user_meta( $user->ID, 'first_name', true );
+	   			if ( ! empty( $first ) && ! empty( $last ) && ! empty( $user->user_email ) ) {
+	   				$users[] = "{$last}\t{$first}\t{$user->ID}\t{$user->user_email}";
+	   			} // end if valid name
+	   		} // end else named only
+	   	} // end for
+	   
+	   	$j = count( $users );
+	   	if ( 2 > $j ) {
+	   		echo sprintf( $template, $cc, __( 'Enter mail address', 'quick-mail' ) );
+	   		return;
+	   	} // end if one match
+	   
+	   	sort( $users );
+	   	$letter = '';
+	   	ob_start();
+	   	echo '<select name="qm-cc[]" id="qm-secondary" multiple tabindex="3" onchange="return is_qm_cc_dup(this.value)"><option class="qmopt" value="" selected>Select</option>';
+	   	for ( $i = 0; $i < $j; $i++ ) {
+	   		$row = explode( "\t", $users[$i] );
+	   		if ($option == 'A') 	{
+	   			$address = urlencode("\"{$row[0]}\" <{$row[1]}>");
+	   		}
+	   		else {
+	   			$address = urlencode("\"{$row[1]} {$row[0]}\" <{$row[3]}>");
+	   		} // end if
+	   
+	   		if ( $letter != $row[0][0] ) {
+	   			if ( ! empty($letter) ) {
+	   				echo '</optgroup>';
+	   			} // end if not first letter group
+	   			$letter = $row[0][0];
+	   			echo "<optgroup class='qmog' label='{$letter}'>";
+	   		} // end if first letter changed
+	   
+	   		if ( 'A' == $option ) {
+	   			$selected = ($row[1] != $cc) ? ' ' : ' selected ';
+	   			echo "<option{$selected}value='{$address}' class='qmopt'>{$row[0]}</option>";
+	   		}
+	   		else {
+	   			$selected = ($row[3] != $cc) ? ' ' : ' selected ';
+	   			echo "<option{$selected}value='{$address}' class='qmopt'>{$row[1]} {$row[0]}</option>";
+	   		}
+	   	} // end for
+	   	echo '</optgroup></select>';
+	   	return ob_get_clean();
    } // end quick_mail_cc_input
    
    /**
@@ -838,7 +838,6 @@ jQuery(document).ready( function() {
          <td id="qm_cc_choice"></td>
       </tr>
       <?php endif; ?>
-      
       <tr>
          <td class="quick-mail"><?php _e( 'Subject', 'quick-mail' ); ?>:</td>
       </tr>
@@ -1182,7 +1181,14 @@ echo $verify_note;
 
 		return (0 < $user_query->get_total());		
 	} // end qm_is_admin
-	
+
+	/**
+	 * Is user an administrator?
+	 *
+	 * @param int $id User ID
+	 * @param int $blog Blog ID or zero if not multisite
+	 * @return boolean whether user is an editor on blog
+	 */
 	protected function qm_is_editor( $id, $blog ) {
 		if ($blog == 0) {
 			$user_query = new WP_User_Query( array( 'role' => 'Editor',
@@ -1242,6 +1248,10 @@ echo $verify_note;
       add_action('load-' . $page, array($this, 'add_qm_settings_help'));
    } // end init_quick_mail_menu
 
+   /**
+    * Quick Mail settings help
+    * @since 2.0.0
+    */
    public function add_qm_settings_help() {
    		$blog = is_multisite() ? get_current_blog_id() : 0;
 		$screen = get_current_screen();
@@ -1322,6 +1332,10 @@ echo $verify_note;
     		} // end if
 	} // add_qm_settings_help
 
+	/**
+	 * Quick Mail general help
+	 * @since 2.0.0
+	 */
 	public function add_qm_help() {
 		$blog = is_multisite() ? get_current_blog_id() : 0;
 		$screen = get_current_screen();

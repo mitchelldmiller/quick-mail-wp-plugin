@@ -3,8 +3,8 @@ Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Tags: email, admin, mail, idn, attachment, multisite, Spanish, French
 Requires at least: 4.4
-Tested up to: 4.6.1
-Stable tag: 2.0.1
+Tested up to: 4.7-beta1-38995
+Stable tag: 2.0.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -40,7 +40,7 @@ User options for sending email to site users or others. Mail is sent with user's
 
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Send Email from WordPress with Quick Mail](http://wheredidmybraingo.com/send-email-from-wordpress-with-quick-mail) for update info.
+* See [Send Email from WordPress with Quick Mail](http://wheredidmybraingo.com/send-email-from-wordpress-with-quick-mail/) for update info.
 
 == Installation ==
 
@@ -71,7 +71,7 @@ User options for sending email to site users or others. Mail is sent with user's
 * "Uploads are disabled" on mobile devices.
 
 Some devices cannot upload files. According to [Modernizr](https://modernizr.com/download#fileinput-inputtypes-setclasses) :
-> iOS < 6 and some android version don't support this
+> iOS < 6 and some android version don't support uploads.
 
 File uploads are disabled for ancient IOS 5 devices. Please [add a support message](https://wordpress.org/support/plugin/quick-mail) if uploads are disabled on your phone or tablet, so I can remove the upload button if your device is detected.
 
@@ -120,6 +120,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 = 2.0.1 =
 * fixed duplicate attachment error
 
+= 2.0.2 =
+* updated translations. removed duplicated directory.
+
 = Earlier versions =
 
 Please refer to the separate changelog.txt for changes of previous versions.
@@ -131,6 +134,9 @@ Please refer to the separate changelog.txt for changes of previous versions.
 
 = 2.0.1 =
 * Upgrade recommended.
+
+= 2.0.2 =
+* Upgrade recommended for Spanish and French users.
 
 == License ==
 

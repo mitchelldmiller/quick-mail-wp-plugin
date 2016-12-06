@@ -3,8 +3,8 @@ Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Tags: email, admin, mail, idn, attachment, multisite, Spanish, French
 Requires at least: 4.4
-Tested up to: 4.7-beta1-38995
-Stable tag: 2.0.2
+Tested up to: 4.7
+Stable tag: 2.0.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -40,7 +40,7 @@ User options for sending email to site users or others. Mail is sent with user's
 
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Send Email from WordPress with Quick Mail](http://wheredidmybraingo.com/send-email-from-wordpress-with-quick-mail/) for update info.
+* See [Using Quick Mail 2.0.3 to Send Email from WordPress](http://wheredidmybraingo.com/using-quick-mail-203-send-email-from-wordpress/) for update info.
 
 == Installation ==
 
@@ -68,7 +68,7 @@ User options for sending email to site users or others. Mail is sent with user's
 
 * Multiple files can be uploaded from up to 6 folders (directories).
 
-* "Uploads are disabled" on mobile devices.
+* "Uploads are disabled" on some mobile devices.
 
 Some devices cannot upload files. According to [Modernizr](https://modernizr.com/download#fileinput-inputtypes-setclasses) :
 > iOS < 6 and some android version don't support uploads.
@@ -123,6 +123,11 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 = 2.0.2 =
 * updated translations. removed duplicated directory.
 
+= 2.0.3 =
+* improved Javascript validation of duplicate addresses.
+* options are hidden from non-admin users, if they cannot access user list.
+* Tested with WordPress 4.7
+
 = Earlier versions =
 
 Please refer to the separate changelog.txt for changes of previous versions.
@@ -137,6 +142,9 @@ Please refer to the separate changelog.txt for changes of previous versions.
 
 = 2.0.2 =
 * Upgrade recommended for Spanish and French users.
+
+= 2.0.3 =
+* Upgrade recommended.
 
 == License ==
 

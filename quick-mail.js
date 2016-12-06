@@ -1,5 +1,10 @@
-// Welcome to Quick Mail. quick-mail.js 2.0.2
+// Welcome! quick-mail.js 2.0.3
 
+/**
+ * set local storage
+ * @param {String} item id
+ * @param {String} info data
+ */
 function set_qm_info(item, info)
 {
    try 	{
@@ -9,6 +14,11 @@ function set_qm_info(item, info)
    }
 } // end set_qm_info
 
+/**
+ * get info from html storage
+ * @param {String} item ID
+ * @returns {String} item's value
+ */
 function get_qm_info(item)
 {
    var got = '', nothing = 'N/A';
@@ -25,19 +35,23 @@ function get_qm_info(item)
    return got;
 } // end get_qm_info
 
+/**
+ * add saved address
+ * @param {String} raw_info email address
+ */
 function add_qm_info(raw_info)
 {
    if (raw_info == '' || typeof(localStorage) == 'undefined' ) { return true; }
    var key = new Array('', 'qmp1', 'qmp2', 'qmp3', 'qmp4', 'qmp5', 'qmp6', 'qmp7', 'qmp8', 'qmp9', 'qmp10', 'qmp11', 'qmp12');
    var value = new Array('', '', '', '', '', '', '', '', '', '', '', '', '');
-   var duplicate = 0;
+   var duplicate = false;
    var info = jQuery.trim(raw_info);
-   for (var i = 1; i < key.length; i++)
+   for (var i = 1; i < key.length && duplicate == false; i++)
    {
       if (!localStorage.getItem(key[i])) { continue; }
       value[i] = localStorage.getItem(key[i]);
-      if (duplicate == 0 && value[i] == info) { 
-    	  	duplicate = i;
+      if (value[i] == info) { 
+    	  	duplicate = true;
     	  } // end if duplicate
    } // end for
 
@@ -46,27 +60,23 @@ function add_qm_info(raw_info)
       set_qm_info('last_valid', info)
    } // end if
 
-   if (info == value[key.length - 1]) { 
-	   return true;
+   if (duplicate) { 
+	   return;
    } // end if last
-
-   if ( (duplicate > 0) && (duplicate < key.length - 1) )
-   {
-      localStorage.setItem(key[duplicate], value[key.length - 1]);
-      localStorage.setItem(key[key.length - 1], value[duplicate]);
-      return true;
-   } // end if
 
    for (var i = 1; i < key.length - 1; i++)
    {
-      if (value[i + 1] == '') { continue; }
-      localStorage.setItem(key[i], value[i + 1]);
+	   localStorage.setItem(key[i], value[i + 1]);
    } // end for
 
    localStorage.setItem(key[key.length - 1], info);
-   return true;
 } // end add_qm_info
 
+/**
+ * load email address from select menu
+ * @param {String} t email address
+ * @returns {Boolean} valid address
+ */
 function load_qm_email_option(t)
 {
 	if ( !t ) {
@@ -100,7 +110,6 @@ function load_qm_email_option(t)
 	if (dup == true) {
 		jQuery('#qm-email').val('');
 		jQuery('#qm-duplicate').show();
-		jQuery('#qm-email').focus();
 		return false;
 	} // end if duplicate
 
@@ -113,35 +122,9 @@ function load_qm_email_option(t)
  * @param string selection selected option
  * @returns {Boolean} valid
  */
-function is_qm_cc_dup(selection) {
-	var recipient = jQuery('#qm-primary').val().toLowerCase();
-	var info = selection.toLowerCase();
-	if (jQuery('#qm-success').is(':visible') ) {
-		jQuery('#qm-success').hide();
-	} // end if
-	if (info == recipient) {
-		jQuery('#qm-primary').val('');
-		jQuery('#qm-duplicate').show();
-		jQuery('#qm-primary').focus();
-		clear_qm_select('#qm-primary');
-		return false;
-	} // end if
-	return true;
-} // end is_qm_cc_dup
-
-/**
- * check if cc selection equals recipient
- * @param string selection selected option
- * @returns {Boolean} valid
- */
-function is_qm_email_dup(selection) {
-	if (jQuery('#qm-success').is(':visible') ) {
-		jQuery('#qm-success').hide();
-	} // end if
-	if (jQuery('#qm-duplicate').is(':visible') ) {
-		jQuery('#qm-duplicate').hide();
-	} // end if
-
+function is_qm_email_dup() {
+	clear_qm_msgs();
+	var selection = jQuery('#qm-primary').val();
 	var info = selection.toLowerCase();
 	var qcc = jQuery('#qm-secondary').find('option:selected');
 	if (qcc.length == 1 && qcc[0] == '') {
@@ -156,7 +139,6 @@ function is_qm_email_dup(selection) {
 	if (result == false) {
 		jQuery('#qm-primary').val('');
 		jQuery('#qm-duplicate').show();
-		jQuery('#qm-primary').focus();
 		clear_qm_select('#qm-primary');
 	} // end if
 	
@@ -170,12 +152,6 @@ function is_qm_email_dup(selection) {
  * @since 1.45
  */
 function update_qm_cc(selection) {
-	if (jQuery('#qm_cc_changed').is(':visible') ) {
-		jQuery('#qm_cc_changed').hide();
-	}
-	if (jQuery('#qm-duplicate').is(':visible') ) {
-		jQuery('#qm-duplicate').hide();
-	}
 	var info = selection.toLowerCase();
 	if (info.length < 5 || info.length > 254) {
 		if (info.length > 45) {
@@ -195,11 +171,8 @@ function update_qm_cc(selection) {
 	
 	// short circuit if selection is recipient or cc is empty
 	if (info == recipient) {
-		jQuery('#qm-email').val('');
 		jQuery('#qm-dma').html('<br>' + info);
 		jQuery('#qm-duplicate').show();
-		jQuery('#qm-email').focus();
-		jQuery('#qm-email').get(0).setSelectionRange(0,0);
 		clear_qm_select('#qm_cc_select');
 		return false;
 	} // end if
@@ -234,8 +207,6 @@ function update_qm_cc(selection) {
 	jQuery('#qm-cc').val(fixed.substr(0, qlen));
 	jQuery('#qm-dma').html('<br>' + duplicate);
 	jQuery('#qm-duplicate').show();
-	jQuery('#qm-cc').focus();
-	jQuery('#qm-cc').get(0).setSelectionRange(0,0);
 	return false;
 } // end update_qm_cc
 
@@ -248,68 +219,53 @@ function sort_qm_select(select) {
 
 /**
  * reset selected option to "select"
- * @param select jQuery id of select. #qm_to_select or #qm_cc_select
+ * @param {String} select jQuery id of select. #qm_to_select or #qm_cc_select
  * @since 1.5.2
  */
 function clear_qm_select(select) {
 	jQuery(select)[0].selectedIndex = 0;
 } // end clear_qm_select
 
+/**
+ * make select for recipients from addresses in HTML storage
+ * @param {String} source element ID
+ * @param {String} location select element ID
+ * @param {Boolean} is_cc is it CC or email?
+ */
 function make_qm_to_select(source, location, is_cc) {
-   var id = new Array('', 'qmp1', 'qmp2', 'qmp3', 'qmp4', 'qmp5', 'qmp6', 'qmp7', 'qmp8', 'qmp9', 'qmp10', 'qmp11', 'qmp12');
-   var control = is_cc ? '<select size="1" id="qm_cc_select" onchange="return update_qm_cc(this.value)">' : '<select size="1" id="qm_to_select" onchange="return load_qm_email_option(this.value)">';
-   var blank = '<option value="" selected> Select</option>';
-   control += blank;
-   var bottom = '</select>';
-   var got = '', nothing = 'N/A';
-   var ctr = 0;
-   var data = jQuery(source).val();
-   var info = data;
-   for (var i = 1; i < id.length - 1; i++)
-   {
-      got = get_qm_info(id[i]);
-      if (!got || (got == nothing) || got == 'undefined') { continue; }
-      ctr++;
-      var line = '<option value="' + escape(got) + '" id="' + id[i] + '">' + got + '</option>';
-      control += line;
-   } // end if
+	var id = new Array('', 'qmp1', 'qmp2', 'qmp3', 'qmp4', 'qmp5', 'qmp6', 'qmp7', 'qmp8', 'qmp9', 'qmp10', 'qmp11', 'qmp12');
+	var control = is_cc ? '<select size="1" id="qm_cc_select" onchange="return update_qm_cc(this.value)">' : '<select size="1" id="qm_to_select" onchange="return load_qm_email_option(this.value)">';
+	var blank = '<option value="" selected> Select</option>';
+	control += blank;
+	var bottom = '</select>';
+	var got = '', nothing = 'N/A';
+	var ctr = 0;
+	var data = jQuery(source).val();
+	var info = data;
+	for (var i = 1; i < id.length; i++) {
+		got = get_qm_info(id[i]);
+		if (!got || (got == nothing) || got == 'undefined') {
+			continue;
+		}
+		ctr++;
+		var line = '<option value="' + escape(got) + '" id="' + id[i] + '">'
+				+ got + '</option>';
+		control += line;
+	} // end if
 
-   i = id.length - 1;
-   got = get_qm_info(id[i]);
-   if ((ctr > 0) || (got != '' && got != 'N/A'))
-   {
-      var line = '<option value="' + escape(got) + '" id="' + id[i] + '">' + got + '</option>';
-      control += line;
-      control += bottom;
-   }
-   else
-   {
-      control = '&nbsp;';
-   } // end if
+	if (ctr > 0) {
+		control += bottom;
+	} else {
+		control = '&nbsp;';
+	} // end if
 
-   jQuery(location).html(control);
+	jQuery(location).html(control);
 } // make_qm_to_select
 
-function saved_qm_addresses() {
-   var ctr = 0;
-   var id = new Array('', 'qmp1', 'qmp2', 'qmp3', 'qmp4', 'qmp5', 'qmp6', 'qmp7', 'qmp8', 'qmp9', 'qmp10', 'qmp11', 'qmp12');
-   if (typeof(localStorage) == 'undefined' ) { return ctr; }
-   for (var i = 1; i < id.length; i++)
-   {
-      try {
-         if (localStorage.getItem(id[i]))
-         {
-            if (-1 != localStorage.getItem(id[i]).indexOf('@') ) {
-               ctr++;
-            }
-         } // end if email
-      } catch(e) {
-         console.log("Error reading saved addresses");
-      }
-   } // end for
-   return ctr;
-} // end saved_qm_addresses
-
+/**
+ * clear stored addresses in HTML storage
+ * @returns {Boolean} true for event
+ */
 function clear_qm_addresses() {
    var id = new Array('', 'qmp1', 'qmp2', 'qmp3', 'qmp4', 'qmp5', 'qmp6', 'qmp7', 'qmp8', 'qmp9', 'qmp10', 'qmp11', 'qmp12', 'last_valid');
    for (var i = 1; i < id.length; i++)
@@ -324,6 +280,37 @@ function clear_qm_addresses() {
    return true;
 } // end clear_qm_addresses
 
+/**
+ * are there any saved addresses?
+ * @returns {Boolean}
+ * @since 2.0.3
+ */
+function got_saved_qm_addresses() {
+	   var ctr = false;
+	   var id = new Array('', 'qmp1', 'qmp2', 'qmp3', 'qmp4', 'qmp5', 'qmp6', 'qmp7', 'qmp8', 'qmp9', 'qmp10', 'qmp11', 'qmp12');
+	   if (typeof(localStorage) == 'undefined' ) { return ctr; }
+	   for (var i = 1; i < id.length && ctr == false; i++)
+	   {
+	      try {
+	         if (localStorage.getItem(id[i]))
+	         {
+	            if (-1 != localStorage.getItem(id[i]).indexOf('@') ) {
+	               ctr = true;
+	            }
+	         } // end if email
+	      } catch(e) {
+	         console.log("Error reading saved addresses");
+	      }
+	   } // end for
+	   return ctr;
+} // end got_saved_qm_addresses
+
+/**
+ * check result of email validation
+ * @param string data
+ * @param string userdata
+ * @returns {Boolean} valid email address?
+ */
 function check_validate_qm_email(data, userdata) {
 	if (data == 'OK') {
 		jQuery('#qm-email').val(userdata);
@@ -337,13 +324,15 @@ function check_validate_qm_email(data, userdata) {
 		jQuery('#qm-success').hide();
 	} // end if
 	
-	jQuery('#qm-validate').show();
-	jQuery('#qm-ima').html('<br>' + data);
-	jQuery('#qm-invalid').val('1');
+	if (data.charAt(0) == ' ') {
+		jQuery('#qm-duplicate').show();
+		jQuery('#qm-dma').html('<br>' + data);
+	} else {
+		jQuery('#qm-validate').show();
+		jQuery('#qm-ima').html('<br>' + data);
+		jQuery('#qm-invalid').val('1');
+	}
 	jQuery('#qm-email').val('');
-	jQuery('#qm-email').focus();
-	jQuery('#qm-email').get(0).setSelectionRange(0,0);
-	// return false;
 } // check_validate_qm_email
 
 /**
@@ -354,10 +343,6 @@ function check_validate_qm_email(data, userdata) {
  * @returns {Boolean}
  */
 function validate_qm_address(info, dup, val_option) {
-	if (jQuery('#qm-duplicate').is(':visible') ) {
-		jQuery('#qm-duplicate').hide();
-	} // end if
-
 	var userdata = jQuery.trim(info.replace(/<\/?[^>]+(>|$)/g, "")); // strip tags
 	if (userdata != info) {
 		jQuery('#qm-email').val(userdata);
@@ -382,19 +367,32 @@ function perform_qm_validate_email(dup, userdata, val_option) {
 			);
 } // end perform_qm_validate_email
 
+/**
+ * check result from CC validation
+ * @param string data OK or error message
+ * @return boolean validate address
+ */
 function check_qm_filter_response(data) {
 	var qtest = data.toString();
 	var mtest = qtest.split("\t");
 	var tab = qtest.indexOf("\t");
+	var retval = true;
+	clear_qm_msgs();
 	if (tab < 1) {
 		if (qtest.charAt(0) == ' ') {
-			jQuery('#qm-dma').html('<br>' + qtest);
-			jQuery('#qm-duplicate').show();
-		} else if (jQuery('#qm-cc').val() != qtest) {
+			retval = false;
+			if (qtest.charAt(1) == ' ') {
+				jQuery('#qm-ima').html('<br>' + qtest);
+				jQuery('#qm-validate').show();
+			} else {
+				jQuery('#qm-dma').html('<br>' + qtest);
+				jQuery('#qm-duplicate').show();
+			} // end if error or duplicate
+		} else if (jQuery('#qm-cc').val() != qtest && 'OK' != qtest) {
 			jQuery('#qm-cc').val(qtest);
 		} // end if content needed update
-		// return true; TODO
 	} else {
+		retval = false;
 		jQuery('#qm-cc').val(mtest[1]); // update
 		if (mtest[0].charAt(0) == ' ') {
 			jQuery('#qm-dma').html('<br>' + mtest[0]);
@@ -403,11 +401,13 @@ function check_qm_filter_response(data) {
 			jQuery('#qm-ima').html('<br>' + mtest[0]);
 			jQuery('#qm-validate').show();
 		}
-		jQuery('#qm-cc').focus();
-		jQuery('#qm-cc').get(0).setSelectionRange(0,0);
-		// return false;
 	} // end if error 
-	// return true;
+
+	if (!retval) {
+		jQuery('#qm-cc').focus();
+		try { jQuery('#qm-cc').get(0).setSelectionRange(0,0); }
+		catch(e) { }
+	} // end if error
 } // end check_qm_filter_response
 
 /**
@@ -452,12 +452,14 @@ function perform_qm_cc_filter(to, cc, val_option) {
  * @since 2.0.0
  */
 function update_saved_cc_addresses() {
-	if (!jQuery('#qm-cc').length) {
-		return;
-	} // end if no addresses to save
+	if (jQuery('#qm-email').length && jQuery('#qm-email').val() != '') {
+  		add_qm_info(jQuery('#qm-email').val());
+  	}
 
-	var qcc = jQuery('#qm-cc').val();
-	if (qcc == '' && jQuery('#qm-email').val() == '') {
+	var qcc = '';
+	if (jQuery('#qm-cc').length && jQuery('#qm-cc').val() != '') {
+		qcc = jQuery('#qm-cc').val();
+	} else {
 		return;
 	}
 	
@@ -465,11 +467,6 @@ function update_saved_cc_addresses() {
   	for (var i = 0; i < all_info.length; i++) {
   		add_qm_info(all_info[i]);    
   	} // end for
-  	
-  	// qm-email
-  	if (jQuery('#qm-email').val() != '') {
-  		add_qm_info(jQuery('#qm-email').val());
-  	}
 } // end update_saved_cc_addresses
 
 /**
@@ -498,25 +495,6 @@ function clear_qm_msgs() {
 		} // end if
 	} // end if
 } // clear_qm_msgs
-
-function check_qm_primary() {
-   var qto = jQuery('#qm-primary').val();
-   var qcc = jQuery('#qm-secondary').val();
-   if (!qcc || !qto) {
-	   return true;
-   }
-
-   for (var qtest in qcc) {
-	   if (qto == qtest) {
-		   jQuery('#qm-primary').val('');
-		   jQuery('#qm-dma').html('<br>' + qto);
-		   jQuery('#qm-duplicate').show();
-		   qto = '';
-		   break;
-	   } // end if duplicate
-   } // end for
-   return (qto != '');
-} // check_qm_primary
 
 jQuery(document).ready(function() {
 	if (!jQuery('#quick-mail-title').length)
@@ -550,19 +528,10 @@ jQuery(document).ready(function() {
 	   clear_qm_msgs();
 	});
 
-   jQuery('#qm-primary').blur(function() {
-	   return check_qm_primary();
-   } );
-
-   jQuery('#qm-secondary').blur(function() {
-	   return check_qm_primary();
-   } );
-   
    jQuery('#qm-email').blur(function() {
       if (!jQuery('#qm_row').length) { 
     	  	return true;
     	  }
-      
       validate_qm_address(jQuery('#qm-email').val(), jQuery('#qm-cc').val(), val_option);
       return true;
    });
@@ -571,26 +540,22 @@ jQuery(document).ready(function() {
 	   if (!jQuery('#qm-cc').length || jQuery('#qm-cc').val() == '') {
 		   return true;
 	   }
-
 	   filter_qm_cc_input(jQuery('#qm-email').val(), jQuery('#qm-cc').val(), val_option);
-	   return true;
+	   return (!jQuery('#qm-validate').is(':visible') && !jQuery('#qm-duplicate').is(':visible') );
    });
    
    jQuery('#qm-subject').focus(function() {
 	   if (!jQuery('#qm-cc').length || jQuery('#qm-cc').val() == '') {
 		   return true;
 	   }
-
 	   filter_qm_cc_input(jQuery('#qm-email').val(), jQuery('#qm-cc').val(), val_option);
 	   return true;
    });
 
    jQuery('#qm-message').focus(function() {
-	   clear_qm_msgs();
 	   if (!jQuery('#qm-cc').length || jQuery('#qm-cc').val() == '') {
 		   return true;
 	   }
-
 	   filter_qm_cc_input(jQuery('#qm-email').val(), jQuery('#qm-cc').val(), val_option);
 	   return true;
    });
@@ -636,10 +601,8 @@ jQuery(document).ready(function() {
    });
 
    jQuery("#Hello").submit(function( event ) {
-	   console.log("633 submit")
 	   jQuery('#qm-success').hide();
 	   if (jQuery('#qm-invalid').val() == '1') {
-		   console.log("636 is there an invalid address?")
 		   event.preventDefault();
 		   jQuery('#qm-validate').show();
 		   jQuery('#qm-email').focus();
@@ -647,47 +610,17 @@ jQuery(document).ready(function() {
 		   return false;
       } // end if error message is visible
 	   
-	   if (jQuery('#qm-secondary').length) {
-		   if (!check_qm_primary()) {
-			   console.log("646 is there a primary error?")
-			   event.preventDefault();
-		       jQuery('#qm-primary').focus();
-		       jQuery('#qm-primary').select();
-		       return false;
-		   }
-	   } // end if duplicate 
-	   
-      if (jQuery('#qm_row').length && !add_qm_info(jQuery('#qm-email').val())) 	{
-    	  	console.log('Error saving HTML storage');
-      }
-      
       if (!jQuery('#qm-cc').length) {
     	  	return true;
       } // end if multiple is showing
-
    });
-
-   var sa = saved_qm_addresses();
-   if (jQuery('#qm_saved').is(':visible'))
-   {
-      if (sa > 0)
-      {
-         var sname = (sa > 1) ? 'addresses' : 'address';
-         var stext = '<button class="button" onclick="clear_qm_addresses()">Clear ' + sa + ' saved ' + sname + '</button>';
-         jQuery('#qm_saved').html(stext);
-      }
-      else
-      {
-         jQuery('#qm_saved').hide();
-      }
-   } // end if
 
    if (jQuery('#qm_row').length) {
       if (typeof(localStorage) == 'undefined') {
          jQuery('#qm_row').hide();
          return true;
       }
-      if (sa > 0) {
+      if (got_saved_qm_addresses()) {
          var cur = localStorage.getItem('last_valid');
          if (cur) {
             jQuery('#qm-email').val = cur;

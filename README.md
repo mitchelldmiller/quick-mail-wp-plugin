@@ -39,7 +39,7 @@ __Features__
 ### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Send Email from WordPress with Quick Mail](http://wheredidmybraingo.com/send-email-from-wordpress-with-quick-mail/) for update info.
+* See [Using Quick Mail 2.0.3 to Send Email from WordPress](http://wheredidmybraingo.com/using-quick-mail-203-send-email-from-wordpress/) for update info.
 
 ### Installation ###
 

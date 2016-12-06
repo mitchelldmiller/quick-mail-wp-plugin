@@ -1,5 +1,5 @@
 @CHARSET "UTF-8";
-/* Welcome to quick-mail.css 2.0.6 */
+/* Welcome Quick Mail CSS. quick-mail.css 2.0.3 */
 #qm-validate, #qm_row, #qm_cc_row, #qm_cc_changed, #qm-duplicate,
 .qm-second, .qm-third, .qm-fourth, .qm-fifth, .qm-sixth {
 	display: none;
@@ -12,6 +12,19 @@
 	color: #c33;
 	font: bold 16px bold Georgia,serif;
 	text-align: center;
+}
+
+#qm-warning {
+   color: #c33;
+   font: normal 18px/24px bold Georgia,serif;
+   text-align: left;
+}
+
+#qm-warning:before {
+   content: "\f348";
+   display: inline-block;
+   font: normal 18px/24px 'dashicons';
+   vertical-align: top;
 }
 
 .qm-vtop {

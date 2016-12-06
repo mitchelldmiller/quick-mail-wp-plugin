@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Adds Quick Mail to Tools menu. Send email with an attachment from dashboard, using a list of users or enter a name.
-Version: 2.0.2
+Version: 2.0.3
 Author: Mitchell D. Miller
 Author URI: http://wheredidmybraingo.com/
 Plugin URI: http://wheredidmybraingo.com/tag/quick-mail/
@@ -26,7 +26,7 @@ class QuickMail {
     * Static property for our instance.
     *
     * @since 1.0.0
-    * @var (boolean|object) $instance Description.
+    * @var (boolean|object) $instance
     */
    public static $instance = false;
 
@@ -54,7 +54,11 @@ class QuickMail {
       }
       return self::$instance;
    } // end get_instance
-   
+
+   /**
+    * Get text for help tab
+    * @return string[]
+    */
 	public static function get_qm_help_tab() {
 		$qm_desc =  __( 'Quick Mail is the easiest way to send an email with attachments to WordPress users on your site.', 'quick-mail' );
 		$english_faq = __('https://wordpress.org/plugins/quick-mail/faq/', 'quick-mail');
@@ -68,9 +72,15 @@ class QuickMail {
 		$more_info = __( 'has more information', 'quick-mail' );
 		$use_str = __( 'Use', 'quick-mail' );
 		$to_ask = __( 'to ask questions', 'quick-mail' );
-		$qm_content = "<p>{$qm_desc}</p><h4>{$questions}</h4><ul><li>{$flink} {$more_info}</li><li>{$use_str} {$slink} {$to_ask}</li><li>{$rlink} {$others}</li></ul>";
+		$help_others = __( 'Help Others', 'quick-mail' );
+		$use_str = __( 'Use', 'quick-mail' );
+		$everyone = __( 'Tell WordPress users that Quick Mail works with WordPress', 'quick-mail' ) . ' ' . get_bloginfo('version');
+		$clink = "<a href='https://wordpress.org/plugins/quick-mail/#compatibility'>{$everyone}</a>";
+		$qm_top = "<p>{$qm_desc}</p><h4>{$questions}</h4><ul><li>{$flink} {$more_info}</li><li>{$use_str} {$slink} {$to_ask}</li></ul>";
+		$qm_bot = "<h4>{$help_others}</h4><ul><li>{$rlink} {$others}</li><li>{$clink}</li></ul>";
+		$qm_content = $qm_top . $qm_bot; 
 		return array('id' => 'qm_intro', 'title'	=> __('Quick Mail', 'quick-mail'), 'content' => $qm_content);
-	}
+	} // end get_qm_help_tab
 
    /**
     * Does site have more than one user? Supports multisite.
@@ -84,12 +94,14 @@ class QuickMail {
 	public function multiple_matching_users($code, $blog) {
 		if ( 'X' == $code ) {
 			return true;
-		} // end if does not want user list
+		} // end if do not want user list
 		
 		if ( is_multisite() && 0 == $blog ) {
 			$blog = get_current_blog_id();
 		} // end if blog not set
 
+		$you = wp_get_current_user();
+		$exclude = array($you->ID); // exclude current user
 		$hide_admin = '';
 		if ( is_multisite() ) {
 			$hide_admin = get_blog_option( $blog, 'hide_quick_mail_admin', 'N' );
@@ -100,41 +112,41 @@ class QuickMail {
 		if ( 'A' == $code ) {
 			if ( $blog > 1 ) {
 				if ( 'Y' == $hide_admin ) {
-					$args = array('blog_id' => $blog, 'role__not_in' => array('Administrator'));
+					$args = array('blog_id' => $blog, 'role__not_in' => array('Administrator'), 'exclude' => $exclude);
 				} else {
-					$args = array();
+					$args = array('exclude' => $exclude);
 				}
 			} else {
 				if ( 'Y' == $hide_admin ) {
-					$args = array('role__not_in' => array('Administrator'));
+					$args = array('role__not_in' => array('Administrator'), 'exclude' => $exclude);
 				} else {
-					$args = array();
+					$args = array('exclude' => $exclude);
 				}
 			} // end if multisite
 		
 			$info = get_users( $args );
-			return 1 < count( $info ); // 2.0.0
+			return 1 < count( $info ); // 2.0.4
 		} // end if ALL
 		
 		// check for first and last names
 		$meta_query =  array('key' => 'last_name', 'value' => '', 'compare' => '>');
 		if ( is_multisite() ) {
 			if ( 'Y' == $hide_admin ) {
-				$args = array('role__not_in' => array('Administrator'),
+				$args = array('role__not_in' => array('Administrator'), 'exclude' => $exclude,
 						'blog_id' => $blog, 'meta_query' => $meta_query,
 						'meta_key' => 'first_name', 'meta_value' => '', 'meta_compare' => '>');
 			} else {
-				$args = array('blog_id' => $blog, 'meta_query' => $meta_query,
+				$args = array('blog_id' => $blog, 'meta_query' => $meta_query, 'exclude' => $exclude,
 						'meta_key' => 'first_name', 'meta_value' => '', 'meta_compare' => '>');
 			} // end if hide admin
 		} else {
 			// unset($args['blog_id']);
 			if ( 'Y' == $hide_admin ) {
-				$args = array('role__not_in' => array('Administrator'),
+				$args = array('role__not_in' => array('Administrator'), 'exclude' => $exclude,
 						'meta_query' => $meta_query,
 						'meta_key' => 'first_name', 'meta_value' => '', 'meta_compare' => '>');
 			} else {
-				$args = array('meta_query' => $meta_query,
+				$args = array('meta_query' => $meta_query, 'exclude' => $exclude,
 						'meta_key' => 'first_name', 'meta_value' => '', 'meta_compare' => '>');
 			} // end if
 		} // end if 'N'
@@ -171,8 +183,7 @@ class QuickMail {
          exit;
       }
       register_activation_hook( __FILE__, array($this, 'check_wp_version') );
-      add_action( 'admin_init', array($this, 'add_email_script' ) );
-
+      add_action( 'admin_init', array($this, 'add_email_scripts' ) );
       add_action( 'admin_menu', array($this, 'init_quick_mail_menu' ) );
       add_action( 'plugins_loaded', array($this, 'init_quick_mail_translation' ) );
       add_action( 'activated_plugin', array($this, 'install_quick_mail'), 10, 0 );
@@ -181,9 +192,33 @@ class QuickMail {
       add_filter( 'plugin_row_meta', array($this, 'qm_plugin_links'), 10, 2 );
       add_filter( 'wp_mail_failed', array($this, 'show_mail_failure'), 99, 1 );
       add_filter( 'quick_mail_setup_capability', array($this, 'let_editor_set_quick_mail_option' ) );
-      add_action( 'load-tools_page_quick_mail_form', array( $this, 'add_qm_help' ), 20 ); // tools.php
+      add_action( 'load-tools_page_quick_mail_form', array( $this, 'add_qm_help' ), 20 );
       add_action( 'plugins_loaded', array($this, 'show_qm_pointer' ) );
    } // end constructor
+   
+   /**
+    * skip options menu when there is nothing to set
+    * @return boolean do we need menu?
+    * @since 2.03
+    */
+   public function want_options_menu() {
+   	if ( is_multisite() && is_super_admin() && is_network_admin() ) {
+   		return true;
+   	} // end if on network admin page
+   	
+   	$blog = 0;
+   	if ( is_multisite() && 0 == $blog ) {
+   		$blog = get_current_blog_id();
+   	} // end if blog not set
+   	
+   	$you = wp_get_current_user();
+   	if ( $this->qm_is_admin( $you->ID, $blog ) ) {
+   		return true;
+   	} // end if always show menu to admin
+
+   	// we've got a non-admin user. do they have any settings?
+   	return $this->multiple_matching_users( 'A', $blog, $you->ID );
+   } // end want_options_menu
 
    /**
     * optionally display dismissible wp_pointer with setup reminder.
@@ -196,7 +231,7 @@ class QuickMail {
 	   		return;
 	   	} // end if skipping pointer on network admin page
    	  	
-		$dismissed = array_filter( explode( ',', (string) get_user_meta( get_current_user_id(), 'dismissed_wp_pointers', true ) ) );
+		$dismissed = array_filter( explode( ',', (string)get_user_meta( get_current_user_id(), 'dismissed_wp_pointers', true ) ) );
 		if ( ! in_array( self::$pointer_name, $dismissed ) ) {
 			add_action( 'admin_enqueue_scripts', array($this, 'qm_pointer_setup') );
       	} // end if pointer was not dismissed
@@ -256,8 +291,8 @@ class QuickMail {
        * Do not show users if one user
        * since 1.2.4
        */
-      $code = $this->multiple_matching_users( 'A', $blog ) ? 'A' : 'X';
-      $this->qm_update_option( 'show_quick_mail_users', $code );
+		$code = $this->multiple_matching_users( 'A', $blog ) ? 'A' : 'X';
+      	$this->qm_update_option( 'show_quick_mail_users', $code );
    } // install_quick_mail
 
    /**
@@ -330,17 +365,21 @@ jQuery(document).ready( function() {
    } // end unload_quick_mail_plugin
 
    /**
-    * load quick-mail.js for email select
-    *
-    * quick-mail.js displays a select with up to
-    * five recent email addresses, from local storage
+    * load quick-mail.js for email select and
+    * quick-mail-addresses.js to count saved addresses
     *
     * @since 1.2.0
     */
-   public function add_email_script()
+   public function add_email_scripts()
    {
       wp_enqueue_script( 'qmScript', plugins_url('/quick-mail.js', __FILE__), array('jquery'), null, false );
-   } // end add_email_script
+      wp_enqueue_script( 'qmCount', plugins_url('/quick-mail-addresses.js', __FILE__), array('jquery'), null, false );
+      $data = array(
+      		'one' => __( 'Clear 1 saved address', 'quick-mail' ),
+      		'many' => sprintf( __( 'Clear %s saved addresses', 'quick-mail' ), '{number}' )
+      );
+      wp_localize_script('qmCount', 'quick_mail_saved', $data);
+   } // end add_email_scripts
 
    /**
     * create and display recipient input. user list or text input.
@@ -354,18 +393,16 @@ jQuery(document).ready( function() {
       $blog = is_multisite() ? get_current_blog_id() : 0;
       $option = $this->qm_get_display_option( $blog );
       if ( 'X' != $option ) {
-         // check if site permissions were changed
          $editors = '';
          if ( is_multisite() ) {
          	$editors = get_blog_option( $blog, 'editors_quick_mail_privilege', 'N' );
          } else {
          	$editors = get_option( 'editors_quick_mail_privilege', 'N' );
          } // end if multisite
-         
          if ( 'Y' != $editors ) {
             if ( ! $this->qm_is_admin( $id, $blog ) ) {
                $option = 'X';
-            } // end if not admin
+            } // end if not admin and option might have changed
          } // end if editors not allowed to see list
       } // end if wants user list
 
@@ -373,18 +410,19 @@ jQuery(document).ready( function() {
          echo sprintf($template, $to, __( 'Enter mail address', 'quick-mail' ) );
          return;
       }
+      $you = wp_get_current_user(); // from
+      $exclude = array($you->ID);
       $args = ( 'A' == $option ) ?
-      array('orderby' => 'user_nicename', 'count_total' => true) :
-      array('count_total' => true);
+      array('orderby' => 'user_nicename', 'exclude' => $exclude) :
+      array('exclude' => $exclude);
       $hide_admin = '';
       if ( is_multisite() ) {
-      	$hide_admin = get_blog_option( get_current_blog_id(), 'hide_quick_mail_admin', 'N' );
+      	$hide_admin = get_blog_option( $blog, 'hide_quick_mail_admin', 'N' );
       } else {
       	$hide_admin = get_option( 'hide_quick_mail_admin', 'N' );
       } // end if
 
       $user_query = new \WP_User_Query( $args );
-      $you = wp_get_current_user(); // from
       $users = array();
       foreach ( $user_query->results as $user ) {
          if ( ( 'Y' == $hide_admin && $this->qm_is_admin( $user->ID, $blog ) ) 
@@ -406,15 +444,15 @@ jQuery(document).ready( function() {
       } // end for
 
       $j = count($users);
-      if ( 2 > $j ) {
+      if ( 1 > $j ) {
          echo sprintf( $template, $to, __( 'Enter mail address', 'quick-mail' ) );
          return;
-      } // end if one match
+      } // end if at least one match
 
       sort( $users );
       $letter = '';
       ob_start();
-      echo '<select name="qm-email" id="qm-primary" required size="1" tabindex="1" autofocus onchange="return is_qm_email_dup(this.value)"><option class="qmopt" value="" selected>Select</option>';
+      echo '<select name="qm-email" id="qm-primary" required size="1" tabindex="1" autofocus onchange="return is_qm_email_dup()"><option class="qmopt" value="" selected>Select</option>';
       for ( $i = 0; $i < $j; $i++ ) {
          $row = explode( "\t", $users[$i] );
          if ($option == 'A') 	{
@@ -474,9 +512,10 @@ jQuery(document).ready( function() {
 	   		return;
 	   	}
 	   	$you = wp_get_current_user(); // from
+	   	$exclude = array($you->ID);
 	   	$args = ( 'A' == $option ) ?
-	   	array('orderby' => 'user_nicename', 'count_total' => true) :
-	   	array('count_total' => true);
+	   	array('orderby' => 'user_nicename', 'exclude' => $exclude) :
+	   	array('exclude' => $exclude);
 	   	$hide_admin = '';
 	   	if ( is_multisite() ) {
 	   		$hide_admin = get_blog_option( $blog, 'hide_quick_mail_admin', 'N' );
@@ -515,7 +554,7 @@ jQuery(document).ready( function() {
 	   	sort( $users );
 	   	$letter = '';
 	   	ob_start();
-	   	echo '<select name="qm-cc[]" id="qm-secondary" multiple tabindex="3" onchange="return is_qm_cc_dup(this.value)"><option class="qmopt" value="" selected>Select</option>';
+	   	echo '<select name="qm-cc[]" id="qm-secondary" multiple tabindex="3" onchange="return	is_qm_email_dup()"><option class="qmopt" value="" selected>Select</option>';
 	   	for ( $i = 0; $i < $j; $i++ ) {
 	   		$row = explode( "\t", $users[$i] );
 	   		if ($option == 'A') 	{
@@ -1025,6 +1064,14 @@ jQuery(document).ready( function() {
       $check_admin  = ( 'Y' == $admin_option ) ? 'checked="checked"' : '';
       $check_editor = ( 'Y' == $editor_option ) ? 'checked="checked"' : '';
       $check_verify = ( 'Y' == $verify_option ) ? 'checked="checked"' : '';
+      $list_warning = '';
+	  if ( 2 == $total && 'Y' == $admin_option && 'X' != $this->qm_get_display_option( $blog ) ) {
+	  	$note = ' <strong>' . __( 'NOTE', 'quick-mail' ) . ' :</strong> ';
+	  	$lw_top = __( 'Only administrators will see user list.', 'quick-mail' );
+	  	$lw_bot = __( 'Editors need three non-admin users for sender, recipient, CC to access User List.', 'quick-mail' );
+	  	$list_warning = $note . $lw_top . '<br>' . $lw_bot; // FIXME
+      } // end if have list warning
+      
       $english_dns = __('http://php.net/manual/en/function.checkdnsrr.php', 'quick-mail');
       $z = __( 'Checks domain with', 'quick-mail' );
       $dnserr_link = "<a target='_blank' href='{$english_dns}'>checkdnsrr</a>";
@@ -1051,6 +1098,11 @@ jQuery(document).ready( function() {
       <tr>
          <th id="recipients" class="recipients"><?php _e( 'User Display', 'quick-mail' ); ?></th>
       </tr>
+      <?php if (!empty($list_warning)) : ?>
+      <tr>
+         <th id="qm-warning"><?php echo $list_warning; ?></th>
+      </tr>
+      <?php endif; ?>
       <?php if ( $this->multiple_matching_users( 'A', $blog ) ) : ?>
       <tr>
          <td><label><input name="show_quick_mail_users" type="radio" value="A"
@@ -1071,6 +1123,7 @@ echo ' ', $info, ' ', __( 'matching users', 'quick-mail' );
          <td><label><input name="show_quick_mail_users" type="radio" value="N"
                <?php echo $check_names; ?>>
 <?php
+$css = ('Y' == $hide_admin) ? 'qm-admin' : 'qm-total';
 $info = sprintf("<span class='%s'>{$names}</span>", $css);
 _e( 'Show Users with Names', 'quick-mail' ); echo " ({$info})"; ?>
 <br><?php _e( 'Show users with names, sorted by last name.', 'quick-mail' );
@@ -1091,14 +1144,17 @@ echo ' ', $info, ' ', __( 'matching users', 'quick-mail' );
 <?php 
 if (! $this->multiple_matching_users( 'A', $blog ) ) {
 	echo '<br><br>';
-	_e( 'User List is not available', 'quick-mail' );
+	if ( $this->qm_is_admin( get_current_user_id(), $blog ) ) {
+		_e( 'Need three users to display User List for sender, recipient, CC.', 'quick-mail' );
+	} else {
+		_e( 'User List was disabled by system administrator.', 'quick-mail' );
+	} // end if admin
 	echo '<br>';
 } // end if one user
 ?>
-<br><?php _e( 'Enter address to send mail.', 'quick-mail' ); ?> <?php _e( 'Saves last 12 addresses.', 'quick-mail' ); ?></label></td>
+<br><?php _e( 'Enter address to send mail.', 'quick-mail' ); ?> <?php _e( 'Saves 12 addresses.', 'quick-mail' ); ?></label></td>
       </tr>
 <?php  
-$blog = is_multisite() ? get_current_blog_id() : 0;
 if ( $this->qm_is_admin( get_current_user_id(), $blog ) ) : ?> 
    <tr>
       <th class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></th>
@@ -1231,28 +1287,29 @@ echo $verify_note;
 		} else {
 			$editors = get_option( 'editors_quick_mail_privilege', 'N' );
 		} // end if multisite
-
 		return ('Y' == $editors) ? 'edit_others_posts' : $role;
    } // end let_editor_set_quick_mail_option
 
-   /**
+	/**
     * init admin menu for appropriate users
     */
-   public function init_quick_mail_menu() {
-      $title = __( 'Quick Mail', 'quick-mail' );
-      $page = add_submenu_page( 'tools.php', $title, $title,
-      apply_filters( 'quick_mail_user_capability', 'publish_posts' ), 'quick_mail_form', array($this, 'quick_mail_form') );
-      add_action( 'admin_print_styles-' . $page, array($this, 'init_quick_mail_style') );
-      $page = add_options_page( 'Quick Mail Options', $title, apply_filters( 'quick_mail_setup_capability', 'list_users' ), 'quick_mail_options', array($this, 'quick_mail_options') );
-      add_action( 'admin_print_styles-' . $page, array($this, 'init_quick_mail_style') );
-      add_action('load-' . $page, array($this, 'add_qm_settings_help'));
+	public function init_quick_mail_menu() {
+		$title = __( 'Quick Mail', 'quick-mail' );
+		$page = add_submenu_page( 'tools.php', $title, $title,
+		apply_filters( 'quick_mail_user_capability', 'publish_posts' ), 'quick_mail_form', array($this, 'quick_mail_form') );
+		add_action( 'admin_print_styles-' . $page, array($this, 'init_quick_mail_style') );
+		if ( $this->want_options_menu() ) {
+			$page = add_options_page( 'Quick Mail Options', $title, apply_filters( 'quick_mail_setup_capability', 'list_users' ), 'quick_mail_options', array($this, 'quick_mail_options') );
+			add_action( 'admin_print_styles-' . $page, array($this, 'init_quick_mail_style') );
+			add_action('load-' . $page, array($this, 'add_qm_settings_help'));
+		} // end if displaying options menu
    } // end init_quick_mail_menu
 
-   /**
+	/**
     * Quick Mail settings help
     * @since 2.0.0
     */
-   public function add_qm_settings_help() {
+	public function add_qm_settings_help() {
    		$blog = is_multisite() ? get_current_blog_id() : 0;
 		$screen = get_current_screen();
 		$hide_admin = '';
@@ -1365,7 +1422,7 @@ echo $verify_note;
 		} // end if
 		$cc_help = ($display_option == 'X') ? $xhelp : $nhelp;
 		$attachment_title = __( 'Attachments', 'quick-mail' );
-		$attachment_help = ''; // TODO duplicated
+		$attachment_help = '';
 		$pattern = '/(OS 5_.+like Mac OS X)/';
 		$can_upload = strtolower( ini_get( 'file_uploads' ) );
 		if ( '1' != $can_upload && 'true' != $can_upload && 'on' != $can_upload ) {
@@ -1430,16 +1487,15 @@ echo $verify_note;
     *
     * @since 1.2.4
     */
-   public function qm_plugin_links( $links, $file ) {
-      $base = plugin_basename( __FILE__ );
-      if ( $file == $base ) {
-      		if ( !is_multisite() ) {
-	        	 	$links[] = '<a href="options-general.php?page=quick_mail_options">' . __( 'Settings', 'quick-mail' ) . '</a>';
-      		} // get settings from menu on multisite
-      	
+	public function qm_plugin_links( $links, $file ) {
+		$base = plugin_basename( __FILE__ );
+		if ( $file == $base ) {
+			if ( !is_multisite() && $this->want_options_menu() ) {
+				$links[] = '<a href="options-general.php?page=quick_mail_options">' . __( 'Settings', 'quick-mail' ) . '</a>';
+			} // get settings from menu on multisite or hide if N/A
          $links[] = '<a href="https://wordpress.org/plugins/quick-mail/faq/" target="_blank">' . __( 'FAQ', 'quick-mail' ) . '</a>';
          $links[] = '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
-      }
+      } // end if adding links
       return $links;
    } // end qm_plugin_links
    

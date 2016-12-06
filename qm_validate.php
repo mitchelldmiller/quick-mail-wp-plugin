@@ -1,5 +1,5 @@
 <?php
-// qm_validate.php 2.0.0
+// qm_validate.php 2.0.4
 
 require_once 'qm_util.php';
 
@@ -39,7 +39,14 @@ if ( !empty( $_REQUEST['one'] ) ) {
 		$message = $_REQUEST['one'];
 	}
 } // end if validating one domain
-if ( !empty( $_REQUEST['filter'] ) && isset( $_REQUEST['to'] ) ) {
+if ( !empty( $_REQUEST['filter'] ) && !isset( $_REQUEST['to'] ) ) {
+	if ( QuickMailUtil::qm_valid_email_domain( $_REQUEST['filter'], $verify ) ) {
+		$message = 'OK';
+	} else {
+		$message = '  ' . $_REQUEST['filter'];
+	} // end if valid
+	echo $message;
+} elseif ( !empty( $_REQUEST['filter'] ) && isset( $_REQUEST['to'] ) ) {
 	echo QuickMailUtil::filter_email_input($_REQUEST['to'], $_REQUEST['filter'], $_REQUEST['quick-mail-verify'] );
 } else {
 	if (!empty($_REQUEST['dup'])) {

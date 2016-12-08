@@ -128,6 +128,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 * options are hidden from non-admin users, if they cannot access user list.
 * Tested with WordPress 4.7
 
+= 2.0.4 =
+* added Javascript file for translating options message
+
 = Earlier versions =
 
 Please refer to the separate changelog.txt for changes of previous versions.
@@ -144,6 +147,9 @@ Please refer to the separate changelog.txt for changes of previous versions.
 * Upgrade recommended for Spanish and French users.
 
 = 2.0.3 =
+* Upgrade recommended.
+
+= 2.0.4 =
 * Upgrade recommended.
 
 == License ==

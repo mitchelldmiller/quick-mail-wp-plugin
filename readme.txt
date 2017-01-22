@@ -3,8 +3,8 @@ Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Tags: email, admin, mail, idn, attachment, multisite, Spanish, French
 Requires at least: 4.4
-Tested up to: 4.7
-Stable tag: 2.0.4
+Tested up to: 4.7.1
+Stable tag: 2.0.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -40,7 +40,7 @@ User options for sending email to site users or others. Mail is sent with user's
 
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Using Quick Mail 2.0.3 to Send Email from WordPress](http://wheredidmybraingo.com/using-quick-mail-203-send-email-from-wordpress/) for update info.
+* See [Quick Mail 2.0.5 Maintenance Release](http://wheredidmybraingo.com/quick-mail-2-0-5-maintenance-release/) for update info.
 
 == Installation ==
 
@@ -125,11 +125,15 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 = 2.0.3 =
 * improved Javascript validation of duplicate addresses.
-* options are hidden from non-admin users, if they cannot access user list.
+* options are hidden from non-admin users, if they cannot access User List.
 * Tested with WordPress 4.7
 
 = 2.0.4 =
 * added Javascript file for translating options message
+
+= 2.0.5 =
+* improved multiple file uploads.
+* hide some admininstrative options when User List is not available.
 
 = Earlier versions =
 
@@ -150,6 +154,9 @@ Please refer to the separate changelog.txt for changes of previous versions.
 * Upgrade recommended.
 
 = 2.0.4 =
+* Upgrade recommended.
+
+= 2.0.5 =
 * Upgrade recommended.
 
 == License ==

@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Adds Quick Mail to Tools menu. Send email with an attachment from dashboard, using a list of users or enter a name.
-Version: 2.0.4
+Version: 2.0.5
 Author: Mitchell D. Miller
 Author URI: http://wheredidmybraingo.com/
 Plugin URI: http://wheredidmybraingo.com/tag/quick-mail/
@@ -631,7 +631,7 @@ jQuery(document).ready( function() {
          $error = '<a href="/wp-admin/profile.php">' . __( 'Error: Incomplete User Profile', 'quick-mail' ) . '</a>';
       }
       elseif ( 'POST' == $_SERVER['REQUEST_METHOD'] ) {
-         if ( ! wp_verify_nonce( $_POST['quick-mail'], 'quick-mail' ) || empty( $_POST['qm-email'] ) ) {
+         if ( ! wp_verify_nonce( $_POST['qm205'], 'qm205' ) ) {
             wp_die( '<h2>' . __( 'Login Expired. Refresh Page.', 'quick-mail' ). '</h2>' );
          }
          if ( empty($_POST['qm-email'] ) ) {
@@ -724,8 +724,11 @@ jQuery(document).ready( function() {
 			$dup = false;
 			$j = count( $uploads['name'] );
 			for ($i = 0; ($i < $j) && ($dup == false); $i++) {
+				if ( empty( $uploads['name'][$i] ) || empty( $uploads['size'][$i] ) ) {
+					continue;
+				}
 				for ($k = $i + 1; $k < $j; $k++) {
-					if ( !empty($uploads['name'][$k] ) && $uploads['name'][$k] == $uploads['name'][$i] ) {
+					if ( !empty( $uploads['name'][$k] ) && !empty( $uploads['size'][$k] ) && $uploads['name'][$k] == $uploads['name'][$i] && $uploads['size'][$k] == $uploads['size'][$i] ) {
 						$dup = true;
 					} // end if
 				} // end for
@@ -734,16 +737,16 @@ jQuery(document).ready( function() {
             if ( $dup ) {
             		$error = __( 'Duplicate attachments', 'quick-mail' );
             } // end if duplicate attachments
-			for ($i = 0; ($i < $j) && empty($error); $i++) {
-				if ( empty( $uploads['name'][$i] ) ) {
+			for ($i = 0; ($i < $j) && empty( $error ); $i++) {
+				if ( empty( $uploads['name'][$i] ) || empty( $uploads['size'][$i] ) ) {
 					continue;
 				}
-				if ( ( 0 == $uploads['error'][$i] ) && ( 0 < $uploads['size'][$i] ) && ( 250 > strlen( $uploads['name'][$i] ) ) ) {
+				if ( 0 == $uploads['error'][$i] ) {
                   	$temp = $this->qm_get_temp_path(); // @since 1.1.1
                   	if ( ! is_dir( $temp ) || ! is_writable( $temp ) ) {
                      	$error = __( 'Missing temporary directory', 'quick-mail' );
                   	} else {
-                     	$file = "{$temp}{$uploads['name'][$i]}";
+                     	$file = "{$temp}{$i}{$uploads['name'][$i]}";
 	                     if ( move_uploaded_file( $uploads['tmp_name'][$i], $file ) ) {
 	                        array_push( $attachments, $file );
 	                     }
@@ -831,15 +834,12 @@ jQuery(document).ready( function() {
 </div>
 <noscript><span class="quick-mail-noscript"><?php _e( 'Quick Mail requires Javascript', 'quick-mail' ); ?></span></noscript>
 <?php if ( ! empty( $you->user_firstname ) && ! empty( $you->user_lastname ) && ! empty( $you->user_email ) ) : ?>
-<form name="Hello" id="Hello" method="post"
-   enctype="multipart/form-data"
-   action="<?php echo $_SERVER['REQUEST_URI']; ?>">
-               <?php wp_nonce_field( 'quick-mail', 'quick-mail', false, true ); ?>
-               <?php if ( ! empty( $no_uploads ) || ! empty( $_POST['quick-mail-uploads'] ) ) : ?>
-               <input type="hidden" name="quick-mail-uploads" value="No">
-               <?php endif; ?>
-               <input type="hidden" name="quick-mail-verify"
-      value="<?php echo $verify; ?>">
+<form name="Hello" id="Hello" method="post" enctype="multipart/form-data" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+<?php wp_nonce_field( 'qm205', 'qm205', false, true ); ?>
+<?php if ( ! empty( $no_uploads ) || ! empty( $_POST['quick-mail-uploads'] ) ) : ?>
+	<input type="hidden" name="quick-mail-uploads" value="No">
+<?php endif; ?>
+<input type="hidden" name="quick-mail-verify" value="<?php echo $verify; ?>">
    <table id="quick-mail" class="form-table">
       <tr>
          <td class="quick-mail"><input type="hidden" name="qm-invalid" id="qm-invalid" value="0"><?php _e( 'From', 'quick-mail' ); ?>:</td>
@@ -881,8 +881,7 @@ jQuery(document).ready( function() {
          <td class="quick-mail"><?php _e( 'Subject', 'quick-mail' ); ?>:</td>
       </tr>
       <tr>
-         <td><input
-            value="<?php echo htmlspecialchars( $subject, ENT_QUOTES ); ?>"
+         <td><input value="<?php echo htmlspecialchars( $subject, ENT_QUOTES ); ?>"
             name="qm-subject" id="qm-subject" type="text" required size="35"
             placeholder="<?php _e( 'Subject', 'quick-mail' ); ?>" tabindex="22"></td>
       </tr>
@@ -1154,28 +1153,29 @@ if (! $this->multiple_matching_users( 'A', $blog ) ) {
 ?>
 <br><?php _e( 'Enter address to send mail.', 'quick-mail' ); ?> <?php _e( 'Saves 12 addresses.', 'quick-mail' ); ?></label></td>
       </tr>
-<?php  
-if ( $this->qm_is_admin( get_current_user_id(), $blog ) ) : ?> 
-   <tr>
-      <th class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></th>
-   </tr>
-   <tr>
-      <td><label><input name="hide_quick_mail_admin" type="checkbox" <?php echo $check_admin; ?>>
-   <?php _e( 'Hide Administrator Profiles', 'quick-mail' ); ?>
-   <br><?php
-   $admins = $this->qm_admin_count( $blog );
-   $profile = sprintf( _n( '%s administrator profile', '%s administrator profiles', $admins, 'quick-mail' ), $admins );
-   echo sprintf('%s %s', __( 'User list will not include', 'quick-mail' ), " {$profile}.");
-?>
-   </label><input name="showing_quick_mail_admin" type="hidden" value="Y"></td>
-   </tr>
-      <tr>
-         <td><label><input name="editors_quick_mail_privilege" type="checkbox"
-               <?php echo $check_editor; ?>>
-<?php _e( 'Grant Editors access to user list', 'quick-mail' ); ?>
-<br><?php _e( 'Modify permission to let editors see user list.', 'quick-mail' ); ?>
-</label></td>
-      </tr>
+<?php if ( $this->qm_is_admin( get_current_user_id(), $blog ) ) : ?>
+	   <tr>
+	      <th class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></th>
+	   </tr>
+	<?php if ( $this->multiple_matching_users( 'A', $blog ) ) : ?>
+	   <tr>
+	      <td><label><input name="hide_quick_mail_admin" type="checkbox" <?php echo $check_admin; ?>>
+	   <?php _e( 'Hide Administrator Profiles', 'quick-mail' ); ?>
+	   <br><?php
+	   $admins = $this->qm_admin_count( $blog );
+	   $profile = sprintf( _n( '%s administrator profile', '%s administrator profiles', $admins, 'quick-mail' ), $admins );
+	   echo sprintf('%s %s', __( 'User list will not include', 'quick-mail' ), " {$profile}.");
+	?>
+	   </label><input name="showing_quick_mail_admin" type="hidden" value="Y"></td>
+	   </tr>
+	      <tr>
+	         <td><label><input name="editors_quick_mail_privilege" type="checkbox"
+	               <?php echo $check_editor; ?>>
+	<?php _e( 'Grant Editors access to user list', 'quick-mail' ); ?>
+	<br><?php _e( 'Modify permission to let editors see user list.', 'quick-mail' ); ?>
+	</label></td>
+	      </tr>
+	<?php endif; ?>      
       <tr>
          <td><label><input name="verify_quick_mail_addresses" type="checkbox" <?php echo $check_verify; ?>>
 <?php _e( 'Verify recipient email domains', 'quick-mail' ); ?>
@@ -1490,9 +1490,6 @@ echo $verify_note;
 	public function qm_plugin_links( $links, $file ) {
 		$base = plugin_basename( __FILE__ );
 		if ( $file == $base ) {
-			if ( !is_multisite() && $this->want_options_menu() ) {
-				$links[] = '<a href="options-general.php?page=quick_mail_options">' . __( 'Settings', 'quick-mail' ) . '</a>';
-			} // get settings from menu on multisite or hide if N/A
          $links[] = '<a href="https://wordpress.org/plugins/quick-mail/faq/" target="_blank">' . __( 'FAQ', 'quick-mail' ) . '</a>';
          $links[] = '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
       } // end if adding links

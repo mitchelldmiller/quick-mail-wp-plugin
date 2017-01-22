@@ -1,5 +1,5 @@
 @CHARSET "UTF-8";
-/* Welcome Quick Mail CSS. quick-mail.css 2.0.3 */
+/* quick-mail.css 2.0.5 */
 #qm-validate, #qm_row, #qm_cc_row, #qm_cc_changed, #qm-duplicate,
 .qm-second, .qm-third, .qm-fourth, .qm-fifth, .qm-sixth {
 	display: none;
@@ -16,14 +16,14 @@
 
 #qm-warning {
    color: #c33;
-   font: normal 18px/24px bold Georgia,serif;
+   font: normal 18px/36px bold Georgia,serif;
    text-align: left;
 }
 
 #qm-warning:before {
    content: "\f348";
    display: inline-block;
-   font: normal 18px/24px 'dashicons';
+   font: normal 24px/36px 'dashicons';
    vertical-align: top;
 }
 
@@ -31,7 +31,7 @@
    vertical-align: top !important;
 }
 .quick-mail-title, .quick-mail-noscript {
-	font: 24px/32px normal Georgia,serif;
+	font: normal 24px/32px Georgia,serif;
 }
 
 .quick-mail-title:before {
@@ -68,7 +68,7 @@ td.quick-mail {
 }
 
 th.recipients {
-	font: 18px/24px bold Georgia,serif;
+	font: bold 24px/36px Georgia,serif;
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
 	vertical-align: top;
 }
@@ -97,5 +97,3 @@ select#qm-primary option.qmopt, select#qm-secondary option.qmopt, optgroup.qmog 
 	background-color: #fff;
 	color: #000;
 }
-
-/* @media only screen and (max-width: 739px) { td.quick-mail, td.quick-mail-message { text-align: left; } } */

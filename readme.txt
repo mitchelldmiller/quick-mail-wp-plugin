@@ -113,27 +113,12 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 == Changelog ==
 
-= 2.0.0 =
-* added multiple recipients
-* supports multisite
-
-= 2.0.1 =
-* fixed duplicate attachment error
-
-= 2.0.2 =
-* updated translations. removed duplicated directory.
-
-= 2.0.3 =
-* improved Javascript validation of duplicate addresses.
-* options are hidden from non-admin users, if they cannot access User List.
-* Tested with WordPress 4.7
-
-= 2.0.4 =
-* added Javascript file for translating options message
-
 = 2.0.5 =
 * improved multiple file uploads.
 * hide some admininstrative options when User List is not available.
+
+= 2.0.4 =
+* added Javascript file for translating options message.
 
 = Earlier versions =
 
@@ -141,22 +126,10 @@ Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
 
-= 2.0.0 =
-* Upgrade recommended.
-
-= 2.0.1 =
-* Upgrade recommended.
-
-= 2.0.2 =
-* Upgrade recommended for Spanish and French users.
-
-= 2.0.3 =
+= 2.0.5 =
 * Upgrade recommended.
 
 = 2.0.4 =
-* Upgrade recommended.
-
-= 2.0.5 =
 * Upgrade recommended.
 
 == License ==

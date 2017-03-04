@@ -1,5 +1,12 @@
 @CHARSET "UTF-8";
-/* quick-mail.css 2.0.5 */
+/* quick-mail.css 2.0.6 */
+
+fieldset {
+border: 1px solid #d1d1d1;
+margin: 0 0 1.75em;
+padding: 1em;
+}
+
 #qm-validate, #qm_row, #qm_cc_row, #qm_cc_changed, #qm-duplicate,
 .qm-second, .qm-third, .qm-fourth, .qm-fifth, .qm-sixth {
 	display: none;
@@ -27,9 +34,6 @@
    vertical-align: top;
 }
 
-.qm-vtop {
-   vertical-align: top !important;
-}
 .quick-mail-title, .quick-mail-noscript {
 	font: normal 24px/32px Georgia,serif;
 }
@@ -41,13 +45,11 @@
 	vertical-align: top;
 }
 
-table#quick-mail {
+div.indented {
 	background-color: transparent;
 	margin: 2em;
 	width: 80%;
 }
-
-table#quick-mail.form-table td { padding-bottom: 0; }
 
 h1, h2, td {
 	color: #000;
@@ -55,22 +57,38 @@ h1, h2, td {
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
 }
 
-table#quick-mail td:nth-of-type(2) {
-	color: #c33;
-}
-
-td.quick-mail {
-	font: bold 16px/16px Georgia,serif;
+label.qm-label, span.qm-label {
+	font: normal 16px/16px Verdana,sans-serif;
     margin-bottom: 0;
     padding-bottom: 0;
-	/* text-align: right; */
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
 }
+label.qm-label, a:link, a:link:visited {
+	color: #11169b;
+}
+span.qm-label {
+	display: block;
+	font-style: italic;
+	padding-top: 1em;
+	padding-bottom: 0;
+}
 
-th.recipients {
+input.qm-input { 
+	font-size: 16px !important;
+	line-height: 1;
+}
+
+input#qm-submit:focus { color: #11169b; }
+
+legend.recipients {
 	font: bold 24px/36px Georgia,serif;
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
 	vertical-align: top;
+}
+
+label.recipients {
+	font: bold 18px/24px Georgia,serif;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
 }
 
 span.qm-total { color: #000; }
@@ -97,3 +115,16 @@ select#qm-primary option.qmopt, select#qm-secondary option.qmopt, optgroup.qmog 
 	background-color: #fff;
 	color: #000;
 }
+
+button.qm-button {
+	color: #11169b;
+	font: normal 16px/24px Verdana,sans-serif;
+	margin-bottom: 2em;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+}
+
+button.qm-button:hover { 
+	color: #c33;
+}
+
+@media only screen and (max-width: 739px) { div.indented { margin: 0; width: 100%; } }

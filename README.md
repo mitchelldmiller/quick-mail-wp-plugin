@@ -3,9 +3,6 @@ quick-mail-wp-plugin
 
 Adds "Quick Mail" to Tools. Send text or html email with file attachments from user's credentials. French and Spanish translations.
 
-### Build Status
-[![Build Status](https://api.travis-ci.org/mitchelldmiller/quick-mail-wp-plugin.svg?branch=master)](https://travis-ci.org/mitchelldmiller/quick-mail-wp-plugin)
-
 ### WordPress Rating
 [![WordPress rating](https://img.shields.io/wordpress/plugin/r/quick-mail.svg?maxAge=2592000)]()
 
@@ -15,6 +12,8 @@ Description
 >Quick Mail is the easiest way to send an email with attachments to a WordPress user on your site.
 
 Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds Quick Mail to Tools menu.
+
+Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
 User options for sending email to site users or others. Mail is sent with user's name and email. Multiple files from up to six directories (folders) can be attached to a message.
 
@@ -39,7 +38,7 @@ __Features__
 ### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail 2.0.5 Maintenance Release](http://wheredidmybraingo.com/quick-mail-2-0-5-maintenance-release/) for update info.
+* See [Quick Mail 3.0.0 Improves Editing and Accessibility](http://wheredidmybraingo.com/quick-mail-3-0-0-improves-editing-accessibility/) for update info.
 
 ### Installation ###
 
@@ -54,6 +53,10 @@ __Who can send mail?__
 * Users must be able to [publish a post](http://codex.wordpress.org/Roles_and_Capabilities#publish_posts) to send an email.
 
 * User profile must include first name, last name, email address.
+
+= Who can send rich text messages? =
+
+* User must have [Visual Editor enabled](https://codex.wordpress.org/Function_Reference/user_can_richedit) on their profile.
 
 __Selecting Recipients__
 

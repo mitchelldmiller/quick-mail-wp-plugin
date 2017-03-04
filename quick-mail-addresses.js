@@ -1,5 +1,5 @@
 /**
- * quick-mail-addresses.js 2.0.3
+ * quick-mail-addresses.js 2.0.6
  */
 (function($) {
 	'use strict';
@@ -34,7 +34,7 @@
 		}
 
 		if (ctr > 0) {
-			var stext = '<button class="button" onclick="clear_qm_addresses()">'	+ msg + '</button>';
+			var stext = '<button class="qm-button" onclick="clear_qm_addresses()">'	+ msg + '</button>';
 			$('#qm_saved').html(stext);
 		}
 	});

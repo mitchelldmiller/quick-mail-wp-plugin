@@ -3,7 +3,7 @@
 .buildpath
 .project
 
-# ignore Eclipse
+# ignore Vim
 *.swp
 
 # ignore Mac

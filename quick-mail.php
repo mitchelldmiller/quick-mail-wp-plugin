@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Adds Quick Mail to Tools menu. Send email with an attachment from dashboard, using a list of users or enter a name.
-Version: 2.0.5
+Version: 3.00
 Author: Mitchell D. Miller
 Author URI: http://wheredidmybraingo.com/
 Plugin URI: http://wheredidmybraingo.com/tag/quick-mail/
@@ -247,7 +247,7 @@ class QuickMail {
       if ( is_wp_error( $e ) ) {
          $direction = is_rtl() ? 'rtl' : 'ltr';
          $args = array( 'response' => 200, 'back_link' => true, 'text_direction' => $direction );
-         wp_die( sprintf( '<h3>%s</h3>', $e->get_error_message() ), __( 'Mail Error', 'quick-mail' ), $args );
+         wp_die( sprintf( '<h3 role="alert">%s</h3>', $e->get_error_message() ), __( 'Mail Error', 'quick-mail' ), $args );
       }
    }
 
@@ -265,7 +265,7 @@ class QuickMail {
       if ( version_compare( $wp_version, '4.4', 'lt' ) )
       {
          deactivate_plugins( basename( __FILE__ ) );
-         wp_die('<span style="font-size:120%">'.
+         wp_die('<span role="alert" style="font-size:120%">'.
                __( 'Quick Mail requires WordPress 4.4 or greater.', 'quick-mail' ) . '</span><br><br>' . __('Please upgrade WordPress to use Quick Mail.', 'quick-mail'), __('Quick Mail Cannot Be Installed', 'quick-mail' ),  array( 'response' => 200, 'back_link' => true ) );
       } // end if
    } // end check_wp_version
@@ -303,7 +303,7 @@ class QuickMail {
    public function quick_mail_pointer_scripts() {
       $greeting = __( 'Welcome to Quick Mail', 'quick-mail' );
       $suggestion = __( 'Please verify your settings before using Quick Mail.', 'quick-mail' );
-	  $pointer_content = "<h3>{$greeting}</h3><p>{$suggestion}</p>";
+	  $pointer_content = "<h3>{$greeting}</h3><p role='alert'>{$suggestion}</p>";
 ?>
 <script type="text/javascript">
 //<![CDATA[
@@ -389,7 +389,7 @@ jQuery(document).ready( function() {
     * @return void displays input
     */
    public function quick_mail_recipient_input( $to, $id ) {
-      $template = '<input value="%s" id="qm-email" name="qm-email" type="email" required tabindex="1" autofocus size="35" placeholder="%s">';
+      $template = '<input aria-labelledby="qme_label" value="%s" id="qm-email" name="qm-email" type="email" required aria-required="true" tabindex="1" autofocus size="35" placeholder="%s">';
       $blog = is_multisite() ? get_current_blog_id() : 0;
       $option = $this->qm_get_display_option( $blog );
       if ( 'X' != $option ) {
@@ -452,7 +452,7 @@ jQuery(document).ready( function() {
       sort( $users );
       $letter = '';
       ob_start();
-      echo '<select name="qm-email" id="qm-primary" required size="1" tabindex="1" autofocus onchange="return is_qm_email_dup()"><option class="qmopt" value="" selected>Select</option>';
+      echo '<select aria-labelledby="qme_label" name="qm-email" id="qm-primary" required aria-required="true" size="1" tabindex="1" autofocus onchange="return is_qm_email_dup()"><option class="qmopt" value="" selected>Select</option>';
       for ( $i = 0; $i < $j; $i++ ) {
          $row = explode( "\t", $users[$i] );
          if ($option == 'A') 	{
@@ -484,7 +484,7 @@ jQuery(document).ready( function() {
    } // end quick_mail_recipient_input
    
 	public function quick_mail_cc_input( $to, $cc, $id ) {
-	   	$template = '<input value="%s" id="qm-cc" name="qm-cc" type="text" size="35" tabindex="2" placeholder="%s">';
+	   	$template = '<input aria-labelledby="qmcc_label" value="%s" id="qm-cc" name="qm-cc" type="text" size="35" tabindex="2" placeholder="%s">';
 	   	$blog = is_multisite() ? get_current_blog_id() : 0;
 	   	$option = $this->qm_get_display_option( $blog );
 	   	if ( !$this->multiple_matching_users( $option, $blog ) ) {
@@ -554,7 +554,7 @@ jQuery(document).ready( function() {
 	   	sort( $users );
 	   	$letter = '';
 	   	ob_start();
-	   	echo '<select name="qm-cc[]" id="qm-secondary" multiple tabindex="3" onchange="return	is_qm_email_dup()"><option class="qmopt" value="" selected>Select</option>';
+	   	echo '<select aria-labelledby="qmcc_label" name="qm-cc[]" id="qm-secondary" multiple size="6" tabindex="3" onchange="return is_qm_email_dup()"><option class="qmopt" value="" selected>Select</option>';
 	   	for ( $i = 0; $i < $j; $i++ ) {
 	   		$row = explode( "\t", $users[$i] );
 	   		if ($option == 'A') 	{
@@ -705,22 +705,21 @@ jQuery(document).ready( function() {
             $error = __( 'No subject', 'quick-mail' );
          } // end subject check
 
-         $message = urldecode( stripslashes( $_POST['qm-message'] ) );
-         // TODO $maxlen = apply_filters( 'quick-mail-max-message', 100000 ) ;
-         if ( empty( $error ) && 2 > strlen( $message ) ) {
-               $error = __( 'Please enter your message', 'quick-mail' );
-         }
-
-         if ( '<' == substr( $message, 0, 1 ) ) {
-            $this->content_type = 'text/html';
+         $raw_msg = urldecode( stripslashes( $_POST['qm-message'] ) );
+         if ( empty( $error ) && 2 > strlen( $raw_msg ) ) {
+         	$error = __( 'Please enter your message', 'quick-mail' );
          } else {
-            $this->content_type = 'text/plain';
-         } // end set content type
+	         $message = do_shortcode( $raw_msg );
+	         if ( strcmp( $raw_msg, $message ) || ( '<' == substr( $message, 0, 1 ) ) ) {
+				$this->content_type = 'text/html';
+	         } else {
+	         	$this->content_type = 'text/plain';
+	         } // end set content type
+         } // end else got message
 
          if ( empty( $error ) && !empty( $_FILES['attachment'] ) && !empty( $_FILES['attachment']['name'][0] ) ) {
 			$uploads = array_merge_recursive($_FILES['attachment'], $_FILES['second'], $_FILES['third'],
 											$_FILES['fourth'], $_FILES['fifth'], $_FILES['sixth'] );
-			
 			$dup = false;
 			$j = count( $uploads['name'] );
 			for ($i = 0; ($i < $j) && ($dup == false); $i++) {
@@ -814,7 +813,7 @@ jQuery(document).ready( function() {
 <h1 id="quick-mail-title" class="quick-mail-title"><?php _e( 'Quick Mail', 'quick-mail' ); ?></h1>
 <?php if ( ! empty( $no_uploads ) ) : ?>
 <div class="update-nag notice is-dismissible">
-   <p><?php echo $no_uploads; ?></p>
+   <p role="alert"><?php echo $no_uploads; ?></p>
 </div>
 <?php elseif ( ! empty( $success ) ) : ?>
 <div id="qm-success" class="updated notice is-dismissible">
@@ -823,120 +822,113 @@ jQuery(document).ready( function() {
 <?php elseif ( ! empty( $error ) ) : ?>
 <?php $ecss = ( strstr( $error, 'profile.php' ) ) ? 'error notice': 'error notice is-dismissible'; ?>
 <div id="qm_error" class="<?php echo $ecss; ?>">
-   <p><?php echo $error; ?></p>
+   <p role="alert"><?php echo $error; ?></p>
 </div>
 <?php endif; ?>
-<div id="qm-validate" class="error notice is-dismissible">
-   <p><?php _e( 'Invalid mail address', 'quick-mail' ); ?><span id="qm-ima"> </span></p>
+<div id="qm-validate" role="alert" class="error notice is-dismissible">
+   <p role="alert"><?php _e( 'Invalid mail address', 'quick-mail' ); ?><span id="qm-ima"> </span></p>
 </div>
-<div id="qm-duplicate" class="error notice is-dismissible">
-   <p><?php _e( 'Duplicate mail address', 'quick-mail' ); ?> <span id="qm-dma"> </span></p>
+<div id="qm-duplicate" role="alert" class="error notice is-dismissible">
+   <p role="alert"><?php _e( 'Duplicate mail address', 'quick-mail' ); ?> <span id="qm-dma"> </span></p>
 </div>
 <noscript><span class="quick-mail-noscript"><?php _e( 'Quick Mail requires Javascript', 'quick-mail' ); ?></span></noscript>
 <?php if ( ! empty( $you->user_firstname ) && ! empty( $you->user_lastname ) && ! empty( $you->user_email ) ) : ?>
 <form name="Hello" id="Hello" method="post" enctype="multipart/form-data" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+		<div class="indented">
 <?php wp_nonce_field( 'qm205', 'qm205', false, true ); ?>
+<input type="hidden" name="qm-invalid" id="qm-invalid" value="0">
 <?php if ( ! empty( $no_uploads ) || ! empty( $_POST['quick-mail-uploads'] ) ) : ?>
 	<input type="hidden" name="quick-mail-uploads" value="No">
 <?php endif; ?>
 <input type="hidden" name="quick-mail-verify" value="<?php echo $verify; ?>">
-   <table id="quick-mail" class="form-table">
-      <tr>
-         <td class="quick-mail"><input type="hidden" name="qm-invalid" id="qm-invalid" value="0"><?php _e( 'From', 'quick-mail' ); ?>:</td>
-      </tr>
-      <tr>
-         <td><?php echo htmlspecialchars( substr( $from, 6 ), ENT_QUOTES ); ?></td>
-      </tr>
-      <tr>
-         <td class="quick-mail"><?php _e( 'To', 'quick-mail' ); ?>:</td>
-      </tr>
-      <tr>
-         <td><?php echo $this->quick_mail_recipient_input( $to, $you->ID ); ?></td>
-      </tr>
-      <?php
-      if ( 'X' == $this->qm_get_display_option( $blog ) ) : ?>
-      <tr id="qm_row">
-         <td class="quick-mail qm-vtop"><?php _e( 'Recent', 'quick-mail' ); ?>:</td>
-      </tr>
-      <tr>
-         <td id="qm_to_choice"></td>
-      </tr>
-      <?php endif; ?>
-      <tr>
-         <td class="quick-mail qm-vtop"><span id="qm_cc_changed"><?php _e( 'Updated', 'quick-mail' ); ?> </span><?php _e( 'CC', 'quick-mail' ); ?>:</td>
-      </tr>
-      <tr>
-         <td><?php echo $this->quick_mail_cc_input( $to, $mcc, $you->ID ); ?></td>
-      </tr>
-      <?php
-      if ( 'X' == $this->qm_get_display_option( $blog ) ) : ?>
-      <tr id="qm_cc_row">
-         <td class="quick-mail qm-vtop" ><?php _e( 'Recent', 'quick-mail' ); ?>:</td>
-      </tr>
-      <tr>
-         <td id="qm_cc_choice"></td>
-      </tr>
-      <?php endif; ?>
-      <tr>
-         <td class="quick-mail"><?php _e( 'Subject', 'quick-mail' ); ?>:</td>
-      </tr>
-      <tr>
-         <td><input value="<?php echo htmlspecialchars( $subject, ENT_QUOTES ); ?>"
-            name="qm-subject" id="qm-subject" type="text" required size="35"
-            placeholder="<?php _e( 'Subject', 'quick-mail' ); ?>" tabindex="22"></td>
-      </tr>
-      <?php if ( empty( $no_uploads ) && empty( $_POST['quick-mail-uploads'] ) ) : ?>
-      <tr>
-         <td class="quick-mail"><?php _e( 'Attachment', 'quick-mail' ); ?>:</td>
-      </tr>
-      <tr>
-         <td><input id="qm-file-first" name="attachment[]" type="file" multiple="multiple" tabindex="23"></td>
-      </tr>
-	  <tr class="qm-second">
-         <td class="quick-mail"><?php _e( 'Attachment', 'quick-mail' ); ?>:</td>
-      </tr>
-	  <tr class="qm-row-second">
-         <td><input id="qm-second-file" name="second[]" type="file" multiple="multiple" tabindex="24"></td>
-      </tr>
-      <tr class="qm-third">
-         <td class="quick-mail"><?php _e( 'Attachment', 'quick-mail' ); ?>:</td>
-      </tr>
-      <tr class="qm-row-third">
-         <td><input id="qm-third-file" name="third[]" type="file" multiple="multiple" tabindex="25"></td>
-      </tr>
-      <tr class="qm-fourth">
-         <td class="quick-mail"><?php _e( 'Attachment', 'quick-mail' ); ?>:</td>
-      </tr>
-      <tr class="qm-row-fourth">
-         <td><input id="qm-fourth-file" name="fourth[]" type="file" multiple="multiple" tabindex="26"></td>
-      </tr>
-      <tr class="qm-fifth">
-         <td class="quick-mail"><?php _e( 'Attachment', 'quick-mail' ); ?>:</td>
-      </tr>
-      <tr class="qm-row-fifth">
-         <td><input id="qm-fifth-file" name="fifth[]" type="file" multiple="multiple" tabindex="27"></td>
-      </tr>
-      <tr class="qm-sixth">
-         <td class="quick-mail"><?php _e( 'Attachment', 'quick-mail' ); ?>:</td>
-      </tr>
-      <tr class="qm-row-sixth">
-         <td><input id="qm-sixth-file" name="sixth[]" type="file" multiple="multiple" tabindex="28"></td>
-      </tr>
-      <?php endif; ?>
-      <tr>
-         <td class="quick-mail qm-vtop"><?php _e( 'Message', 'quick-mail' ); ?>:</td>
-      </tr>
-      <tr>
-         <td class="qm-vtop"><textarea id="qm-message" name="qm-message"
-               placeholder="<?php _e( 'Enter your message', 'quick-mail' ); ?>"
-               required rows="4" cols="35" tabindex="50"><?php echo htmlspecialchars( $message, ENT_QUOTES ); ?></textarea></td>
-      </tr>
-      <tr>
-         <td class="submit"><input disabled type="submit" id="qm-submit" name="qm-submit"
-            title="<?php _e( 'Send Mail', 'quick-mail' ); ?>" tabindex="99"
-            value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></td>
-      </tr>
-   </table>
+<fieldset>
+<?php 
+$the_from = htmlspecialchars( substr( $from, 6 ), ENT_QUOTES );
+$tlen = strlen( $the_from ) + 2;
+if ( 75 < $tlen ) { 
+	$tlen = 75;
+}
+$tsize = "size='{$tlen}'";
+?>
+<label id="tf_label" for="the_from" class="recipients"><?php _e( 'From', 'quick-mail' ); ?></label>
+<p><input aria-labelledby="tf_label" <?php echo $tsize; ?> value="<?php echo $the_from; ?>" readonly aria-readonly="true" id="the_from" tabindex="5000"></p>
+</fieldset>
+<fieldset>
+<label id="qme_label" for="qm-email" class="recipients"><?php _e( 'To', 'quick-mail' ); ?></label>
+<p><?php echo $this->quick_mail_recipient_input( $to, $you->ID ); ?></p>
+</fieldset>
+<?php
+if ( 'X' == $this->qm_get_display_option( $blog ) ) : ?>
+<fieldset id="qm_row">
+<label id="qtc_label" for="qm_to_choice" class="recipients"><?php _e( 'Recent', 'quick-mail' ); ?> <?php _e( 'To', 'quick-mail' ); ?></label>      
+<p id="qm_to_choice"></p>
+</fieldset>
+<?php endif; ?>
+<fieldset>
+<label id="qmcc_label" for="qm-cc" class="recipients"><?php _e( 'CC', 'quick-mail' ); ?></label>
+<p><?php echo $this->quick_mail_cc_input( $to, $mcc, $you->ID ); ?></p>
+</fieldset>
+<?php
+if ( 'X' == $this->qm_get_display_option( $blog ) ) : ?>
+<fieldset id="qm_cc_row">
+<label id="qcc2_label" for="qm_cc_choice" class="recipients"><?php _e( 'Recent', 'quick-mail' ); ?> <?php _e( 'CC', 'quick-mail' ); ?></label>
+<p id="qm_cc_choice"></p>
+</fieldset>      
+<?php endif; ?>
+<fieldset>
+<label id="qmsubject_label" for="qm-subject" class="recipients"><?php _e( 'Subject', 'quick-mail' ); ?></label>
+<p><input value="<?php echo htmlspecialchars( $subject, ENT_QUOTES ); ?>" type="text" 
+aria-labelledby="qmsubject_label" name="qm-subject" id="qm-subject" required size="35" aria-required="true"
+placeholder="<?php _e( 'Subject', 'quick-mail' ); ?>" tabindex="22"></p>
+</fieldset>
+<?php if ( empty( $no_uploads ) && empty( $_POST['quick-mail-uploads'] ) ) : ?>
+<fieldset>
+<label id="qmf1" for="qm-file-first" class="recipients"><?php _e( 'Attachment', 'quick-mail' ); ?></label>
+<p><input aria-labelledby="qmf1" id="qm-file-first" name="attachment[]" type="file" multiple="multiple" tabindex="23"></p>
+</fieldset>      
+<fieldset class="qm-second">
+<label id="qmf2" for="qm-second-file" class="recipients"><?php _e( 'Attachment', 'quick-mail' ); ?></label>
+<p class="qm-row-second"><input  aria-labelledby="qmf2" id="qm-second-file" name="second[]" type="file" multiple="multiple" tabindex="24"></p>
+</fieldset>
+<fieldset class="qm-third">
+<label id="qmf3" for="qm-third-file" class="recipients"><?php _e( 'Attachment', 'quick-mail' ); ?></label>
+<p class="qm-row-third"><input  aria-labelledby="qmf3" id="qm-third-file" name="third[]" type="file" multiple="multiple" tabindex="25"></p>
+</fieldset>
+<fieldset class="qm-fourth">
+<label id="qmf4" for="qm-fourth-file" class="recipients"><?php _e( 'Attachment', 'quick-mail' ); ?>:</label>
+<p class="qm-row-fourth"><input  aria-labelledby="qmf4" id="qm-fourth-file" name="fourth[]" type="file" multiple="multiple" tabindex="26"></p>
+</fieldset>
+<fieldset class="qm-fifth">
+<label id="qmf5" for="qm-fifth-file" class="recipients"><?php _e( 'Attachment', 'quick-mail' ); ?></label>
+<p class="qm-row-fifth"><input  aria-labelledby="qmf5" id="qm-fifth-file" name="fifth[]" type="file" multiple="multiple" tabindex="27"></p>
+</fieldset>
+<fieldset class="qm-sixth">
+<label id="qmf6" for="qm-sixth-file" class="recipients"><?php _e( 'Attachment', 'quick-mail' ); ?></label>
+<p class="qm-row-sixth"><input id="qm-sixth-file" name="sixth[]" type="file" multiple="multiple" tabindex="28"></p>
+</fieldset>
+<?php endif; ?>
+<fieldset>
+<label id="qm_msg_label" for="qm-message" class="recipients"><?php _e( 'Message', 'quick-mail' ); ?></label>
+<?php if ( !user_can_richedit() ) {
+?>
+<p><textarea id="qm-message" name="qm-message" 
+placeholder="<?php _e( 'Enter your message', 'quick-mail' ); ?>"
+aria-labelledby="qm_msg_label" required aria-required="true" aria-multiline=”true” 
+rows="8" cols="60" tabindex="50"><?php echo htmlspecialchars( $message, ENT_QUOTES ); ?></textarea></p>
+<?php
+} else {  
+$editor_id = 'qm-message';
+$content = $message; // htmlspecialchars( $message, ENT_QUOTES );
+$settings = array('content' => htmlspecialchars( $message, ENT_QUOTES ),
+		'textarea_rows' => 8, 'tabindex' => 50, );
+wp_editor( $content, $editor_id, $settings); // 		'teeny' => true, 'media_buttons' => false
+} // end if
+?>
+</fieldset>
+<p class="submit"><input disabled type="submit" id="qm-submit" name="qm-submit"
+title="<?php _e( 'Send Mail', 'quick-mail' ); ?>" tabindex="99"
+value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
+					</div> <!-- indented -->
 </form>
 <?php endif; ?>
    <?php
@@ -1068,7 +1060,7 @@ jQuery(document).ready( function() {
 	  	$note = ' <strong>' . __( 'NOTE', 'quick-mail' ) . ' :</strong> ';
 	  	$lw_top = __( 'Only administrators will see user list.', 'quick-mail' );
 	  	$lw_bot = __( 'Editors need three non-admin users for sender, recipient, CC to access User List.', 'quick-mail' );
-	  	$list_warning = $note . $lw_top . '<br>' . $lw_bot; // FIXME
+	  	$list_warning = $note . $lw_top . '<br>' . $lw_bot;
       } // end if have list warning
       
       $english_dns = __('http://php.net/manual/en/function.checkdnsrr.php', 'quick-mail');
@@ -1086,110 +1078,89 @@ jQuery(document).ready( function() {
          $nf = $idn_link . ' ' . __( 'function not found', 'quick-mail') . '.';
          $cannot = __( 'Cannot verify international domains', 'quick-mail' ) . ' ' . __( 'because', 'quick-mail' ) . ' ';
          $faq = __( 'Please read', 'quick-mail' ) . ' ' . $faq_link . '.';
-         $verify_problem = '<br><br>' . $cannot . $nf . '<br>' . $faq;
+         $verify_problem = '<br><br><span role="alert">' . $cannot . $nf . '<br>' . $faq . '</span>';
       } // end if idn_to_ascii is available
       $verify_note = $verify_message . $verify_problem;
 ?>
 <h1 id="quick-mail-title" class="quick-mail-title"><?php _e( 'Quick Mail Options', 'quick-mail' ); ?></h1>
-<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
-   <table class="form-table">
-      <tr><td id="qm_saved"></td></tr>
-      <tr>
-         <th id="recipients" class="recipients"><?php _e( 'User Display', 'quick-mail' ); ?></th>
-      </tr>
+<form id="quick-mail-settings" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+<div class="indented">
+<div id="qm_saved"></div>
+<fieldset>
+<legend class="recipients"><?php _e( 'User Display', 'quick-mail' ); ?></legend>
       <?php if (!empty($list_warning)) : ?>
-      <tr>
-         <th id="qm-warning"><?php echo $list_warning; ?></th>
-      </tr>
+      <p role="alert" id="qm-warning"><?php echo $list_warning; ?></p>
       <?php endif; ?>
       <?php if ( $this->multiple_matching_users( 'A', $blog ) ) : ?>
-      <tr>
-         <td><label><input name="show_quick_mail_users" type="radio" value="A"
-               <?php echo $check_all; ?>>
+      <p><input aria-describedby="qm_all_desc" aria-labelledby="qm_all_label" id="qm_all_users" class="qm-input" name="show_quick_mail_users" type="radio" value="A" <?php echo $check_all; ?>>
+      <label id="qm_all_label" for="qm_all_users" class="qm-label">
 <?php 
 $css = ('Y' == $hide_admin) ? 'qm-admin' : 'qm-total';
 $info = sprintf("<span class='%s'>{$total}</span>", $css);
 _e( 'Show All Users', 'quick-mail' ); echo " ({$info})"; ?>
-<br><?php _e( 'Show all users sorted by nickname.', 'quick-mail' );
+</label><span id="qm_all_desc" class="qm-label"><?php _e( 'Show all users sorted by nickname.', 'quick-mail' );
 $info = sprintf("<span class='%s'>{$total}</span>", $css);
 echo ' ', $info, ' ', __( 'matching users', 'quick-mail' );
 ?>
-.</label></td>
-      </tr>
-      <?php endif; ?>
+.</span></p>
+     <?php endif; ?>
 	  <?php if ( $this->multiple_matching_users( 'N', $blog ) ) : ?>
-      <tr>
-         <td><label><input name="show_quick_mail_users" type="radio" value="N"
-               <?php echo $check_names; ?>>
+      <p><input aria-describedby="qm_names_desc" aria-labelledby="qm_names_label" class="qm-input" name="show_quick_mail_users" type="radio" value="N" <?php echo $check_names; ?>>
+      <label id="qm_names_label" class="qm-label">
 <?php
 $css = ('Y' == $hide_admin) ? 'qm-admin' : 'qm-total';
 $info = sprintf("<span class='%s'>{$names}</span>", $css);
-_e( 'Show Users with Names', 'quick-mail' ); echo " ({$info})"; ?>
-<br><?php _e( 'Show users with names, sorted by last name.', 'quick-mail' );
+_e( 'Show Users with Names', 'quick-mail' ); echo " ({$info})"; ?></label>
+<span id="qm_names_desc" class="qm-label"><?php _e( 'Show users with names, sorted by last name.', 'quick-mail' );
 $css = ('Y' == $hide_admin) ? 'qm-admin' : 'qm-total';
 $info = sprintf("<span class='%s'>{$names}</span>", $css);
 echo ' ', $info, ' ', __( 'matching users', 'quick-mail' );
 ?>
-.</label></td>
-      </tr>
+.</span></p>
       <?php endif; ?>
-      <tr>
-         <td><label><input name="show_quick_mail_users" type="radio" value="X"
-               <?php echo $check_none; 
-               if (! $this->multiple_matching_users( 'A', $blog ) ) {
-               	echo ' onclick="return false" '; }
-               ?>>
-               <?php _e( 'Do Not Show Users', 'quick-mail' ); ?>
+<p><input aria-describedby="qm_none_desc" aria-labelledby="qm_none_label" class="qm-input" name="show_quick_mail_users" type="radio" value="X"
+<?php 
+echo $check_none; 
+if (! $this->multiple_matching_users( 'A', $blog ) ) {
+	echo ' readonly'; }
+?>>
+<label id="qm_none_label" class="qm-label"><?php _e( 'Do Not Show Users', 'quick-mail' ); ?></label>
 <?php 
 if (! $this->multiple_matching_users( 'A', $blog ) ) {
-	echo '<br><br>';
+	echo '<br><br><span class="qm-label" role="alert">';
 	if ( $this->qm_is_admin( get_current_user_id(), $blog ) ) {
 		_e( 'Need three users to display User List for sender, recipient, CC.', 'quick-mail' );
 	} else {
 		_e( 'User List was disabled by system administrator.', 'quick-mail' );
 	} // end if admin
-	echo '<br>';
+	echo '</span><br>';
 } // end if one user
 ?>
-<br><?php _e( 'Enter address to send mail.', 'quick-mail' ); ?> <?php _e( 'Saves 12 addresses.', 'quick-mail' ); ?></label></td>
-      </tr>
+<span id="qm_none_desc" class="qm-label"><?php _e( 'Enter address to send mail.', 'quick-mail' ); ?> <?php _e( 'Saves 12 addresses.', 'quick-mail' ); ?></span></p>
+</fieldset>      
 <?php if ( $this->qm_is_admin( get_current_user_id(), $blog ) ) : ?>
-	   <tr>
-	      <th class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></th>
-	   </tr>
-	<?php if ( $this->multiple_matching_users( 'A', $blog ) ) : ?>
-	   <tr>
-	      <td><label><input name="hide_quick_mail_admin" type="checkbox" <?php echo $check_admin; ?>>
-	   <?php _e( 'Hide Administrator Profiles', 'quick-mail' ); ?>
-	   <br><?php
-	   $admins = $this->qm_admin_count( $blog );
-	   $profile = sprintf( _n( '%s administrator profile', '%s administrator profiles', $admins, 'quick-mail' ), $admins );
-	   echo sprintf('%s %s', __( 'User list will not include', 'quick-mail' ), " {$profile}.");
-	?>
-	   </label><input name="showing_quick_mail_admin" type="hidden" value="Y"></td>
-	   </tr>
-	      <tr>
-	         <td><label><input name="editors_quick_mail_privilege" type="checkbox"
-	               <?php echo $check_editor; ?>>
-	<?php _e( 'Grant Editors access to user list', 'quick-mail' ); ?>
-	<br><?php _e( 'Modify permission to let editors see user list.', 'quick-mail' ); ?>
-	</label></td>
-	      </tr>
-	<?php endif; ?>      
-      <tr>
-         <td><label><input name="verify_quick_mail_addresses" type="checkbox" <?php echo $check_verify; ?>>
-<?php _e( 'Verify recipient email domains', 'quick-mail' ); ?>
-<br><?php
-echo $verify_note;
+<fieldset>
+<legend class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></legend>
+<?php if ( $this->multiple_matching_users( 'A', $blog ) ) : ?>
+<p><input aria-describedby="qm_hide_desc" aria-labelledby="qm_hide_label" class="qm-input" name="hide_quick_mail_admin" type="checkbox" <?php echo $check_admin; ?>>
+<label id="qm_hide_label" class="qm-label"><?php _e( 'Hide Administrator Profiles', 'quick-mail' ); ?></label>
+<?php
+$admins = $this->qm_admin_count( $blog );
+$profile = sprintf( _n( '%s administrator profile', '%s administrator profiles', $admins, 'quick-mail' ), $admins );
+echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User list will not include', 'quick-mail' ), " {$profile}.");
 ?>
-</label></td>
-      </tr>
+<input name="showing_quick_mail_admin" type="hidden" value="Y"></p>
+<p><input aria-describedby="qm_grant_desc" aria-labelledby="qm_grant_label" class="qm-input" name="editors_quick_mail_privilege" type="checkbox" <?php echo $check_editor; ?>>
+<label id="qm_grant_label" class="qm-label"><?php _e( 'Grant Editors access to user list', 'quick-mail' ); ?></label>
+<span id="qm_grant_desc" class="qm-label"><?php _e( 'Modify permission to let editors see user list.', 'quick-mail' ); ?></span></p>
+<?php endif; ?>      
+<p><input aria-describedby="qm_verify_desc" aria-labelledby="qm_verify_label" class="qm-input" name="verify_quick_mail_addresses" type="checkbox" <?php echo $check_verify; ?>>
+<label id="qm_verify_label" class="qm-label"><?php _e( 'Verify recipient email domains', 'quick-mail' ); ?></label>
+<span id="qm_verify_desc" class="qm-label"><?php echo $verify_note; ?></span></p>
+</fieldset>      
 <?php endif; ?>
-      <tr>
-         <td><input type="submit" name="qm-submit" class="button button-primary"
-            value="<?php _e( 'Save Options', 'quick-mail' ); ?>"></td>
-      </tr>
-   </table>
+<p class="submit"><input type="submit" name="qm-submit" class="button button-primary qm-input" value="<?php _e( 'Save Options', 'quick-mail' ); ?>"></p>
+</div>
 </form>
 <?php
    } // end quick_mail_options
@@ -1406,10 +1377,10 @@ echo $verify_note;
 		$display_option = $this->qm_get_display_option( $blog );
 		$cc_title = __( 'Adding CC', 'quick-mail' );
 		$xhelp = __( 'Enter multiple addresses by separating them with a space or comma.', 'quick-mail' );
-		$mac_names = $nhelp = __( 'Press &lt;Command&gt; while clicking, to select multiple users.', 'quick-mail' );
+		$mac_names = __( 'Press &lt;Command&gt; while clicking, to select multiple users.', 'quick-mail' );
 		$win_names = __( 'Press &lt;Control&gt; while clicking, to select multiple users.', 'quick-mail' );
 		$mob_names = __( 'You can select multiple users', 'quick-mail' );
-		$nhelp ='';
+		$nhelp = '';
 		if (wp_is_mobile()) {
 			$nhelp = $mob_names;
 		} else {
@@ -1426,15 +1397,15 @@ echo $verify_note;
 		$pattern = '/(OS 5_.+like Mac OS X)/';
 		$can_upload = strtolower( ini_get( 'file_uploads' ) );
 		if ( '1' != $can_upload && 'true' != $can_upload && 'on' != $can_upload ) {
-			$attachment_help = __( 'File uploads were disabled by system administrator', 'quick-mail' );
+			$attachment_help = '<p>' . __( 'File uploads were disabled by system administrator', 'quick-mail' ) . '</p>';
 		} else if ( !empty( $_SERVER['HTTP_USER_AGENT'] ) && 1 == preg_match( $pattern, $_SERVER['HTTP_USER_AGENT'] ) ) {
-			$attachment_help = __( 'File uploads are not available on your device', 'quick-mail' );
+			$attachment_help = '<p>' . __( 'File uploads are not available on your device', 'quick-mail' ) . '</p>';
 		} else {
-			$attachment_help = __( 'You can attach multiple files to your message', 'quick-mail' );
+			$attachment_help = '<p>' . __( 'You can attach multiple files to your message', 'quick-mail' );
 			if ( !wp_is_mobile() ) {
 				$attachment_help .= ' ' . __( 'from up to six directories', 'quick-mail' );
 			} // end if mobile
-			$attachment_help .= '.';
+			$attachment_help .= '.</p>';
 		} // end if uploads
 		$screen->add_help_tab( self::get_qm_help_tab() );
 		$screen->add_help_tab( array(
@@ -1443,8 +1414,8 @@ echo $verify_note;
 				'content'	=> "<p>{$cc_help}</p>"));
 		$screen->add_help_tab( array('id' => 'qm_attach_help_tab',
 				'title'	=> $attachment_title,
-				'content'	=> "<p>{$attachment_help}</p>") );
-	} // add_qm_help
+				'content'	=> $attachment_help) );
+	} // end add_qm_help
 	
    /**
     * use by admin print styles to add css to admin

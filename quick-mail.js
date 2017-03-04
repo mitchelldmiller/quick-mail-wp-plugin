@@ -1,4 +1,4 @@
-// Welcome! quick-mail.js 2.0.3
+// Welcome! quick-mail.js 2.0.6
 
 /**
  * set local storage
@@ -234,7 +234,8 @@ function clear_qm_select(select) {
  */
 function make_qm_to_select(source, location, is_cc) {
 	var id = new Array('', 'qmp1', 'qmp2', 'qmp3', 'qmp4', 'qmp5', 'qmp6', 'qmp7', 'qmp8', 'qmp9', 'qmp10', 'qmp11', 'qmp12');
-	var control = is_cc ? '<select size="1" id="qm_cc_select" onchange="return update_qm_cc(this.value)">' : '<select size="1" id="qm_to_select" onchange="return load_qm_email_option(this.value)">';
+	var lby = (location == 'qm_cc_choice') ? 'qcc2_label' : 'qtc_label';
+	var control = is_cc ? '<select aria-labelledby="' + lby + '" size="1" id="qm_cc_select" onchange="return update_qm_cc(this.value)">' : '<select size="1" id="qm_to_select" onchange="return load_qm_email_option(this.value)">';
 	var blank = '<option value="" selected> Select</option>';
 	control += blank;
 	var bottom = '</select>';
@@ -473,10 +474,6 @@ function update_saved_cc_addresses() {
  * clear status messages
  */
 function clear_qm_msgs() {
-	if (jQuery('#qm_cc_changed').is(':visible') ) {
-		jQuery('#qm_cc_changed').hide();
-	}
-	
 	if (jQuery('#qm-duplicate').is(':visible') ) {
 		jQuery('#qm-duplicate').hide();
 	}

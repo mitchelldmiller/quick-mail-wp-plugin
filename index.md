@@ -1,4 +1,4 @@
-Quick Mail 2.0.5
+Quick Mail 3.0.1
 ====================
 
 Adds "Quick Mail" to Tools. Send text or html email with file attachments from user's credentials. French and Spanish translations.
@@ -9,6 +9,8 @@ Description
 >Quick Mail is the easiest way to send an email with attachments to a WordPress user on your site.
 
 Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds Quick Mail to Tools menu.
+
+Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
 User options for sending email to site users or others. Mail is sent with user's name and email. Multiple files from up to six directories (folders) can be attached to a message.
 
@@ -33,7 +35,7 @@ __Features__
 ### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail 2.0.5 Maintenance Release](http://wheredidmybraingo.com/quick-mail-2-0-5-maintenance-release/) for update info.
+* See [Quick Mail Adds BCC, Improves HTML Messages](https://wheredidmybraingo.com/quick-mail-adds-bcc-improves-html-messages/) for update info.
 
 ### Installation ###
 
@@ -49,6 +51,13 @@ __Who can send mail?__
 
 * User profile must include first name, last name, email address.
 
+__Who can send rich text messages?__
+
+* User must have [Visual Editor enabled](https://codex.wordpress.org/Function_Reference/user_can_richedit) on their profile, to compose messages with the Visual Editor.
+
+* Anyone can send HTML by pasting it into a message.
+
+
 __Selecting Recipients__
 
 * Options to send mail to any user, or limit to users with first and last names on their profile.
@@ -58,6 +67,8 @@ __Selecting Recipients__
 __Limitations__
 
 * Up to 12 manually entered recipients are saved in HTML Storage.
+
+* Additional recipients can be either `CC` or `BCC` but not both.
 
 * Multiple files can be uploaded from up to 6 folders (directories).
 
@@ -109,5 +120,4 @@ __Translators and Programmers__
 __License__
 
 This plugin is free for personal or commercial use. 
-
 

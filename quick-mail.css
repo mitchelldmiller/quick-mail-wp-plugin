@@ -1,5 +1,5 @@
 @CHARSET "UTF-8";
-/* quick-mail.css 2.0.6 */
+/* quick-mail.css 3.0.1 */
 
 fieldset {
 border: 1px solid #d1d1d1;
@@ -65,6 +65,10 @@ label.qm-label, span.qm-label {
 }
 label.qm-label, a:link, a:link:visited {
 	color: #11169b;
+}
+
+label#qmbcc_label { 
+	padding-left: 2em;
 }
 span.qm-label {
 	display: block;

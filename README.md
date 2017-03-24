@@ -38,7 +38,7 @@ __Features__
 ### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail 3.0.0 Improves Editing and Accessibility](http://wheredidmybraingo.com/quick-mail-3-0-0-improves-editing-accessibility/) for update info.
+* See [Quick Mail Adds BCC, Improves HTML Messages](https://wheredidmybraingo.com/quick-mail-adds-bcc-improves-html-messages/) for update info.
 
 ### Installation ###
 
@@ -56,7 +56,9 @@ __Who can send mail?__
 
 = Who can send rich text messages? =
 
-* User must have [Visual Editor enabled](https://codex.wordpress.org/Function_Reference/user_can_richedit) on their profile.
+* User must have [Visual Editor enabled](https://codex.wordpress.org/Function_Reference/user_can_richedit) on their profile, to compose messages with the Visual Editor.
+
+* Anyone can send HTML by pasting it into a message.
 
 __Selecting Recipients__
 
@@ -67,6 +69,8 @@ __Selecting Recipients__
 __Limitations__
 
 * Up to 12 manually entered recipients are saved in HTML Storage.
+
+* Additional recipients can be either `CC` or `BCC` but not both.
 
 * Multiple files can be uploaded from up to 6 folders (directories).
 

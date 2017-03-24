@@ -1,10 +1,10 @@
 === Quick Mail ===
 Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
-Tags: email, admin, mail, idn, attachment, multisite, Spanish, French
+Tags: email, admin, mail, idn, attachment, multisite, accessible, accessibility, rich text, Spanish, French
 Requires at least: 4.4
-Tested up to: 4.7.1
-Stable tag: 2.0.5
+Tested up to: 4.7.3
+Stable tag: 3.0.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -15,6 +15,8 @@ Adds "Quick Mail" to Tools. Send text or html email with file attachments from u
 >Quick Mail is the easiest way to send an email with attachments to WordPress users on your site. Compatible with multisite.
 
 Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds Quick Mail to Tools menu.
+
+Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
 User options for sending email to site users or others. Mail is sent with user's name and email. Multiple files from up to six directories (folders) can be attached to a message.
 
@@ -38,9 +40,9 @@ User options for sending email to site users or others. Mail is sent with user's
 
 = Learn More =
 
-* See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
+* See [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail 2.0.5 Maintenance Release](http://wheredidmybraingo.com/quick-mail-2-0-5-maintenance-release/) for update info.
+* See [Quick Mail Adds BCC, Improves HTML Messages](https://wheredidmybraingo.com/quick-mail-adds-bcc-improves-html-messages/) for update info.
 
 == Installation ==
 
@@ -56,6 +58,12 @@ User options for sending email to site users or others. Mail is sent with user's
 
 * User profile must include first name, last name, email address.
 
+= Who can send rich text messages? =
+
+* User must have [Visual Editor enabled](https://codex.wordpress.org/Function_Reference/user_can_richedit) on their profile, to compose messages with the Visual Editor.
+
+* Anyone can send HTML by pasting it into a message.
+
 = Selecting Recipients =
 
 * Options to send mail to any user, or limit to users with first and last names on their profile.
@@ -65,6 +73,8 @@ User options for sending email to site users or others. Mail is sent with user's
 = Limitations =
 
 * Up to 12 manually entered recipients are saved in HTML Storage.
+
+* Additional recipients can be either `CC` or `BCC` but not both.
 
 * Multiple files can be uploaded from up to 6 folders (directories).
 
@@ -105,13 +115,25 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 == Screenshots ==
 
-1. Selecting users on Quick Mail data entry form
+1. Selecting users on Quick Mail data entry form.
 
-2. Multiple attachments from different folders (directories)
+2. Multiple attachments from different folders (directories).
 
-3. Selecting saved recipients
+3. Selecting saved recipients.
+
+4. Quick Mail options.
+
+5. Full screen view.
 
 == Changelog ==
+
+= 3.0.1 =
+* added Blind Carbon Copy (BCC).
+* improved HTML messages.
+
+= 3.0.0 =
+* improved data entry form accessibility and design.
+* added visual editor.
 
 = 2.0.5 =
 * improved multiple file uploads.
@@ -125,6 +147,12 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.0.1 =
+* Upgrade recommended.
+
+= 3.0.0 =
+* Upgrade recommended.
 
 = 2.0.5 =
 * Upgrade recommended.

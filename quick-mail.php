@@ -2,10 +2,10 @@
 /*
 Plugin Name: Quick Mail
 Description: Adds Quick Mail to Tools menu. Send email with an attachment from dashboard, using a list of users or enter a name.
-Version: 3.0.0
+Version: 3.0.1
 Author: Mitchell D. Miller
-Author URI: http://wheredidmybraingo.com/
-Plugin URI: http://wheredidmybraingo.com/tag/quick-mail/
+Author URI: https://wheredidmybraingo.com/
+Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
 Text Domain: quick-mail
 Domain Path: /lang
 */
@@ -484,7 +484,7 @@ jQuery(document).ready( function() {
    } // end quick_mail_recipient_input
    
 	public function quick_mail_cc_input( $to, $cc, $id ) {
-	   	$template = '<input aria-labelledby="qmcc_label" value="%s" id="qm-cc" name="qm-cc" type="text" size="35" tabindex="2" placeholder="%s">';
+	   	$template = '<input aria-labelledby="qmcc_label" value="%s" id="qm-cc" name="qm-cc" type="text" size="35" tabindex="3" placeholder="%s">';
 	   	$blog = is_multisite() ? get_current_blog_id() : 0;
 	   	$option = $this->qm_get_display_option( $blog );
 	   	if ( !$this->multiple_matching_users( $option, $blog ) ) {
@@ -640,6 +640,8 @@ jQuery(document).ready( function() {
          	wp_die( sprintf( '<h3>%s</h3>', __( 'Invalid mail address', 'quick-mail' ) ), __( 'Mail Error', 'quick-mail' ), $args );
          } // end if user circumvented Javascript
          
+         $rec_type = empty($_POST['qm_bcc']) ? 'Cc' : 'Bcc';
+         
          if (isset($_POST['qm-cc']) && is_array($_POST['qm-cc'])) {
          	$e = strtolower( urldecode( $_POST['qm-email'] ) );
          	foreach ($_POST['qm-cc'] as $c) {
@@ -710,13 +712,13 @@ jQuery(document).ready( function() {
          	$error = __( 'Please enter your message', 'quick-mail' );
          } else {
 	         $message = do_shortcode( $raw_msg );
-	         if ( strcmp( $raw_msg, $message ) || ( '<' == substr( $message, 0, 1 ) ) ) {
+	         if ( strcmp( $raw_msg, $message ) || is_string( strstr($message, '</') ) ) {
 				$this->content_type = 'text/html';
 	         } else {
 	         	$this->content_type = 'text/plain';
 	         } // end set content type
          } // end else got message
-
+         
          if ( empty( $error ) && !empty( $_FILES['attachment'] ) && !empty( $_FILES['attachment']['name'][0] ) ) {
 			$uploads = array_merge_recursive($_FILES['attachment'], $_FILES['second'], $_FILES['third'],
 											$_FILES['fourth'], $_FILES['fifth'], $_FILES['sixth'] );
@@ -766,15 +768,16 @@ jQuery(document).ready( function() {
          if ( empty( $error ) ) {
          	$headers = array( $from );
          	if ( !empty( $mcc ) ) {
-         		$headers[] = "Cc: {$mcc}";
+         		$headers[] = "{$rec_type}: {$mcc}";
          	} // end if CC
 
             if ( wp_mail( $to, $subject, $message, $headers, $attachments ) ) {
 	            	$success = __( 'Message Sent', 'quick-mail' );
+	            	$rec_label = ($rec_type == 'Cc') ? __( 'CC', 'quick-mail' ) : __( 'BCC', 'quick-mail' );
 	    			if (empty( $mcc ) ) {
 					$success .= sprintf("<br>%s %s", __( 'To', 'quick-mail' ), $to);            				
 				} else {
-					$success .= sprintf("<br>%s %s<br>%s %s", __( 'To', 'quick-mail' ), $to, __( 'CC', 'quick-mail' ), $mcc);
+					$success .= sprintf("<br>%s %s<br>%s %s", __( 'To', 'quick-mail' ), $to, $rec_label, $mcc);
 				} // end if has CC
             } else {
              	$error = __( 'Error sending mail', 'quick-mail' ); // else  error
@@ -866,6 +869,10 @@ if ( 'X' == $this->qm_get_display_option( $blog ) ) : ?>
 <?php endif; ?>
 <fieldset>
 <label id="qmcc_label" for="qm-cc" class="recipients"><?php _e( 'CC', 'quick-mail' ); ?></label>
+<label id="qmbcc_label" for="qm_bcc" class="qm-label"><?php _e( 'BCC', 'quick-mail' ); ?></label>
+<input tabindex="2" type="checkbox" id="qm_bcc" name="qm_bcc"
+onchange="if (jQuery('#qm_bcc').is(':checked')) { jQuery('#qmcc_label').text('<?php _e( 'BCC', 'quick-mail' ); ?>'); } 
+else { jQuery('#qmcc_label').text('<?php _e( 'CC', 'quick-mail' ); ?>') }">
 <p><?php echo $this->quick_mail_cc_input( $to, $mcc, $you->ID ); ?></p>
 </fieldset>
 <?php
@@ -888,23 +895,23 @@ placeholder="<?php _e( 'Subject', 'quick-mail' ); ?>" tabindex="22"></p>
 </fieldset>      
 <fieldset class="qm-second">
 <label id="qmf2" for="qm-second-file" class="recipients"><?php _e( 'Attachment', 'quick-mail' ); ?></label>
-<p class="qm-row-second"><input  aria-labelledby="qmf2" id="qm-second-file" name="second[]" type="file" multiple="multiple" tabindex="24"></p>
+<p class="qm-row-second"><input aria-labelledby="qmf2" id="qm-second-file" name="second[]" type="file" multiple="multiple" tabindex="24"></p>
 </fieldset>
 <fieldset class="qm-third">
 <label id="qmf3" for="qm-third-file" class="recipients"><?php _e( 'Attachment', 'quick-mail' ); ?></label>
-<p class="qm-row-third"><input  aria-labelledby="qmf3" id="qm-third-file" name="third[]" type="file" multiple="multiple" tabindex="25"></p>
+<p class="qm-row-third"><input aria-labelledby="qmf3" id="qm-third-file" name="third[]" type="file" multiple="multiple" tabindex="25"></p>
 </fieldset>
 <fieldset class="qm-fourth">
 <label id="qmf4" for="qm-fourth-file" class="recipients"><?php _e( 'Attachment', 'quick-mail' ); ?>:</label>
-<p class="qm-row-fourth"><input  aria-labelledby="qmf4" id="qm-fourth-file" name="fourth[]" type="file" multiple="multiple" tabindex="26"></p>
+<p class="qm-row-fourth"><input aria-labelledby="qmf4" id="qm-fourth-file" name="fourth[]" type="file" multiple="multiple" tabindex="26"></p>
 </fieldset>
 <fieldset class="qm-fifth">
 <label id="qmf5" for="qm-fifth-file" class="recipients"><?php _e( 'Attachment', 'quick-mail' ); ?></label>
-<p class="qm-row-fifth"><input  aria-labelledby="qmf5" id="qm-fifth-file" name="fifth[]" type="file" multiple="multiple" tabindex="27"></p>
+<p class="qm-row-fifth"><input aria-labelledby="qmf5" id="qm-fifth-file" name="fifth[]" type="file" multiple="multiple" tabindex="27"></p>
 </fieldset>
 <fieldset class="qm-sixth">
 <label id="qmf6" for="qm-sixth-file" class="recipients"><?php _e( 'Attachment', 'quick-mail' ); ?></label>
-<p class="qm-row-sixth"><input id="qm-sixth-file" name="sixth[]" type="file" multiple="multiple" tabindex="28"></p>
+<p class="qm-row-sixth"><input aria-labelledby="qmf6" id="qm-sixth-file" name="sixth[]" type="file" multiple="multiple" tabindex="28"></p>
 </fieldset>
 <?php endif; ?>
 <fieldset>
@@ -918,10 +925,10 @@ rows="8" cols="60" tabindex="50"><?php echo htmlspecialchars( $message, ENT_QUOT
 <?php
 } else {  
 $editor_id = 'qm-message';
-$content = $message; // htmlspecialchars( $message, ENT_QUOTES );
+$content = $message;
 $settings = array('content' => htmlspecialchars( $message, ENT_QUOTES ),
-		'textarea_rows' => 8, 'tabindex' => 50, );
-wp_editor( $content, $editor_id, $settings); // 		'teeny' => true, 'media_buttons' => false
+'textarea_rows' => 8, 'tabindex' => 50, );
+wp_editor( $content, $editor_id, $settings);
 } // end if
 ?>
 </fieldset>
@@ -1406,6 +1413,21 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 				$attachment_help .= ' ' . __( 'from up to six directories', 'quick-mail' );
 			} // end if mobile
 			$attachment_help .= '.</p>';
+			$mac_files = __( 'Press &lt;Command&gt; while clicking, to select multiple files.', 'quick-mail' );
+			$win_files = __( 'Press &lt;Control&gt; while clicking, to select multiple files.', 'quick-mail' );
+			$mob_files = __( 'You can select multiple files', 'quick-mail' );
+			$nhelp = '';
+			if (wp_is_mobile()) {
+				$nhelp = $mob_files;
+			} else {
+				$b = empty($_SERVER['HTTP_USER_AGENT']) ? '' : $_SERVER['HTTP_USER_AGENT'];
+				if ( preg_match( '/macintosh|mac os x/i', $b ) ) {
+					$nhelp = $mac_files;
+				} else {
+					$nhelp = $win_files;
+				} // end if
+			} // end if
+			$attachment_help .= "<p>{$nhelp}</p>";
 		} // end if uploads
 		$screen->add_help_tab( self::get_qm_help_tab() );
 		$screen->add_help_tab( array(

@@ -3,8 +3,8 @@ Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Tags: email, admin, mail, idn, attachment, multisite, accessible, accessibility, rich text, Spanish, French
 Requires at least: 4.4
-Tested up to: 4.7.3
-Stable tag: 3.0.1
+Tested up to: 4.7.4
+Stable tag: 3.0.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -38,11 +38,13 @@ User options for sending email to site users or others. Mail is sent with user's
 
 * Site options for administrators to hide their profile, and limit access to user list.
 
+* Option to add paragraphs and line breaks to HTML messages with [wpauto](https://codex.wordpress.org/Function_Reference/wpautop).
+
 = Learn More =
 
 * See [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail Adds BCC, Improves HTML Messages](https://wheredidmybraingo.com/quick-mail-adds-bcc-improves-html-messages/) for update info.
+* See [Quick Mail 3.0.2 Adds Paragraphs to HTML Messages](https://wheredidmybraingo.com/quick-mail-adds-paragraphs-to-html-messages/) for update info.
 
 == Installation ==
 
@@ -127,6 +129,10 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 == Changelog ==
 
+= 3.0.2 =
+* added wpauto option for HTML messages.
+* display user nickname instead of `user_nicename`.
+
 = 3.0.1 =
 * added Blind Carbon Copy (BCC).
 * improved HTML messages.
@@ -147,6 +153,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.0.2 =
+* Upgrade recommended.
 
 = 3.0.1 =
 * Upgrade recommended.

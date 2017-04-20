@@ -38,7 +38,7 @@ __Features__
 ### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail Adds BCC, Improves HTML Messages](https://wheredidmybraingo.com/quick-mail-adds-bcc-improves-html-messages/) for update info.
+* See [Quick Mail 3.0.2 Adds Paragraphs to HTML Messages](https://wheredidmybraingo.com/quick-mail-adds-paragraphs-to-html-messages/) for update info.
 
 ### Installation ###
 
@@ -122,5 +122,4 @@ __Translators and Programmers__
 __License__
 
 This plugin is free for personal or commercial use. 
-
 

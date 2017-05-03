@@ -38,13 +38,13 @@ __Features__
 ### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail 3.0.2 Adds Paragraphs to HTML Messages](https://wheredidmybraingo.com/quick-mail-adds-paragraphs-to-html-messages/) for update info.
+* See [Quick Mail 3.0.3 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-0-3-maintenance-release/) for update info.
 
 ### Installation ###
 
 1. Download the plugin and unpack in your `/wp-content/plugins/` directory.
 
-1. Activate the plugin through the 'Plugins' menu in WordPress.
+1. Activate the plugin through the WordPress 'Plugins' menu.
 
 ### Frequently Asked Questions ###
 
@@ -54,7 +54,7 @@ __Who can send mail?__
 
 * User profile must include first name, last name, email address.
 
-= Who can send rich text messages? =
+__Who can send rich text messages?__
 
 * User must have [Visual Editor enabled](https://codex.wordpress.org/Function_Reference/user_can_richedit) on their profile, to compose messages with the Visual Editor.
 

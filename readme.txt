@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: email, admin, mail, idn, attachment, multisite, accessible, accessibility, rich text, Spanish, French
 Requires at least: 4.4
 Tested up to: 4.7.4
-Stable tag: 3.0.2
+Stable tag: 3.0.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -44,7 +44,7 @@ User options for sending email to site users or others. Mail is sent with user's
 
 * See [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail 3.0.2 Adds Paragraphs to HTML Messages](https://wheredidmybraingo.com/quick-mail-adds-paragraphs-to-html-messages/) for update info.
+* See [Quick Mail 3.0.3 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-0-3-maintenance-release/) for update info.
 
 == Installation ==
 
@@ -128,6 +128,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 5. Full screen view.
 
 == Changelog ==
+= 3.0.3 =
+* fixed email content type compatibility error.
+* fixed settings display error.
 
 = 3.0.2 =
 * added wpauto option for HTML messages.
@@ -153,6 +156,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.0.3 =
+* Upgrade recommended.
 
 = 3.0.2 =
 * Upgrade recommended.

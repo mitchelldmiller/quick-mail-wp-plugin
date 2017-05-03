@@ -2,10 +2,10 @@
 /*
 Plugin Name: Quick Mail
 Description: Adds Quick Mail to Tools menu. Send email with an attachment from dashboard, using a list of users or enter a name.
-Version: 3.0.2
+Version: 3.0.3
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
-Plugin URI: https://wheredidmybraingo.com/quick-mail-adds-paragraphs-to-html-messages/
+Plugin URI: https://wheredidmybraingo.com/quick-mail-3-0-3-maintenance-release/
 Text Domain: quick-mail
 Domain Path: /lang
 */
@@ -73,10 +73,8 @@ class QuickMail {
 		$use_str = __( 'Please use', 'quick-mail' );
 		$to_ask = __( 'to ask questions and report problems', 'quick-mail' );
 		$help_others = __( 'Help Others', 'quick-mail' );
-		$everyone = __( 'Tell WordPress users that Quick Mail works with WordPress', 'quick-mail' ) . ' ' . get_bloginfo('version');
-		$clink = "<a href='https://wordpress.org/plugins/quick-mail/#compatibility'>{$everyone}</a>";
 		$qm_top = "<p>{$qm_desc}</p><h4>{$questions}</h4><ul><li>{$flink} {$more_info}</li><li>{$use_str} {$slink} {$to_ask}</li></ul>";
-		$qm_bot = "<h4>{$help_others}</h4><ul><li>{$rlink} {$others}</li><li>{$clink}</li></ul>";
+		$qm_bot = "<h4>{$help_others}</h4><ul><li>{$rlink} {$others}</li></ul>";
 		$qm_content = $qm_top . $qm_bot; 
 		return array('id' => 'qm_intro', 'title'	=> __('Quick Mail', 'quick-mail'), 'content' => $qm_content);
 	} // end get_qm_help_tab
@@ -187,7 +185,6 @@ class QuickMail {
       add_action( 'plugins_loaded', array($this, 'init_quick_mail_translation') );
       add_action( 'activated_plugin', array($this, 'install_quick_mail'), 10, 0);
       add_action( 'deactivated_plugin', array($this, 'unload_quick_mail_plugin'), 10, 0);
-      add_filter( 'wp_mail_content_type', array($this, 'set_mail_content_type') );
       add_filter( 'plugin_row_meta', array($this, 'qm_plugin_links'), 10, 2);
       add_filter( 'wp_mail_failed', array($this, 'show_mail_failure'), 99, 1);
       add_filter( 'quick_mail_setup_capability', array($this, 'let_editor_set_quick_mail_option') );
@@ -309,7 +306,7 @@ class QuickMail {
 //<![CDATA[
 jQuery(document).ready( function() {
     jQuery('#menu-settings').pointer({
-      content: '<?php echo $pointer_content; ?>',
+      content: "<?php echo $pointer_content; ?>",
       position:	{
          edge: 'left', // arrow direction
          align: 'center' // vertical alignment
@@ -772,6 +769,9 @@ jQuery(document).ready( function() {
          		$message = wpautop( $message );
          	} // end if
          	
+         	// set content type temporarily 3.0.3
+         	add_filter( 'wp_mail_content_type', array($this, 'set_mail_content_type') );
+         	
             if ( wp_mail( $to, $subject, $message, $headers, $attachments ) ) {
 	            	$success = __( 'Message Sent', 'quick-mail' );
 	            	$rec_label = ($rec_type == 'Cc') ? __( 'CC', 'quick-mail' ) : __( 'BCC', 'quick-mail' );
@@ -783,6 +783,9 @@ jQuery(document).ready( function() {
             } else {
              	$error = __( 'Error sending mail', 'quick-mail' ); // else  error
          	} // end else error
+         	
+         	// reset content type 3.0.3
+         	remove_action( 'wp_mail_content_type', array($this, 'set_mail_content_type') );
             
             if ( ! empty( $file ) ) {
                $e = '<br>' . __( 'Error Deleting Upload', 'quick-mail' );
@@ -1527,8 +1530,9 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 	public function qm_plugin_links( $links, $file ) {
 		$base = plugin_basename( __FILE__ );
 		if ( $file == $base ) {
-         $links[] = '<a href="https://wordpress.org/plugins/quick-mail/faq/" target="_blank">' . __( 'FAQ', 'quick-mail' ) . '</a>';
-         $links[] = '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
+			$links[] = '<a href="/wp-admin/options-general.php?page=quick_mail_options">' . __( 'Settings', 'quick-mail' ) . '</a>';
+         	$links[] = '<a href="https://wordpress.org/plugins/quick-mail/faq/" target="_blank">' . __( 'FAQ', 'quick-mail' ) . '</a>';
+         	$links[] = '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
       } // end if adding links
       return $links;
    } // end qm_plugin_links

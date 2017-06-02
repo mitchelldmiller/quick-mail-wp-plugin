@@ -2,10 +2,10 @@
 /*
 Plugin Name: Quick Mail
 Description: Adds Quick Mail to Tools menu. Send email with an attachment from dashboard, using a list of users or enter a name.
-Version: 3.0.3
+Version: 3.0.4
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
-Plugin URI: https://wheredidmybraingo.com/quick-mail-3-0-3-maintenance-release/
+Plugin URI: https://wheredidmybraingo.com/quick-mail-wordpress-4-8/
 Text Domain: quick-mail
 Domain Path: /lang
 */
@@ -67,7 +67,6 @@ class QuickMail {
 		$slink = '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
 		$rlink = '<a href="https://wordpress.org/support/plugin/quick-mail/reviews/" target="_blank">' . __( 'Please leave a review', 'quick-mail' ) . '</a>';
 		$others = __( 'to help others find Quick Mail', 'quick-mail' );
-		// https://wordpress.org/support/plugin/quick-mail/reviews/
 		$questions = __( 'Resources', 'quick-mail' );
 		$more_info = __( 'has more information', 'quick-mail' );
 		$use_str = __( 'Please use', 'quick-mail' );
@@ -186,7 +185,6 @@ class QuickMail {
       add_action( 'activated_plugin', array($this, 'install_quick_mail'), 10, 0);
       add_action( 'deactivated_plugin', array($this, 'unload_quick_mail_plugin'), 10, 0);
       add_filter( 'plugin_row_meta', array($this, 'qm_plugin_links'), 10, 2);
-      add_filter( 'wp_mail_failed', array($this, 'show_mail_failure'), 99, 1);
       add_filter( 'quick_mail_setup_capability', array($this, 'let_editor_set_quick_mail_option') );
       add_action( 'load-tools_page_quick_mail_form', array( $this, 'add_qm_help' ), 20);
       add_action( 'plugins_loaded', array($this, 'show_qm_pointer' ) );
@@ -195,7 +193,7 @@ class QuickMail {
    /**
     * skip options menu when there is nothing to set
     * @return boolean do we need menu?
-    * @since 2.03
+    * @since 2.0.3
     */
    public function want_options_menu() {
    	if ( is_multisite() && is_super_admin() && is_network_admin() ) {
@@ -261,8 +259,8 @@ class QuickMail {
       if ( version_compare( $wp_version, '4.4', 'lt' ) )
       {
          deactivate_plugins( basename( __FILE__ ) );
-         wp_die('<span role="alert" style="font-size:120%">'.
-               __( 'Quick Mail requires WordPress 4.4 or greater.', 'quick-mail' ) . '</span><br><br>' . __('Please upgrade WordPress to use Quick Mail.', 'quick-mail'), __('Quick Mail Cannot Be Installed', 'quick-mail' ),  array( 'response' => 200, 'back_link' => true ) );
+         echo sprintf("<div class='notice notice-error' role='alert'>%s</div>", __( 'Quick Mail requires WordPress 4.4 or greater.', 'quick-mail' ) );
+         exit;
       } // end if
    } // end check_wp_version
 
@@ -340,26 +338,23 @@ jQuery(document).ready( function() {
     *
     * delete global and user options
     *
-    * @global object $wpdb delete user options
-    *
     * @since 1.1.1
     */
-   public function unload_quick_mail_plugin() {
-      global $wpdb;
-      $sql = "DELETE FROM {$wpdb->prefix}usermeta WHERE meta_key = 'show_quick_mail_users'";
-      $wpdb->query( $sql );
-      if ( is_multisite() ) {
-      	delete_blog_option( get_current_blog_id(), 'show_quick_mail_users' );
-      	delete_blog_option( get_current_blog_id(), 'hide_quick_mail_admin' );
-      	delete_blog_option( get_current_blog_id(), 'editors_quick_mail_privilege' );
-      	delete_blog_option( get_current_blog_id(), 'verify_quick_mail_addresses' );
-      } else {
-      	delete_option( 'show_quick_mail_users' );
-      	delete_option( 'hide_quick_mail_admin' );
-      	delete_option( 'editors_quick_mail_privilege' );
-      	delete_option( 'verify_quick_mail_addresses' );
-      } // end if multisite
-   } // end unload_quick_mail_plugin
+	public function unload_quick_mail_plugin() {
+		delete_user_meta ( get_current_user_id (), 'show_quick_mail_users' );
+		if (is_multisite ()) {
+			$blog = get_current_blog_id ();
+			delete_blog_option ( $blog, 'show_quick_mail_users' );
+			delete_blog_option ( $blog, 'hide_quick_mail_admin' );
+			delete_blog_option ( $blog, 'editors_quick_mail_privilege' );
+			delete_blog_option ( $blog, 'verify_quick_mail_addresses' );
+		} else {
+			delete_option ( 'show_quick_mail_users' );
+			delete_option ( 'hide_quick_mail_admin' );
+			delete_option ( 'editors_quick_mail_privilege' );
+			delete_option ( 'verify_quick_mail_addresses' );
+		} // end if multisite
+	} // end unload_quick_mail_plugin
 
    /**
     * load quick-mail.js for email select and
@@ -596,6 +591,7 @@ jQuery(document).ready( function() {
       $success = '';
       $to = '';
       $verify = '';
+      $raw_msg = '';
       $blog = is_multisite() ? get_current_blog_id() : 0;
       if ( is_multisite() ) {
       	$verify = get_blog_option( $blog, 'verify_quick_mail_addresses', 'N' );
@@ -769,8 +765,9 @@ jQuery(document).ready( function() {
          		$message = wpautop( $message );
          	} // end if
          	
-         	// set content type temporarily 3.0.3
-         	add_filter( 'wp_mail_content_type', array($this, 'set_mail_content_type') );
+         	// set content type and redirect error before sending mail. 3.0.4
+         	add_filter( 'wp_mail_content_type', array($this, 'set_mail_content_type'), 99, 1 );
+         	add_filter( 'wp_mail_failed', array($this, 'show_mail_failure'), 99, 1 );
          	
             if ( wp_mail( $to, $subject, $message, $headers, $attachments ) ) {
 	            	$success = __( 'Message Sent', 'quick-mail' );
@@ -784,8 +781,9 @@ jQuery(document).ready( function() {
              	$error = __( 'Error sending mail', 'quick-mail' ); // else  error
          	} // end else error
          	
-         	// reset content type 3.0.3
-         	remove_action( 'wp_mail_content_type', array($this, 'set_mail_content_type') );
+         	// reset filters after send 3.0.4
+         	remove_filter( 'wp_mail_content_type', array($this, 'set_mail_content_type'), 99 );
+         	remove_filter( 'wp_mail_failed', array($this, 'show_mail_failure'), 99 );
             
             if ( ! empty( $file ) ) {
                $e = '<br>' . __( 'Error Deleting Upload', 'quick-mail' );
@@ -874,9 +872,7 @@ if ( 'X' == $this->qm_get_display_option( $blog ) ) : ?>
 <fieldset>
 <label id="qmcc_label" for="qm-cc" class="recipients"><?php _e( 'CC', 'quick-mail' ); ?></label>
 <label id="qmbcc_label" for="qm_bcc" class="qm-label"><?php _e( 'BCC', 'quick-mail' ); ?></label>
-<input tabindex="2" type="checkbox" id="qm_bcc" name="qm_bcc"
-onchange="if (jQuery('#qm_bcc').is(':checked')) { jQuery('#qmcc_label').text('<?php _e( 'BCC', 'quick-mail' ); ?>'); } 
-else { jQuery('#qmcc_label').text('<?php _e( 'CC', 'quick-mail' ); ?>') }">
+<input tabindex="2" type="checkbox" id="qm_bcc" name="qm_bcc" onchange="if (jQuery('#qm_bcc').is(':checked')) { jQuery('#qmcc_label').text('<?php _e( 'BCC', 'quick-mail' ); ?>'); } else { jQuery('#qmcc_label').text('<?php _e( 'CC', 'quick-mail' ); ?>') }">
 <p><?php echo $this->quick_mail_cc_input( $to, $mcc, $you->ID ); ?></p>
 </fieldset>
 <?php
@@ -925,14 +921,12 @@ placeholder="<?php _e( 'Subject', 'quick-mail' ); ?>" tabindex="22"></p>
 <p><textarea id="qm-message" name="qm-message" 
 placeholder="<?php _e( 'Enter your message', 'quick-mail' ); ?>"
 aria-labelledby="qm_msg_label" required aria-required="true" aria-multiline=”true” 
-rows="8" cols="60" tabindex="50"><?php echo htmlspecialchars( $message, ENT_QUOTES ); ?></textarea></p>
+rows="8" cols="60" tabindex="50"><?php echo htmlspecialchars( $raw_msg, ENT_QUOTES ); ?></textarea></p>
 <?php
 } else {  
 $editor_id = 'qm-message';
-$content = $message;
-$settings = array('content' => htmlspecialchars( $message, ENT_QUOTES ),
-'textarea_rows' => 8, 'tabindex' => 50, );
-wp_editor( $content, $editor_id, $settings);
+$settings = array('textarea_rows' => 8, 'tabindex' => 50 );
+wp_editor( $raw_msg, $editor_id, $settings);
 } // end if
 ?>
 </fieldset>
@@ -942,7 +936,7 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 					</div> <!-- indented -->
 </form>
 <?php endif; ?>
-   <?php
+<?php
          echo ob_get_clean();
    } // end quick_mail_form
 
@@ -1101,6 +1095,9 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
          $verify_problem = '<br><br><span role="alert">' . $cannot . $nf . '<br>' . $faq . '</span>';
       } // end if idn_to_ascii is available
       $verify_note = $verify_message . $verify_problem;
+      $wam = sprintf("%s %s %s",	__( 'Apply', 'quick-mail'), 
+      		'<a target="_blank" href="https://codex.wordpress.org/Function_Reference/wpautop">wpautop</a>',
+      		__( 'to HTML messages', 'quick-mail'));
 ?>
 <h1 id="quick-mail-title" class="quick-mail-title"><?php _e( 'Quick Mail Options', 'quick-mail' ); ?></h1>
 <form id="quick-mail-settings" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
@@ -1113,7 +1110,7 @@ if ( user_can_richedit() ) : ?>
 <legend class="recipients"><?php _e( 'Add Paragraphs', 'quick-mail' ); ?></legend>
 <p><input aria-describedby="qm_par_desc" aria-labelledby="qm_par_label" id="qm_add_par" class="qm-input" name="qm_wpautop" type="checkbox" value="1" <?php echo $check_wpautop; ?>>
 <label id="qm_par_label" for="qm_add_par" class="qm-label"><?php _e( 'Add Paragraphs to sent mail', 'quick-mail' ); ?></label></p>
-<p><span id="qm_par_desc" class="qm-label"><?php _e( 'Apply wpautop to HTML messages.', 'quick-mail' ); ?></span></p>
+<p><span id="qm_par_desc" class="qm-label"><?php echo $wam; ?></span></p>
 </fieldset>
 <?php endif; ?>
 

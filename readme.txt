@@ -44,7 +44,7 @@ User options for sending email to site users or others. Mail is sent with user's
 
 * See [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail for WordPress 4.8](https://wheredidmybraingo.com/quick-mail-for-wordpress-4-8/) for update info.
+* See [Quick Mail for WordPress 4.8](https://wheredidmybraingo.com/quick-mail-wordpress-4-8/) for update info.
 
 == Installation ==
 

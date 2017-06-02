@@ -1,4 +1,4 @@
-Quick Mail 3.0.3
+Quick Mail 3.0.4
 ====================
 
 Adds "Quick Mail" to Tools. Send text or html email with file attachments from user's credentials. French and Spanish translations.
@@ -35,7 +35,7 @@ __Features__
 ### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail 3.0.3 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-0-3-maintenance-release/) for update info.
+* See [Quick Mail for WordPress 4.8](https://wheredidmybraingo.com/quick-mail-wordpress-4-8/) for update info.
 
 ### Installation ###
 

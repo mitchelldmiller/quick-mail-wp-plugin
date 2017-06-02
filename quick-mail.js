@@ -1,4 +1,4 @@
-// Welcome! quick-mail.js 2.0.6
+// Welcome to quick-mail.js
 
 /**
  * set local storage
@@ -127,7 +127,7 @@ function is_qm_email_dup() {
 	var selection = jQuery('#qm-primary').val();
 	var info = selection.toLowerCase();
 	var qcc = jQuery('#qm-secondary').find('option:selected');
-	if (qcc.length == 1 && qcc[0] == '') {
+	if (info == '' || qcc.length == 1 && qcc[0] == '') {
 		return false;
 	}
 

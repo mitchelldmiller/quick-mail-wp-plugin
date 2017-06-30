@@ -1,4 +1,4 @@
-// Welcome to quick-mail.js
+// Welcome to quick-mail.js 3.1.0
 
 /**
  * set local storage
@@ -119,7 +119,6 @@ function load_qm_email_option(t)
 
 /**
  * check if cc selection equals recipient
- * @param string selection selected option
  * @returns {Boolean} valid
  */
 function is_qm_email_dup() {
@@ -549,7 +548,7 @@ jQuery(document).ready(function() {
 	   return true;
    });
 
-   jQuery('#qm-message').focus(function() {
+   jQuery('#quickmailmessage').focus(function() {
 	   if (!jQuery('#qm-cc').length || jQuery('#qm-cc').val() == '') {
 		   return true;
 	   }

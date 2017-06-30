@@ -1,4 +1,4 @@
-Quick Mail 3.0.4
+Quick Mail 3.1.0 Beta
 ====================
 
 Adds "Quick Mail" to Tools. Send text or html email with file attachments from user's credentials. French and Spanish translations.
@@ -32,10 +32,14 @@ __Features__
 
 * Site options for administrators to hide their profile, and limit access to user list.
 
+* Option to add paragraphs and line breaks to HTML messages with [wpauto](https:/codex.wordpress.org/Function_Reference/wpautop).
+
+* Select recipient from users or commenters. Reply privately to comments.
+
 ### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail for WordPress 4.8](https://wheredidmybraingo.com/quick-mail-wordpress-4-8/) for update info.
+* See [Reply to Comments with Quick Mail](https://wheredidmybraingo.com/) for update info.
 
 ### Installation ###
 

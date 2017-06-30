@@ -3,12 +3,12 @@ Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Tags: email, admin, mail, idn, attachment, multisite, accessible, accessibility, rich text, Spanish, French
 Requires at least: 4.4
-Tested up to: 4.8
+Tested up to: 4.9
 Stable tag: 3.0.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
-Adds "Quick Mail" to Tools. Send text or html email with file attachments from user's credentials. French and Spanish translations.
+Send text or html email with attachments from user's credentials. Select recipient from users or commenters. 
 
 == Description ==
 
@@ -40,11 +40,13 @@ User options for sending email to site users or others. Mail is sent with user's
 
 * Option to add paragraphs and line breaks to HTML messages with [wpauto](https://codex.wordpress.org/Function_Reference/wpautop).
 
+* Select recipient from users or commenters. Reply privately to comments. 
+
 = Learn More =
 
 * See [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail for WordPress 4.8](https://wheredidmybraingo.com/quick-mail-wordpress-4-8/) for update info.
+* See [Reply to WordPress Comments with Quick Mail](https://wheredidmybraingo.com/reply-wordpress-comments-quick-mail/) for update info.
 
 == Installation ==
 
@@ -127,7 +129,13 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 5. Full screen view.
 
+6. Reply to comment.
+
 == Changelog ==
+
+= 3.1.0 =
+* reply to comments.
+* improved performance.
 
 = 3.0.4 =
 * fixed reset email content type.
@@ -149,18 +157,14 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 * improved data entry form accessibility and design.
 * added visual editor.
 
-= 2.0.5 =
-* improved multiple file uploads.
-* hide some admininstrative options when User List is not available.
-
-= 2.0.4 =
-* added Javascript file for translating options message.
-
 = Earlier versions =
 
 Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.1.0 =
+* Upgrade recommended.
 
 = 3.0.4 =
 * Upgrade recommended.
@@ -175,12 +179,6 @@ Please refer to the separate changelog.txt for changes of previous versions.
 * Upgrade recommended.
 
 = 3.0.0 =
-* Upgrade recommended.
-
-= 2.0.5 =
-* Upgrade recommended.
-
-= 2.0.4 =
 * Upgrade recommended.
 
 == License ==

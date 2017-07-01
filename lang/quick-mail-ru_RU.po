@@ -165,7 +165,7 @@ msgstr "Показать пользовтелей по именам, с сорт
 # @ quick-mail
 #: quick-mail.php:1167
 msgid "Enter address to send mail."
-msgstr "Вводить адрес, для отправки сообщений"
+msgstr "Вводить адрес, для отправки сообщений."
 
 # @ quick-mail
 #: quick-mail.php:1171 quick-mail.php:1402 quick-mail.php:1410
@@ -527,7 +527,7 @@ msgstr "Список пользователей отключен админис�
 # @ quick-mail
 #: quick-mail.php:1167
 msgid "Saves 12 addresses."
-msgstr "Сохранено 12 адресов"
+msgstr "Сохраняет 12 адресов."
 
 # @ quick-mail
 #. translators: plugin header field 'AuthorURI'

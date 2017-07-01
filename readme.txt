@@ -1,14 +1,14 @@
 === Quick Mail ===
 Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
-Tags: email, admin, mail, idn, attachment, multisite, accessible, accessibility, rich text, Spanish, French
+Tags: email, admin, mail, idn, attachment, multisite, accessible, accessibility, rich text, Spanish, French, Russian
 Requires at least: 4.4
 Tested up to: 4.8
-Stable tag: 3.0.4
+Stable tag: 3.0.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
-Adds "Quick Mail" to Tools. Send text or html email with file attachments from user's credentials. French and Spanish translations.
+Send text or html email with attachments from user's credentials. Select recipient from users or enter name. Russian, French, Spanish translations.
 
 == Description ==
 
@@ -129,6 +129,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 == Changelog ==
 
+= 3.0.5 =
+* added Russian translation. Props @orlov562
+
 = 3.0.4 =
 * fixed reset email content type.
 * preserves shortcodes in messages.
@@ -162,6 +165,9 @@ Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
 
+= 3.0.5 =
+* Upgrade adds Russian translation.
+
 = 3.0.4 =
 * Upgrade recommended.
 
@@ -191,6 +197,6 @@ Quick Mail is free for personal or commercial use. Please encourage future devel
 
 * A .pot file is included for translators.
 
-* Includes Spanish and French translations.
+* Includes Russian, Spanish, French translations.
 
 * See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.

@@ -9,3 +9,7 @@
 # ignore Mac
 .DS_Store
 ._*
+
+# ignore Bash, release
+*.sh
+*.zip

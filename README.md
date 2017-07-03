@@ -1,7 +1,7 @@
 quick-mail-wp-plugin
 ====================
 
-Adds "Quick Mail" to Tools. Send text or html email with file attachments from user's credentials. French and Spanish translations.
+Send text or html email with attachments from user's credentials. Select recipient from users or commenters. Russian, French, Spanish translations.
 
 ### WordPress Rating
 [![WordPress rating](https://img.shields.io/wordpress/plugin/r/quick-mail.svg?maxAge=2592000)]()
@@ -42,7 +42,7 @@ __Features__
 ### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See <del>[Reply to Comments with Quick Mail](https://wheredidmybraingo.com/)</del> for update info.
+* See [Reply to Comments with Quick Mail](https://wheredidmybraingo.com/reply-wordpress-comments-quick-mail/) for update info.
 
 ### Installation ###
 
@@ -119,7 +119,7 @@ __Translators and Programmers__
 
 * A .pot file is included for translators.
 
-* Includes French and Spanish translations.
+* Includes Russian, Spanish, French translations.
 
 * See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.
 

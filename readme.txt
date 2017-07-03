@@ -133,6 +133,10 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 == Changelog ==
 
+= 3.1.1 =
+* reply to comments with Quick Mail from Comments list. 
+* fix error displaying multibyte post titles.
+
 = 3.1.0 =
 * reply to comments.
 * improved performance.
@@ -166,6 +170,9 @@ Please refer to the separate changelog.txt for changes of previous versions.
 = 3.1.0 =
 * Upgrade recommended.
 
+= 3.1.0 =
+* Upgrade recommended.
+
 = 3.0.4 =
 * Upgrade recommended.
 
@@ -189,6 +196,6 @@ Quick Mail is free for personal or commercial use. Please encourage future devel
 
 * A .pot file is included for translators.
 
-* Includes Spanish and French translations.
+* Includes Russian, Spanish, French translations.
 
 * See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.

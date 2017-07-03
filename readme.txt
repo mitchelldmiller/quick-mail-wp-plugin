@@ -12,7 +12,7 @@ Send text or html email with attachments from user's credentials. Select recipie
 
 == Description ==
 
->Quick Mail is the easiest way to send an email with attachments to WordPress users on your site. Compatible with multisite.
+>Quick Mail is the easiest way to send email with attachments to WordPress users on your site, or send private replies to comments. Compatible with multisite.
 
 Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds Quick Mail to Tools menu.
 
@@ -23,6 +23,8 @@ User options for sending email to site users or others. Mail is sent with user's
 = Features =
 
 * Sends text or html mails to multiple recipients. Content type is determined from message.
+
+* Send private replies with attachments to comments.
 
 * Multiple recipients can be selected from users or entered manually.
 
@@ -40,13 +42,15 @@ User options for sending email to site users or others. Mail is sent with user's
 
 * Option to add paragraphs and line breaks to HTML messages with [wpauto](https://codex.wordpress.org/Function_Reference/wpautop).
 
-* Select recipient from users or commenters. Reply privately to comments. 
+* Select recipient from users or commenters.
 
 = Learn More =
 
 * See [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
 * See [Reply to WordPress Comments with Quick Mail](https://wheredidmybraingo.com/reply-wordpress-comments-quick-mail/) for update info.
+
+* [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/)
 
 == Installation ==
 
@@ -59,8 +63,6 @@ User options for sending email to site users or others. Mail is sent with user's
 = Who can send mail? =
 
 * Users must be able to [publish a post](http://codex.wordpress.org/Roles_and_Capabilities#publish_posts) to send an email. Minimum permission can be changed with a filter.
-
-* User profile must include first name, last name, email address.
 
 = Who can send rich text messages? =
 
@@ -132,6 +134,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 6. Reply to comment.
 
 == Changelog ==
+
+= 3.1.2 =
+* fixed color on Reply with Quick Mail.
 
 = 3.1.1 =
 * reply to comments with Quick Mail from Comments list. 

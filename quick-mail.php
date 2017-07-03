@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.1.1 Beta
+Version: 3.1.2 Beta
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/reply-wordpress-comments-quick-mail/
@@ -1640,16 +1640,17 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 		$qm_url = admin_url( "tools.php?page=quick_mail_form&comment_id={$comment->comment_ID}");
 		$reply = __( 'Reply with Quick Mail', 'quick-mail' );
 		$ereply = esc_attr( $reply );
+		$css = 'style="color: #e14d43;"'; // wp-ui-text-highlight
 		$retval = array();
 		foreach ($actions as $k => $v) {
 			$retval[$k] = $v;
 			if ('reply' == $k) {
-				$retval['quickmail'] = "<a class='wp-ui-text-highlight' href='{$qm_url}' aria-label='{$ereply}'>{$reply}</a>";
+				$retval['quickmail'] = "<a {$css} href='{$qm_url}' aria-label='{$ereply}'>{$reply}</a>";
 			}
 		} // end foreach
 		
 		if (empty($retval['quickmail'])) {
-			$retval['quickmail'] = "<a class='wp-ui-text-highlight' href='{$qm_url}' aria-label='{$ereply}'>{$reply}</a>";
+			$retval['quickmail'] = "<a {$css} href='{$qm_url}' aria-label='{$ereply}'>{$reply}</a>";
 		} // end if missing reply option
 		
 		return $retval;

@@ -729,8 +729,7 @@ jQuery(document).ready( function() {
 		if ( user_can_richedit() ) {
 			$direction = is_rtl() ? 'right' : 'left';
 			$css = $this->get_comment_style();
-			$htext = htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' );
-			return "<div {$css}>{$htext}</div><br>";
+			return "<div {$css}>{$text}</div><br>";
 		} // end if rich editor
 		if ( is_rtl() ) {
 			return $text . ' <' . "\r\n______________\r\n";

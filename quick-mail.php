@@ -263,12 +263,9 @@ class QuickMail {
     * @since 1.3.0
     */
 	public function show_qm_pointer() {
-		if ( is_multisite() ) {
-			$screen = get_current_screen();
-			if ( 'plugins-network' == $screen->id ) {
-				return;
-			} // end if skipping pointer on network admin page
-	   	} // end if multisite
+		if ( is_multisite() && is_super_admin() && is_network_admin() ) {
+			return;
+		} // end if skipping pointer on network admin page
 
 		$dismissed = array_filter( explode( ',', (string)get_user_meta( get_current_user_id(), 'dismissed_wp_pointers', true ) ) );
 		if ( ! in_array( self::$pointer_name, $dismissed ) ) {

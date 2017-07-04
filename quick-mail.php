@@ -97,18 +97,23 @@ class QuickMail {
 
 	/**
 	 * get user role
-	 * @param object $user $WP_User
-	 * @return string lowercase role
+	 * @return string lowercase role. author, editor, administrator, n/a
 	 * @since 3.1.0
 	 */
-	public function qm_get_role( $user ) {
-		if ( empty( $user->ID ) ) {
-			return 'author';
-		}
-		if ( is_super_admin( $user->ID ) ) {
+	public function qm_get_role() {
+		if ( current_user_can( 'activate_plugins' ) ) {
 			return 'administrator';
 		}
-		return empty( $user->roles[0] ) ? 'author' : strtolower( $user->roles[0] );
+
+		if ( current_user_can( 'delete_others_pages' ) ) {
+			return 'editor';
+		}
+
+		if ( current_user_can( 'publish_posts' ) ) {
+			return 'author';
+		}
+
+		return 'n/a';
 	} // end qm_get_role
 
    /**
@@ -130,13 +135,15 @@ class QuickMail {
 		} // end if blog not set
 
 		$you = wp_get_current_user();
-		$urole = $this->qm_get_role( $you );
+		$urole = $this->qm_get_role();
 		if ( 'administrator' == $urole ) {
 			return true;
-		}
+		} // end if administrator
+
 		if ( 'author' == $urole ) {
 			return ( 'X' == $code );
 		} // author can only reply to comments
+
 		if ( 'editor' == $urole ) {
 			$editors = '';
 			if ( is_multisite() ) {
@@ -256,9 +263,12 @@ class QuickMail {
     * @since 1.3.0
     */
 	public function show_qm_pointer() {
-		if ( is_multisite() && is_super_admin() && is_network_admin() ) {
-	   		return;
-	   	} // end if skipping pointer on network admin page
+		if ( is_multisite() ) {
+			$screen = get_current_screen();
+			if ( 'plugins-network' == $screen->id ) {
+				return;
+			} // end if skipping pointer on network admin page
+	   	} // end if multisite
 
 		$dismissed = array_filter( explode( ',', (string)get_user_meta( get_current_user_id(), 'dismissed_wp_pointers', true ) ) );
 		if ( ! in_array( self::$pointer_name, $dismissed ) ) {
@@ -424,8 +434,7 @@ jQuery(document).ready( function() {
       $blog = is_multisite() ? get_current_blog_id() : 0;
       $option = $this->qm_get_display_option( $blog );
       $you = wp_get_current_user(); // from
-      $urole = $this->qm_get_role( $you );
-      if ( 'author' == $urole ) {
+      if ( 'author' == $this->qm_get_role() ) {
       	$option = 'X';
       } // end if author
 
@@ -526,8 +535,7 @@ jQuery(document).ready( function() {
 	   		$option = 'X';
 	   	} // end if since 1.4.0
 	   	$you = wp_get_current_user();
-	   	$urole = $this->qm_get_role( $you );
-	   	if ( 'author' == $urole ) {
+	   	if ( 'author' == $this->qm_get_role() ) {
 	   		$option = 'X';
 	   	} // end if author
 
@@ -1551,11 +1559,11 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
     */
    public function qm_get_display_option( $blog ) {
       global $current_user;
-      if ( 'author' == $this->qm_get_role( $current_user ) ) {
+      if ( 'author' == $this->qm_get_role() ) {
       	return 'X';
       } // end if author
       $value = get_user_meta( $current_user->ID, 'show_quick_mail_users', true );
-      $retval = ( ! empty($value) ) ? $value : 'A'; // should never be empty
+      $retval = ( ! empty( $value ) ) ? $value : 'A'; // should never be empty
       return $this->multiple_matching_users( $retval, $blog ) ? $retval : 'X';
    } // end qm_get_display_option
 

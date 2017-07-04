@@ -1645,6 +1645,15 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 	 * @since 3.1.0
 	 */
 	public function qm_comment_reply($text, $id) {
+		if ( 'author' == qm_get_role() ) {
+			$allowed = is_multisite() ?
+			get_blog_option( get_current_blog_id(), 'authors_quick_mail_privilege', 'N' ) :
+			get_option( 'authors_quick_mail_privilege', 'N' );
+			if ( 'Y' != $allowed ) {
+				return $text;
+			} // end if not allowed to reply with Quick Mail
+		} // end if author
+
 		$qm = admin_url( "tools.php?page=quick_mail_form&comment_id={$id}\r\n" );
 		$left_link = __( 'Reply with Quick Mail', 'quick-mail' ) . ': ' . $qm;
 		$right_link = $qm . ' : ' . __( 'Reply with Quick Mail', 'quick-mail' );

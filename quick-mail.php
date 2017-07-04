@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.1.2 Beta
+Version: 3.1.3 Beta
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/reply-wordpress-comments-quick-mail/
@@ -56,11 +56,11 @@ class QuickMail {
    } // end get_instance
 
    /**
-    * Get text for help tab
-    * @return string[]
+    * Get info for basic help tab.
+    	* @return array args for WP_Screen::add_help_tab(array $args)
     */
 	public static function get_qm_help_tab() {
-		$qm_desc =  __( 'Quick Mail is the easiest way to send an email with attachments to WordPress users on your site.', 'quick-mail' );
+		$qm_desc =  __( 'Quick Mail is the easiest way to send email with attachments to WordPress users on your site, or send private replies to comments.', 'quick-mail' );
 		$english_faq = __('https://wordpress.org/plugins/quick-mail/faq/', 'quick-mail');
 		$faq = __( 'FAQ', 'quick-mail' );
 		$flink = '<a href="https://wordpress.org/plugins/quick-mail/faq/" target="_blank">' . __( 'FAQ', 'quick-mail' ) . '</a>';
@@ -77,6 +77,23 @@ class QuickMail {
 		$qm_content = $qm_top . $qm_bot;
 		return array('id' => 'qm_intro', 'title'	=> __('Quick Mail', 'quick-mail'), 'content' => $qm_content);
 	} // end get_qm_help_tab
+
+	/**
+	 * get help for comment reply.
+	 * @since 3.1.3
+	 * @return array args for WP_Screen::add_help_tab(array $args)
+	 */
+	public static function get_qm_comment_help_tab() {
+		$qm_desc =  __( 'Send private replies to comments.', 'quick-mail' );
+		$qm_how =  __( 'Select a commenter to send a message.', 'quick-mail' );
+		$qm_info = __( 'Subject and message are automatically added.', 'quick-mail' );
+		$slink = '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
+		$use_str = __( 'Please use', 'quick-mail' );
+		$to_ask = __( 'to ask questions and report problems', 'quick-mail' );
+		$rc5 = "<dd style='font-weight:bold; margin-top:2em;'>{$use_str} {$slink} {$to_ask}.</dd>";
+		$qm_content = "<dl><dt style='font-weight:bold; margin-bottom:1em;'>{$qm_desc}</dt><dd>{$qm_how}</dd><dd>{$qm_info}</dd>{$rc5}</dl>";
+		return array('id' => 'qm_chelp', 'title'	=> __('Reply to Comments', 'quick-mail'), 'content' => $qm_content);
+	} // end get_qm_comment_help_tab
 
 	/**
 	 * get user role
@@ -1424,7 +1441,6 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 	} else {
 		$comment_label = __( 'Display Commenters instead of users', 'quick-mail' );
       } // end if no users
-      $space = $this->multiple_matching_users( 'A', $blog ) ? '' : ' style="margin-top:2em;" '
 ?>
 <h1 id="quick-mail-title" class="quick-mail-title"><?php _e( 'Quick Mail Options', 'quick-mail' ); ?></h1>
 <form id="quick-mail-settings" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
@@ -1898,10 +1914,16 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 			$attachment_help .= "<p>{$nhelp}</p>";
 		} // end if uploads
 		$screen->add_help_tab( self::get_qm_help_tab() );
-		$screen->add_help_tab( array(
-				'id'	=> 'qm_cc_help_tab',
-				'title'	=> $cc_title,
-				'content'	=> "<p>{$cc_help}</p>"));
+		$you = wp_get_current_user();
+		if ( 'Y' == get_user_option( 'show_quick_mail_commenters', $you->ID ) ) {
+			$screen->add_help_tab( self::get_qm_comment_help_tab() );
+		} else {
+			$screen->add_help_tab( array(
+					'id'	=> 'qm_cc_help_tab',
+					'title'	=> $cc_title,
+					'content'	=> "<p>{$cc_help}</p>"));
+		} // end if replying to commenters
+
 		$screen->add_help_tab( array('id' => 'qm_attach_help_tab',
 				'title'	=> $attachment_title,
 				'content'	=> $attachment_help) );

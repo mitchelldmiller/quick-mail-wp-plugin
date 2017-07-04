@@ -1,4 +1,4 @@
-Quick Mail 3.1.2 Beta
+Quick Mail 3.1.3 Beta
 ====================
 
 Send text or html email with attachments from user's credentials. Select recipient from users or commenters.

@@ -1388,6 +1388,13 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
       $check_all    = ( 'A' == $this->qm_get_display_option( $blog ) ) ? 'checked="checked"' : '';
       $check_names  = ( 'N' == $this->qm_get_display_option( $blog ) ) ? 'checked="checked"' : '';
       $check_none   = ( 'X' == $this->qm_get_display_option( $blog ) ) ? 'checked="checked"' : '';
+      $list_warning = '';
+      if ( 3 > $total && 'X' != $this->qm_get_display_option( $blog ) ) {
+	      	$note = ' <strong>' . __( 'NOTE', 'quick-mail' ) . ' : </strong> ';
+	      	$lw_msg = __( 'Quick Mail needs three non-admin users for sender, recipient, CC to access User List.', 'quick-mail' );
+	      	$list_warning = $note . $lw_msg;
+      } // end if have total less than 3
+
       $admin_option = '';
       $editor_option = '';
       $author_option = '';
@@ -1408,13 +1415,6 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
       $check_editor = ( 'Y' == $editor_option ) ? 'checked="checked"' : '';
       $check_author = ( 'Y' == $author_option ) ? 'checked="checked"' : '';
       $check_verify = ( 'Y' == $verify_option ) ? 'checked="checked"' : '';
-      $list_warning = '';
-	  if ( 3 > $total && 'Y' == $admin_option && 'X' != $this->qm_get_display_option( $blog ) ) {
-	  	$note = ' <strong>' . __( 'NOTE', 'quick-mail' ) . ' :</strong> ';
-	  	$lw_top = __( 'Only administrators will see user list.', 'quick-mail' );
-	  	$lw_bot = __( 'Quick Mail needs three non-admin users for sender, recipient, CC to access User List.', 'quick-mail' );
-	  	$list_warning = $note . $lw_top . '<br>' . $lw_bot;
-      } // end if have list warning
 
       $english_dns = __('http://php.net/manual/en/function.checkdnsrr.php', 'quick-mail');
       $z = __( 'Checks domain with', 'quick-mail' );
@@ -1475,10 +1475,16 @@ if ( user_can_richedit() ) : ?>
 <?php
 $css = ('Y' == $hide_admin) ? 'qm-admin' : 'qm-total';
 $info = sprintf("<span class='%s'>{$total}</span>", $css);
-_e( 'Show All Users', 'quick-mail' ); echo " ({$info})"; ?>
+_e( 'Show All Users', 'quick-mail' );
+if ($total > 0) {
+	echo " ({$info})";
+} // end if
+?>
 </label><span id="qm_all_desc" class="qm-label"><?php _e( 'Show all users sorted by nickname.', 'quick-mail' );
 $info = sprintf("<span class='%s'>{$total}</span>", $css);
-echo ' ', $info, ' ', __( 'matching users', 'quick-mail' );
+if ($total > 0) {
+	echo ' ', $info, ' ', __( 'matching users', 'quick-mail' );
+} // end if
 ?>
 .</span></p>
      <?php endif; ?>
@@ -1488,11 +1494,17 @@ echo ' ', $info, ' ', __( 'matching users', 'quick-mail' );
 <?php
 $css = ('Y' == $hide_admin) ? 'qm-admin' : 'qm-total';
 $info = sprintf("<span class='%s'>{$names}</span>", $css);
-_e( 'Show Users with Names', 'quick-mail' ); echo " ({$info})"; ?></label>
+_e( 'Show Users with Names', 'quick-mail' );
+if ($total > 0) {
+	echo " ({$info})";
+} // end if
+?></label>
 <span id="qm_names_desc" class="qm-label"><?php _e( 'Show users with names, sorted by last name.', 'quick-mail' );
 $css = ('Y' == $hide_admin) ? 'qm-admin' : 'qm-total';
 $info = sprintf("<span class='%s'>{$names}</span>", $css);
-echo ' ', $info, ' ', __( 'matching users', 'quick-mail' );
+if ($total > 0) {
+	echo ' ', $info, ' ', __( 'matching users', 'quick-mail' );
+} // end if
 ?>
 .</span></p>
       <?php endif; ?>

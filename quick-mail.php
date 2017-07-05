@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.1.3 Beta
+Version: 3.1.4 Beta
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/reply-wordpress-comments-quick-mail/
@@ -387,12 +387,14 @@ jQuery(document).ready( function() {
 		delete_metadata( 'user', 1, 'show_quick_mail_users', '', true );
 		delete_metadata( 'user', 1, 'show_quick_mail_commenters', '', true );
 		if ( is_multisite() ) {
-			$blog = get_current_blog_id();
-			delete_blog_option( $blog, 'show_quick_mail_users' );
-			delete_blog_option( $blog, 'hide_quick_mail_admin' );
-			delete_blog_option( $blog, 'editors_quick_mail_privilege' );
-			delete_blog_option( $blog, 'authors_quick_mail_privilege' );
-			delete_blog_option( $blog, 'verify_quick_mail_addresses' );
+			$sites = get_sites();
+			foreach ($sites as $site) {
+				delete_blog_option( $site->blog_id, 'show_quick_mail_users' );
+				delete_blog_option( $site->blog_id, 'hide_quick_mail_admin' );
+				delete_blog_option( $site->blog_id, 'editors_quick_mail_privilege' );
+				delete_blog_option( $site->blog_id, 'authors_quick_mail_privilege' );
+				delete_blog_option( $site->blog_id, 'verify_quick_mail_addresses' );
+			} // end foreach
 		} else {
 			delete_option( 'show_quick_mail_users' );
 			delete_option( 'hide_quick_mail_admin' );
@@ -1142,9 +1144,10 @@ if ( 75 < $tlen ) {
 }
 $tsize = "size='{$tlen}'";
 $you_to = ( empty( $commenter ) || empty( $commenter_list ) ) ? __( 'To', 'quick-mail' ) : __( 'Commenters', 'quick-mail' );
+$save_address = ( empty( $commenter ) || empty( $commenter_list ) ) ? '<input type="hidden" id="qm-saving" value="1">' : '<input type="hidden" id="qm-saving" value="">';
 ?>
 <label id="tf_label" for="the_from" class="recipients"><?php _e( 'From', 'quick-mail' ); ?></label>
-<p><input aria-labelledby="tf_label" <?php echo $tsize; ?> value="<?php echo $the_from; ?>" readonly aria-readonly="true" id="the_from" tabindex="5000"></p>
+<p><?php echo $save_address; ?><input aria-labelledby="tf_label" <?php echo $tsize; ?> value="<?php echo $the_from; ?>" readonly aria-readonly="true" id="the_from" tabindex="5000"></p>
 </fieldset>
 <fieldset>
 <label id="qme_label" for="qm-email" class="recipients"><?php echo $you_to; ?></label>
@@ -1480,7 +1483,7 @@ if ($total > 0) {
 	echo " ({$info})";
 } // end if
 ?>
-</label><span id="qm_all_desc" class="qm-label"><?php _e( 'Show all users sorted by nickname.', 'quick-mail' );
+</label><span id="qm_all_desc" class="qm-label"><?php _e( 'Show all users sorted by nickname', 'quick-mail' );
 $info = sprintf("<span class='%s'>{$total}</span>", $css);
 if ($total > 0) {
 	echo ' ', $info, ' ', __( 'matching users', 'quick-mail' );
@@ -1499,7 +1502,7 @@ if ($total > 0) {
 	echo " ({$info})";
 } // end if
 ?></label>
-<span id="qm_names_desc" class="qm-label"><?php _e( 'Show users with names, sorted by last name.', 'quick-mail' );
+<span id="qm_names_desc" class="qm-label"><?php _e( 'Show users with names, sorted by last name', 'quick-mail' );
 $css = ('Y' == $hide_admin) ? 'qm-admin' : 'qm-total';
 $info = sprintf("<span class='%s'>{$names}</span>", $css);
 if ($total > 0) {

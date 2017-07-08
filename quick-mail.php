@@ -1448,6 +1448,14 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 	} else {
 		$comment_label = __( 'Display Commenters instead of users', 'quick-mail' );
       } // end if no users
+      if ( 'author' == $this->qm_get_role() ) {
+      	$allowed = is_multisite() ?
+      	get_blog_option( get_current_blog_id(), 'authors_quick_mail_privilege', 'N' ) :
+      	get_option( 'authors_quick_mail_privilege', 'N' );
+      	if ( 'Y' != $allowed ) {
+      		$comment_label = '';
+      	} // end if not allowed to reply with Quick Mail
+      } // end if author
 ?>
 <h1 id="quick-mail-title" class="quick-mail-title"><?php _e( 'Quick Mail Options', 'quick-mail' ); ?></h1>
 <form id="quick-mail-settings" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
@@ -1464,11 +1472,14 @@ if ( user_can_richedit() ) : ?>
 <?php endif; ?>
 <fieldset>
 <legend class="recipients"><?php _e( 'User Display', 'quick-mail' ); ?></legend>
+<?php if ( empty( $comment_label ) ) : ?>
+<input type="hidden" name="show_quick_mail_commenters" value="N">
+<?php else : ?>
       <p><input aria-describedby="qm_commenter_desc" aria-labelledby="qm_commenter_label" id="show_quick_mail_commenters" class="qm-input" name="show_quick_mail_commenters"
       type="checkbox" value="Y" <?php echo $check_commenters; ?>>
       <label id="qm_commenter_label" for="show_quick_mail_commenters" class="qm-label"><?php echo $comment_label; ?></label>
       <span id="qm_commenter_desc" class="qm-label"><?php _e( 'Send private replies to comments.', 'quick-mail' ); ?></span></p>
-
+<?php endif; ?>
       <?php if (!empty($list_warning)) : ?>
       <p role="alert" id="qm-warning"><?php echo $list_warning; ?></p>
       <?php endif; ?>
@@ -1745,12 +1756,19 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
     */
 	public function init_quick_mail_menu() {
 		$title = __( 'Quick Mail', 'quick-mail' );
+		$min_permission = 'publish_posts';
+		$allowed = is_multisite() ?
+		get_blog_option( get_current_blog_id(), 'authors_quick_mail_privilege', 'N' ) :
+		get_option( 'authors_quick_mail_privilege', 'N' );
+		if ( 'Y' != $allowed ) {
+			$min_permission = 'edit_others_posts';
+		} // end if skipping authors
 		$page = add_submenu_page( 'tools.php', $title, $title,
-		apply_filters( 'quick_mail_user_capability', 'publish_posts' ), 'quick_mail_form', array($this, 'quick_mail_form') );
+		apply_filters( 'quick_mail_user_capability', $min_permission ), 'quick_mail_form', array($this, 'quick_mail_form') );
 		add_action( 'admin_print_styles-' . $page, array($this, 'init_quick_mail_style') );
 		// removed $this->want_options_menu()
 		// everybody gets the menu for Display Commenters @since 3.1.0
-		$page = add_options_page( 'Quick Mail Options', $title, apply_filters( 'quick_mail_setup_capability', 'publish_posts' ), 'quick_mail_options', array($this, 'quick_mail_options') );
+		$page = add_options_page( 'Quick Mail Options', $title, apply_filters( 'quick_mail_setup_capability', $min_permission ), 'quick_mail_options', array($this, 'quick_mail_options') );
 		if ( !empty( $page ) ) {
 			add_action( 'admin_print_styles-' . $page, array($this, 'init_quick_mail_style') );
 			add_action('load-' . $page, array($this, 'add_qm_settings_help'));

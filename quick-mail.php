@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.1.4 Beta
+Version: 3.1.5 Beta
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/reply-wordpress-comments-quick-mail/
@@ -1657,7 +1657,7 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 	 * @since 3.1.0
 	 */
 	public function qm_comment_reply($text, $id) {
-		if ( 'author' == qm_get_role() ) {
+		if ( 'author' == $this->qm_get_role() ) {
 			$allowed = is_multisite() ?
 			get_blog_option( get_current_blog_id(), 'authors_quick_mail_privilege', 'N' ) :
 			get_option( 'authors_quick_mail_privilege', 'N' );
@@ -1687,6 +1687,14 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 		if ( !QuickMailUtil::qm_valid_email_domain( $comment->comment_author_email, 'Y' ) ) {
 			return $actions;
 		} // end if invalid author email
+		if ( 'author' == $this->qm_get_role() ) {
+			$allowed = is_multisite() ?
+			get_blog_option( get_current_blog_id(), 'authors_quick_mail_privilege', 'N' ) :
+			get_option( 'authors_quick_mail_privilege', 'N' );
+			if ( 'Y' != $allowed ) {
+				return $actions;
+			} // end if not allowed to reply with Quick Mail
+		} // end if author
 
 		$qm_url = admin_url( "tools.php?page=quick_mail_form&comment_id={$comment->comment_ID}");
 		$reply = __( 'Reply with Quick Mail', 'quick-mail' );

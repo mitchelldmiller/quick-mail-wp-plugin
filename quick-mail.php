@@ -1623,7 +1623,7 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 	} // end qm_is_admin
 
 	/**
-	 * Is user an administrator?
+	 * Is user an editor?
 	 *
 	 * @param int $id User ID
 	 * @param int $blog Blog ID or zero if not multisite
@@ -1642,7 +1642,7 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 	} // end qm_is_admin
 
 	/**
-	 * get total users with administrator role on a blog
+	 * get total users with administrator role on a blog.
 	 *
 	 * @param int $blog Blog ID or zero if not multisite
 	 * @return int total
@@ -1661,7 +1661,7 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 	} // end qm_admin_count
 
 	/**
-	 * filter comment notification to add quick mail
+	 * filter comment notification to add quick mail.
 	 * @param string $text
 	 * @param integer $id comment ID
 	 * @return string filtered text
@@ -1685,7 +1685,7 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 	} // end qm_comment_reply
 
 	/**
-	 * filter comment_row_actions to add Reply with Quick Mail
+	 * filter comment_row_actions to add Reply with Quick Mail.
 	 * @param array $actions actions to filter
 	 * @param object $comment WP_Comment
 	 * @return array string filtered comments
@@ -1727,7 +1727,7 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 	} // end qm_filter_comment_link
 
    /**
-    * used with quick_mail_setup_capability filter, to let editors see user list
+    * used with quick_mail_setup_capability filter, to let editors see user list.
     *
     */
 	public function let_editor_set_quick_mail_option( $role ) {
@@ -1752,7 +1752,7 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
    } // end let_editor_set_quick_mail_option
 
 	/**
-    * init admin menu for appropriate users
+    * init admin menu for appropriate users.
     */
 	public function init_quick_mail_menu() {
 		$title = __( 'Quick Mail', 'quick-mail' );
@@ -1766,8 +1766,6 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 		$page = add_submenu_page( 'tools.php', $title, $title,
 		apply_filters( 'quick_mail_user_capability', $min_permission ), 'quick_mail_form', array($this, 'quick_mail_form') );
 		add_action( 'admin_print_styles-' . $page, array($this, 'init_quick_mail_style') );
-		// removed $this->want_options_menu()
-		// everybody gets the menu for Display Commenters @since 3.1.0
 		$page = add_options_page( 'Quick Mail Options', $title, apply_filters( 'quick_mail_setup_capability', $min_permission ), 'quick_mail_options', array($this, 'quick_mail_options') );
 		if ( !empty( $page ) ) {
 			add_action( 'admin_print_styles-' . $page, array($this, 'init_quick_mail_style') );

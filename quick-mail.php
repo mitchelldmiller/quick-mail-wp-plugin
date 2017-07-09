@@ -1504,6 +1504,35 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 <form id="quick-mail-settings" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 <div class="indented">
 <div id="qm_saved"></div>
+<?php if ( $this->qm_is_admin( $you->ID, $blog ) ) : ?>
+<fieldset>
+<legend class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></legend>
+<?php if ( $this->multiple_matching_users( 'A', $blog ) ) : ?>
+<p><input aria-describedby="qm_hide_desc" aria-labelledby="qm_hide_label" class="qm-input" name="hide_quick_mail_admin" type="checkbox" <?php echo $check_admin; ?>>
+<label id="qm_hide_label" class="qm-label"><?php _e( 'Hide Administrator Profiles', 'quick-mail' ); ?>.</label>
+<?php
+$admins = $this->qm_admin_count( $blog );
+$profile = sprintf( _n( '%s administrator profile', '%s administrator profiles', $admins, 'quick-mail' ), $admins );
+echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User list will not include', 'quick-mail' ), " {$profile}.");
+?>
+<?php endif; ?>
+<input name="showing_quick_mail_admin" type="hidden" value="Y"></p>
+<p><input aria-describedby="quick_mail_cannot_reply_desc" id="quick_mail_cannot_reply"
+aria-labelledby="quick_mail_cannot_reply_label" class="qm-input"
+name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?>>
+<label id="quick_mail_cannot_reply_label" class="qm-label"><?php _e( 'Disable Replies to Comments', 'quick-mail' ); ?>.</label>
+<span id="quick_mail_cannot_reply_desc" class="qm-label"><?php _e( 'Users will not see commenter list.', 'quick-mail' ); ?></span></p>
+<p id="qm-authors"><input aria-describedby="qm_author_desc" aria-labelledby="qm_author_label" class="qm-input" name="authors_quick_mail_privilege" type="checkbox" <?php echo $check_author; ?>>
+<label id="qm_author_label" class="qm-label"><?php _e( 'Grant Authors permission to reply to comments', 'quick-mail' ); ?>.</label>
+<span id="qm_author_desc" class="qm-label"><?php _e( 'Authors will not have access to user list.', 'quick-mail' ); ?></span></p>
+<p><input aria-describedby="qm_grant_desc" aria-labelledby="qm_grant_label" class="qm-input" name="editors_quick_mail_privilege" type="checkbox" <?php echo $check_editor; ?>>
+<label id="qm_grant_label" class="qm-label"><?php _e( 'Grant Editors access to user list.', 'quick-mail' ); ?></label>
+<span id="qm_grant_desc" class="qm-label"><?php _e( 'Let editors see user list and reply to comments.', 'quick-mail' ); ?></span></p>
+<p><input aria-describedby="qm_verify_desc" aria-labelledby="qm_verify_label" class="qm-input" name="verify_quick_mail_addresses" type="checkbox" <?php echo $check_verify; ?>>
+<label id="qm_verify_label" class="qm-label"><?php _e( 'Verify recipient email domains', 'quick-mail' ); ?>.</label>
+<span id="qm_verify_desc" class="qm-label"><?php echo $verify_note; ?></span></p>
+</fieldset>
+<?php endif; ?>
 <?php
 if ( user_can_richedit() ) : ?>
 <fieldset>
@@ -1585,35 +1614,6 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 ?>
 <span id="qm_none_desc" class="qm-label"><?php _e( 'Enter address to send mail.', 'quick-mail' ); ?> <?php _e( 'Saves 12 addresses.', 'quick-mail' ); ?></span></p>
 </fieldset>
-<?php if ( $this->qm_is_admin( $you->ID, $blog ) ) : ?>
-<fieldset>
-<legend class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></legend>
-<?php if ( $this->multiple_matching_users( 'A', $blog ) ) : ?>
-<p><input aria-describedby="qm_hide_desc" aria-labelledby="qm_hide_label" class="qm-input" name="hide_quick_mail_admin" type="checkbox" <?php echo $check_admin; ?>>
-<label id="qm_hide_label" class="qm-label"><?php _e( 'Hide Administrator Profiles', 'quick-mail' ); ?>.</label>
-<?php
-$admins = $this->qm_admin_count( $blog );
-$profile = sprintf( _n( '%s administrator profile', '%s administrator profiles', $admins, 'quick-mail' ), $admins );
-echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User list will not include', 'quick-mail' ), " {$profile}.");
-?>
-<?php endif; ?>
-<input name="showing_quick_mail_admin" type="hidden" value="Y"></p>
-<p><input aria-describedby="quick_mail_cannot_reply_desc" id="quick_mail_cannot_reply"
-aria-labelledby="quick_mail_cannot_reply_label" class="qm-input"
-name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?>>
-<label id="quick_mail_cannot_reply_label" class="qm-label"><?php _e( 'Disable Replies to Comments', 'quick-mail' ); ?>.</label>
-<span id="quick_mail_cannot_reply_desc" class="qm-label"><?php _e( 'Users will not see commenter list.', 'quick-mail' ); ?></span></p>
-<p id="qm-authors"><input aria-describedby="qm_author_desc" aria-labelledby="qm_author_label" class="qm-input" name="authors_quick_mail_privilege" type="checkbox" <?php echo $check_author; ?>>
-<label id="qm_author_label" class="qm-label"><?php _e( 'Grant Authors permission to reply to comments', 'quick-mail' ); ?>.</label>
-<span id="qm_author_desc" class="qm-label"><?php _e( 'Authors will not have access to user list.', 'quick-mail' ); ?></span></p>
-<p><input aria-describedby="qm_grant_desc" aria-labelledby="qm_grant_label" class="qm-input" name="editors_quick_mail_privilege" type="checkbox" <?php echo $check_editor; ?>>
-<label id="qm_grant_label" class="qm-label"><?php _e( 'Grant Editors access to user list.', 'quick-mail' ); ?></label>
-<span id="qm_grant_desc" class="qm-label"><?php _e( 'Let editors see user list and reply to comments.', 'quick-mail' ); ?></span></p>
-<p><input aria-describedby="qm_verify_desc" aria-labelledby="qm_verify_label" class="qm-input" name="verify_quick_mail_addresses" type="checkbox" <?php echo $check_verify; ?>>
-<label id="qm_verify_label" class="qm-label"><?php _e( 'Verify recipient email domains', 'quick-mail' ); ?>.</label>
-<span id="qm_verify_desc" class="qm-label"><?php echo $verify_note; ?></span></p>
-</fieldset>
-<?php endif; ?>
 <p class="submit"><input type="submit" name="qm-submit" class="button button-primary qm-input" value="<?php _e( 'Save Options', 'quick-mail' ); ?>"></p>
 </div>
 </form>

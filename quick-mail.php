@@ -1747,8 +1747,6 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 			return $actions;
 		} // end if site allows private replies to comments
 
-		// are users allowed to reply to comment? TODO
-
 		$qm_url = admin_url( "tools.php?page=quick_mail_form&comment_id={$comment->comment_ID}");
 		$reply = apply_filters( 'quick-mail-reply-title',  __( 'Private Reply', 'quick-mail' ) );  // was Reply with Quick Mail
 		$ereply = esc_attr( $reply );
@@ -1876,29 +1874,32 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
     		$rc5 = "<dd style='font-weight:bold; margin-top:2em;'>{$use_str} {$slink} {$to_ask}.</dd>";
 
    		$dc_title = __( 'Display Commenters', 'quick-mail' );
+   		$dc_head = __( 'Display list of commenters, instead of users.', 'quick-mail' );
+   		// instead
     		$dc_enabled = sprintf('<a target="_blank" href="https://codex.wordpress.org/Comments_in_WordPress#Enabling_Comments_on_Your_Site">%s</a>', __( 'enabling comments', 'quick-mail' ) );
     		$dc_settings = sprintf('<a target="_blank" href="https://codex.wordpress.org/Settings_Discussion_Screen">%s</a>', __( 'discussion settings', 'quick-mail' ) );
     		$dc_see = __( 'See', 'quick-mail' );
     		$dc_info = __( 'for additional information.', 'quick-mail' );
     		$dc_and = __( 'and', 'quick-mail' );
     		$dc1 = '<dd>' . __( 'Reply to comments on your published content.', 'quick-mail' ) . '</dd>';
-    		$dc2 = '<dd>' . __( 'Display list of commenters, instead of users.', 'quick-mail' ) . '</dd>';
+    		// $dc2 = '<dd>' . __( 'Display list of commenters, instead of users.', 'quick-mail' ) . '</dd>';
     		$dc3 = '<dd>' . __( 'Comments are often disabled on older content.', 'quick-mail' ) . '</dd>';
     		$dc4 = '<dd>' . __( 'Comments must be enabled to reply.', 'quick-mail' ) . '</dd>';
     		$dc_val = '<dd>' . __( 'Invalid mail addresses are not displayed.', 'quick-mail' ) . '</dd>';
     		if ( $is_admin_user ) {
+    			$dc_disable = '<strong>' . __('Select Disable Replies to Comments to remove this feature.', 'quick-mail') . '</strong>';
     			$dc_grant = __('Grant Authors permission to reply to comments', 'quick-mail');
     			$dc_author = admin_url('options-general.php?page=quick_mail_options#qm-authors');
     			$dc_link = "<a href='{$dc_author}'>{$dc_grant}</a>";
     			$dc_use = __('to let authors use this feature', 'quick-mail');
     			$note = '<strong>' . __( 'Administration', 'quick-mail' ) . ' :</strong>';
-    			$dc6 = "<dl><dt style='margin-top:2em;'>{$note}</dt><dd>{$dc_see} {$dc_link} {$dc_use}.</dd>";
+    			$dc6 = "<dl><dt style='margin-top:2em;'>{$note}</dt><dd>{$dc_disable}</dd><dd>{$dc_see} {$dc_link} {$dc_use}.</dd>";
     			$dc7 = "<dd>Email domains are always validated.</dd>";
     			$dc5 = "<dd>{$dc_see} {$dc_enabled} {$dc_and} {$dc_settings} {$dc_info}{$dc6}{$dc7}{$rc5}</dl></dd>";
     		} else {
     			$dc5 = "<dd>{$dc_see} {$dc_enabled} {$dc_info}</dd>{$rc5}";
     		} // end if admin
-    		$dcontent = "<dl><dt><strong>{$dc_title}</strong></dt>{$dc1}{$dc2}{$dc3}{$dc4}{$dc_val}{$dc5}</dl>";
+    		$dcontent = "<dl><dt><strong>{$dc_head}</strong></dt>{$dc1}{$dc3}{$dc4}{$dc_val}{$dc5}</dl>";
 		if ( $this->user_can_reply_to_comments( false ) ) {
 	    		$screen->add_help_tab( array('id' => 'qm_commenter_help', 'title'	=> $dc_title, 'content' => $dcontent) );
 		} // add comment help, if user can reply to comments

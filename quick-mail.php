@@ -2,10 +2,10 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.1.6 RC1
+Version: 3.1.7
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
-Plugin URI: https://wheredidmybraingo.com/reply-wordpress-comments-quick-mail/
+Plugin URI: https://wheredidmybraingo.com/how-to-send-private-comment-replies-with-wordpress/
 Text Domain: quick-mail
 Domain Path: /lang
 */
@@ -841,7 +841,7 @@ jQuery(document).ready( function() {
 
 		$you = wp_get_current_user();
 		if ( !empty( $_REQUEST['comment_id'] ) ) {
-			if ( !$this->user_can_reply_to_comments() ) {
+			if ( !$this->user_can_reply_to_comments( false ) ) {
 				$direction = is_rtl() ? 'rtl' : 'ltr';
 				$args = array('response' => 200, 'back_link' => true, 'text_direction' => $direction);
 				wp_die( sprintf( '<h1 role="alert">%s</h1>', __( 'Comments disabled by system administrator.', 'quick-mail' ) ), __( 'Mail Error', 'quick-mail' ), $args );
@@ -884,7 +884,7 @@ jQuery(document).ready( function() {
       $success = '';
       $from = '';
       $attachments = array();
-      $commenter_list = (empty( $commenter ) && $this->user_can_reply_to_comments() ) ? $this->get_commenters() : null;
+      $commenter_list = (empty( $commenter ) && $this->user_can_reply_to_comments( false ) ) ? $this->get_commenters() : null;
       if ( is_wp_error( $commenter_list ) ) {
       	$error = $commenter_list->get_error_message();
       } elseif ( is_string( $commenter_list ) ) {
@@ -1413,7 +1413,7 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
       } // end for
 
       $check_wpautop = ( '1' == get_user_meta( $you->ID, 'qm_wpautop', true ) ) ? 'checked="checked"' : '';
-      $check_commenters = $this->user_can_reply_to_comments() ? 'checked="checked"' : '';
+      $check_commenters = $this->user_can_reply_to_comments( false ) ? 'checked="checked"' : '';
       $check_all    = ( 'A' == $this->qm_get_display_option( $blog ) ) ? 'checked="checked"' : '';
       $check_names  = ( 'N' == $this->qm_get_display_option( $blog ) ) ? 'checked="checked"' : '';
       $check_none   = ( 'X' == $this->qm_get_display_option( $blog ) ) ? 'checked="checked"' : '';
@@ -1716,13 +1716,14 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 	 * @since 3.1.0
 	 */
 	public function qm_comment_reply($text, $id) {
-		if ( !$this->user_can_reply_to_comments() ) {
+		if ( !$this->user_can_reply_to_comments( true ) ) {
 			return $text;
-		} // end if no comments for this user
+		} // end if comments disabled by administrator
 
 		$qm = admin_url( "tools.php?page=quick_mail_form&comment_id={$id}\r\n" );
-		$left_link = __( 'Reply with Quick Mail', 'quick-mail' ) . ': ' . $qm;
-		$right_link = $qm . ' : ' . __( 'Reply with Quick Mail', 'quick-mail' );
+		$title = apply_filters( 'quick-mail-reply-title',  __( 'Private Reply', 'quick-mail' ) ); // was Reply with Quick Mail
+		$left_link = "{$title}: {$qm}";
+		$right_link = "{$qm} : {$title}";
 		$text .= is_rtl() ? $right_link: $left_link;
 		return $text;
 	} // end qm_comment_reply
@@ -1742,12 +1743,14 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 			return $actions;
 		} // end if invalid author email
 
-		if ( !$this->user_can_reply_to_comments() ) {
+		if ( !$this->user_can_reply_to_comments( true ) ) {
 			return $actions;
-		} // end if user wants comments
+		} // end if site allows private replies to comments
+
+		// are users allowed to reply to comment? TODO
 
 		$qm_url = admin_url( "tools.php?page=quick_mail_form&comment_id={$comment->comment_ID}");
-		$reply = __( 'Reply with Quick Mail', 'quick-mail' );
+		$reply = apply_filters( 'quick-mail-reply-title',  __( 'Private Reply', 'quick-mail' ) );  // was Reply with Quick Mail
 		$ereply = esc_attr( $reply );
 		$css = 'style="color: #e14d43;"'; // wp-ui-text-highlight
 		$retval = array();
@@ -1896,7 +1899,7 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
     			$dc5 = "<dd>{$dc_see} {$dc_enabled} {$dc_info}</dd>{$rc5}";
     		} // end if admin
     		$dcontent = "<dl><dt><strong>{$dc_title}</strong></dt>{$dc1}{$dc2}{$dc3}{$dc4}{$dc_val}{$dc5}</dl>";
-		if ( $this->user_can_reply_to_comments() ) {
+		if ( $this->user_can_reply_to_comments( false ) ) {
 	    		$screen->add_help_tab( array('id' => 'qm_commenter_help', 'title'	=> $dc_title, 'content' => $dcontent) );
 		} // add comment help, if user can reply to comments
 
@@ -1946,10 +1949,11 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 
 	/**
 	 * can user reply to comments? checks blog option, user option.
-	 * @return boolean if user can reply to comments.
+	 * @param boolean $site want site option, instead of user's option
+	 * @return boolean if site allows comments or if user can reply to comments.
 	 * @since 3.1.5
 	 */
-	function user_can_reply_to_comments() {
+	function user_can_reply_to_comments( $site ) {
 		$blog = is_multisite() ? get_current_blog_id() : 0;
 		$cannot_reply = '';
 		if ( is_multisite() ) {
@@ -1957,6 +1961,10 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 		} else {
 			$cannot_reply = get_option( 'quick_mail_cannot_reply', 'N' );
 		} // end if multisite
+
+		if ( $site ) {
+			return ( 'Y' != $cannot_reply );
+		} // end if want site option only, for comment list
 
 		if ( 'Y' == $cannot_reply ) {
 			return false;

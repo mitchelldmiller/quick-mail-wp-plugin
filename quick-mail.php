@@ -842,6 +842,8 @@ jQuery(document).ready( function() {
 
 		$you = wp_get_current_user();
 		if ( !empty( $_REQUEST['comment_id'] ) ) {
+// check for permission
+
 			$id = intval( $_REQUEST['comment_id'] );
 			$info = get_comment( $id, ARRAY_A );
 			$name = empty($info['comment_author']) ? __( 'You', 'quick-mail' ) : 	$info['comment_author'];
@@ -879,8 +881,7 @@ jQuery(document).ready( function() {
       $success = '';
       $from = '';
       $attachments = array();
-      $want_commenters = $this->user_can_reply_to_comments() ? get_user_option( 'show_quick_mail_commenters', $you->ID ) : 'N';
-      $commenter_list = (empty( $commenter ) && 'Y' == $want_commenters) ? $this->get_commenters() : null;
+      $commenter_list = (empty( $commenter ) && $this->user_wants_comments() ) ? $this->get_commenters() : null;
       if ( is_wp_error( $commenter_list ) ) {
       	$error = $commenter_list->get_error_message();
       } elseif ( is_string( $commenter_list ) ) {
@@ -1145,14 +1146,15 @@ if ( 75 < $tlen ) {
 	$tlen = 75;
 }
 $tsize = "size='{$tlen}'";
-$you_to = ( empty( $commenter ) || empty( $commenter_list ) ) ? __( 'To', 'quick-mail' ) : __( 'Commenters', 'quick-mail' );
+$to_label = ( empty( $commenter ) || empty( $commenter_list ) ) ? __( 'To', 'quick-mail' ) : __( 'Commenters', 'quick-mail' );
+$msg_label =  ( empty( $commenter ) || empty( $commenter_list ) ) ? __( 'Message', 'quick-mail' ) : __( 'Reply', 'quick-mail' );
 $save_address = ( empty( $commenter ) || empty( $commenter_list ) ) ? '<input type="hidden" id="qm-saving" value="1">' : '<input type="hidden" id="qm-saving" value="">';
 ?>
 <label id="tf_label" for="the_from" class="recipients"><?php _e( 'From', 'quick-mail' ); ?></label>
 <p><?php echo $save_address; ?><input aria-labelledby="tf_label" <?php echo $tsize; ?> value="<?php echo $the_from; ?>" readonly aria-readonly="true" id="the_from" tabindex="5000"></p>
 </fieldset>
 <fieldset>
-<label id="qme_label" for="qm-email" class="recipients"><?php echo $you_to; ?></label>
+<label id="qme_label" for="qm-email" class="recipients"><?php echo $to_label; ?></label>
 <?php if ( empty( $commenter ) ) : ?>
 <p><?php echo $this->quick_mail_recipient_input( $to, $you->ID ); ?></p>
 <?php else : ?>
@@ -1224,7 +1226,7 @@ placeholder="<?php _e( 'Subject', 'quick-mail' ); ?>" tabindex="22"></p>
 </fieldset>
 <?php endif; ?>
 <fieldset>
-<label id="qm_msg_label" for="quickmailmessage" class="recipients"><?php _e( 'Message', 'quick-mail' ); ?></label>
+<label id="qm_msg_label" for="quickmailmessage" class="recipients"><?php echo $msg_label; ?></label>
 <?php if ( !user_can_richedit() ) {
 ?>
 <p><textarea id="quickmailmessage" name="quickmailmessage"
@@ -1407,8 +1409,7 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
       } // end for
 
       $check_wpautop = ( '1' == get_user_meta( $you->ID, 'qm_wpautop', true ) ) ? 'checked="checked"' : '';
-      $want_commenters = get_user_meta( $you->ID, 'show_quick_mail_commenters', true );
-      $check_commenters = ( 'Y' == $want_commenters ) ? 'checked="checked"' : '';
+      $check_commenters = $this->user_wants_comments() ? 'checked="checked"' : '';
       $check_all    = ( 'A' == $this->qm_get_display_option( $blog ) ) ? 'checked="checked"' : '';
       $check_names  = ( 'N' == $this->qm_get_display_option( $blog ) ) ? 'checked="checked"' : '';
       $check_none   = ( 'X' == $this->qm_get_display_option( $blog ) ) ? 'checked="checked"' : '';
@@ -1593,18 +1594,15 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 ?>
 <?php endif; ?>
 <input name="showing_quick_mail_admin" type="hidden" value="Y"></p>
-
 <p><input aria-describedby="quick_mail_cannot_reply_desc" aria-labelledby="quick_mail_cannot_reply_label" class="qm-input" name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?>>
 <label id="quick_mail_cannot_reply_label" class="qm-label"><?php _e( 'Disable Replies to Comments', 'quick-mail' ); ?>.</label>
 <span id="quick_mail_cannot_reply_desc" class="qm-label"><?php _e( 'Users will not see commenter list.', 'quick-mail' ); ?></span></p>
-
 <p id="qm-authors"><input aria-describedby="qm_author_desc" aria-labelledby="qm_author_label" class="qm-input" name="authors_quick_mail_privilege" type="checkbox" <?php echo $check_author; ?>>
 <label id="qm_author_label" class="qm-label"><?php _e( 'Grant Authors permission to reply to comments', 'quick-mail' ); ?>.</label>
 <span id="qm_author_desc" class="qm-label"><?php _e( 'Authors will not have access to user list.', 'quick-mail' ); ?></span></p>
-
 <p><input aria-describedby="qm_grant_desc" aria-labelledby="qm_grant_label" class="qm-input" name="editors_quick_mail_privilege" type="checkbox" <?php echo $check_editor; ?>>
 <label id="qm_grant_label" class="qm-label"><?php _e( 'Grant Editors access to user list.', 'quick-mail' ); ?></label>
-<span id="qm_grant_desc" class="qm-label"><?php _e( 'Modify permission to let editors see user list and reply to comments.', 'quick-mail' ); ?></span></p>
+<span id="qm_grant_desc" class="qm-label"><?php _e( 'Let editors see user list and reply to comments.', 'quick-mail' ); ?></span></p>
 <p><input aria-describedby="qm_verify_desc" aria-labelledby="qm_verify_label" class="qm-input" name="verify_quick_mail_addresses" type="checkbox" <?php echo $check_verify; ?>>
 <label id="qm_verify_label" class="qm-label"><?php _e( 'Verify recipient email domains', 'quick-mail' ); ?>.</label>
 <span id="qm_verify_desc" class="qm-label"><?php echo $verify_note; ?></span></p>
@@ -1712,25 +1710,9 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 	 * @since 3.1.0
 	 */
 	public function qm_comment_reply($text, $id) {
-		// here
-		$cannot_reply_option = '';
-		if ( is_multisite() ) {
-			$cannot_reply_option = get_blog_option( $blog, 'quick_mail_cannot_reply', 'N' );
-		} else {
-			$cannot_reply_option = get_option( 'quick_mail_cannot_reply', 'N' );
-		} // end if
-		if ( 'Y' == $cannot_reply_option ) {
+		if ( !$this->user_wants_comments() ) {
 			return $text;
-		} // end if cannot reply
-
-		if ( 'author' == $this->qm_get_role() ) {
-			$allowed = is_multisite() ?
-			get_blog_option( get_current_blog_id(), 'authors_quick_mail_privilege', 'N' ) :
-			get_option( 'authors_quick_mail_privilege', 'N' );
-			if ( 'Y' != $allowed ) {
-				return $text;
-			} // end if not allowed to reply with Quick Mail
-		} // end if author
+		} // end if no comments for this user
 
 		$qm = admin_url( "tools.php?page=quick_mail_form&comment_id={$id}\r\n" );
 		$left_link = __( 'Reply with Quick Mail', 'quick-mail' ) . ': ' . $qm;
@@ -1754,24 +1736,9 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 			return $actions;
 		} // end if invalid author email
 
-		$cannot_reply_option = '';
-		if ( is_multisite() ) {
-			$cannot_reply_option = get_blog_option( $blog, 'quick_mail_cannot_reply', 'N' );
-		} else {
-			$cannot_reply_option = get_option( 'quick_mail_cannot_reply', 'N' );
-		} // end if
-		if ( 'Y' == $cannot_reply_option ) {
+		if ( !$this->user_wants_comments() ) {
 			return $actions;
-		} // end if cannot reply
-
-		if ( 'author' == $this->qm_get_role() ) {
-			$allowed = is_multisite() ?
-			get_blog_option( get_current_blog_id(), 'authors_quick_mail_privilege', 'N' ) :
-			get_option( 'authors_quick_mail_privilege', 'N' );
-			if ( 'Y' != $allowed ) {
-				return $actions;
-			} // end if not allowed to reply with Quick Mail
-		} // end if author
+		} // end if user wants comments
 
 		$qm_url = admin_url( "tools.php?page=quick_mail_form&comment_id={$comment->comment_ID}");
 		$reply = __( 'Reply with Quick Mail', 'quick-mail' );
@@ -1923,7 +1890,7 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
     			$dc5 = "<dd>{$dc_see} {$dc_enabled} {$dc_info}</dd>{$rc5}";
     		} // end if admin
     		$dcontent = "<dl><dt><strong>{$dc_title}</strong></dt>{$dc1}{$dc2}{$dc3}{$dc4}{$dc_val}{$dc5}</dl>";
-		if ( $this->user_can_reply_to_comments() ) {
+		if ( $this->user_wants_comments() ) {
 	    		$screen->add_help_tab( array('id' => 'qm_commenter_help', 'title'	=> $dc_title, 'content' => $dcontent) );
 		} // add comment help, if user can reply to comments
 
@@ -1976,7 +1943,7 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 	 * @return boolean if user can reply to comments.
 	 * @since 3.1.5
 	 */
-	function user_can_reply_to_comments() {
+	function user_wants_comments() {
 		$blog = is_multisite() ? get_current_blog_id() : 0;
 		$cannot_reply = '';
 		if ( is_multisite() ) {
@@ -1988,6 +1955,7 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 		if ( 'Y' == $cannot_reply ) {
 			return false;
 		} // end if comment replies are disabled
+
 		if ( 'author' == $this->qm_get_role () ) {
 			$allowed = is_multisite () ? get_blog_option ( $blog, 'authors_quick_mail_privilege', 'N' ) : get_option ( 'authors_quick_mail_privilege', 'N' );
 			if ('Y' != $allowed) {
@@ -1995,8 +1963,13 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 			} // end if not allowed to reply with Quick Mail
 		} // end if author
 
+		$option = get_user_option( 'show_quick_mail_commenters', get_current_user_id() );
+		if ( 'Y' != $option ) {
+			return false;
+		} // end if user does not want comments
+
 		return true;
-	} // end user_can_reply_to_comments
+	} // end user_wants_comments
 
 	/**
 	 * Quick Mail general help

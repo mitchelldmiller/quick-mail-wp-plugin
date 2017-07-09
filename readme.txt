@@ -8,7 +8,7 @@ Stable tag: 3.0.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
-Send text or html email with attachments from user's credentials. Select recipient from users or commenters. 
+Send text or html email with attachments and shortcodes. Send private replies to comments. Select recipient from users or commenters.
 
 == Description ==
 

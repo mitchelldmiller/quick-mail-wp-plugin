@@ -1,7 +1,7 @@
-Quick Mail 3.1.3 Beta
+Quick Mail 3.1.6 RC1
 ====================
 
-Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
+Send text or html email with attachments and shortcodes. Send private replies to comments. Select recipient from users or commenters. French, Russian, Spanish translations.
 
 Description
 -----------

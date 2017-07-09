@@ -1,4 +1,4 @@
-// Welcome to quick-mail.js 3.1.4
+// Welcome to quick-mail.js 3.1.6
 
 /**
  * set local storage
@@ -501,9 +501,14 @@ jQuery(document).ready(function() {
 	{
 		return;
 	} // do not load if not on Quick Mail form
+	
+	if (jQuery('#quick_mail_cannot_reply').prop('checked')) {
+	   jQuery('#show_commenters_row').hide();
+	} else {
+		jQuery('#show_commenters_row').show();
+	} // hide show commenters if admin disabled comment replies
 
 	update_saved_cc_addresses();
-
 	jQuery('#qm-invalid').val('0');
 	jQuery("#qm-submit").prop('disabled', false);
 	if (jQuery('#qm-email').length) {
@@ -523,6 +528,15 @@ jQuery(document).ready(function() {
 			}
 		});
 	} // end if
+
+	// 3.1.6 hide show commenters on admin, if admin disabled replies
+	jQuery('#quick_mail_cannot_reply').click(function() {
+	   if (jQuery('#quick_mail_cannot_reply').prop('checked')) {
+		   jQuery('#show_commenters_row').hide();
+		} else {
+			jQuery('#show_commenters_row').show();
+		}
+	});
 
    jQuery('#qm-first').click(function() {
 	   clear_qm_msgs();

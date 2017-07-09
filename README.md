@@ -1,7 +1,7 @@
 quick-mail-wp-plugin
 ====================
 
-Send text or html email with attachments from user's credentials. Select recipient from users or commenters. Russian, French, Spanish translations.
+Send text or html email with attachments and shortcodes. Send private replies to comments. Select recipient from users or commenters. French, Russian, Spanish translations.
 
 ### WordPress Rating
 [![WordPress rating](https://img.shields.io/wordpress/plugin/r/quick-mail.svg?maxAge=2592000)]()

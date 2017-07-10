@@ -139,9 +139,6 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 * Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
 * Many changes to improve private comment replies.
 
-= 3.1.2 =
-* fixed color on Reply with Quick Mail.
-
 = 3.1.1 =
 * reply to comments with Quick Mail from Comments list. 
 * fix error displaying multibyte post titles.
@@ -149,6 +146,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 = 3.1.0 =
 * reply to comments.
 * improved performance.
+
+= 3.0.5 =
+* added Russian translation. Props @orlov562
 
 = 3.0.4 =
 * fixed reset email content type.
@@ -179,8 +179,8 @@ Refer to the separate changelog.txt for changes of previous versions.
 = 3.1.7 =
 * Upgrade recommended.
 
-= 3.1.0 =
-* Upgrade recommended.
+= 3.0.5 =
+* Upgrade adds Russian translation.
 
 = 3.0.4 =
 * Upgrade recommended.

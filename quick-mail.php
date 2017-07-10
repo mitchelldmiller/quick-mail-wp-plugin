@@ -1486,16 +1486,15 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
       $wam = sprintf("%s %s %s",	__( 'Apply', 'quick-mail'),
       		'<a target="_blank" href="https://codex.wordpress.org/Function_Reference/wpautop">wpautop</a>',
       		__( 'to HTML messages', 'quick-mail'));
-      $space = '';
-      $comment_label = '';
+	$space = '';
+	$comment_label = '';
 	if ( ! $this->multiple_matching_users( 'A', $blog ) ) {
 		$space = ' style="margin-top:2em;" ';
-		$comment_label = __( 'Reply to comments', 'quick-mail' );
+		$comment_label = __( 'Select recipient from commenters', 'quick-mail' );
 	} else {
 		$comment_label = __( 'Display Commenters instead of users', 'quick-mail' );
 	} // end if no users
 
-      // quick_mail_cannot_reply
       if ( !$this->qm_is_admin( get_current_user_id(), $blog ) ) {
       	$cannot_reply = '';
       	if ( is_multisite() ) {
@@ -1889,8 +1888,10 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
     		$to_ask = __( 'to ask questions and report problems', 'quick-mail' );
     		$rc5 = "<dd style='font-weight:bold; margin-top:2em;'>{$use_str} {$slink} {$to_ask}.</dd>";
 
-   		$dc_title = __( 'Display Commenters', 'quick-mail' );
-   		$dc_head = __( 'Display list of commenters, instead of users.', 'quick-mail' );
+   		$dc_title = __( 'Commenters', 'quick-mail' );
+   		$dc_head = $this->multiple_matching_users( 'A', $blog ) ?
+   		__( 'Display list of commenters, instead of users.', 'quick-mail' ) :
+   		__( 'Select recipient from commenters.', 'quick-mail' );
    		// instead
     		$dc_enabled = sprintf('<a target="_blank" href="https://codex.wordpress.org/Comments_in_WordPress#Enabling_Comments_on_Your_Site">%s</a>', __( 'enabling comments', 'quick-mail' ) );
     		$dc_settings = sprintf('<a target="_blank" href="https://codex.wordpress.org/Settings_Discussion_Screen">%s</a>', __( 'discussion settings', 'quick-mail' ) );

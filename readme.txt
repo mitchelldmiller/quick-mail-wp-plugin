@@ -136,7 +136,7 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 == Changelog ==
 
 = 3.1.7 =
-* Next development version. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
+* Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
 * Many changes to improve private comment replies.
 
 = 3.1.2 =
@@ -205,6 +205,6 @@ Quick Mail is free for personal or commercial use. Please encourage future devel
 
 * A .pot file is included for translators.
 
-* Includes Russian, Spanish, French translations.
+* Includes French, Russian, Spanish translations.
 
 * See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.

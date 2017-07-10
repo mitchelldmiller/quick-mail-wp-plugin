@@ -31,7 +31,7 @@ class QuickMail {
    public static $instance = false;
 
    /**
-    * Our dismissed pointer name
+    * Our dismissed pointer name.
     * @var string
     * @since 1.3.0
     */
@@ -334,7 +334,7 @@ class QuickMail {
    } // install_quick_mail
 
    /**
-    * load scripts to display wp_pointer after installation.
+    * load Javascript to display wp_pointer after installation.
     *
     * @since 1.3.0
     */
@@ -366,7 +366,7 @@ jQuery(document).ready( function() {
 <?php
 }
    /**
-    * setup wp_pointer for new installations
+    * setup wp_pointer for new installations.
     *
     * @since 1.3.0
     */
@@ -377,9 +377,9 @@ jQuery(document).ready( function() {
    } // end qm_pointer_setup
 
    /**
-    * delete options when Quick Mail is deactivated
+    * delete options when Quick Mail is deactivated.
     *
-    * delete global and user options
+    * delete global and user options.
     *
     * @since 1.1.1
     */
@@ -407,8 +407,7 @@ jQuery(document).ready( function() {
 	} // end unload_quick_mail_plugin
 
    /**
-    * load quick-mail.js for email select and
-    * quick-mail-addresses.js to count saved addresses
+    * load quick-mail.js for email select and quick-mail-addresses.js to count saved addresses.
     *
     * @since 1.2.0
     */
@@ -428,7 +427,6 @@ jQuery(document).ready( function() {
     *
     * @param string $to recipient email
     * @param int $id user ID
-    * @return void displays input
     */
 	public function quick_mail_recipient_input( $to, $id ) {
       $template = '<input aria-labelledby="qme_label" value="%s" id="qm-email" name="qm-email" type="email" required aria-required="true" tabindex="0" autofocus size="35" placeholder="%s">';
@@ -528,6 +526,13 @@ jQuery(document).ready( function() {
       return ob_get_clean();
    } // end quick_mail_recipient_input
 
+   /**
+    * get input control for cc input.
+    * @param string $to recipient
+    * @param string $cc cc
+    * @param integer $id user ID
+    * @return void|string
+    */
 	public function quick_mail_cc_input( $to, $cc, $id ) {
 	   	$template = '<input aria-labelledby="qmcc_label" value="%s" id="qm-cc" name="qm-cc" type="text" size="35" tabindex="3" placeholder="%s">';
 	   	$blog = is_multisite() ? get_current_blog_id() : 0;
@@ -632,7 +637,7 @@ jQuery(document).ready( function() {
    } // end quick_mail_cc_input
 
    /**
-    * get list of commenters from posts / pages with comments open
+    * get list of commenters from posts / pages with comments open.
     * @return string select with commenters instead of users. WP_Error if no commenters.
     * @since 3.0.5
     */
@@ -681,6 +686,9 @@ jQuery(document).ready( function() {
 	   	return ($matches > 0) ? $select : $problem;
    } // end get_commenters
 
+   /**
+    * get comment title from Javascript.
+    */
 	public function qm_get_title() {
 		check_ajax_referer( 'qm_get_title', 'security' );
    		$pid = intval( $_POST['pid'] );
@@ -689,6 +697,9 @@ jQuery(document).ready( function() {
    		wp_die();
 	} // end qm_get_title
 
+	/**
+	 * Javascript to load comment title into subject.
+	 */
 	public function qm_get_title_script() {
 		$ajax_nonce = wp_create_nonce( 'qm_get_title' );
 		?>
@@ -720,7 +731,7 @@ jQuery(document).ready( function() {
    	} // end get_comment_style
 
    	/**
-   	 * format comment reply for textarea
+   	 * format comment reply for textarea.
    	 * @param string $text comment text
    	 * @return string formatted comment
    	 * @since 3.1.1
@@ -738,6 +749,9 @@ jQuery(document).ready( function() {
 		} // end if
 	} // end get_formatted_comment
 
+	/**
+	 * get comment text from Javascript.
+	 */
    	public function qm_get_comment() {
    		check_ajax_referer( 'qm_get_comment', 'security' );
    		$cid = intval( $_POST['cid'] );
@@ -746,6 +760,9 @@ jQuery(document).ready( function() {
 		wp_die();
    	} // end qm_get_comment
 
+   	/**
+   	 * get Javascript to load comment and move cursor to end of textarea or TinyMCE.
+   	 */
 	public function qm_get_comment_script() {
 		$ajax_nonce = wp_create_nonce( 'qm_get_comment' );
 	?>
@@ -1150,11 +1167,10 @@ if ( 75 < $tlen ) {
 $tsize = "size='{$tlen}'";
 $to_label = ( empty( $commenter ) || empty( $commenter_list ) ) ? __( 'To', 'quick-mail' ) : __( 'Commenters', 'quick-mail' );
 $msg_label =  ( empty( $commenter ) || empty( $commenter_list ) ) ? __( 'Message', 'quick-mail' ) : __( 'Reply', 'quick-mail' );
-$save_address = ( empty( $commenter ) || empty( $commenter_list ) ) ? '<input type="hidden" id="qm-saving" value="1">' : '<input type="hidden" id="qm-saving" value="">';
 $message_tabindex = (is_string($commenter_list) && empty($commenter_list) ) ? 50 : 1;
 ?>
 <label id="tf_label" for="the_from" class="recipients"><?php _e( 'From', 'quick-mail' ); ?></label>
-<p><?php echo $save_address; ?><input aria-labelledby="tf_label" <?php echo $tsize; ?> value="<?php echo $the_from; ?>" readonly aria-readonly="true" id="the_from" tabindex="5000"></p>
+<p><input aria-labelledby="tf_label" <?php echo $tsize; ?> value="<?php echo $the_from; ?>" readonly aria-readonly="true" id="the_from" tabindex="5000"></p>
 </fieldset>
 <fieldset>
 <label id="qme_label" for="qm-email" class="recipients"><?php echo $to_label; ?></label>
@@ -1638,7 +1654,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
    } // end qm_get_display_option
 
    /**
-    * update user option
+    * update user option.
     *
     * @param string $key
     * @param string $value
@@ -1687,7 +1703,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 		} // end if not multisite
 
 		return (0 < $user_query->get_total());
-	} // end qm_is_admin
+	} // end qm_is_editor
 
 	/**
 	 * get total users with administrator role on a blog.
@@ -1814,7 +1830,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
    } // end init_quick_mail_menu
 
 	/**
-    * Quick Mail settings help
+    * Quick Mail settings help.
     * @since 2.0.0
     */
 	public function add_qm_settings_help() {
@@ -1987,7 +2003,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	} // end user_can_reply_to_comments
 
 	/**
-	 * Quick Mail general help
+	 * Quick Mail general help.
 	 * @since 2.0.0
 	 */
 	public function add_qm_help() {
@@ -2065,14 +2081,14 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	} // end add_qm_help
 
    /**
-    * use by admin print styles to add css to admin
+    * use by admin print styles to add css to admin.
     */
    public function init_quick_mail_style() {
       wp_enqueue_style( 'quick-mail', plugins_url( '/quick-mail.css', __FILE__) , array(), null, 'all' );
    } // end init_quick_mail_style
 
    /**
-    * load translations
+    * load translations.
     */
    public function init_quick_mail_translation() {
    	  load_plugin_textdomain( 'quick-mail', false, basename( dirname( __FILE__ ) ) . '/lang' );

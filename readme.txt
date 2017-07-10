@@ -1,7 +1,7 @@
 === Quick Mail ===
 Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
-Tags: email, admin, mail, idn, attachment, multisite, accessible, accessibility, rich text, Spanish, French
+Tags: email, comments, comment, reply, admin, mail, idn, attachment, multisite, accessibility, rich text, tinymce
 Requires at least: 4.6
 Tested up to: 4.9
 Stable tag: 3.1.7

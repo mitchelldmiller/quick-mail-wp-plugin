@@ -841,11 +841,11 @@ jQuery(document).ready( function() {
 
 		$you = wp_get_current_user();
 		if ( !empty( $_REQUEST['comment_id'] ) ) {
-			if ( !$this->user_can_reply_to_comments( false ) ) {
+			if ( !$this->user_can_reply_to_comments( true ) ) {
 				$direction = is_rtl() ? 'rtl' : 'ltr';
 				$args = array('response' => 200, 'back_link' => true, 'text_direction' => $direction);
 				wp_die( sprintf( '<h1 role="alert">%s</h1>', __( 'Comments disabled by system administrator.', 'quick-mail' ) ), __( 'Mail Error', 'quick-mail' ), $args );
-			} // end if check user has permission to reply
+			} // end if check site has permission to reply
 
 			$id = intval( $_REQUEST['comment_id'] );
 			$info = get_comment( $id, ARRAY_A );

@@ -1,4 +1,4 @@
-// Welcome to quick-mail.js
+// Welcome to quick-mail.js 3.1.7
 
 /**
  * set local storage
@@ -119,7 +119,6 @@ function load_qm_email_option(t)
 
 /**
  * check if cc selection equals recipient
- * @param string selection selected option
  * @returns {Boolean} valid
  */
 function is_qm_email_dup() {
@@ -498,9 +497,14 @@ jQuery(document).ready(function() {
 	{
 		return;
 	} // do not load if not on Quick Mail form
+	
+	if (jQuery('#quick_mail_cannot_reply').prop('checked')) {
+	   jQuery('#show_commenters_row').hide();
+	} else {
+		jQuery('#show_commenters_row').show();
+	} // hide show commenters if admin disabled comment replies
 
 	update_saved_cc_addresses();
-
 	jQuery('#qm-invalid').val('0');
 	jQuery("#qm-submit").prop('disabled', false);
 	if (jQuery('#qm-email').length) {
@@ -520,6 +524,15 @@ jQuery(document).ready(function() {
 			}
 		});
 	} // end if
+
+	// 3.1.6 hide show commenters on admin, if admin disabled replies
+	jQuery('#quick_mail_cannot_reply').click(function() {
+	   if (jQuery('#quick_mail_cannot_reply').prop('checked')) {
+		   jQuery('#show_commenters_row').hide();
+		} else {
+			jQuery('#show_commenters_row').show();
+		}
+	});
 
    jQuery('#qm-first').click(function() {
 	   clear_qm_msgs();
@@ -549,7 +562,7 @@ jQuery(document).ready(function() {
 	   return true;
    });
 
-   jQuery('#qm-message').focus(function() {
+   jQuery('#quickmailmessage').focus(function() {
 	   if (!jQuery('#qm-cc').length || jQuery('#qm-cc').val() == '') {
 		   return true;
 	   }

@@ -1,20 +1,20 @@
 === Quick Mail ===
 Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
-Tags: email, admin, mail, idn, attachment, multisite, accessible, accessibility, rich text, Spanish, French, Russian
-Requires at least: 4.4
-Tested up to: 4.8
-Stable tag: 3.0.5
+Tags: email, comments, comment, reply, admin, mail, idn, attachment, multisite, accessibility, rich text, tinymce
+Requires at least: 4.6
+Tested up to: 4.9
+Stable tag: 3.1.7
 License: GPLv3
-License URI: http://www.gnu.org/licenses/gpl.html
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Send text or html email with attachments from user's credentials. Select recipient from users or enter name. Russian, French, Spanish translations.
+Send text or html email with attachments and shortcodes. Send private replies to comments. Select recipient from users or commenters.
 
 == Description ==
 
->Quick Mail is the easiest way to send an email with attachments to WordPress users on your site. Compatible with multisite.
+>Quick Mail is the easiest way to send email with attachments to WordPress users on your site, or send private replies to comments. Compatible with multisite.
 
-Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds Quick Mail to Tools menu.
+Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds Quick Mail to Tools menu and comment replies.
 
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
@@ -23,6 +23,8 @@ User options for sending email to site users or others. Mail is sent with user's
 = Features =
 
 * Sends text or html mails to multiple recipients. Content type is determined from message.
+
+* Send private replies with attachments to comments.
 
 * Multiple recipients can be selected from users or entered manually.
 
@@ -40,11 +42,15 @@ User options for sending email to site users or others. Mail is sent with user's
 
 * Option to add paragraphs and line breaks to HTML messages with [wpauto](https://codex.wordpress.org/Function_Reference/wpautop).
 
+* Select recipient from users or commenters.
+
 = Learn More =
 
 * See [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail for WordPress 4.8](https://wheredidmybraingo.com/quick-mail-wordpress-4-8/) for update info.
+* See [How to Send Private Comment Replies with WordPress](https://wheredidmybraingo.com/how-to-send-private-comment-replies-with-wordpress/) for update info.
+
+* [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/)
 
 == Installation ==
 
@@ -57,8 +63,6 @@ User options for sending email to site users or others. Mail is sent with user's
 = Who can send mail? =
 
 * Users must be able to [publish a post](http://codex.wordpress.org/Roles_and_Capabilities#publish_posts) to send an email. Minimum permission can be changed with a filter.
-
-* User profile must include first name, last name, email address.
 
 = Who can send rich text messages? =
 
@@ -127,7 +131,21 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 5. Full screen view.
 
+6. Reply to comment.
+
 == Changelog ==
+
+= 3.1.7 =
+* Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
+* Many changes to improve private comment replies.
+
+= 3.1.1 =
+* reply to comments with Quick Mail from Comments list. 
+* fix error displaying multibyte post titles.
+
+= 3.1.0 =
+* reply to comments.
+* improved performance.
 
 = 3.0.5 =
 * added Russian translation. Props @orlov562
@@ -152,18 +170,14 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 * improved data entry form accessibility and design.
 * added visual editor.
 
-= 2.0.5 =
-* improved multiple file uploads.
-* hide some admininstrative options when User List is not available.
-
-= 2.0.4 =
-* added Javascript file for translating options message.
-
 = Earlier versions =
 
-Please refer to the separate changelog.txt for changes of previous versions.
+Refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.1.7 =
+* Upgrade recommended.
 
 = 3.0.5 =
 * Upgrade adds Russian translation.
@@ -183,12 +197,6 @@ Please refer to the separate changelog.txt for changes of previous versions.
 = 3.0.0 =
 * Upgrade recommended.
 
-= 2.0.5 =
-* Upgrade recommended.
-
-= 2.0.4 =
-* Upgrade recommended.
-
 == License ==
 
 Quick Mail is free for personal or commercial use. Please encourage future development with a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY "Donate with PayPal").
@@ -197,6 +205,6 @@ Quick Mail is free for personal or commercial use. Please encourage future devel
 
 * A .pot file is included for translators.
 
-* Includes Russian, Spanish, French translations.
+* Includes French, Russian, Spanish translations.
 
 * See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.

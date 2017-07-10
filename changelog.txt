@@ -1,5 +1,12 @@
 == Quick Mail Changelog ==
 
+= 2.0.5 =
+* improved multiple file uploads.
+* hide some admininstrative options when User List is not available.
+
+= 2.0.4 =
+* added Javascript file for translating options message.
+
 = 2.0.3 =
 * improved Javascript validation of duplicate addresses.
 * options are hidden from non-admin users, if they cannot access User List.
@@ -9,19 +16,19 @@
 * updated translations. removed duplicated directory.
 
 = 2.0.1 =
-* fixed duplicate attachment error
+* fixed duplicate attachment error.
 
 = 2.0.0 =
-* added multiple recipients
-* supports multisite
+* added multiple recipients.
+* supports multisite.
 
 = 1.3.3 =
- * Fixed: invalid email address was saved to recent addresses
- * Tested with WordPress 4.6
+ * Fixed: invalid email address was saved to recent addresses.
+ * Tested with WordPress 4.6.
 
 = 1.3.2 =
- * Multiple files can be uploaded from up to 6 folders (directories)
- * Fixed translations, added French. Props [@verbre](https://wordpress.org/support/profile/verbre)
+ * Multiple files can be uploaded from up to 6 folders (directories).
+ * Fixed translations, added French. Props [@verbre](https://wordpress.org/support/profile/verbre)..
  
 = 1.3.1 =
  * Fixed mail validation error.
@@ -46,7 +53,7 @@
 = 1.2.3 =
 * Requires WordPress 4.2 or greater for dismissible messages.
 * Improved documentation.
-* Tested with WordPress 4.3.1, 4.4
+* Tested with WordPress 4.3.1, 4.4.
 
 = 1.2.2 =
 * Status messages must be dismissed by user. Messages vanished after 4 seconds in previous versions.
@@ -65,12 +72,12 @@
 * Improved install / uninstall.
 * Default options are "show admin" and "show all users." Works on sites with one user.
 * Moved plugin functions into a class.
-* Tested with WordPress 4.2.2
+* Tested with WordPress 4.2.2.
 
 = 1.1.1 =
 * temp upload dir: use [sys_get_temp_dir](http://php.net/manual/en/function.sys-get-temp-dir.php) if [upload_tmp_dir](http://php.net/manual/en/ini.core.php#ini.upload-tmp-dir) is undefined.
 * uninstall deletes plugin options.
-* tested with WordPress 4.1.2
+* tested with WordPress 4.1.2.
 
 = 1.1.0 =
 * Send email to site users, without typing address.
@@ -79,7 +86,7 @@
 * Removed form background.
 
 = 1.0.2 =
-* Minimum role can changed by adding a filter. Props: [@lumpysimon](https://github.com/lumpysimon/)
+* Minimum role can changed by adding a filter. Props: [@lumpysimon](https://github.com/lumpysimon/).
 * Fixed typos.
 
 = 1.0.1 =

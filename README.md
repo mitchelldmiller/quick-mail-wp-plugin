@@ -1,7 +1,7 @@
-quick-mail-wp-plugin
+Quick Mail WordPress Plugin
 ====================
 
-Adds "Quick Mail" to Tools. Send text or html email with file attachments from user's credentials. French and Spanish translations.
+Send text or html email with attachments and shortcodes. Send private replies to comments. Select recipient from users or commenters. French, Russian, Spanish translations.
 
 ### WordPress Rating
 [![WordPress rating](https://img.shields.io/wordpress/plugin/r/quick-mail.svg?maxAge=2592000)]()
@@ -9,9 +9,9 @@ Adds "Quick Mail" to Tools. Send text or html email with file attachments from u
 Description
 -----------
 
->Quick Mail is the easiest way to send an email with attachments to a WordPress user on your site.
+>Quick Mail is the easiest way to send email with attachments to WordPress users on your site, or send private replies to comments. Compatible with multisite.
 
-Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds Quick Mail to Tools menu.
+Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds Quick Mail to Tools menu and comment replies.
 
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
@@ -20,6 +20,8 @@ User options for sending email to site users or others. Mail is sent with user's
 __Features__
 
 * Sends text or html mails to multiple recipients. Content type is determined from message.
+
+* Send private replies with attachments to comments.
 
 * Multiple recipients can be selected from users or entered manually.
 
@@ -35,14 +37,18 @@ __Features__
 
 * Site options for administrators to hide their profile, and limit access to user list.
 
+* Option to add paragraphs and line breaks to HTML messages with [wpauto](https:/codex.wordpress.org/Function_Reference/wpautop).
+
+* Select recipient from users or commenters.
+
 ### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail for WordPress 4.8](https://wheredidmybraingo.com/quick-mail-wordpress-4-8/) for update info.
+* See [How to Send Private Comment Replies with WordPress](https://wheredidmybraingo.com/how-to-send-private-comment-replies-with-wordpress/) for update info.
 
 ### Installation ###
 
-1. Download the plugin and unpack in your `/wp-content/plugins/` directory.
+1. Download [the latest release](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases/latest) and unpack in your `/wp-content/plugins/` directory.
 
 1. Activate the plugin through the WordPress 'Plugins' menu.
 
@@ -51,8 +57,6 @@ __Features__
 __Who can send mail?__
 
 * Users must be able to [publish a post](http://codex.wordpress.org/Roles_and_Capabilities#publish_posts) to send an email.
-
-* User profile must include first name, last name, email address.
 
 __Who can send rich text messages?__
 
@@ -115,7 +119,7 @@ __Translators and Programmers__
 
 * A .pot file is included for translators.
 
-* Includes French and Spanish translations.
+* Includes Russian, Spanish, French translations.
 
 * See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.
 

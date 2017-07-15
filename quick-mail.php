@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.1.8
+Version: 3.1.9
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/how-to-send-private-comment-replies-with-wordpress/
@@ -10,7 +10,7 @@ Text Domain: quick-mail
 Domain Path: /lang
 */
 
-require_once 'qm_util.php';
+require_once 'inc/qm_util.php';
 
 class QuickMail {
 
@@ -409,8 +409,8 @@ jQuery(document).ready( function() {
     */
    public function add_email_scripts()
    {
-      wp_enqueue_script( 'qmScript', plugins_url('/quick-mail.js', __FILE__), array('jquery'), null, false );
-      wp_enqueue_script( 'qmCount', plugins_url('/quick-mail-addresses.js', __FILE__), array('jquery'), null, false );
+      wp_enqueue_script( 'qmScript', plugins_url('/lib/js/quick-mail.js', __FILE__), array('jquery'), null, false );
+      wp_enqueue_script( 'qmCount', plugins_url('/lib/js/quick-mail-addresses.js', __FILE__), array('jquery'), null, false );
       $data = array(
       		'one' => __( 'Clear 1 saved address', 'quick-mail' ),
       		'many' => sprintf( __( 'Clear %s saved addresses', 'quick-mail' ), '{number}' )
@@ -2081,7 +2081,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
     * use by admin print styles to add css to admin.
     */
    public function init_quick_mail_style() {
-      wp_enqueue_style( 'quick-mail', plugins_url( '/quick-mail.css', __FILE__) , array(), null, 'all' );
+      wp_enqueue_style( 'quick-mail', plugins_url( '/lib/css/quick-mail.css', __FILE__) , array(), null, 'all' );
    } // end init_quick_mail_style
 
    /**

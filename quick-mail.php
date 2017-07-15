@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.1.7
+Version: 3.1.8
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/how-to-send-private-comment-replies-with-wordpress/
@@ -298,10 +298,10 @@ class QuickMail {
    public function check_wp_version()
    {
       global $wp_version;
-      if ( version_compare( $wp_version, '4.4', 'lt' ) )
+      if ( version_compare( $wp_version, '4.6', 'lt' ) )
       {
          deactivate_plugins( basename( __FILE__ ) );
-         echo sprintf("<div class='notice notice-error' role='alert'>%s</div>", __( 'Quick Mail requires WordPress 4.4 or greater.', 'quick-mail' ) );
+         echo sprintf("<div class='notice notice-error' role='alert'>%s</div>", __( 'Quick Mail requires WordPress 4.6 or greater.', 'quick-mail' ) );
          exit;
       } // end if
    } // end check_wp_version

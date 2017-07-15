@@ -208,3 +208,7 @@ Quick Mail is free for personal or commercial use. Please encourage future devel
 * Includes French, Russian, Spanish translations.
 
 * See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.
+
+== Credits ==
+
+Banner image by [27707](https://pixabay.com/en/users/27707-27707/)

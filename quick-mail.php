@@ -2,15 +2,15 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.1.6 RC1
+Version: 3.1.9
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
-Plugin URI: https://wheredidmybraingo.com/reply-wordpress-comments-quick-mail/
+Plugin URI: https://wheredidmybraingo.com/how-to-send-private-comment-replies-with-wordpress/
 Text Domain: quick-mail
 Domain Path: /lang
 */
 
-require_once 'qm_util.php';
+require_once 'inc/qm_util.php';
 
 class QuickMail {
 
@@ -31,7 +31,7 @@ class QuickMail {
    public static $instance = false;
 
    /**
-    * Our dismissed pointer name
+    * Our dismissed pointer name.
     * @var string
     * @since 1.3.0
     */
@@ -136,10 +136,6 @@ class QuickMail {
 
 		$you = wp_get_current_user();
 		$urole = $this->qm_get_role();
-		if ( 'administrator' == $urole ) {
-			return true;
-		} // end if administrator
-
 		if ( 'author' == $urole ) {
 			return ( 'X' == $code );
 		} // author can only reply to comments
@@ -298,10 +294,10 @@ class QuickMail {
    public function check_wp_version()
    {
       global $wp_version;
-      if ( version_compare( $wp_version, '4.4', 'lt' ) )
+      if ( version_compare( $wp_version, '4.6', 'lt' ) )
       {
          deactivate_plugins( basename( __FILE__ ) );
-         echo sprintf("<div class='notice notice-error' role='alert'>%s</div>", __( 'Quick Mail requires WordPress 4.4 or greater.', 'quick-mail' ) );
+         echo sprintf("<div class='notice notice-error' role='alert'>%s</div>", __( 'Quick Mail requires WordPress 4.6 or greater.', 'quick-mail' ) );
          exit;
       } // end if
    } // end check_wp_version
@@ -334,7 +330,7 @@ class QuickMail {
    } // install_quick_mail
 
    /**
-    * load scripts to display wp_pointer after installation.
+    * load Javascript to display wp_pointer after installation.
     *
     * @since 1.3.0
     */
@@ -366,7 +362,7 @@ jQuery(document).ready( function() {
 <?php
 }
    /**
-    * setup wp_pointer for new installations
+    * setup wp_pointer for new installations.
     *
     * @since 1.3.0
     */
@@ -377,9 +373,9 @@ jQuery(document).ready( function() {
    } // end qm_pointer_setup
 
    /**
-    * delete options when Quick Mail is deactivated
+    * delete options when Quick Mail is deactivated.
     *
-    * delete global and user options
+    * delete global and user options.
     *
     * @since 1.1.1
     */
@@ -407,15 +403,14 @@ jQuery(document).ready( function() {
 	} // end unload_quick_mail_plugin
 
    /**
-    * load quick-mail.js for email select and
-    * quick-mail-addresses.js to count saved addresses
+    * load quick-mail.js for email select and quick-mail-addresses.js to count saved addresses.
     *
     * @since 1.2.0
     */
    public function add_email_scripts()
    {
-      wp_enqueue_script( 'qmScript', plugins_url('/quick-mail.js', __FILE__), array('jquery'), null, false );
-      wp_enqueue_script( 'qmCount', plugins_url('/quick-mail-addresses.js', __FILE__), array('jquery'), null, false );
+      wp_enqueue_script( 'qmScript', plugins_url('/lib/js/quick-mail.js', __FILE__), array('jquery'), null, false );
+      wp_enqueue_script( 'qmCount', plugins_url('/lib/js/quick-mail-addresses.js', __FILE__), array('jquery'), null, false );
       $data = array(
       		'one' => __( 'Clear 1 saved address', 'quick-mail' ),
       		'many' => sprintf( __( 'Clear %s saved addresses', 'quick-mail' ), '{number}' )
@@ -428,7 +423,6 @@ jQuery(document).ready( function() {
     *
     * @param string $to recipient email
     * @param int $id user ID
-    * @return void displays input
     */
 	public function quick_mail_recipient_input( $to, $id ) {
       $template = '<input aria-labelledby="qme_label" value="%s" id="qm-email" name="qm-email" type="email" required aria-required="true" tabindex="0" autofocus size="35" placeholder="%s">';
@@ -528,6 +522,13 @@ jQuery(document).ready( function() {
       return ob_get_clean();
    } // end quick_mail_recipient_input
 
+   /**
+    * get input control for cc input.
+    * @param string $to recipient
+    * @param string $cc cc
+    * @param integer $id user ID
+    * @return void|string
+    */
 	public function quick_mail_cc_input( $to, $cc, $id ) {
 	   	$template = '<input aria-labelledby="qmcc_label" value="%s" id="qm-cc" name="qm-cc" type="text" size="35" tabindex="3" placeholder="%s">';
 	   	$blog = is_multisite() ? get_current_blog_id() : 0;
@@ -632,7 +633,7 @@ jQuery(document).ready( function() {
    } // end quick_mail_cc_input
 
    /**
-    * get list of commenters from posts / pages with comments open
+    * get list of commenters from posts / pages with comments open.
     * @return string select with commenters instead of users. WP_Error if no commenters.
     * @since 3.0.5
     */
@@ -681,6 +682,9 @@ jQuery(document).ready( function() {
 	   	return ($matches > 0) ? $select : $problem;
    } // end get_commenters
 
+   /**
+    * get comment title from Javascript.
+    */
 	public function qm_get_title() {
 		check_ajax_referer( 'qm_get_title', 'security' );
    		$pid = intval( $_POST['pid'] );
@@ -689,6 +693,9 @@ jQuery(document).ready( function() {
    		wp_die();
 	} // end qm_get_title
 
+	/**
+	 * Javascript to load comment title into subject.
+	 */
 	public function qm_get_title_script() {
 		$ajax_nonce = wp_create_nonce( 'qm_get_title' );
 		?>
@@ -720,7 +727,7 @@ jQuery(document).ready( function() {
    	} // end get_comment_style
 
    	/**
-   	 * format comment reply for textarea
+   	 * format comment reply for textarea.
    	 * @param string $text comment text
    	 * @return string formatted comment
    	 * @since 3.1.1
@@ -738,6 +745,9 @@ jQuery(document).ready( function() {
 		} // end if
 	} // end get_formatted_comment
 
+	/**
+	 * get comment text from Javascript.
+	 */
    	public function qm_get_comment() {
    		check_ajax_referer( 'qm_get_comment', 'security' );
    		$cid = intval( $_POST['cid'] );
@@ -746,6 +756,9 @@ jQuery(document).ready( function() {
 		wp_die();
    	} // end qm_get_comment
 
+   	/**
+   	 * get Javascript to load comment and move cursor to end of textarea or TinyMCE.
+   	 */
 	public function qm_get_comment_script() {
 		$ajax_nonce = wp_create_nonce( 'qm_get_comment' );
 	?>
@@ -841,11 +854,11 @@ jQuery(document).ready( function() {
 
 		$you = wp_get_current_user();
 		if ( !empty( $_REQUEST['comment_id'] ) ) {
-			if ( !$this->user_can_reply_to_comments() ) {
+			if ( !$this->user_can_reply_to_comments( true ) ) {
 				$direction = is_rtl() ? 'rtl' : 'ltr';
 				$args = array('response' => 200, 'back_link' => true, 'text_direction' => $direction);
 				wp_die( sprintf( '<h1 role="alert">%s</h1>', __( 'Comments disabled by system administrator.', 'quick-mail' ) ), __( 'Mail Error', 'quick-mail' ), $args );
-			} // end if check user has permission to reply
+			} // end if check site has permission to reply
 
 			$id = intval( $_REQUEST['comment_id'] );
 			$info = get_comment( $id, ARRAY_A );
@@ -884,7 +897,7 @@ jQuery(document).ready( function() {
       $success = '';
       $from = '';
       $attachments = array();
-      $commenter_list = (empty( $commenter ) && $this->user_can_reply_to_comments() ) ? $this->get_commenters() : null;
+      $commenter_list = (empty( $commenter ) && $this->user_can_reply_to_comments( false ) ) ? $this->get_commenters() : null;
       if ( is_wp_error( $commenter_list ) ) {
       	$error = $commenter_list->get_error_message();
       } elseif ( is_string( $commenter_list ) ) {
@@ -1150,11 +1163,10 @@ if ( 75 < $tlen ) {
 $tsize = "size='{$tlen}'";
 $to_label = ( empty( $commenter ) || empty( $commenter_list ) ) ? __( 'To', 'quick-mail' ) : __( 'Commenters', 'quick-mail' );
 $msg_label =  ( empty( $commenter ) || empty( $commenter_list ) ) ? __( 'Message', 'quick-mail' ) : __( 'Reply', 'quick-mail' );
-$save_address = ( empty( $commenter ) || empty( $commenter_list ) ) ? '<input type="hidden" id="qm-saving" value="1">' : '<input type="hidden" id="qm-saving" value="">';
 $message_tabindex = (is_string($commenter_list) && empty($commenter_list) ) ? 50 : 1;
 ?>
 <label id="tf_label" for="the_from" class="recipients"><?php _e( 'From', 'quick-mail' ); ?></label>
-<p><?php echo $save_address; ?><input aria-labelledby="tf_label" <?php echo $tsize; ?> value="<?php echo $the_from; ?>" readonly aria-readonly="true" id="the_from" tabindex="5000"></p>
+<p><input aria-labelledby="tf_label" <?php echo $tsize; ?> value="<?php echo $the_from; ?>" readonly aria-readonly="true" id="the_from" tabindex="5000"></p>
 </fieldset>
 <fieldset>
 <label id="qme_label" for="qm-email" class="recipients"><?php echo $to_label; ?></label>
@@ -1413,7 +1425,7 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
       } // end for
 
       $check_wpautop = ( '1' == get_user_meta( $you->ID, 'qm_wpautop', true ) ) ? 'checked="checked"' : '';
-      $check_commenters = $this->user_can_reply_to_comments() ? 'checked="checked"' : '';
+      $check_commenters = $this->user_can_reply_to_comments( false ) ? 'checked="checked"' : '';
       $check_all    = ( 'A' == $this->qm_get_display_option( $blog ) ) ? 'checked="checked"' : '';
       $check_names  = ( 'N' == $this->qm_get_display_option( $blog ) ) ? 'checked="checked"' : '';
       $check_none   = ( 'X' == $this->qm_get_display_option( $blog ) ) ? 'checked="checked"' : '';
@@ -1470,16 +1482,15 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
       $wam = sprintf("%s %s %s",	__( 'Apply', 'quick-mail'),
       		'<a target="_blank" href="https://codex.wordpress.org/Function_Reference/wpautop">wpautop</a>',
       		__( 'to HTML messages', 'quick-mail'));
-      $space = '';
-      $comment_label = '';
+	$space = '';
+	$comment_label = '';
 	if ( ! $this->multiple_matching_users( 'A', $blog ) ) {
 		$space = ' style="margin-top:2em;" ';
-		$comment_label = __( 'Reply to comments', 'quick-mail' );
+		$comment_label = __( 'Select recipient from commenters', 'quick-mail' );
 	} else {
 		$comment_label = __( 'Display Commenters instead of users', 'quick-mail' );
 	} // end if no users
 
-      // quick_mail_cannot_reply
       if ( !$this->qm_is_admin( get_current_user_id(), $blog ) ) {
       	$cannot_reply = '';
       	if ( is_multisite() ) {
@@ -1504,6 +1515,35 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 <form id="quick-mail-settings" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 <div class="indented">
 <div id="qm_saved"></div>
+<?php if ( $this->qm_is_admin( $you->ID, $blog ) ) : ?>
+<fieldset>
+<legend class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></legend>
+<?php if ( $this->multiple_matching_users( 'A', $blog ) ) : ?>
+<p><input aria-describedby="qm_hide_desc" aria-labelledby="qm_hide_label" class="qm-input" name="hide_quick_mail_admin" type="checkbox" <?php echo $check_admin; ?>>
+<label id="qm_hide_label" class="qm-label"><?php _e( 'Hide Administrator Profiles', 'quick-mail' ); ?>.</label>
+<?php
+$admins = $this->qm_admin_count( $blog );
+$profile = sprintf( _n( '%s administrator profile', '%s administrator profiles', $admins, 'quick-mail' ), $admins );
+echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User list will not include', 'quick-mail' ), " {$profile}.");
+?>
+<?php endif; ?>
+<input name="showing_quick_mail_admin" type="hidden" value="Y"></p>
+<p><input aria-describedby="quick_mail_cannot_reply_desc" id="quick_mail_cannot_reply"
+aria-labelledby="quick_mail_cannot_reply_label" class="qm-input"
+name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?>>
+<label id="quick_mail_cannot_reply_label" class="qm-label"><?php _e( 'Disable Replies to Comments', 'quick-mail' ); ?>.</label>
+<span id="quick_mail_cannot_reply_desc" class="qm-label"><?php _e( 'Users will not see commenter list.', 'quick-mail' ); ?></span></p>
+<p id="qm-authors"><input aria-describedby="qm_author_desc" aria-labelledby="qm_author_label" class="qm-input" name="authors_quick_mail_privilege" type="checkbox" <?php echo $check_author; ?>>
+<label id="qm_author_label" class="qm-label"><?php _e( 'Grant Authors permission to reply to comments', 'quick-mail' ); ?>.</label>
+<span id="qm_author_desc" class="qm-label"><?php _e( 'Authors will not have access to user list.', 'quick-mail' ); ?></span></p>
+<p><input aria-describedby="qm_grant_desc" aria-labelledby="qm_grant_label" class="qm-input" name="editors_quick_mail_privilege" type="checkbox" <?php echo $check_editor; ?>>
+<label id="qm_grant_label" class="qm-label"><?php _e( 'Grant Editors access to user list.', 'quick-mail' ); ?></label>
+<span id="qm_grant_desc" class="qm-label"><?php _e( 'Let editors see user list.', 'quick-mail' ); ?></span></p>
+<p><input aria-describedby="qm_verify_desc" aria-labelledby="qm_verify_label" class="qm-input" name="verify_quick_mail_addresses" type="checkbox" <?php echo $check_verify; ?>>
+<label id="qm_verify_label" class="qm-label"><?php _e( 'Verify recipient email domains', 'quick-mail' ); ?>.</label>
+<span id="qm_verify_desc" class="qm-label"><?php echo $verify_note; ?></span></p>
+</fieldset>
+<?php endif; ?>
 <?php
 if ( user_can_richedit() ) : ?>
 <fieldset>
@@ -1585,35 +1625,6 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 ?>
 <span id="qm_none_desc" class="qm-label"><?php _e( 'Enter address to send mail.', 'quick-mail' ); ?> <?php _e( 'Saves 12 addresses.', 'quick-mail' ); ?></span></p>
 </fieldset>
-<?php if ( $this->qm_is_admin( $you->ID, $blog ) ) : ?>
-<fieldset>
-<legend class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></legend>
-<?php if ( $this->multiple_matching_users( 'A', $blog ) ) : ?>
-<p><input aria-describedby="qm_hide_desc" aria-labelledby="qm_hide_label" class="qm-input" name="hide_quick_mail_admin" type="checkbox" <?php echo $check_admin; ?>>
-<label id="qm_hide_label" class="qm-label"><?php _e( 'Hide Administrator Profiles', 'quick-mail' ); ?>.</label>
-<?php
-$admins = $this->qm_admin_count( $blog );
-$profile = sprintf( _n( '%s administrator profile', '%s administrator profiles', $admins, 'quick-mail' ), $admins );
-echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User list will not include', 'quick-mail' ), " {$profile}.");
-?>
-<?php endif; ?>
-<input name="showing_quick_mail_admin" type="hidden" value="Y"></p>
-<p><input aria-describedby="quick_mail_cannot_reply_desc" id="quick_mail_cannot_reply"
-aria-labelledby="quick_mail_cannot_reply_label" class="qm-input"
-name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?>>
-<label id="quick_mail_cannot_reply_label" class="qm-label"><?php _e( 'Disable Replies to Comments', 'quick-mail' ); ?>.</label>
-<span id="quick_mail_cannot_reply_desc" class="qm-label"><?php _e( 'Users will not see commenter list.', 'quick-mail' ); ?></span></p>
-<p id="qm-authors"><input aria-describedby="qm_author_desc" aria-labelledby="qm_author_label" class="qm-input" name="authors_quick_mail_privilege" type="checkbox" <?php echo $check_author; ?>>
-<label id="qm_author_label" class="qm-label"><?php _e( 'Grant Authors permission to reply to comments', 'quick-mail' ); ?>.</label>
-<span id="qm_author_desc" class="qm-label"><?php _e( 'Authors will not have access to user list.', 'quick-mail' ); ?></span></p>
-<p><input aria-describedby="qm_grant_desc" aria-labelledby="qm_grant_label" class="qm-input" name="editors_quick_mail_privilege" type="checkbox" <?php echo $check_editor; ?>>
-<label id="qm_grant_label" class="qm-label"><?php _e( 'Grant Editors access to user list.', 'quick-mail' ); ?></label>
-<span id="qm_grant_desc" class="qm-label"><?php _e( 'Let editors see user list and reply to comments.', 'quick-mail' ); ?></span></p>
-<p><input aria-describedby="qm_verify_desc" aria-labelledby="qm_verify_label" class="qm-input" name="verify_quick_mail_addresses" type="checkbox" <?php echo $check_verify; ?>>
-<label id="qm_verify_label" class="qm-label"><?php _e( 'Verify recipient email domains', 'quick-mail' ); ?>.</label>
-<span id="qm_verify_desc" class="qm-label"><?php echo $verify_note; ?></span></p>
-</fieldset>
-<?php endif; ?>
 <p class="submit"><input type="submit" name="qm-submit" class="button button-primary qm-input" value="<?php _e( 'Save Options', 'quick-mail' ); ?>"></p>
 </div>
 </form>
@@ -1638,7 +1649,7 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
    } // end qm_get_display_option
 
    /**
-    * update user option
+    * update user option.
     *
     * @param string $key
     * @param string $value
@@ -1687,7 +1698,7 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 		} // end if not multisite
 
 		return (0 < $user_query->get_total());
-	} // end qm_is_admin
+	} // end qm_is_editor
 
 	/**
 	 * get total users with administrator role on a blog.
@@ -1716,13 +1727,14 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 	 * @since 3.1.0
 	 */
 	public function qm_comment_reply($text, $id) {
-		if ( !$this->user_can_reply_to_comments() ) {
+		if ( !$this->user_can_reply_to_comments( true ) ) {
 			return $text;
-		} // end if no comments for this user
+		} // end if comments disabled by administrator
 
 		$qm = admin_url( "tools.php?page=quick_mail_form&comment_id={$id}\r\n" );
-		$left_link = __( 'Reply with Quick Mail', 'quick-mail' ) . ': ' . $qm;
-		$right_link = $qm . ' : ' . __( 'Reply with Quick Mail', 'quick-mail' );
+		$title = apply_filters( 'quick-mail-reply-title',  __( 'Private Reply', 'quick-mail' ) ); // was Reply with Quick Mail
+		$left_link = "{$title}: {$qm}";
+		$right_link = "{$qm} : {$title}";
 		$text .= is_rtl() ? $right_link: $left_link;
 		return $text;
 	} // end qm_comment_reply
@@ -1742,12 +1754,12 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 			return $actions;
 		} // end if invalid author email
 
-		if ( !$this->user_can_reply_to_comments() ) {
+		if ( !$this->user_can_reply_to_comments( true ) ) {
 			return $actions;
-		} // end if user wants comments
+		} // end if site allows private replies to comments
 
 		$qm_url = admin_url( "tools.php?page=quick_mail_form&comment_id={$comment->comment_ID}");
-		$reply = __( 'Reply with Quick Mail', 'quick-mail' );
+		$reply = apply_filters( 'quick-mail-reply-title',  __( 'Private Reply', 'quick-mail' ) );  // was Reply with Quick Mail
 		$ereply = esc_attr( $reply );
 		$css = 'style="color: #e14d43;"'; // wp-ui-text-highlight
 		$retval = array();
@@ -1813,7 +1825,7 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
    } // end init_quick_mail_menu
 
 	/**
-    * Quick Mail settings help
+    * Quick Mail settings help.
     * @since 2.0.0
     */
 	public function add_qm_settings_help() {
@@ -1872,31 +1884,36 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
     		$to_ask = __( 'to ask questions and report problems', 'quick-mail' );
     		$rc5 = "<dd style='font-weight:bold; margin-top:2em;'>{$use_str} {$slink} {$to_ask}.</dd>";
 
-   		$dc_title = __( 'Display Commenters', 'quick-mail' );
+   		$dc_title = __( 'Commenters', 'quick-mail' );
+   		$dc_head = $this->multiple_matching_users( 'A', $blog ) ?
+   		__( 'Display list of commenters, instead of users.', 'quick-mail' ) :
+   		__( 'Select recipient from commenters.', 'quick-mail' );
+   		// instead
     		$dc_enabled = sprintf('<a target="_blank" href="https://codex.wordpress.org/Comments_in_WordPress#Enabling_Comments_on_Your_Site">%s</a>', __( 'enabling comments', 'quick-mail' ) );
     		$dc_settings = sprintf('<a target="_blank" href="https://codex.wordpress.org/Settings_Discussion_Screen">%s</a>', __( 'discussion settings', 'quick-mail' ) );
     		$dc_see = __( 'See', 'quick-mail' );
     		$dc_info = __( 'for additional information.', 'quick-mail' );
     		$dc_and = __( 'and', 'quick-mail' );
     		$dc1 = '<dd>' . __( 'Reply to comments on your published content.', 'quick-mail' ) . '</dd>';
-    		$dc2 = '<dd>' . __( 'Display list of commenters, instead of users.', 'quick-mail' ) . '</dd>';
+    		// $dc2 = '<dd>' . __( 'Display list of commenters, instead of users.', 'quick-mail' ) . '</dd>';
     		$dc3 = '<dd>' . __( 'Comments are often disabled on older content.', 'quick-mail' ) . '</dd>';
     		$dc4 = '<dd>' . __( 'Comments must be enabled to reply.', 'quick-mail' ) . '</dd>';
     		$dc_val = '<dd>' . __( 'Invalid mail addresses are not displayed.', 'quick-mail' ) . '</dd>';
     		if ( $is_admin_user ) {
+    			$dc_disable = '<strong>' . __('Select Disable Replies to Comments to remove this feature.', 'quick-mail') . '</strong>';
     			$dc_grant = __('Grant Authors permission to reply to comments', 'quick-mail');
     			$dc_author = admin_url('options-general.php?page=quick_mail_options#qm-authors');
     			$dc_link = "<a href='{$dc_author}'>{$dc_grant}</a>";
     			$dc_use = __('to let authors use this feature', 'quick-mail');
     			$note = '<strong>' . __( 'Administration', 'quick-mail' ) . ' :</strong>';
-    			$dc6 = "<dl><dt style='margin-top:2em;'>{$note}</dt><dd>{$dc_see} {$dc_link} {$dc_use}.</dd>";
+    			$dc6 = "<dl><dt style='margin-top:2em;'>{$note}</dt><dd>{$dc_disable}</dd><dd>{$dc_see} {$dc_link} {$dc_use}.</dd>";
     			$dc7 = "<dd>Email domains are always validated.</dd>";
     			$dc5 = "<dd>{$dc_see} {$dc_enabled} {$dc_and} {$dc_settings} {$dc_info}{$dc6}{$dc7}{$rc5}</dl></dd>";
     		} else {
     			$dc5 = "<dd>{$dc_see} {$dc_enabled} {$dc_info}</dd>{$rc5}";
     		} // end if admin
-    		$dcontent = "<dl><dt><strong>{$dc_title}</strong></dt>{$dc1}{$dc2}{$dc3}{$dc4}{$dc_val}{$dc5}</dl>";
-		if ( $this->user_can_reply_to_comments() ) {
+    		$dcontent = "<dl><dt><strong>{$dc_head}</strong></dt>{$dc1}{$dc3}{$dc4}{$dc_val}{$dc5}</dl>";
+		if ( $this->user_can_reply_to_comments( false ) ) {
 	    		$screen->add_help_tab( array('id' => 'qm_commenter_help', 'title'	=> $dc_title, 'content' => $dcontent) );
 		} // add comment help, if user can reply to comments
 
@@ -1946,10 +1963,11 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 
 	/**
 	 * can user reply to comments? checks blog option, user option.
-	 * @return boolean if user can reply to comments.
+	 * @param boolean $site want site option, instead of user's option
+	 * @return boolean if site allows comments or if user can reply to comments.
 	 * @since 3.1.5
 	 */
-	function user_can_reply_to_comments() {
+	function user_can_reply_to_comments( $site ) {
 		$blog = is_multisite() ? get_current_blog_id() : 0;
 		$cannot_reply = '';
 		if ( is_multisite() ) {
@@ -1957,6 +1975,10 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 		} else {
 			$cannot_reply = get_option( 'quick_mail_cannot_reply', 'N' );
 		} // end if multisite
+
+		if ( $site ) {
+			return ( 'Y' != $cannot_reply );
+		} // end if want site option only, for comment list
 
 		if ( 'Y' == $cannot_reply ) {
 			return false;
@@ -1978,7 +2000,7 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 	} // end user_can_reply_to_comments
 
 	/**
-	 * Quick Mail general help
+	 * Quick Mail general help.
 	 * @since 2.0.0
 	 */
 	public function add_qm_help() {
@@ -2056,14 +2078,14 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 	} // end add_qm_help
 
    /**
-    * use by admin print styles to add css to admin
+    * use by admin print styles to add css to admin.
     */
    public function init_quick_mail_style() {
-      wp_enqueue_style( 'quick-mail', plugins_url( '/quick-mail.css', __FILE__) , array(), null, 'all' );
+      wp_enqueue_style( 'quick-mail', plugins_url( '/lib/css/quick-mail.css', __FILE__) , array(), null, 'all' );
    } // end init_quick_mail_style
 
    /**
-    * load translations
+    * load translations.
     */
    public function init_quick_mail_translation() {
    	  load_plugin_textdomain( 'quick-mail', false, basename( dirname( __FILE__ ) ) . '/lang' );

@@ -1,11 +1,11 @@
 === Quick Mail ===
 Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
-Tags: email, admin, mail, idn, attachment, multisite, accessible, accessibility, rich text, Spanish, French
+Tags: email, comments, attachment, accessibility, comment, mail, idn, multisite, rich text, tinymce
 Requires at least: 4.6
 Tested up to: 4.9
-Stable tag: 3.0.4
-License: GPLv3
+Stable tag: 3.1.8
+License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 
 Send text or html email with attachments and shortcodes. Send private replies to comments. Select recipient from users or commenters.
@@ -14,7 +14,7 @@ Send text or html email with attachments and shortcodes. Send private replies to
 
 >Quick Mail is the easiest way to send email with attachments to WordPress users on your site, or send private replies to comments. Compatible with multisite.
 
-Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds Quick Mail to Tools menu.
+Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds Quick Mail to Tools menu and comment replies.
 
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
@@ -48,7 +48,7 @@ User options for sending email to site users or others. Mail is sent with user's
 
 * See [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Reply to WordPress Comments with Quick Mail](https://wheredidmybraingo.com/reply-wordpress-comments-quick-mail/) for update info.
+* See [How to Send Private Comment Replies with WordPress](https://wheredidmybraingo.com/how-to-send-private-comment-replies-with-wordpress/) for update info.
 
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/)
 
@@ -135,8 +135,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 == Changelog ==
 
-= 3.1.2 =
-* fixed color on Reply with Quick Mail.
+= 3.1.7 =
+* Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
+* Many changes to improve private comment replies.
 
 = 3.1.1 =
 * reply to comments with Quick Mail from Comments list. 
@@ -145,6 +146,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 = 3.1.0 =
 * reply to comments.
 * improved performance.
+
+= 3.0.5 =
+* added Russian translation. Props @orlov562
 
 = 3.0.4 =
 * fixed reset email content type.
@@ -168,15 +172,15 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 = Earlier versions =
 
-Please refer to the separate changelog.txt for changes of previous versions.
+Refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
 
-= 3.1.0 =
+= 3.1.7 =
 * Upgrade recommended.
 
-= 3.1.0 =
-* Upgrade recommended.
+= 3.0.5 =
+* Upgrade adds Russian translation.
 
 = 3.0.4 =
 * Upgrade recommended.
@@ -201,6 +205,10 @@ Quick Mail is free for personal or commercial use. Please encourage future devel
 
 * A .pot file is included for translators.
 
-* Includes Russian, Spanish, French translations.
+* Includes French, Russian, Spanish translations.
 
 * See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.
+
+== Credits ==
+
+Banner image by [27707](https://pixabay.com/en/users/27707-27707/)

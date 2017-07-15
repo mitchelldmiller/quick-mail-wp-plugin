@@ -1,12 +1,12 @@
 === Quick Mail ===
 Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
-Tags: email, comments, comment, reply, admin, mail, idn, attachment, multisite, accessibility, rich text, tinymce
+Tags: email, comments, attachment, accessibility, comment, mail, idn, multisite, rich text, tinymce
 Requires at least: 4.6
 Tested up to: 4.9
-Stable tag: 3.1.7
-License: GPLv3
-License URI: https://www.gnu.org/licenses/gpl-3.0.html
+Stable tag: 3.1.8
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl.html
 
 Send text or html email with attachments and shortcodes. Send private replies to comments. Select recipient from users or commenters.
 

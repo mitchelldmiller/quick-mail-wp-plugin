@@ -136,10 +136,6 @@ class QuickMail {
 
 		$you = wp_get_current_user();
 		$urole = $this->qm_get_role();
-		if ( 'administrator' == $urole ) {
-			return true;
-		} // end if administrator
-
 		if ( 'author' == $urole ) {
 			return ( 'X' == $code );
 		} // author can only reply to comments

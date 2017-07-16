@@ -135,6 +135,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 == Changelog ==
 
+= 3.1.8 =
+* Fixed error that presented user list to administrator when there are less than 3 users on site.
+
 = 3.1.7 =
 * Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
 * Many changes to improve private comment replies.
@@ -175,6 +178,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 Refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.1.8 =
+* Upgrade recommended.
 
 = 3.1.7 =
 * Upgrade recommended.

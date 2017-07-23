@@ -12,6 +12,11 @@ Domain Path: /lang
 
 require_once 'inc/qm_util.php';
 
+// Load our WP-CLI command, if available
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	require_once dirname( __FILE__ ) . '/inc/quick-mail-cli.php';
+}
+
 class QuickMail {
 
    /**

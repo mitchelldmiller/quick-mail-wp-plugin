@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: email, comments, attachment, accessibility, comment, mail, idn, multisite, rich text, tinymce
 Requires at least: 4.6
 Tested up to: 4.9
-Stable tag: 3.1.8
+Stable tag: 3.1.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -118,6 +118,10 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 
    `wp_mail` rejected an address. Seen when Quick Mail verification is off.
+   
+= Sendgrid =
+
+* Administrators can send mail with their Sendgrid name and email address.
 
 == Screenshots ==
 
@@ -134,6 +138,10 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 6. Reply to comment.
 
 == Changelog ==
+
+= 3.1.9 =
+* Organized plugin files into multiple directories.
+* Fixed "Login Expired" error when form was requested with POST from another plugin.
 
 = 3.1.8 =
 * Fixed error that presented user list to administrator when there are less than 3 users on site.
@@ -178,6 +186,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 Refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.1.9 =
+* Upgrade recommended.
 
 = 3.1.8 =
 * Upgrade recommended.

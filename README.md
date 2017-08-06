@@ -15,7 +15,9 @@ Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds 
 
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
-User options for sending email to site users or others. Mail is sent with user's name and email. Multiple files from up to six directories (folders) can be attached to a message.
+User options for sending email to site users or others. Mail is sent with user's name and email, or [Sendgrid](https://sendgrid.com/) credentials.
+
+Multiple files from up to six directories (folders) can be attached to a message.
 
 __Features__
 
@@ -40,6 +42,8 @@ __Features__
 * Option to add paragraphs and line breaks to HTML messages with [wpauto](https:/codex.wordpress.org/Function_Reference/wpautop).
 
 * Select recipient from users or commenters.
+
+* Includes a [WP-CLI](https://wp-cli.org/) command to send the contents of a Web page.
 
 ### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.

@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.1.9
+Version: 3.2.0
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/how-to-send-private-comment-replies-with-wordpress/
@@ -2199,10 +2199,17 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 		$your_plugins = is_multisite() ?
 		get_blog_option( get_current_blog_id(), 'active_plugins', array() ) :
 		get_option( 'active_plugins', array() );
-		$j = count( $your_plugins );
-		for ($i = 0; ($i < $j) && ($sendgrid === false); $i++) {
-			$sendgrid = stristr( $your_plugins[$i], 'sendgrid-email-delivery-simplified' );
-		} // end for
+		$j = is_array( $your_plugins ) ? count( $your_plugins ) : 0;
+		if ( empty( $j ) ) {
+			return $sendgrid;
+		} // end if no active plugins
+
+		foreach ( $your_plugins as $p ) {
+			if ( $sendgrid = stristr( $p, 'sendgrid-email-delivery-simplified' ) ) {
+				break;
+			} // end if match
+		} // end foreach
+
 		if ( $sendgrid === false ) {
 			return $sendgrid;
 		} // end if Sendgrid not active

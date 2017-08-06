@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Quick Mail v3.1.9\n"
+"Project-Id-Version: Quick Mail v3.2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-07-24 00:06:06+0000\n"
+"PO-Revision-Date: 2017-08-06 19:07:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -840,12 +840,6 @@ msgstr "Pas trouvé"
 msgid "Cannot connect to"
 msgstr "Impossible de se connecter à"
 
-#. translators: plugin header field 'Version'
-#: quick-mail.php:0
-#@ quick-mail
-msgid "3.1.9"
-msgstr "3.1.9"
-
 #: quick-mail.php:1563
 #@ quick-mail
 msgid "Use Sendgrid credentials"
@@ -855,4 +849,10 @@ msgstr "Utiliser les informations d'identification Sendgrid"
 #@ quick-mail
 msgid "Send mail from your Sendgrid name and mail address."
 msgstr "Envoyez le courrier de votre Sendgrid nom et adresse postale."
+
+#. translators: plugin header field 'Version'
+#: quick-mail.php:0
+#@ quick-mail
+msgid "3.2.0"
+msgstr "3.2.0"
 

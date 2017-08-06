@@ -1,6 +1,6 @@
 <?php
 /**
- * Adds quick-mail command to wp-cli.
+ * Mail a Web page with quick-mail.
  *
  */
 class Quick_Mail_Command extends WP_CLI_Command {
@@ -35,7 +35,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	public function __invoke( $args, $assoc_args ) {
 		$from = isset( $args[0] ) ? sanitize_email( $args[0] ) : '';
 		$to = isset( $args[1] ) ? sanitize_email( $args[1] ) : '';
-		$url = isset( $args[2] ) ? esc_url( $args[2] ) : '';
+		$url = isset( $args[2] ) ? str_replace('&#038;', '&', esc_url( $args[2] ) ) : '';
 		$subject = '';
 		if ( isset( $args[3] ) ) {
 			$subject = html_entity_decode( $args[3], ENT_QUOTES, 'UTF-8' );

@@ -934,9 +934,6 @@ jQuery(document).ready( function() {
     } // FIXME end if has first / last names
 
     $replaced = apply_filters( 'replace_quick_mail_sender', $your_vals );
-    $xq = print_r($your_vals, true);
-    $zq = print_r($replaced, true);
-    error_log("945 before: {$xq}\r\nafter: {$zq}");
     $your_email = $replaced['email'];
     $your_name = $replaced['name'];
     $from = "From: \"{$your_name}\" <{$your_email}>\r\n";
@@ -1103,7 +1100,11 @@ jQuery(document).ready( function() {
 					$success .= sprintf("<br>%s %s<br>%s %s", __( 'To', 'quick-mail' ), $to, $rec_label, $mcc);
 				} // end if has CC
             } else {
-             	$error = __( 'Error sending mail', 'quick-mail' ); // else  error
+            		if ( $this->using_sendgrid() ) {
+            			$error = __( 'Sendgrid Error sending mail', 'quick-mail' );
+            		} else {
+	             	$error = __( 'Error sending mail', 'quick-mail' );
+            		}
          	} // end else error
 
          	// reset filters after send 3.0.4
@@ -2235,7 +2236,6 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	 */
 	public function get_sendgrid_info($wp_info) {
 		if ( ! $this->using_sendgrid() ) {
-			error_log('2234 no Sendgrid?');
 			return $wp_info;
 		}
 		$sg_name = '';
@@ -2248,14 +2248,12 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 			$sg_email = get_option( 'sendgrid_from_email' );
 		}
 
-		error_log("2244 sg mail: {$sg_email}");
 		if ( empty( $sg_email ) ) {
-			error_log('2248 no Sendgrid email?');
 			return $wp_info;
-		}
+		} // end if no Sendgrid email
 		if ( empty( $sg_name ) ) {
 			$sg_name = $sg_email;
-		}
+		} // end if no Sendgrid name
 		return array('name' => $sg_name, 'email' => $sg_email);
 	} // end get_sendgrid_info
 
@@ -2268,7 +2266,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	public function let_user_replace_sender() {
 		$blog = is_multisite() ? get_current_blog_id() : 0;
 		if ( $this->qm_is_admin( get_current_user_id(), $blog ) ) {
-			$can_send = ''; 	// is setting = 'Y'
+			$can_send = '';
 			if ( is_multisite() ) {
 				$can_send = get_blog_option( get_current_blog_id, 'replace_quick_mail_sender', 'N' );
 			} else {

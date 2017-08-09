@@ -1125,7 +1125,7 @@ jQuery(document).ready( function() {
          } // end if no error
       } // end if POST
 
-      $orig_link = plugins_url( '/qm_validate.php', __FILE__ );
+      $orig_link = plugins_url( '/inc/qm_validate.php', __FILE__ );
       $site = untrailingslashit( network_site_url( '/' ) );
       $link = str_replace( $site, '', $orig_link );
       if ( !$this->qm_is_admin( get_current_user_id(), $blog ) && 'X' != $this->qm_get_display_option( $blog ) ) {

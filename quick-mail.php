@@ -2268,7 +2268,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 		if ( $this->qm_is_admin( get_current_user_id(), $blog ) ) {
 			$can_send = '';
 			if ( is_multisite() ) {
-				$can_send = get_blog_option( get_current_blog_id, 'replace_quick_mail_sender', 'N' );
+				$can_send = get_blog_option( 'get_current_blog_id', 'replace_quick_mail_sender', 'N' );
 			} else {
 				$can_send = get_option( 'replace_quick_mail_sender', 'N' );
 			} // end if multisite

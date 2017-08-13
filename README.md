@@ -76,7 +76,7 @@ __Selecting Recipients__
 
 __Sending Mail from Other Addresses__
 
-* Uses Mailgun plugin settings, if the plugin is activated and set to use free [Mailgun API](https://documentation.mailgun.com/en/latest/api_reference.html).
+* Uses Mailgun plugin settings, if the plugin is activated, using `Override "From" Details` and [Mailgun API](https://documentation.mailgun.com/en/latest/api_reference.html).
 
 * Option for administrators to use [Sendgrid API](https://sendgrid.com/solutions/sendgrid-api/). 
 

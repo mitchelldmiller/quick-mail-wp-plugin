@@ -1087,9 +1087,14 @@ jQuery(document).ready( function() {
          		$message = wpautop( $message );
          	} // end if
 
-         	// set content type and redirect error before sending mail. 3.0.4
+         	// set content type and redirect error before sending mail.
          	add_filter( 'wp_mail_content_type', array($this, 'get_mail_content_type'), 99, 1 );
          	add_filter( 'wp_mail_failed', array($this, 'show_mail_failure'), 99, 1 );
+         	// do not use Mailgun credentials for non-admin users
+         	$mg_toggle = $this->got_mailgun_info( true );
+			if ( $mg_toggle ) {
+				$this->toggle_mailgun_override();
+			} // end if do not replace sender name on non-admin user
 
             if ( wp_mail( $to, $subject, $message, $headers, $attachments ) ) {
 	            	$success = __( 'Message Sent', 'quick-mail' );
@@ -1109,9 +1114,12 @@ jQuery(document).ready( function() {
             		}
          	} // end else error
 
-         	// reset filters after send 3.0.4
+         	// reset filters after send
          	remove_filter( 'wp_mail_content_type', array($this, 'get_mail_content_type'), 99 );
          	remove_filter( 'wp_mail_failed', array($this, 'show_mail_failure'), 99 );
+         	if ( $mg_toggle ) {
+         		$this->toggle_mailgun_override();
+         	} // end if do not replace sender name on non-admin user
 
             if ( ! empty( $file ) ) {
                $e = '<br>' . __( 'Error Deleting Upload', 'quick-mail' );
@@ -1554,18 +1562,30 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
       } // end if not admin
 	$mg_label = '';
 	$mg_message = '';
-	if ( $this->got_mailgun_info( true ) ) {
+	if ( $this->qm_is_admin( $you->ID, $blog ) && $this->got_mailgun_info( true ) ) {
 		$mg_label = __( 'Using Mailgun credentials', 'quick-mail' );
 		$mg_message = __( 'Sending mail with your Mailgun name and mail address.', 'quick-mail' );
 	} elseif ( $this->got_mailgun_info( false ) ) {
 		$mg_label = __( 'Mailgun is active', 'quick-mail' );
-		$mg_message = __( 'Sending mail with Mailgun API.', 'quick-mail' );
+		if ( !$this->qm_is_admin( $you->ID, $blog ) ) {
+			$mg_message = __( 'Administrator set site to send mail with Mailgun.', 'quick-mail' );
+		} else {
+			$mg_message = __( 'Sending mail with Mailgun API.', 'quick-mail' );
+		} // end if
 	} // end if got mailgun info
 ?>
 <h1 id="quick-mail-title" class="quick-mail-title"><?php _e( 'Quick Mail Options', 'quick-mail' ); ?></h1>
 <form id="quick-mail-settings" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 <div class="indented">
 <div id="qm_saved"></div>
+<?php if ( !$this->qm_is_admin( $you->ID, $blog ) && $this->got_mailgun_info( false ) ) : ?>
+<fieldset>
+<legend class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></legend>
+<p><input readonly aria-readonly="true" aria-describedby="qm_mailgun_desc" aria-labelledby="qm_mailgun_label" class="qm-input" name="using_Mailgun" type="checkbox" checked="checked" onclick='return false;'>
+<label id="qm_mailgun_label" class="qm-label"><?php echo $mg_label; ?>.</label>
+<span id="qm_mailgun_desc" class="qm-label"><?php echo $mg_message; ?></span></p>
+</fieldset>
+<?php endif; ?>
 <?php if ( $this->qm_is_admin( $you->ID, $blog ) ) : ?>
 <fieldset>
 <legend class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></legend>
@@ -2238,6 +2258,10 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	 */
 	public function using_sendgrid() {
 		$sendgrid = false;
+		if ( $this->qm_is_plugin_active( 'mailgun' ) ) {
+			return $sendgrid;
+		} // end if Mailgun is active. cannot use Sengrid with Mailgun.
+
 		if ( !$this->qm_is_plugin_active( 'sendgrid' ) ) {
 			return $sendgrid;
 		} // end if sendgrid is not active
@@ -2386,6 +2410,47 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 
 		return array('name' => $name, 'email' => $email);
 	} // end get_mailgun_info
+
+	/**
+	 * toggle mailgun override from credentials.
+	 *
+	 * override credentials for non-admin users.
+	 *
+	 * @since 3.2.0
+	 */
+	public function toggle_mailgun_override() {
+		if ( 'administrator' == $this->qm_get_role() ) {
+			return false;
+		} // end if admin
+
+		$options = array();
+		$site = false;
+		if ( !is_multisite() ) {
+			$options = get_option( 'mailgun', array() );
+		} else {
+			$options = get_site_option( 'mailgun', array() );
+			if ( empty($options) ) {
+				$options = get_blog_option( get_current_blog_id(), 'mailgun', array() );
+			} else {
+				$site = true;
+			} // end if no site option
+		} // end if not multisite
+
+		$override = $options['override-from'];
+		$updated = ($override == '1') ? '0' : '1';
+		$options['override-from'] = $updated;
+		if ( !is_multisite() ) {
+			update_option( 'mailgun', $options );
+		} else {
+			if ( $site ) {
+				update_site_option( 'mailgun', $options );
+			} else {
+				update_blog_option( get_current_blog_id(), 'mailgun', $options );
+			} // end if site option
+		} // end if not multisite
+
+		return true;
+	} // end toggle_mailgun_override
 
 	/**
 	 * is user allowed to replace sender?

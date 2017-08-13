@@ -40,7 +40,7 @@ class QuickMail {
     * @var string
     * @since 1.3.0
     */
-   public static $pointer_name = 'quickmail_131';
+   public static $pointer_name = 'quickmail_320';
 
    /**
     * Returns an instance.
@@ -1100,7 +1100,7 @@ jQuery(document).ready( function() {
 					$success .= sprintf("<br>%s %s<br>%s %s", __( 'To', 'quick-mail' ), $to, $rec_label, $mcc);
 				} // end if has CC
             } else {
-            		if ( $this->got_mailgun_info() ) {
+            		if ( $this->got_mailgun_info( false ) ) {
             			$error = __( 'Mailgrid Error sending mail', 'quick-mail' );
             		} elseif ( $this->using_sendgrid() ) {
             			$error = __( 'Sendgrid Error sending mail', 'quick-mail' );
@@ -1552,6 +1552,15 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 	      	} // end if not allowed to reply with Quick Mail
 	      } // end if author
       } // end if not admin
+	$mg_label = '';
+	$mg_message = '';
+	if ( $this->got_mailgun_info( true ) ) {
+		$mg_label = __( 'Using Mailgun credentials', 'quick-mail' );
+		$mg_message = __( 'Sending mail with your Mailgun name and mail address.', 'quick-mail' );
+	} elseif ( $this->got_mailgun_info( false ) ) {
+		$mg_label = __( 'Mailgun is active', 'quick-mail' );
+		$mg_message = __( 'Sending mail with Mailgun API.', 'quick-mail' );
+	} // end if got mailgun info
 ?>
 <h1 id="quick-mail-title" class="quick-mail-title"><?php _e( 'Quick Mail Options', 'quick-mail' ); ?></h1>
 <form id="quick-mail-settings" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
@@ -1560,14 +1569,14 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 <?php if ( $this->qm_is_admin( $you->ID, $blog ) ) : ?>
 <fieldset>
 <legend class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></legend>
-<?php if ( $this->got_mailgun_info() ) : ?>
+<?php if ( $this->got_mailgun_info(false) ) : ?>
 <p><input readonly aria-readonly="true" aria-describedby="qm_mailgun_desc" aria-labelledby="qm_mailgun_label" class="qm-input" name="using_Mailgun" type="checkbox" checked="checked" onclick='return false;'>
-<label id="qm_mailgun_label" class="qm-label"><?php _e( 'Using Mailgun credentials', 'quick-mail' ); ?>.</label>
-<span id="qm_mailgun_desc" class="qm-label"><?php _e( 'Sending mail with your Mailgun name and mail address.', 'quick-mail' ) ?></span></p>
+<label id="qm_mailgun_label" class="qm-label"><?php echo $mg_label; ?>.</label>
+<span id="qm_mailgun_desc" class="qm-label"><?php echo $mg_message; ?></span></p>
 <?php elseif ( $this->using_sendgrid() ) : ?>
 <p><input aria-describedby="qm_sendgrid_desc" aria-labelledby="qm_sendgrid_label" class="qm-input" name="replace_quick_mail_sender" type="checkbox" <?php echo $check_sendgrid; ?>>
 <label id="qm_sendgrid_label" class="qm-label"><?php _e( 'Use Sendgrid credentials', 'quick-mail' ); ?>.</label>
-<span id="qm_sendgrid_desc" class="qm-label"><?php _e( 'Send mail from your Sendgrid name and mail address.', 'quick-mail' ) ?></span></p>
+<span id="qm_sendgrid_desc" class="qm-label"><?php _e( 'Send mail from your Sendgrid name and mail address.', 'quick-mail' ); ?></span></p>
 <?php endif; ?>
 <?php if ( $this->multiple_matching_users( 'A', $blog ) ) : ?>
 <p><input aria-describedby="qm_hide_desc" aria-labelledby="qm_hide_label" class="qm-input" name="hide_quick_mail_admin" type="checkbox" <?php echo $check_admin; ?>>
@@ -2286,10 +2295,12 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 
 	/**
 	 * do we have Mailgun plugin and credentials?
+	 *
+	 * @param $check_from boolean should we check if Mailgrid override-from is set?
 	 * @return boolean got mailgun info
 	 * @since 3.2.0
 	 */
-	public function got_mailgun_info() {
+	public function got_mailgun_info( $check_from ) {
 		if ( !$this->qm_is_plugin_active( 'mailgun' ) ) {
 			return false;
 		} // end if not active
@@ -2304,7 +2315,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 			} // end if no site option
 		} // end if not multisite
 
-		if ( empty( $options['override-from'] ) ) {
+		if ( $check_from && empty( $options['override-from'] ) ) {
 			return false;
 		} // end if do not replace sender credentials
 
@@ -2394,8 +2405,8 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 			} else {
 				$can_send = get_option( 'replace_quick_mail_sender', 'N' );
 			} // end if multisite
-			if ( 'Y' == $can_send || $this->got_mailgun_info() ) {
-				if ( $this->got_mailgun_info() ) {
+			if ( 'Y' == $can_send || $this->got_mailgun_info( true ) ) {
+				if ( $this->got_mailgun_info( true)  ) {
 					add_filter('replace_quick_mail_sender', array($this, 'get_mailgun_info'), 10, 1);
 				} else {
 					add_filter('replace_quick_mail_sender', array($this, 'get_sendgrid_info'), 10, 1);

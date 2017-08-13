@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: mail, email, comments, mailgun, sendgrid, attachment, accessibility, comment, idn, multisite, rich text, tinymce
 Requires at least: 4.6
 Tested up to: 4.9
-Stable tag: 3.2.0
+Stable tag: 3.1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -84,7 +84,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 = Sending Mail from Other Addresses =
 
-* Uses Mailgun plugin settings, if the plugin is activated, using `Override "From" Details` and [Mailgun API](https://documentation.mailgun.com/en/latest/api_reference.html).
+* Uses Mailgun plugin settings for Administrators, if the plugin is activated, using `Override "From" Details` and [Mailgun API](https://documentation.mailgun.com/en/latest/api_reference.html).
 
 * Option for administrators to use [Sendgrid API](https://sendgrid.com/solutions/sendgrid-api/).
 

@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.2.0
+Version: 3.2.0 Beta
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/how-to-send-private-comment-replies-with-wordpress/
@@ -1578,7 +1578,7 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 <form id="quick-mail-settings" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 <div class="indented">
 <div id="qm_saved"></div>
-<?php if ( !$this->qm_is_admin( $you->ID, $blog ) && $this->got_mailgun_info( false ) ) : ?>
+<?php if ( defined('NOT_NOW') && !$this->qm_is_admin( $you->ID, $blog ) && $this->got_mailgun_info( false ) ) : ?>
 <fieldset>
 <legend class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></legend>
 <p><input readonly aria-readonly="true" aria-describedby="qm_mailgun_desc" aria-labelledby="qm_mailgun_label" class="qm-input" name="using_Mailgun" type="checkbox" checked="checked" onclick='return false;'>
@@ -2028,6 +2028,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
     		$screen->add_help_tab( array('id' => 'qm_display_help',
         		'title'	=> __('User Display', 'quick-mail'), 'content' => $content) );
 
+    		// TODO add info for Mailgun, Sendgrid
     		if ( $is_admin_user ) {
     			$title =  __('Administration', 'quick-mail');
     			$content = '<dl><dt><strong>' . __( 'Hide Administrator Profiles', 'quick-mail' ) . '</strong></dt>';

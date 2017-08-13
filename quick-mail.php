@@ -1340,25 +1340,24 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
       			$updated = true;
 	      	} // end if value changed
 
-	      if ( ! empty($_POST['replace_quick_mail_sender']) ) {
-	         $previous = '';
-	         if ( is_multisite() ) {
-	         	$previous = get_blog_option( $blog, 'replace_quick_mail_sender', 'N' );
-	         } else {
-	         	$previous = get_option( 'replace_quick_mail_sender', 'N' );
-	         } // end if multisite
+		      $previous = '';
+		      $current = empty( $_POST['replace_quick_mail_sender'] ) ? 'N' : 'Y';
 
-	         $current = empty( $_POST['replace_quick_mail_sender'] ) ? 'N' : 'Y';
-	         if ( $current != $previous ) {
-	         	if ( is_multisite() ) {
-	         		update_blog_option( $blog, 'replace_quick_mail_sender', $current );
-	         	} else {
-	         		update_option( 'replace_quick_mail_sender', $current );
-	         	} // end if multisite
+		      if ( is_multisite() ) {
+		      	$previous = get_blog_option( $blog, 'replace_quick_mail_sender', 'N' );
+		      } else {
+		      	$previous = get_option( 'replace_quick_mail_sender', 'N' );
+		      } // end if multisite
 
-               $updated = true;
-	         } // end if value changed
-	      } // end if replace sender entered
+		      if ( $current != $previous ) {
+		      	if ( is_multisite() ) {
+		      		update_blog_option( $blog, 'replace_quick_mail_sender', $current );
+		      	} else {
+		      		update_option( 'replace_quick_mail_sender', $current );
+		      	} // end if multisite
+
+		      	$updated = true;
+		      } // end if replace_quick_mail_sender value changed
 
 	         $previous = '';
 	         if ( is_multisite() ) {
@@ -1562,7 +1561,7 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 <fieldset>
 <legend class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></legend>
 <?php if ( $this->got_mailgun_info() ) : ?>
-<p><input readonly aria-readonly="true" aria-describedby="qm_mailgun_desc" aria-labelledby="qm_mailgun_label" class="qm-input" name="using_Mailgun" type="checkbox" checked="checked">
+<p><input readonly aria-readonly="true" aria-describedby="qm_mailgun_desc" aria-labelledby="qm_mailgun_label" class="qm-input" name="using_Mailgun" type="checkbox" checked="checked" onclick='return false;'>
 <label id="qm_mailgun_label" class="qm-label"><?php _e( 'Using Mailgun credentials', 'quick-mail' ); ?>.</label>
 <span id="qm_mailgun_desc" class="qm-label"><?php _e( 'Sending mail with your Mailgun name and mail address.', 'quick-mail' ) ?></span></p>
 <?php elseif ( $this->using_sendgrid() ) : ?>
@@ -2237,10 +2236,13 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 		// check for Sendgrid email
 		$sg_email = '';
 		if ( is_multisite() ) {
-			$sg_email = get_blog_option( get_current_blog_id(), 'sendgrid_from_email', '' );
+			$sg_email = get_site_option( 'sendgrid_from_email', '');
+			if ( empty( $sg_email ) ) {
+				$sg_email = get_blog_option( get_current_blog_id(), 'sendgrid_from_email', 'N' );
+			} // end if
 		} else {
 			$sg_email = get_option( 'sendgrid_from_email', '' );
-		}
+		} // end if multisite
 
 		// TODO is this a valid email address?
 		return !empty( $sg_email );
@@ -2260,12 +2262,18 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 		$sg_name = '';
 		$sg_email = '';
 		if ( is_multisite() ) {
+			$sg_name = get_site_option( 'sendgrid_from_name', '');
+			if ( empty( $sg_name ) ) {
 			$sg_name = get_blog_option( get_current_blog_id(), 'sendgrid_from_name', 'N' );
-			$sg_email = get_blog_option( get_current_blog_id(), 'sendgrid_from_email', 'N' );
+			} // end if
+			$sg_email = get_site_option( 'sendgrid_from_email', '');
+			if ( empty( $sg_email ) ) {
+				$sg_email = get_blog_option( get_current_blog_id(), 'sendgrid_from_email', 'N' );
+			} // end if
 		} else {
 			$sg_name = get_option( 'sendgrid_from_name' );
 			$sg_email = get_option( 'sendgrid_from_email' );
-		}
+		} // end if multisite
 
 		if ( empty( $sg_email ) ) {
 			return $wp_info;
@@ -2286,12 +2294,19 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 			return false;
 		} // end if not active
 
-		$options = is_multisite() ?
-		get_blog_option( get_current_blog_id(), 'mailgun', array() ) :
-		get_option( 'mailgun', array() );
-		if ( empty( $options['useAPI'] ) ) {
+		$options = array();
+		if ( !is_multisite() ) {
+			$options = get_option( 'mailgun', array() );
+		} else {
+			$options = get_site_option( 'mailgun', array() );
+			if ( empty($options) ) {
+				$options = get_blog_option( get_current_blog_id(), 'mailgun', array() );
+			} // end if no site option
+		} // end if not multisite
+
+		if ( empty( $options['override-from'] ) ) {
 			return false;
-		} // end if not using API
+		} // end if do not replace sender credentials
 
 		// from Mailgun plugin
 		$apiKey = (defined('MAILGUN_APIKEY') && MAILGUN_APIKEY) ? MAILGUN_APIKEY : $options['apiKey'];
@@ -2321,12 +2336,19 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 			return $wp_info;
 		} // end if Mailgun is not active
 
-		$options = is_multisite() ?
-		get_blog_option( get_current_blog_id(), 'mailgun', array() ) :
-		get_option( 'mailgun', array() );
-		if ( empty( $options['useAPI'] ) ) {
+		$options = array();
+		if ( !is_multisite() ) {
+			$options = get_option( 'mailgun', array() );
+		} else {
+			$options = get_site_option( 'mailgun', array() );
+			if ( empty($options) ) {
+				$options = get_blog_option( get_current_blog_id(), 'mailgun', array() );
+			} // end if no site option
+		} // end if not multisite
+
+		if ( empty( $options['override-from'] ) || empty( $options['useAPI'] ) ) {
 			return $wp_info;
-		} // end if not using API
+		} // end if not using API or override from not set
 
 		$apiKey = (defined('MAILGUN_APIKEY') && MAILGUN_APIKEY) ? MAILGUN_APIKEY : $options['apiKey'];
 		// from mailgun.php

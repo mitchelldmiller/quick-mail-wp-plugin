@@ -1,7 +1,7 @@
 === Quick Mail ===
 Contributors: brainiac
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
-Tags: mail, email, comments, Sendgrid, attachment, accessibility, comment, idn, multisite, rich text, tinymce
+Tags: mail, email, comments, mailgun, sendgrid, attachment, accessibility, comment, idn, multisite, rich text, tinymce
 Requires at least: 4.6
 Tested up to: 4.9
 Stable tag: 3.2.0
@@ -18,7 +18,11 @@ Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds 
 
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
-User options for sending email to site users or others. Mail is sent with user's name and email, or [Sendgrid](https://sendgrid.com/) credentials. Multiple files from up to six directories (folders) can be attached to a message.
+User options for sending email to site users or others.
+
+Mail is sent with user's name and email. Recognizes credentials from [Mailgun](https://wordpress.org/plugins/mailgun/) and [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugins.
+
+Multiple files from up to six directories (folders) can be attached to a message.
 
 = Features =
 
@@ -78,6 +82,14 @@ User options for sending email to site users or others. Mail is sent with user's
 
 * Users need permission to [list users](http://codex.wordpress.org/Roles_and_Capabilities#list_users), to view user list or change options. Minimum permission can be changed with an option or filter.
 
+= Sending Mail from Other Addresses =
+
+* Uses Mailgun plugin settings, if the plugin is activated and set to use free [Mailgun API](https://documentation.mailgun.com/en/latest/api_reference.html).
+
+* Option for administrators to use [Sendgrid API](https://sendgrid.com/solutions/sendgrid-api/).
+
+* Programmers can replace their credentials by adding a filter to _replace_quick_mail_sender_.  
+
 = Limitations =
 
 * Up to 12 manually entered recipients are saved in HTML Storage.
@@ -121,10 +133,6 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
    `wp_mail` rejected an address. Seen when Quick Mail verification is off.
    
-= Sendgrid =
-
-* Administrators can send mail with their Sendgrid name and email address.
-
 == Screenshots ==
 
 1. Selecting users on Quick Mail data entry form.
@@ -143,7 +151,8 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 = 3.2.0 =
 * Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
-* Option to use Sendgrid credentials.
+* Uses Mailgun credentials, if the plugin is active and set to use API.
+* Option to use Sendgrid credentials, if the plugin is active.
 * Organized plugin files into multiple directories.
 * Fixed "Login Expired" error when form was requested with POST from another plugin.
 

@@ -931,7 +931,7 @@ jQuery(document).ready( function() {
       	$your_vals['name'] = "{$you->user_firstname} {$you->user_lastname}";
     } else {
       	$your_vals['name'] = $you->display_name;
-    } // FIXME end if has first / last names
+    } // end if user has first and last names
 
     $replaced = apply_filters( 'replace_quick_mail_sender', $your_vals );
     $your_email = $replaced['email'];
@@ -1100,7 +1100,9 @@ jQuery(document).ready( function() {
 					$success .= sprintf("<br>%s %s<br>%s %s", __( 'To', 'quick-mail' ), $to, $rec_label, $mcc);
 				} // end if has CC
             } else {
-            		if ( $this->using_sendgrid() ) {
+            		if ( $this->got_mailgun_info() ) {
+            			$error = __( 'Mailgrid Error sending mail', 'quick-mail' );
+            		} elseif ( $this->using_sendgrid() ) {
             			$error = __( 'Sendgrid Error sending mail', 'quick-mail' );
             		} else {
 	             	$error = __( 'Error sending mail', 'quick-mail' );
@@ -1199,7 +1201,7 @@ if (is_string($commenter_list) && !empty($commenter_list) ) {
 } else {
 	$crecipient = "<input aria-labelledby='qme_label' value='{$to}'
 	id='qm-email' name='qm-email' type='email' required aria-required='true' tabindex='6000'
-	readonly size='35'>";
+	readonly aria-readonly='true' size='35'>";
 } // end if
 ?>
 <p><?php echo $crecipient; ?></p>
@@ -1559,7 +1561,11 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 <?php if ( $this->qm_is_admin( $you->ID, $blog ) ) : ?>
 <fieldset>
 <legend class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></legend>
-<?php if ( $this->using_sendgrid() ) : ?>
+<?php if ( $this->got_mailgun_info() ) : ?>
+<p><input readonly aria-readonly="true" aria-describedby="qm_mailgun_desc" aria-labelledby="qm_mailgun_label" class="qm-input" name="using_Mailgun" type="checkbox" checked="checked">
+<label id="qm_mailgun_label" class="qm-label"><?php _e( 'Using Mailgun credentials', 'quick-mail' ); ?>.</label>
+<span id="qm_mailgun_desc" class="qm-label"><?php _e( 'Sending mail with your Mailgun name and mail address.', 'quick-mail' ) ?></span></p>
+<?php elseif ( $this->using_sendgrid() ) : ?>
 <p><input aria-describedby="qm_sendgrid_desc" aria-labelledby="qm_sendgrid_label" class="qm-input" name="replace_quick_mail_sender" type="checkbox" <?php echo $check_sendgrid; ?>>
 <label id="qm_sendgrid_label" class="qm-label"><?php _e( 'Use Sendgrid credentials', 'quick-mail' ); ?>.</label>
 <span id="qm_sendgrid_desc" class="qm-label"><?php _e( 'Send mail from your Sendgrid name and mail address.', 'quick-mail' ) ?></span></p>
@@ -2183,11 +2189,38 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 		if ( $file == $base ) {
 			$blog = is_multisite() ? get_current_blog_id() : null;
 			$url = get_admin_url( $blog, 'options-general.php?page=quick_mail_options' );
-			$link = sprintf('<a href="%s">%s</a>', $url, __( 'Settings', 'quick-mail' ) );
-			$links[] = $link;
+			$qm_link = sprintf('<a href="%s">%s</a>', $url, __( 'Settings', 'quick-mail' ) );
+			array_unshift( $links, $qm_link );
 	   	} // end if adding links
    		return $links;
 	} // end qm_action_links
+
+	/**
+	 * check if plugin is active.
+	 *
+	 * does not require exact name like is_plugin_active()
+	 *
+	 * @param string $pname plugin name
+	 * @return boolean is this plugin active?
+	 * @since 3.2.0
+	 */
+	public function qm_is_plugin_active( $pname ) {
+		$result = false;
+		$your_plugins = is_multisite() ?
+		get_blog_option( get_current_blog_id(), 'active_plugins', array() ) :
+		get_option( 'active_plugins', array() );
+		if ( empty( $your_plugins ) || !is_array( $your_plugins ) || 1 > count( $your_plugins ) ) {
+			return $result;
+		} // end if no plugins
+
+		foreach ( $your_plugins as $p ) {
+			if ( $result = stristr( $p, $pname ) ) {
+				break;
+			} // end if match
+		} // end foreach
+
+		return $result;
+	} // end qm_is_plugin_active
 
 	/**
 	 * is site using Sendgrid? check for active plugin with sendgrid in name.
@@ -2197,23 +2230,9 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	 */
 	public function using_sendgrid() {
 		$sendgrid = false;
-		$your_plugins = is_multisite() ?
-		get_blog_option( get_current_blog_id(), 'active_plugins', array() ) :
-		get_option( 'active_plugins', array() );
-		$j = is_array( $your_plugins ) ? count( $your_plugins ) : 0;
-		if ( empty( $j ) ) {
+		if ( !$this->qm_is_plugin_active( 'sendgrid' ) ) {
 			return $sendgrid;
-		} // end if no active plugins
-
-		foreach ( $your_plugins as $p ) {
-			if ( $sendgrid = stristr( $p, 'sendgrid-email-delivery-simplified' ) ) {
-				break;
-			} // end if match
-		} // end foreach
-
-		if ( $sendgrid === false ) {
-			return $sendgrid;
-		} // end if Sendgrid not active
+		} // end if sendgrid is not active
 
 		// check for Sendgrid email
 		$sg_email = '';
@@ -2234,7 +2253,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	 * @return array updated array
 	 * @since 3.1.9
 	 */
-	public function get_sendgrid_info($wp_info) {
+	public function get_sendgrid_info( $wp_info ) {
 		if ( ! $this->using_sendgrid() ) {
 			return $wp_info;
 		}
@@ -2258,26 +2277,109 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	} // end get_sendgrid_info
 
 	/**
+	 * do we have Mailgun plugin and credentials?
+	 * @return boolean got mailgun info
+	 * @since 3.2.0
+	 */
+	public function got_mailgun_info() {
+		if ( !$this->qm_is_plugin_active( 'mailgun' ) ) {
+			return false;
+		} // end if not active
+
+		$options = is_multisite() ?
+		get_blog_option( get_current_blog_id(), 'mailgun', array() ) :
+		get_option( 'mailgun', array() );
+		if ( empty( $options['useAPI'] ) ) {
+			return false;
+		} // end if not using API
+
+		// from Mailgun plugin
+		$apiKey = (defined('MAILGUN_APIKEY') && MAILGUN_APIKEY) ? MAILGUN_APIKEY : $options['apiKey'];
+		$domain = (defined('MAILGUN_DOMAIN') && MAILGUN_DOMAIN) ? MAILGUN_DOMAIN : $options['domain'];
+		$useapi = (defined('MAILGUN_USEAPI') && MAILGUN_USEAPI) ? MAILGUN_USEAPI : $options['useAPI'];
+		if ( empty($useapi) || empty($domain) || empty($apiKey) ) {
+			return false;
+		} // end if not using API or missing key / domain
+
+		$email = empty($options['from-address']) ? '' : $options['from-address'];
+		if (empty($email) ) {
+			return false;
+		} // end if missing email address
+
+		return true;
+	} // end got_mailgun_info
+
+	/**
+	 * get Mailgun credentials.
+	 *
+	 * @param array $wp_info 'name' => $name, 'email' => $email
+	 * @return string[] original or updated array
+	 * @since 3.2.0
+	 */
+	function get_mailgun_info( $wp_info ) {
+		if ( !$this->qm_is_plugin_active( 'mailgun' ) ) {
+			return $wp_info;
+		} // end if Mailgun is not active
+
+		$options = is_multisite() ?
+		get_blog_option( get_current_blog_id(), 'mailgun', array() ) :
+		get_option( 'mailgun', array() );
+		if ( empty( $options['useAPI'] ) ) {
+			return $wp_info;
+		} // end if not using API
+
+		$apiKey = (defined('MAILGUN_APIKEY') && MAILGUN_APIKEY) ? MAILGUN_APIKEY : $options['apiKey'];
+		// from mailgun.php
+		$domain = (defined('MAILGUN_DOMAIN') && MAILGUN_DOMAIN) ? MAILGUN_DOMAIN : $options['domain'];
+		$useapi = (defined('MAILGUN_USEAPI') && MAILGUN_USEAPI) ? MAILGUN_USEAPI : $options['useAPI'];
+		if ( empty( $useapi ) || empty( $domain ) || empty( $apiKey ) ) {
+			return $wp_info;
+		} // end if not using API or missing key / domain
+
+		$email = empty($options['from-address']) ? '' : $options['from-address'];
+		if (empty($email) ) {
+			return $wp_info;
+		} // end if missing email address
+
+		$name = '';
+		if ( !empty( $options['from-name'] ) ) {
+			$name = $options['from-name'];
+		} else {
+			$split = explode( '@', $email );
+			if ( is_array( $split ) ) {
+				$name = $split[0];
+			} // end if found amphora
+		} // end if missing sender name
+
+		return array('name' => $name, 'email' => $email);
+	} // end get_mailgun_info
+
+	/**
 	 * is user allowed to replace sender?
+	 *
+	 * Use Mailgun or Sengrid credentials. Mailgun has priority, it replaces wp_mail()
 	 *
 	 * @return boolean if user can replace sender
 	 * @since 3.1.9
+	 * @see Mailgun
 	 */
 	public function let_user_replace_sender() {
 		$blog = is_multisite() ? get_current_blog_id() : 0;
 		if ( $this->qm_is_admin( get_current_user_id(), $blog ) ) {
 			$can_send = '';
 			if ( is_multisite() ) {
-				$can_send = get_blog_option( 'get_current_blog_id', 'replace_quick_mail_sender', 'N' );
+				$can_send = get_blog_option( get_current_blog_id(), 'replace_quick_mail_sender', 'N' );
 			} else {
 				$can_send = get_option( 'replace_quick_mail_sender', 'N' );
 			} // end if multisite
-			if ( 'Y' == $can_send ) {
-				add_filter('replace_quick_mail_sender', array($this, 'get_sendgrid_info'), 10, 1);
+			if ( 'Y' == $can_send || $this->got_mailgun_info() ) {
+				if ( $this->got_mailgun_info() ) {
+					add_filter('replace_quick_mail_sender', array($this, 'get_mailgun_info'), 10, 1);
+				} else {
+					add_filter('replace_quick_mail_sender', array($this, 'get_sendgrid_info'), 10, 1);
+				} // end if got Mailgun
 			} // end if allowed to replace sender by option
 		} // end if admin
 	} // end let_user_replace_sender
-
-
 } // end class
 $quick_mail_plugin = QuickMail::get_instance();

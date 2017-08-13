@@ -15,7 +15,7 @@ Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds 
 
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
-User options for sending email to site users or others. Mail is sent with user's name and email, or [Sendgrid](https://sendgrid.com/) credentials.
+Mail is sent with user's name and email. Recognizes credentials from [Mailgun](https://wordpress.org/plugins/mailgun/) and [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugins.
 
 Multiple files from up to six directories (folders) can be attached to a message.
 
@@ -74,6 +74,14 @@ __Selecting Recipients__
 
 * Users need permission to [list users](http://codex.wordpress.org/Roles_and_Capabilities#list_users), to view user list or change options. Minimum permission can be changed with an option or filter.
 
+__Sending Mail from Other Addresses__
+
+* Uses Mailgun plugin settings, if the plugin is activated and set to use free [Mailgun API](https://documentation.mailgun.com/en/latest/api_reference.html).
+
+* Option for administrators to use [Sendgrid API](https://sendgrid.com/solutions/sendgrid-api/). 
+
+* Programmers can replace their credentials by adding a filter to `replace_quick_mail_sender`.
+
 __Limitations__
 
 * Up to 12 manually entered recipients are saved in HTML Storage.
@@ -111,11 +119,9 @@ __Mail Errors__
 
 * Quick Mail sends email with [wp_mail](https://developer.wordpress.org/reference/functions/wp_mail/).
 
-
   `wp_mail` error messages are displayed, if there is a problem.
 
 * "You must provide at least one recipient email address."
-
 
    `wp_mail` rejected an address. Seen when Quick Mail verification is off.
 

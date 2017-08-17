@@ -1,7 +1,7 @@
 "Project-Id-Version: Quick Mail v3.2.0 Beta\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-08-13 23:26:22+0000\n"
+"PO-Revision-Date: 2017-08-17 14:29:36+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -824,17 +824,17 @@ msgstr ""
 msgid "Quick Mail requires WordPress 4.6 or greater."
 msgstr ""
 
-#: inc/quick-mail-cli.php:122
+#: inc/quick-mail-cli.php:133
 #@ quick-mail
 msgid "Sent email to"
 msgstr ""
 
-#: inc/quick-mail-cli.php:197
+#: inc/quick-mail-cli.php:181
 #@ quick-mail
 msgid "Not found"
 msgstr ""
 
-#: inc/quick-mail-cli.php:200
+#: inc/quick-mail-cli.php:184
 #@ quick-mail
 msgid "Cannot connect to"
 msgstr ""
@@ -890,3 +890,12 @@ msgstr ""
 msgid "Sending mail with Mailgun API."
 msgstr ""
 
+#: inc/quick-mail-cli.php:58
+#@ quick-mail
+msgid "Invalid Recipient Email"
+msgstr ""
+
+#: inc/quick-mail-cli.php:63
+#@ quick-mail
+msgid "Invalid Sender Email"
+msgstr ""

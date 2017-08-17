@@ -68,14 +68,16 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		} // end if invalid sender
 
 		if ( !empty($url) && !filter_var( $url, FILTER_VALIDATE_URL ) ) {
-			WP_CLI::error('Invalid URL'); // exit
+			$msg = __( 'Invalid URL', 'quick-mail' );
+			WP_CLI::error( $msg ); // exit
 		} // end if URL was entered
 
 		// get user info
 		$args = array( 'user_email' => $this->from );
 		$user_query = new WP_User_Query( $args );
 		if ( 1 > count( $user_query->results ) ) {
-			WP_CLI::error('Invalid user'); // exit
+			$msg = __( 'Invalid user', 'quick-mail' );
+			WP_CLI::error( $msg ); // exit
 		}
 
 		$user = null;
@@ -112,7 +114,8 @@ class Quick_Mail_Command extends WP_CLI_Command {
 
 		$message = wp_remote_retrieve_body($data);
 		if ( empty( $message ) ) {
-			WP_CLI::error( 'No content' );
+			$msg = __( 'No content', 'quick-mail' );
+			WP_CLI::error( $msg );
 		}
 
 		if ( empty( $subject ) ) {
@@ -132,7 +135,8 @@ class Quick_Mail_Command extends WP_CLI_Command {
 
 		if ( ! wp_mail( $to, $subject, $message ) ) {
 			$this->remove_qm_filters();
-			WP_CLI::error( 'Error sending mail' );
+			$msg = __( 'Error sending mail', 'quick-mail' );
+			WP_CLI::error( $msg );
 		} // end if error
 
 		$this->remove_qm_filters();
@@ -221,11 +225,13 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		if ($data['response']['code'] != 200) {
 			$code = empty($data['response']['code']) ? 500 : $data['response']['code'] ;
 			if ( 404 == $code ) {
-				$msg = sprintf("%s %s", __( 'Not found', 'quick-mail' ), $site);
+				$title = __( 'Not found', 'quick-mail' );
+				$msg = sprintf("%s %s", $title, $site);
 				return new WP_Error('404', $msg);
 			} else {
 				$msg = sprintf("(%d) %s %s", $code, __( 'Cannot connect to', 'quick-mail' ), $site);
-				return new WP_Error('error', $msg);
+				$title = __( 'Error', 'quick-mail' );
+				return new WP_Error($title, $msg);
 			} // end if 404
 		}
 		return $data;

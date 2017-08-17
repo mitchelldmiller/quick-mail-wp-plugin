@@ -4,6 +4,9 @@
  *
  */
 class Quick_Mail_Command extends WP_CLI_Command {
+
+	public $from = '', $name = '';
+
 	/**
 	 * Mail the contents of a URL.
 	 *
@@ -34,7 +37,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 */
 	public function __invoke( $args, $assoc_args ) {
 		require_once plugin_dir_path( __FILE__ ) . 'qm_util.php';
-		$from = isset( $args[0] ) ? sanitize_email( $args[0] ) : '';
+		$this->from = isset( $args[0] ) ? sanitize_email( $args[0] ) : '';
 		$to = isset( $args[1] ) ? sanitize_email( $args[1] ) : '';
 		$url = isset( $args[2] ) ? str_replace('&#038;', '&', esc_url( $args[2] ) ) : '';
 		$subject = '';
@@ -43,7 +46,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		} // end if got subject
 
 		$usage = 'Usage: quick-mail <from> <to> https://example.com [subject]';
-		if ( empty( $from ) || empty( $to ) || empty( $url ) ) {
+		if ( empty( $this->from ) || empty( $to ) || empty( $url ) ) {
 			WP_CLI::warning( $usage );
 			exit;
 		}
@@ -59,9 +62,9 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			WP_CLI::error("{$msg} : {$to}"); // exit
 		} // end if invalid recipient
 
-		if ( !QuickMailUtil::qm_valid_email_domain( $from, $verify ) ) {
+		if ( !QuickMailUtil::qm_valid_email_domain( $this->from, $verify ) ) {
 			$msg = __( 'Invalid Sender Email', 'quick-mail' );
-			WP_CLI::error("{$msg} : {$from}"); // exit
+			WP_CLI::error("{$msg} : {$this->from}"); // exit
 		} // end if invalid sender
 
 		if ( !empty($url) && !filter_var( $url, FILTER_VALIDATE_URL ) ) {
@@ -69,22 +72,23 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		} // end if URL was entered
 
 		// get user info
-		$args = array( 'user_email' => $from );
+		$args = array( 'user_email' => $this->from );
 		$user_query = new WP_User_Query( $args );
 		if ( 1 > count( $user_query->results ) ) {
 			WP_CLI::error('Invalid user'); // exit
 		}
 
 		$user = null;
-		foreach ($user_query->results as $u) {
-			if ( $u->user_email != $from ) {
+		foreach ( $user_query->results as $u ) {
+			if ( $u->user_email != $this->from ) {
 				continue;
 			} else {
 				$user = $u;
-			}
+				break;
+			} // end if not user
 		} // end foreach
 
-		if ( empty($user) || $user->user_email != $from ) {
+		if ( empty($user) || $user->user_email != $this->from ) {
 			WP_CLI::error("User query error"); // exit
 		}
 
@@ -92,11 +96,10 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			WP_CLI::error("Sorry. Only administrators can send mail."); // exit
 		}
 
-		$name = '';
 		if ( empty( $user->user_firstname ) || empty( $user->user_lastname ) ) {
-			$name = $user->display_name;
+			$this->name = $user->display_name;
 		} else {
-			$name = "\"{$user->user_firstname} {$user->user_lastname}\"";
+			$this->name = "\"{$user->user_firstname} {$user->user_lastname}\"";
 		} // end if missing first or last name
 
 		$domain = parse_url( $url, PHP_URL_HOST );
@@ -123,17 +126,57 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		} // end if need subject
 
 		// set filters and send
-		add_filter( 'wp_mail_content_type', function ( $e ) { return 'text/html'; }, 1, 1 );
-		add_filter( 'wp_mail_from', function( $e ) use( $from ) { return $from; }, 1, 1);
-		add_filter( 'wp_mail_from_name', function( $e ) use( $name ) { return $name; }, 1, 1);
+		add_filter( 'wp_mail_content_type', array($this, 'type_filter'), 1, 1 );
+		add_filter( 'wp_mail_from', array($this, 'from_filter'), 1, 1 );
+		add_filter( 'wp_mail_from_name', array($this, 'name_filter'), 1, 1 );
+
 		if ( ! wp_mail( $to, $subject, $message ) ) {
+			$this->remove_qm_filters();
 			WP_CLI::error( 'Error sending mail' );
 		} // end if error
 
+		$this->remove_qm_filters();
 		$msg = sprintf( '%s %s', __( 'Sent email to', 'quick-mail' ), $to );
 		WP_CLI::success( $msg );
 		exit;
 	} // end _invoke
+
+	/**
+	 * convenience function to remove filters.
+	 */
+	public function remove_qm_filters() {
+		remove_filter( 'wp_mail_content_type', array($this, 'type_filter'), 1 );
+		remove_filter( 'wp_mail_from', array($this, 'from_filter'), 1 );
+		remove_filter( 'wp_mail_from_name', array($this, 'name_filter'), 1 );
+	} // end remove_qm_filters
+
+	/**
+	 * filter for wp_mail_content_type.
+	 * @param string $type MIME type
+	 * @return string text/html
+	 */
+	public function type_filter( $type ) {
+		return 'text/html';
+	} // end type_filter
+
+	/**
+	 * filter for wp_mail_from.
+	 * @param string $f from address: ignored.
+	 * @return string sender email address
+	 */
+	public function from_filter( $f ) {
+		return $this->from;
+	} // end from_filter
+
+	/**
+	 * filter for wp_mail_from_name.
+	 * @param string $n name: ignored.
+	 * @return string sender name
+	 */
+	public function name_filter( $n ) {
+		return $this->name;
+	} // end from_filter
+
 
 	/**
 	* Read the title of a URL. Return this site's name if URL is empty

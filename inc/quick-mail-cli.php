@@ -23,9 +23,9 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     quick-mail fred@example.com mary@example.com http://example.com "Hello Mary"
+	 *     quick-mail fred@example.com mary@example.com https://example.com "Hello Mary"
 	 *
-	 *     Sends http://example.com from fred@example.com to mary@example.com
+	 *     Sends https://example.com from fred@example.com to mary@example.com
 	 *     with "Hello Mary" subject
 	 *
 	 *     Web page title will be used if optional subject is omitted.
@@ -33,6 +33,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 * @synopsis <from> <to> <url> [<subject>]
 	 */
 	public function __invoke( $args, $assoc_args ) {
+		require_once plugin_dir_path( __FILE__ ) . 'qm_util.php';
 		$from = isset( $args[0] ) ? sanitize_email( $args[0] ) : '';
 		$to = isset( $args[1] ) ? sanitize_email( $args[1] ) : '';
 		$url = isset( $args[2] ) ? str_replace('&#038;', '&', esc_url( $args[2] ) ) : '';
@@ -41,19 +42,29 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			$subject = html_entity_decode( $args[3], ENT_QUOTES, 'UTF-8' );
 		} // end if got subject
 
-		$usage = 'Usage: quick-mail <from> <to> http://example.com [subject]';
+		$usage = 'Usage: quick-mail <from> <to> https://example.com [subject]';
 		if ( empty( $from ) || empty( $to ) || empty( $url ) ) {
 			WP_CLI::warning( $usage );
 			exit;
 		}
-		if ( !filter_var( $from, FILTER_VALIDATE_EMAIL ) || !$this->qm_valid_email_domain( $from ) ) {
-			WP_CLI::error("Invalid Email: {$from}"); // exit
+		$verify = '';
+		if ( is_multisite() ) {
+			$verify = get_blog_option( get_current_blog_id(), 'verify_quick_mail_addresses', 'N' );
+		} else {
+			$verify = get_option( 'verify_quick_mail_addresses', 'N' );
 		}
 
-		if ( !filter_var( $to, FILTER_VALIDATE_EMAIL ) || !$this->qm_valid_email_domain( $to ) ) {
-			WP_CLI::error("Invalid Email: {$to}"); // exit
-		}
-		if ( !filter_var( $url, FILTER_VALIDATE_URL ) ) {
+		if ( !QuickMailUtil::qm_valid_email_domain( $to, $verify ) ) {
+			$msg = __( 'Invalid Recipient Email', 'quick-mail' );
+			WP_CLI::error("{$msg} : {$to}"); // exit
+		} // end if invalid recipient
+
+		if ( !QuickMailUtil::qm_valid_email_domain( $from, $verify ) ) {
+			$msg = __( 'Invalid Sender Email', 'quick-mail' );
+			WP_CLI::error("{$msg} : {$from}"); // exit
+		} // end if invalid sender
+
+		if ( !empty($url) && !filter_var( $url, FILTER_VALIDATE_URL ) ) {
 			WP_CLI::error('Invalid URL'); // exit
 		} // end if URL was entered
 
@@ -123,33 +134,6 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		WP_CLI::success( $msg );
 		exit;
 	} // end _invoke
-
-	/**
-	 * Validate email domain with DNS record.
-	 *
-	 * @since Quick Mail 1.0.0
-	 * @param string $qm_address
-	 * @return boolean valid domain
-	 */
-	public function qm_valid_email_domain( $qm_address ) {
-		$result = false;
-		$a_split = explode( '@', $qm_address );
-		if ( ! is_array( $a_split ) || empty( $a_split[1] ) ) {
-			return $result;
-		} // sanity check
-
-		$a_record = dns_get_record( $a_split[1], DNS_MX );
-		if ( ! is_array( $a_record ) || ! isset( $a_record[0]['pri'] ) ) {
-			return $result;
-		} // end if invalid domain
-
-		$j = count( $a_record );
-		for ( $i = 0; ( $i < $j ) && ( $result == false ); $i++ ) {
-			$result = ( $a_record[$i]['pri'] > 0 ) || ( $a_record[$i]['host'] == $a_record[$i]['target'] );
-		} // end check for a valid mail server
-
-		return $result;
-	} // end qm_valid_email_domain
 
 	/**
 	* Read the title of a URL. Return this site's name if URL is empty

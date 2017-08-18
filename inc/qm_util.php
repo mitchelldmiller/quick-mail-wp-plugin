@@ -1,6 +1,6 @@
 <?php
 /**
- * Quick Mail validation functions for Javascript
+ * Quick Mail validation functions for Javascript and quick-mail-cli.php
  */
 class QuickMailUtil {
 
@@ -181,7 +181,4 @@ class QuickMailUtil {
 
 	   	return checkdnsrr( $hostname, 'A' );
 	} // end valid_web_domain
-
-
-
 } // end class

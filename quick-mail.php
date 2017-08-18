@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.2.0 Beta
+Version: 3.2.1
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/how-to-send-private-comment-replies-with-wordpress/
@@ -1959,6 +1959,28 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
     		} // end if 'A' not possible
 
     		$screen->add_help_tab( self::get_qm_help_tab() );
+    		if ( $is_admin_user ) {
+    			$content = '<dl>';
+    			// check for Mailgun, Sendgrid
+			if ($this->got_mailgun_info( false ) ) {
+				$content .= '<dt><strong>' . __( 'Mailgun is active', 'quick-mail' ) . '</strong></dt>';
+				if ( $this->got_mailgun_info( true ) ) {
+					$content .= '<dd>' . __( 'Administrators send mail with Mailgun credentials', 'quick-mail' ) . '.</dd>';
+				} else {
+					$content .= '<dd>' . __( 'Sending mail with Mailgun API', 'quick-mail' ) . '.</dd>';
+				} // end if using Mailgun name
+			} // end if Mailgun
+
+    			$content .= '<dt><strong>' . __( 'Hide Administrator Profiles', 'quick-mail' ) . '</strong></dt>';
+    			$content .= '<dd>' . __( 'Prevent users from sending email to administrators', 'quick-mail' ) . '.</dd>';
+    			$content .= '<dt><strong>' . __( 'Grant Editors access to user list', 'quick-mail' ) . '</strong></dt>';
+    			$content .= '<dd>' . __(  'Otherwise only administrators can view the user list', 'quick-mail' ) . '</dd>';
+    			$content .= '<dt><strong>' . __( 'Verify recipient email domains', 'quick-mail' ) . '</strong></dt>';
+    			$content .= '<dd>' . __( 'Check if recipient domain accepts email. Detects typos.', 'quick-mail' ) . '.</dd></dl>';
+    			$screen->add_help_tab( array('id'	=> 'qm_admin_display_help',
+    					'title'	=> __('Administration', 'quick-mail'), 'content' => $content) );
+    		} // end if
+
     		$slink = '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
     		$use_str = __( 'Please use', 'quick-mail' );
     		$to_ask = __( 'to ask questions and report problems', 'quick-mail' );
@@ -2028,18 +2050,6 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
     		$screen->add_help_tab( array('id' => 'qm_display_help',
         		'title'	=> __('User Display', 'quick-mail'), 'content' => $content) );
 
-    		// TODO add info for Mailgun, Sendgrid
-    		if ( $is_admin_user ) {
-    			$title =  __('Administration', 'quick-mail');
-    			$content = '<dl><dt><strong>' . __( 'Hide Administrator Profiles', 'quick-mail' ) . '</strong></dt>';
-    			$content .= '<dd>' . __( 'Prevent users from sending email to administrators', 'quick-mail' ) . '.</dd>';
-    			$content .= '<dt><strong>' . __( 'Grant Editors access to user list', 'quick-mail' ) . '</strong></dt>';
-    			$content .= '<dd>' . __(  'Otherwise only administrators can view the user list', 'quick-mail' ) . '</dd>';
-    			$content .= '<dt><strong>' . __( 'Verify recipient email domains', 'quick-mail' ) . '</strong></dt>';
-    			$content .= '<dd>' . __( 'Check if recipient domain accepts email. Detects typos.', 'quick-mail' ) . '.</dd></dl>';
-    			$screen->add_help_tab( array('id'	=> 'qm_admin_display_help',
-    				'title'	=> __('Administration', 'quick-mail'), 'content' => $content) );
-    		} // end if
 	} // add_qm_settings_help
 
 	/**

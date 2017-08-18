@@ -32,10 +32,10 @@ class QuickMailUtil {
 	   		$hsave = htmlspecialchars($name, ENT_HTML5);
 	   		$retval .= "{$hsave}<br>";
 	   	}
-	   	
+
 	   	return $retval;
    } // end qm_find_dups
-   
+
    /**
     * remove invalid email addresses from user input.
     *
@@ -44,7 +44,7 @@ class QuickMailUtil {
     * @param string $to recipient
     * @param string $original user input
     * @return string filtered string
-    * 
+    *
     * @since 1.4.0
     */
 	public static function filter_email_input($to, $original, $validate_option) {
@@ -63,14 +63,14 @@ class QuickMailUtil {
 	   		if ( empty( $name ) ) {
 	   			continue;
 	   		} // end if empty
-	   		
+
 	   		$hname = htmlspecialchars( html_entity_decode(strip_tags($name)), ENT_QUOTES );
 	   		if ( !self::qm_valid_email_domain( $name, $validate_option ) ) {
 	   			$invalid .= "{$hname}<br>";
 	   			$name = '';
 	   			continue;
 	   		} // end if invalid name
-	   		
+
 	   		if ( $name == $raw_dup ) {
 	   			if ( !strstr( $duplicate, $name ) ) {
 	   				$duplicate .= "{$hname}<br>";
@@ -89,11 +89,11 @@ class QuickMailUtil {
 	   		}
 	   		return "{$invalid}<br><br>Duplicate:<br>{$duplicate}\t" . $saved;
 	   	}
-	   	 
+
 	   	if ( !empty( $duplicate ) ) {
 	   		return " {$duplicate}\t" . $saved;
 	   	} // end if duplicates
-	   
+
    		return $saved;
    } // end filter_email_input
 
@@ -115,10 +115,10 @@ class QuickMailUtil {
 		   		$retval[] = $qm_address;
 	   		} // end if valid address
 	   	} // end foreach
-	   
+
 		return array_unique( $retval );
 	} // end filter_user_emails
-   
+
    /**
     * validate email domain with DNS record.
     * translate domain if validation on and idn_to_ascii is available.
@@ -135,12 +135,12 @@ class QuickMailUtil {
    		if ( 5 > $length || 255 < $length ) {
    			return false;
    		} // end if invalid length
-		
+
 		$a_split = explode( '@', trim( $qm_address ) );
 		if ( ! is_array( $a_split ) || 2 != count( $a_split ) || empty( $a_split[0] ) || empty( $a_split[1] ) ) {
 			return false;
 		} // return false if missing amphora
-		
+
 		if ( function_exists( 'idn_to_ascii' ) ) {
 			$intl = idn_to_ascii( $a_split[1] );
 			if ( !empty( $intl ) ) {
@@ -148,11 +148,40 @@ class QuickMailUtil {
 				$qm_address = "{$a_split[0]}@{$a_split[1]}";
 			}
 		} // end if we have idn_to_ascii
-		
+
 		if ( !filter_var( $qm_address, FILTER_VALIDATE_EMAIL ) ) {
 			return false;
 		} // end if PHP rejects address
-		
+
        return ( 'N' == $validate_option ) ? true : checkdnsrr( $a_split[1], 'MX' );
    } // end qm_valid_email_domain
+
+	/**
+	 * is this a valid Web domain? checks for an `A` record. used by quick-mail-cli.php
+	 *
+	 * @param string $domain domain to check
+	 * @return boolean valid domain?
+	 * @since 3.2.1
+	 */
+	public static function valid_web_domain( $domain ) {
+		$hostname = $domain;
+	   	if ( filter_var( $domain, FILTER_VALIDATE_IP ) ) {
+	   		$hostname = gethostbyaddr( $domain );
+	   		if ( empty( $hostname ) || $hostname == $domain ) {
+	   			return false;
+	   		} // end if
+	   	} // end if IP address
+
+	   	if ( function_exists( 'idn_to_ascii' ) ) {
+	   		$intl = idn_to_ascii( $domain );
+	   		if ( !empty( $intl ) ) {
+	   			$hostname = $intl;
+	   		}
+	   	} // end if we have idn_to_ascii
+
+	   	return checkdnsrr( $hostname, 'A' );
+	} // end valid_web_domain
+
+
+
 } // end class

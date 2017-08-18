@@ -5,10 +5,10 @@
  */
 class Quick_Mail_Command extends WP_CLI_Command {
 
-	public $from = '', $name = '';
+	public $from = '', $name = '', $content_type = 'text/html';
 
 	/**
-	 * Mail the contents of a URL.
+	 * Mail the contents of a URL or file.
 	 *
 	 * ## OPTIONS
 	 *
@@ -18,8 +18,8 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 * <to>
 	 * : Mail recipient.
 	 *
-	 * <url>
-	 * : Url to send.
+	 * <url or filename>
+	 * : Url or file to send.
 	 *
 	 * [<subject>]
 	 * : Optional subject.
@@ -33,23 +33,43 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 *
 	 *     Web page title will be used if optional subject is omitted.
 	 *
-	 * @synopsis <from> <to> <url> [<subject>]
+	 * @synopsis <from> <to> <url|filename> [<subject>]
 	 */
 	public function __invoke( $args, $assoc_args ) {
 		require_once plugin_dir_path( __FILE__ ) . 'qm_util.php';
-		$this->from = isset( $args[0] ) ? sanitize_email( $args[0] ) : '';
-		$to = isset( $args[1] ) ? sanitize_email( $args[1] ) : '';
-		$url = isset( $args[2] ) ? str_replace('&#038;', '&', esc_url( $args[2] ) ) : '';
+		$this->from = sanitize_email( $args[0] );
+		$to = sanitize_email( $args[1] );
+		$url = '';
+		$subject = '';
+		$domain = '';
+		$sending_file = false;
+		if ( 'http' == substr( $args[2], 0, 4) ) {
+			$url = str_replace('&#038;', '&', esc_url( $args[2] ) );
+			if ( !filter_var( $url, FILTER_VALIDATE_URL ) ) {
+				$temp_msg = __( 'Invalid URL', 'quick-mail' );
+				$hurl = htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false);
+				WP_CLI::error( "$temp_msg: {$hurl}"); // exit
+			} // end if invalid URL
+
+			$domain = parse_url( $url, PHP_URL_HOST ); // TODO
+			if ( !QuickMailUtil::valid_web_domain( $domain ) ) {
+				$temp_msg = __( 'Invalid domain', 'quick-mail' );
+				WP_CLI::error( "{$temp_msg} : {$domain}" );
+			}
+		} else {
+			if ( !file_exists( $args[2] ) ) {
+				$temp_msg = __( 'File not found', 'quick-mail' );
+				WP_CLI::error( $temp_msg ); // exit
+			}
+			$url = $args[2];
+			$sending_file = true;
+		} // end if URL
+
 		$subject = '';
 		if ( isset( $args[3] ) ) {
 			$subject = html_entity_decode( $args[3], ENT_QUOTES, 'UTF-8' );
 		} // end if got subject
 
-		$usage = 'Usage: quick-mail <from> <to> https://example.com [subject]';
-		if ( empty( $this->from ) || empty( $to ) || empty( $url ) ) {
-			WP_CLI::warning( $usage );
-			exit;
-		}
 		$verify = '';
 		if ( is_multisite() ) {
 			$verify = get_blog_option( get_current_blog_id(), 'verify_quick_mail_addresses', 'N' );
@@ -58,45 +78,37 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		}
 
 		if ( !QuickMailUtil::qm_valid_email_domain( $to, $verify ) ) {
-			$msg = __( 'Invalid Recipient Email', 'quick-mail' );
-			WP_CLI::error("{$msg} : {$to}"); // exit
+			$temp_msg = __( 'Invalid Recipient Email', 'quick-mail' );
+			WP_CLI::error("{$temp_msg} : {$to}"); // exit
 		} // end if invalid recipient
 
 		if ( !QuickMailUtil::qm_valid_email_domain( $this->from, $verify ) ) {
-			$msg = __( 'Invalid Sender Email', 'quick-mail' );
-			WP_CLI::error("{$msg} : {$this->from}"); // exit
+			$temp_msg = __( 'Invalid Sender Email', 'quick-mail' );
+			WP_CLI::error("{$temp_msg} : {$this->from}"); // exit
 		} // end if invalid sender
-
-		if ( !empty($url) && !filter_var( $url, FILTER_VALIDATE_URL ) ) {
-			$msg = __( 'Invalid URL', 'quick-mail' );
-			WP_CLI::error( $msg ); // exit
-		} // end if URL was entered
 
 		// get user info
 		$args = array( 'user_email' => $this->from );
 		$user_query = new WP_User_Query( $args );
 		if ( 1 > count( $user_query->results ) ) {
-			$msg = __( 'Invalid user', 'quick-mail' );
-			WP_CLI::error( $msg ); // exit
-		}
+			$temp_msg = __( 'Invalid user', 'quick-mail' );
+			WP_CLI::error( $temp_msg ); // exit
+		} // end if email not found
 
 		$user = null;
 		foreach ( $user_query->results as $u ) {
-			if ( $u->user_email != $this->from ) {
-				continue;
-			} else {
+			if ( $u->user_email == $this->from ) {
 				$user = $u;
 				break;
-			} // end if not user
+			} // end if user
 		} // end foreach
-
 		if ( empty($user) || $user->user_email != $this->from ) {
-			WP_CLI::error("User query error"); // exit
-		}
+			WP_CLI::error('User query error'); // exit
+		} // end if unknown email
 
 		if (empty($user->caps['administrator'])) {
-			WP_CLI::error("Sorry. Only administrators can send mail."); // exit
-		}
+			WP_CLI::error('Sorry. Only administrators can send mail.'); // exit
+		} // end if not administrator
 
 		if ( empty( $user->user_firstname ) || empty( $user->user_lastname ) ) {
 			$this->name = $user->display_name;
@@ -104,29 +116,55 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			$this->name = "\"{$user->user_firstname} {$user->user_lastname}\"";
 		} // end if missing first or last name
 
-		$domain = parse_url( $url, PHP_URL_HOST );
-		WP_CLI::line( "Sending {$domain} to {$to}" );
-		$data = $this->get_wp_site_data( $url );
-		if ( is_wp_error( $data ) ) {
-			$msg = preg_replace('/curl error .+: /i', '',  WP_CLI::error_to_string( $data ) );
-			WP_CLI::error( $msg );
-		} // end if error
+		$message = '';
+		$fname = '';
+		if ( $sending_file ) {
+			$message = file_get_contents( $url );
+			if ( empty( $message ) ) {
+				$temp_msg = __( 'Empty file', 'quick-mail' );
+				$hurl = htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false);
+				WP_CLI::error( "$temp_msg: {$hurl}"); // exit
+			} // end if empty file
 
-		$message = wp_remote_retrieve_body($data);
-		if ( empty( $message ) ) {
-			$msg = __( 'No content', 'quick-mail' );
-			WP_CLI::error( $msg );
-		}
+			if ( empty( mb_strstr( $message, '</', false, 'UTF-8' ) ) ) {
+				 $this->content_type = 'text/plain';
+			} // end if plain text
 
-		if ( empty( $subject ) ) {
-			$pattern = "/title>(.+)<\/title>/";
-			preg_match( $pattern, $message, $found );
-			if ( !empty( $found ) && !empty( $found[1] ) ) {
-				$subject = html_entity_decode( $found[1], ENT_QUOTES, 'UTF-8' );
-			} else {
-				$subject = $this->get_wp_site_title($domain);
+			if (empty($subject)) {
+				$subject = __( 'For Your Eyes Only', 'quick-mail' );
+			} // end if no subject
+
+			$fname = basename( $url );
+			$temp_msg = sprintf( '%s %s %s %s', __( 'Sending file', 'quick-mail' ),
+					$fname, __( 'to', 'quick-mail' ), $to );
+			WP_CLI::line( $temp_msg );
+		} // end if sending file
+		else {
+			$temp_msg = sprintf( '%s %s %s %s', __( 'Sending', 'quick-mail' ),
+					$domain, __( 'to', 'quick-mail' ), $to );
+			WP_CLI::line( $temp_msg );
+			$data = $this->get_wp_site_data( $url );
+			if ( is_wp_error( $data ) ) {
+				$temp_msg = preg_replace( '/curl error .+: /i', '',  WP_CLI::error_to_string( $data ) );
+				WP_CLI::error( $temp_msg );
+			} // end if error
+
+			$message = wp_remote_retrieve_body( $data );
+			if ( empty( $message ) ) {
+				$temp_msg = __( 'No content', 'quick-mail' );
+				WP_CLI::error( $temp_msg );
 			}
-		} // end if need subject
+
+			if ( empty( $subject ) ) {
+				$pattern = "/title>(.+)<\/title>/";
+				preg_match( $pattern, $message, $found );
+				if ( !empty( $found ) && !empty( $found[1] ) ) {
+					$subject = html_entity_decode( $found[1], ENT_QUOTES, 'UTF-8' );
+				} else {
+					$subject = $this->get_wp_site_title( $domain );
+				}
+			} // end if need subject
+		} // end else sending Web page
 
 		// set filters and send
 		add_filter( 'wp_mail_content_type', array($this, 'type_filter'), 1, 1 );
@@ -135,13 +173,18 @@ class Quick_Mail_Command extends WP_CLI_Command {
 
 		if ( ! wp_mail( $to, $subject, $message ) ) {
 			$this->remove_qm_filters();
-			$msg = __( 'Error sending mail', 'quick-mail' );
-			WP_CLI::error( $msg );
+			$temp_msg = __( 'Error sending mail', 'quick-mail' );
+			WP_CLI::error( $temp_msg );
 		} // end if error
 
 		$this->remove_qm_filters();
-		$msg = sprintf( '%s %s', __( 'Sent email to', 'quick-mail' ), $to );
-		WP_CLI::success( $msg );
+		if ( $sending_file ) {
+			$temp_msg = sprintf('%s %s %s %s', __( 'Sent', 'quick-mail' ),
+					$fname, __( 'to', 'quick-mail' ), $to );
+		} else {
+			$temp_msg = sprintf( '%s %s', __( 'Sent email to', 'quick-mail' ), $to );
+		} // end if sending file
+		WP_CLI::success( $temp_msg );
 		exit;
 	} // end _invoke
 
@@ -160,7 +203,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 * @return string text/html
 	 */
 	public function type_filter( $type ) {
-		return 'text/html';
+		return $this->content_type;
 	} // end type_filter
 
 	/**
@@ -189,24 +232,20 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	* @return string title|error
 	*/
 	private function get_wp_site_title( $site ) {
-		if ( empty( $site ) ) {
-			return get_bloginfo( 'name' );
-		}
-
 		$data = $this->get_wp_site_data( $site );
 		if ( is_string( $data ) ) {
 			return $data;
-		}
+		} // end if error
 
 		$html = wp_remote_retrieve_body( $data );
 		$pattern = "/title>(.+)<\/title>/";
-		preg_match($pattern, $html, $found);
+		preg_match( $pattern, $html, $found );
 		if ( empty( $found ) || empty( $found[1] ) )
 		{
 			return $site;
 		} // end if no title
 
-		return trim($found[1]);
+		return trim( $found[1] );
 	} // end get_wp_site_title
 
 	/**
@@ -222,16 +261,17 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		if ( is_wp_error( $data ) ) {
 			return $data;
 		} // end if WP Error
-		if ($data['response']['code'] != 200) {
-			$code = empty($data['response']['code']) ? 500 : $data['response']['code'] ;
+
+		$code = empty($data['response']['code']) ? 500 : $data['response']['code'] ;
+		if ( 200 != $code ) {
 			if ( 404 == $code ) {
 				$title = __( 'Not found', 'quick-mail' );
-				$msg = sprintf("%s %s", $title, $site);
-				return new WP_Error('404', $msg);
+				$temp_msg = sprintf("%s %s", $title, $site);
+				return new WP_Error('404', $temp_msg);
 			} else {
-				$msg = sprintf("(%d) %s %s", $code, __( 'Cannot connect to', 'quick-mail' ), $site);
+				$temp_msg = sprintf("(%d) %s %s", $code, __( 'Cannot connect to', 'quick-mail' ), $site);
 				$title = __( 'Error', 'quick-mail' );
-				return new WP_Error($title, $msg);
+				return new WP_Error($title, $temp_msg);
 			} // end if 404
 		}
 		return $data;

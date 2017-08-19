@@ -1107,8 +1107,9 @@ jQuery(document).ready( function() {
             } else {
             		if ( $this->got_mailgun_info( false ) ) {
             			$error = __( 'Mailgrid Error sending mail', 'quick-mail' );
-            		} elseif ( $this->using_sendgrid() ) {
-            			$error = __( 'Sendgrid Error sending mail', 'quick-mail' );
+            		} elseif ( $this->got_replacement_info() ) {
+            			$rname = $this->get_replacement_name();
+            			$error = "{$rname} " . __( 'Error sending mail', 'quick-mail' );
             		} else {
 	             	$error = __( 'Error sending mail', 'quick-mail' );
             		}
@@ -1568,11 +1569,33 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 	} elseif ( $this->got_mailgun_info( false ) ) {
 		$mg_label = __( 'Mailgun is active', 'quick-mail' );
 		if ( !$this->qm_is_admin( $you->ID, $blog ) ) {
-			$mg_message = __( 'Administrator set site to send mail with Mailgun.', 'quick-mail' );
+			$mg_message = __( 'Administrator is using Mailgun to send mail.', 'quick-mail' );
 		} else {
 			$mg_message = __( 'Sending mail with Mailgun API.', 'quick-mail' );
 		} // end if
 	} // end if got mailgun info
+
+	$rname = '';
+	$rlabel = '';
+	$replacement_label = '';
+	$replacement_desc = '';
+	if ( $this->got_replacement_info() ) {
+		$rname = $this->get_replacement_name();
+		$replacement_label = sprintf('%s %s %s', __( 'Use', 'quick-mail' ),
+				$rname, 	__( 'credentials', 'quick-mail' ) );
+		if ($this->user_has_replaced_sender()) {
+			$replacement_desc = sprintf('%s %s %s %s', __( 'Using', 'quick-mail' ),
+				$rname, 	__( 'credentials', 'quick-mail' ), __( 'to send mail for Administrators', 'quick-mail' ) );
+		} else {
+			if ( !$this->qm_is_admin( $you->ID, $blog ) ) {
+				$replacement_desc = sprintf('%s %s %s.	', __( 'Administrator is using', 'quick-mail' ),
+						$rname, 	__( 'to send mail', 'quick-mail' ) );
+			} else {
+				$replacement_desc = sprintf('%s %s %s.	', __( 'Using', 'quick-mail' ),
+						$rname, 	__( 'to send mail', 'quick-mail' ) );
+			} // end if not admin
+		} // end if
+	} // end if got replacement API
 ?>
 <h1 id="quick-mail-title" class="quick-mail-title"><?php _e( 'Quick Mail Options', 'quick-mail' ); ?></h1>
 <form id="quick-mail-settings" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
@@ -1593,10 +1616,10 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 <p><input readonly aria-readonly="true" aria-describedby="qm_mailgun_desc" aria-labelledby="qm_mailgun_label" class="qm-input" name="using_Mailgun" type="checkbox" checked="checked" onclick='return false;'>
 <label id="qm_mailgun_label" class="qm-label"><?php echo $mg_label; ?>.</label>
 <span id="qm_mailgun_desc" class="qm-label"><?php echo $mg_message; ?></span></p>
-<?php elseif ( $this->using_sendgrid() ) : ?>
+<?php elseif ( $this->got_replacement_info() ) : ?>
 <p><input aria-describedby="qm_sendgrid_desc" aria-labelledby="qm_sendgrid_label" class="qm-input" name="replace_quick_mail_sender" type="checkbox" <?php echo $check_sendgrid; ?>>
-<label id="qm_sendgrid_label" class="qm-label"><?php _e( 'Use Sendgrid credentials', 'quick-mail' ); ?>.</label>
-<span id="qm_sendgrid_desc" class="qm-label"><?php _e( 'Send mail from your Sendgrid name and mail address.', 'quick-mail' ); ?></span></p>
+<label id="qm_sendgrid_label" class="qm-label"><?php echo $replacement_label; ?>.</label>
+<span id="qm_sendgrid_desc" class="qm-label"><?php echo $replacement_desc; ?></span></p>
 <?php endif; ?>
 <?php if ( $this->multiple_matching_users( 'A', $blog ) ) : ?>
 <p><input aria-describedby="qm_hide_desc" aria-labelledby="qm_hide_label" class="qm-input" name="hide_quick_mail_admin" type="checkbox" <?php echo $check_admin; ?>>
@@ -1750,7 +1773,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
     * @return boolean whether user is an administrator on blog
     */
 	protected function qm_is_admin( $id, $blog ) {
-		if ($blog == 0) {
+		if ( $blog == 0 ) {
 			$user_query = new WP_User_Query( array( 'role' => 'Administrator',
 					'include' => array($id), 'count_total' => true ) );
 		} else {
@@ -1970,6 +1993,11 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 					$content .= '<dd>' . __( 'Sending mail with Mailgun API', 'quick-mail' ) . '.</dd>';
 				} // end if using Mailgun name
 			} // end if Mailgun
+
+			if ( $this->got_replacement_info() ) {
+				$content .= '<dt><strong>' . __( 'Sendgrid is active', 'quick-mail' ) . '</strong></dt>';
+
+			} // end if
 
     			$content .= '<dt><strong>' . __( 'Hide Administrator Profiles', 'quick-mail' ) . '</strong></dt>';
     			$content .= '<dd>' . __( 'Prevent users from sending email to administrators', 'quick-mail' ) . '.</dd>';
@@ -2262,35 +2290,51 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	} // end qm_is_plugin_active
 
 	/**
-	 * is site using Sendgrid? check for active plugin with sendgrid in name.
+	 * is site using Replacement? Check for active plugin with Sendgrid in name.
 	 *
-	 * @return boolean Sendgrid is active and config has an email address.
+	 * @param $check_from boolean default false. check if Sengrid from mail is set?
+	 * @return boolean replace is active and optionally if config has an email address.
 	 * @since 3.1.9
 	 */
-	public function using_sendgrid() {
-		$sendgrid = false;
+	public function got_replacement_info( $check_from = false ) {
 		if ( $this->qm_is_plugin_active( 'mailgun' ) ) {
-			return $sendgrid;
+			error_log('2300 mailgun active?'); // TODO
+			return false;
 		} // end if Mailgun is active. cannot use Sengrid with Mailgun.
 
 		if ( !$this->qm_is_plugin_active( 'sendgrid' ) ) {
-			return $sendgrid;
+			error_log('2305 SENDGRID not active?'); // TODO
+			return false;
 		} // end if sendgrid is not active
 
 		// check for Sendgrid email
-		$sg_email = '';
-		if ( is_multisite() ) {
-			$sg_email = get_site_option( 'sendgrid_from_email', '');
-			if ( empty( $sg_email ) ) {
-				$sg_email = get_blog_option( get_current_blog_id(), 'sendgrid_from_email', 'N' );
-			} // end if
-		} else {
-			$sg_email = get_option( 'sendgrid_from_email', '' );
-		} // end if multisite
+		if ( $check_from ) {
+			$sg_email = '';
+			if ( is_multisite() ) {
+				$sg_email = get_site_option( 'sendgrid_from_email', '');
+				if ( empty( $sg_email ) ) {
+					$sg_email = get_blog_option( get_current_blog_id(), 'sendgrid_from_email', 'N' );
+				} // end if
+			} else {
+				$sg_email = get_option( 'sendgrid_from_email', '' );
+			} // end if multisite
 
-		// TODO is this a valid email address?
-		return !empty( $sg_email );
-	} // end using_sendgrid
+			return !empty( $sg_email ); 	// TODO is this a valid email address?
+		} else {
+			return true;
+		} // end if want to check for Sendgrid from address
+	} // end got_replacement_info
+
+	/**
+	 * get a name for text label of the replacement service settings and messages.
+	 *
+	 * @return string name of replacement service
+	 * @todo add a setting, or add option to get it from credentials function.
+	 * @since 3.2.1
+	 */
+	public function get_replacement_name() {
+		return $this->got_replacement_info() ? __( 'Sendgrid', 'quick-mail' ) : '';
+	} // end get_replacement_name TODO add setting
 
 	/**
 	 * get Sendgrid user info, if available
@@ -2299,8 +2343,8 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	 * @return array updated array
 	 * @since 3.1.9
 	 */
-	public function get_sendgrid_info( $wp_info ) {
-		if ( ! $this->using_sendgrid() ) {
+	public function get_replacement_credentials( $wp_info ) {
+		if ( ! $this->got_replacement_info() ) {
 			return $wp_info;
 		}
 		$sg_name = '';
@@ -2326,7 +2370,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 			$sg_name = $sg_email;
 		} // end if no Sendgrid name
 		return array('name' => $sg_name, 'email' => $sg_email);
-	} // end get_sendgrid_info
+	} // end get_replacement_credentials
 
 	/**
 	 * do we have Mailgun plugin and credentials?
@@ -2464,6 +2508,26 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	} // end toggle_mailgun_override
 
 	/**
+	 * check if user is admin and replaced sender.
+	 * @return boolean user replaced sender
+	 * @since 3.2.1
+	 */
+	public function user_has_replaced_sender() {
+		$blog = is_multisite() ? get_current_blog_id() : 0;
+		if ( $this->qm_is_admin( get_current_user_id(), $blog ) ) {
+			$can_send = '';
+			if ( is_multisite() ) {
+				$can_send = get_blog_option( get_current_blog_id(), 'replace_quick_mail_sender', 'N' );
+			} else {
+				$can_send = get_option( 'replace_quick_mail_sender', 'N' );
+			} // end if multisite
+
+			return ('Y' == $can_send) ? $this->got_replacement_info( true ) : false;
+		} // end if admin
+		return false;
+	} // end user_has_replaced_sender
+
+	/**
 	 * is user allowed to replace sender?
 	 *
 	 * Use Mailgun or Sengrid credentials. Mailgun has priority, it replaces wp_mail()
@@ -2482,10 +2546,10 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 				$can_send = get_option( 'replace_quick_mail_sender', 'N' );
 			} // end if multisite
 			if ( 'Y' == $can_send || $this->got_mailgun_info( true ) ) {
-				if ( $this->got_mailgun_info( true)  ) {
+				if ( $this->got_mailgun_info( true )  ) {
 					add_filter('replace_quick_mail_sender', array($this, 'get_mailgun_info'), 10, 1);
-				} else {
-					add_filter('replace_quick_mail_sender', array($this, 'get_sendgrid_info'), 10, 1);
+				} else if ( $this->got_replacement_info( true ) ) {
+					add_filter('replace_quick_mail_sender', array($this, 'get_replacement_credentials'), 10, 1);
 				} // end if got Mailgun
 			} // end if allowed to replace sender by option
 		} // end if admin

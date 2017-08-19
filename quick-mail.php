@@ -1106,7 +1106,7 @@ jQuery(document).ready( function() {
 				} // end if has CC
             } else {
             		if ( $this->got_mailgun_info( false ) ) {
-            			$error = __( 'Mailgrid Error sending mail', 'quick-mail' );
+            			$error = __( 'Mailgun Error sending mail', 'quick-mail' );
             		} elseif ( $this->got_replacement_info() ) {
             			$rname = $this->get_replacement_name();
             			$error = "{$rname} " . __( 'Error sending mail', 'quick-mail' );
@@ -2382,7 +2382,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	/**
 	 * do we have Mailgun plugin and credentials?
 	 *
-	 * @param $check_from boolean should we check if Mailgrid override-from is set?
+	 * @param $check_from boolean should we check if Mailgun override-from is set?
 	 * @return boolean got mailgun info
 	 * @since 3.2.0
 	 */

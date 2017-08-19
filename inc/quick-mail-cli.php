@@ -78,12 +78,12 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		}
 
 		if ( !QuickMailUtil::qm_valid_email_domain( $to, $verify ) ) {
-			$temp_msg = __( 'Invalid Recipient Email', 'quick-mail' );
+			$temp_msg = __( 'Invalid Recipient Address', 'quick-mail' );
 			WP_CLI::error("{$temp_msg} : {$to}"); // exit
 		} // end if invalid recipient
 
 		if ( !QuickMailUtil::qm_valid_email_domain( $this->from, $verify ) ) {
-			$temp_msg = __( 'Invalid Sender Email', 'quick-mail' );
+			$temp_msg = __( 'Invalid Sender Address', 'quick-mail' );
 			WP_CLI::error("{$temp_msg} : {$this->from}"); // exit
 		} // end if invalid sender
 

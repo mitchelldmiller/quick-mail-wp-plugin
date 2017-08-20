@@ -155,30 +155,4 @@ class QuickMailUtil {
 
        return ( 'N' == $validate_option ) ? true : checkdnsrr( $a_split[1], 'MX' );
    } // end qm_valid_email_domain
-
-	/**
-	 * is this a valid Web domain? checks for an `A` record. used by quick-mail-cli.php
-	 *
-	 * @param string $domain domain to check
-	 * @return boolean valid domain?
-	 * @since 3.2.1
-	 */
-	public static function valid_web_domain( $domain ) {
-		$hostname = $domain;
-	   	if ( filter_var( $domain, FILTER_VALIDATE_IP ) ) {
-	   		$hostname = gethostbyaddr( $domain );
-	   		if ( empty( $hostname ) || $hostname == $domain ) {
-	   			return false;
-	   		} // end if
-	   	} // end if IP address
-
-	   	if ( function_exists( 'idn_to_ascii' ) ) {
-	   		$intl = idn_to_ascii( $domain );
-	   		if ( !empty( $intl ) ) {
-	   			$hostname = $intl;
-	   		}
-	   	} // end if we have idn_to_ascii
-
-	   	return checkdnsrr( $hostname, 'A' );
-	} // end valid_web_domain
 } // end class

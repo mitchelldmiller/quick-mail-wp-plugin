@@ -2002,7 +2002,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 					$replacement_desc = sprintf('%s %s %s %s.', __( 'Using', 'quick-mail' ),
 							$rname, 	__( 'credentials', 'quick-mail' ), __( 'to send mail for Administrators', 'quick-mail' ) );
 				} else {
-					$replacement_desc = sprintf('%s %s %s.	', __( 'Sending mail with', 'quick-mail' ),
+					$replacement_desc = sprintf('%s %s %s', __( 'Sending mail with', 'quick-mail' ),
 							$rname, 	__( 'plugin', 'quick-mail' ) );
 				} // end if not admin
 				$content .= "<dd>{$replacement_desc}.</dd>";

@@ -1,11 +1,12 @@
 <?php
 /**
- * Mail a Web page with quick-mail.
+ * Mail a Web page or file with quick-mail.
  *
  */
 class Quick_Mail_Command extends WP_CLI_Command {
 
 	public $from = '', $name = '', $content_type = 'text/html';
+	public static $charset = '';
 
 	/**
 	 * Mail the contents of a URL or file.
@@ -13,32 +14,65 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 * ## OPTIONS
 	 *
 	 * <from>
-	 * : Mail sender.
+	 * : Sender. Must be Administrator. Enter WordPress user ID or email address.
 	 *
 	 * <to>
-	 * : Mail recipient.
+	 * : Mail recipient. Enter WordPress user ID or email address.
 	 *
 	 * <url or filename>
 	 * : Url or file to send.
+	 * Url or Text file is sent as a message. Binary file is sent as an attachment.
 	 *
 	 * [<subject>]
 	 * : Optional subject.
+	 * Default subject for Url is html document's title.
+	 * Default subject for text is "For Your Eyes Only."
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     quick-mail fred@example.com mary@example.com https://example.com "Hello Mary"
+	 *     * wp quick-mail fred@example.com mary@example.com https://example.com "Hello Mary"
 	 *
 	 *     Sends https://example.com from fred@example.com to mary@example.com
 	 *     with "Hello Mary" subject
 	 *
-	 *     Web page title will be used if optional subject is omitted.
+	 *     Link's HTML page title will be used if optional subject is omitted.
+	 *
+	 *     * wp quick-mail fred@example.com mary@example.com image.png "Beautiful Image"
+	 *
+	 *     Sends image.png to mary@example.com as attachment with subject "Beautiful Image"
+	 *     Default subject is "For Your Eyes Only."
+	 *     Default attachment message is "Please see attachment : filename."
 	 *
 	 * @synopsis <from> <to> <url|filename> [<subject>]
 	 */
 	public function __invoke( $args, $assoc_args ) {
 		require_once plugin_dir_path( __FILE__ ) . 'qm_util.php';
-		$this->from = sanitize_email( $args[0] );
-		$to = sanitize_email( $args[1] );
+		self::$charset = get_bloginfo( 'charset' );
+		$verify_domain = '';
+		if ( is_multisite() ) {
+			$verify_domain = get_blog_option( get_current_blog_id(), 'verify_quick_mail_addresses', 'N' );
+		} else {
+			$verify_domain = get_option( 'verify_quick_mail_addresses', 'N' );
+		} // end if multisite
+
+		$this->from = $this->verify_email_or_id( $args[0], true ); // admin_only
+		$temp_msg = '';
+		if ( empty( $this->from ) ) {
+			$temp_msg = __( 'Only administrators can send mail.', 'quick-mail' ); // TODO
+		} else if ( !QuickMailUtil::qm_valid_email_domain( $this->from, $verify_domain ) ) {
+			$temp_msg = __( 'Invalid Sender Address', 'quick-mail' );
+		} // end if invalid user or address
+
+		if ( !empty( $temp_msg ) ) {
+			WP_CLI::error( $temp_msg ); // exit
+		} // end if we have an error message
+
+		$to = $this->verify_email_or_id( $args[1], false );
+		if ( empty( $to ) || !QuickMailUtil::qm_valid_email_domain( $to, $verify_domain ) ) {
+			$temp_msg = __( 'Invalid Recipient Address', 'quick-mail' );
+			WP_CLI::error( $temp_msg ); // exit
+		} // end if invalid recipient
+
 		$url = '';
 		$subject = '';
 		$domain = '';
@@ -47,49 +81,31 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			$url = str_replace('&#038;', '&', esc_url( $args[2] ) );
 			if ( !filter_var( $url, FILTER_VALIDATE_URL ) ) {
 				$temp_msg = __( 'Invalid URL', 'quick-mail' );
-				$hurl = htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false);
+				$hurl = htmlspecialchars($url, ENT_QUOTES, self::$charset, false);
 				WP_CLI::error( "$temp_msg: {$hurl}"); // exit
 			} // end if invalid URL
 
-			$domain = parse_url( $url, PHP_URL_HOST ); // TODO
-			if ( !QuickMailUtil::valid_web_domain( $domain ) ) {
-				$temp_msg = __( 'Invalid domain', 'quick-mail' );
-				WP_CLI::error( "{$temp_msg} : {$domain}" );
-			}
+			$domain = parse_url( $url, PHP_URL_HOST );
 		} else {
 			if ( !file_exists( $args[2] ) ) {
 				$temp_msg = __( 'File not found', 'quick-mail' );
 				WP_CLI::error( $temp_msg ); // exit
-			}
-			// MIME type TODO
+			} // end if file not found
+
+			if ( empty( filesize ( $args[2] ) ) ) {
+				$temp_msg = __( 'Empty file', 'quick-mail' );
+				$html = htmlspecialchars($args[2], ENT_QUOTES, self::$charset, false);
+				WP_CLI::error( "$temp_msg: {$html}"); // exit
+			} // end if empty file
+
 			$url = $args[2];
 			$sending_file = true;
 		} // end if URL
 
-		$subject = '';
-		if ( isset( $args[3] ) ) {
-			$subject = html_entity_decode( $args[3], ENT_QUOTES, 'UTF-8' );
-		} // end if got subject
+		$subject = isset( $args[3] ) ? html_entity_decode( $args[3], ENT_QUOTES, self::$charset ) : '';
 
-		$verify = '';
-		if ( is_multisite() ) {
-			$verify = get_blog_option( get_current_blog_id(), 'verify_quick_mail_addresses', 'N' );
-		} else {
-			$verify = get_option( 'verify_quick_mail_addresses', 'N' );
-		}
-
-		if ( !QuickMailUtil::qm_valid_email_domain( $to, $verify ) ) {
-			$temp_msg = __( 'Invalid Recipient Address', 'quick-mail' );
-			WP_CLI::error("{$temp_msg} : {$to}"); // exit
-		} // end if invalid recipient
-
-		if ( !QuickMailUtil::qm_valid_email_domain( $this->from, $verify ) ) {
-			$temp_msg = __( 'Invalid Sender Address', 'quick-mail' );
-			WP_CLI::error("{$temp_msg} : {$this->from}"); // exit
-		} // end if invalid sender
-
-		// get user info
-		$args = array( 'user_email' => $this->from );
+		// get sender info
+		$args = array('search' => $this->from, 'search_columns' => array('user_email'), 'role' => 'Administrator');
 		$user_query = new WP_User_Query( $args );
 		if ( 1 > count( $user_query->results ) ) {
 			$temp_msg = __( 'Invalid user', 'quick-mail' );
@@ -104,12 +120,9 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			} // end if user
 		} // end foreach
 		if ( empty($user) || $user->user_email != $this->from ) {
-			WP_CLI::error('User query error'); // exit
+			$temp_msg = __( 'Invalid user', 'quick-mail' );
+			WP_CLI::error( $temp_msg ); // exit
 		} // end if unknown email
-
-		if (empty($user->caps['administrator'])) {
-			WP_CLI::error('Sorry. Only administrators can send mail.'); // exit
-		} // end if not administrator
 
 		if ( empty( $user->user_firstname ) || empty( $user->user_lastname ) ) {
 			$this->name = $user->display_name;
@@ -120,22 +133,14 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		$message = '';
 		$attachments = array();
 		if ( $sending_file ) {
-			if ( 'text/' != substr( mime_content_type($url), 0, 5) ) {
+			$mime_type = mime_content_type( $url );
+			if ( 'text/' != substr( $mime_type, 0, 5) ) {
 				$message = sprintf('%s : %s', __( 'Please see attachment', 'quick-mail' ), basename( $url ) );
-				$attachments = array($url); // ignored $this->content_type = 'multipart/form-data';
+				$attachments = array($url);
 			} else {
 				$message = file_get_contents( $url );
+				$this->content_type = $mime_type;
 			} // end if not text file
-
-			if ( empty( $message ) ) {
-				$temp_msg = __( 'Empty file', 'quick-mail' );
-				$hurl = htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false);
-				WP_CLI::error( "$temp_msg: {$hurl}"); // exit
-			} // end if empty file
-
-			if ( empty( mb_strstr( $message, '</', false, 'UTF-8' ) ) ) {
-				 $this->content_type = 'text/plain';
-			} // end if plain text
 
 			if (empty($subject)) {
 				$subject = __( 'For Your Eyes Only', 'quick-mail' );
@@ -165,7 +170,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 				$pattern = "/title>(.+)<\/title>/";
 				preg_match( $pattern, $message, $found );
 				if ( !empty( $found ) && !empty( $found[1] ) ) {
-					$subject = html_entity_decode( $found[1], ENT_QUOTES, 'UTF-8' );
+					$subject = html_entity_decode( $found[1], ENT_QUOTES, self::$charset );
 				} else {
 					$subject = $this->get_wp_site_title( $domain );
 				}
@@ -232,7 +237,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 
 
 	/**
-	* Read the title of a URL. Return this site's name if URL is empty
+	* Read the title of a URL. Return this site's name if URL is empty.
 	*
 	* @param string $site
 	* @return string title|error
@@ -255,7 +260,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	} // end get_wp_site_title
 
 	/**
-	 * Connect to remote site as Chrome browser. Return error string or array with data
+	 * Connect to remote site as Chrome browser. Return error string or array with data.
 	 *
 	 * @param string $site
 	 * @return string|array
@@ -282,6 +287,53 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		}
 		return $data;
 	} // end get_wp_site_data
+
+	/**
+	 * Return email address from user ID, with optional check for Administrator.
+	 *
+	 * @param mixed $from ID number or email address.
+	 * @param boolean $admin_only limit search to Administrators.
+	 */
+	private function verify_email_or_id( $from, $admin_only ) {
+		if ( !is_numeric( $from ) && !$admin_only ) {
+			return sanitize_email( $from );
+		} // end if not numeric or admin only
+
+		$args = array();
+		if ( is_numeric( $from ) ) {
+			if ( is_multisite() ) {
+				if ( $admin_only ) {
+					$args = array( 'blog_id' => get_current_blog_id(), 'include' =>  array($from), 'role' => 'Administrator' );
+				} else {
+					$args = array( 'blog_id' => get_current_blog_id(), 'include' =>  array($from) );
+				} // end if admin
+			} else {
+				if ( $admin_only ) {
+					$args = array( 'include' =>  array($from), 'role' => 'Administrator' );
+				} else {
+					$args = array( 'include' =>  array($from) );
+				} // end if admin
+			} // end if
+		} else {
+			$from = sanitize_email( $from );
+			if ( is_multisite() ) {
+				if ($admin_only) {
+					$args = array( 'blog_id' => get_current_blog_id(), 'user_email' => $from , 'role' => 'Administrator' );
+				} else {
+					$args = array( 'blog_id' => get_current_blog_id(), 'user_email' => $from  );
+				} // end if admin
+			} else {
+				if ( $admin_only ) {
+					$args = array('search' => $from, 'search_columns' => array('user_email'), 'role' => 'Administrator');
+				} else {
+					$args = array('search' => $from, 'search_columns' => array('user_email'));
+				} // end if admin
+			} // end if
+		} // end if numeric
+
+		$user_query = new WP_User_Query( $args );
+		return empty( $user_query->results ) ? '' : $user_query->results[0]->data->user_email;
+	} // end verify_email_or_id
 } // end Quick_Mail_Command
 
 WP_CLI::add_command( 'quick-mail', 'Quick_Mail_Command' );

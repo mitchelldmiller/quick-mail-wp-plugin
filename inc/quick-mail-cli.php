@@ -2,6 +2,8 @@
 /**
  * Mail a Web page or file with quick-mail.
  *
+ * @author mitchelldmiller
+ *
  */
 class Quick_Mail_Command extends WP_CLI_Command {
 
@@ -55,10 +57,10 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			$verify_domain = get_option( 'verify_quick_mail_addresses', 'N' );
 		} // end if multisite
 
-		$this->from = $this->verify_email_or_id( $args[0], true ); // admin_only
+		$this->from = $this->verify_email_or_id( $args[0], true ); // admin only
 		$temp_msg = '';
 		if ( empty( $this->from ) ) {
-			$temp_msg = __( 'Only administrators can send mail.', 'quick-mail' ); // TODO
+			$temp_msg = __( 'Only administrators can send mail.', 'quick-mail' );
 		} else if ( !QuickMailUtil::qm_valid_email_domain( $this->from, $verify_domain ) ) {
 			$temp_msg = __( 'Invalid Sender Address', 'quick-mail' );
 		} // end if invalid user or address
@@ -234,7 +236,6 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	public function name_filter( $n ) {
 		return $this->name;
 	} // end from_filter
-
 
 	/**
 	* Read the title of a URL. Return this site's name if URL is empty.

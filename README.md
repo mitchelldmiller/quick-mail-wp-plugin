@@ -21,6 +21,8 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 __Features__
 
+* Includes a [WP-CLI](https://wp-cli.org/) command to send a file, or the the contents of a Web page.
+
 * Sends text or html mails to multiple recipients. Content type is determined from message.
 
 * Send private replies with attachments to comments.
@@ -43,8 +45,6 @@ __Features__
 
 * Select recipient from users or commenters.
 
-* Includes a [WP-CLI](https://wp-cli.org/) command to send the contents of a Web page.
-
 ### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
@@ -61,6 +61,8 @@ __Features__
 __Who can send mail?__
 
 * Users must be able to [publish a post](http://codex.wordpress.org/Roles_and_Capabilities#publish_posts) to send an email.
+
+* WP-CLI: Only administrators can send mail with the `quick-mail` WP-CLI command.
 
 __Who can send rich text messages?__
 
@@ -129,7 +131,7 @@ __Translators and Programmers__
 
 * A .pot file is included for translators.
 
-* Includes Russian, Spanish, French translations.
+* Includes French, Russian, Spanish translations.
 
 * See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.
 

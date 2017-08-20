@@ -3,6 +3,9 @@ Quick Mail WordPress Plugin
 
 Send text or html email with attachments and shortcodes. Send private replies to comments. Select recipient from users or commenters. French, Russian, Spanish translations.
 
+### WordPress Rating
+[![WordPress rating](https://img.shields.io/wordpress/plugin/r/quick-mail.svg?maxAge=2592000)]()
+
 Description
 -----------
 
@@ -12,9 +15,13 @@ Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds 
 
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
-User options for sending email to site users or others. Mail is sent with user's name and email. Multiple files from up to six directories (folders) can be attached to a message.
+Mail is sent with user's name and email. Recognizes credentials from [Mailgun](https://wordpress.org/plugins/mailgun/) and [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugins.
+
+Multiple files from up to six directories (folders) can be attached to a message.
 
 __Features__
+
+* Includes a [WP-CLI](https://wp-cli.org/) command to send a file, or the the contents of a Web page.
 
 * Sends text or html mails to multiple recipients. Content type is determined from message.
 
@@ -41,7 +48,7 @@ __Features__
 ### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [How to Send Private Comment Replies with WordPress](https://wheredidmybraingo.com/how-to-send-private-comment-replies-with-wordpress/) for update info.
+* See [Send Reliable Email from WordPress with Quick Mail](https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/) for update info.
 
 ### Installation ###
 
@@ -55,6 +62,8 @@ __Who can send mail?__
 
 * Users must be able to [publish a post](http://codex.wordpress.org/Roles_and_Capabilities#publish_posts) to send an email.
 
+* WP-CLI: Only administrators can send mail with the `quick-mail` WP-CLI command.
+
 __Who can send rich text messages?__
 
 * User must have [Visual Editor enabled](https://codex.wordpress.org/Function_Reference/user_can_richedit) on their profile, to compose messages with the Visual Editor.
@@ -66,6 +75,14 @@ __Selecting Recipients__
 * Options to send mail to any user, or limit to users with first and last names on their profile.
 
 * Users need permission to [list users](http://codex.wordpress.org/Roles_and_Capabilities#list_users), to view user list or change options. Minimum permission can be changed with an option or filter.
+
+__Sending Mail from Other Addresses__
+
+* Uses Mailgun plugin settings for Administrators, if the plugin is activated, using `Override "From" Details` and [Mailgun API](https://documentation.mailgun.com/en/latest/api_reference.html).
+
+* Option for administrators to use [Sendgrid API](https://sendgrid.com/solutions/sendgrid-api/). 
+
+* Programmers can replace their credentials by adding a filter to `replace_quick_mail_sender`.
 
 __Limitations__
 
@@ -104,11 +121,9 @@ __Mail Errors__
 
 * Quick Mail sends email with [wp_mail](https://developer.wordpress.org/reference/functions/wp_mail/).
 
-
   `wp_mail` error messages are displayed, if there is a problem.
 
 * "You must provide at least one recipient email address."
-
 
    `wp_mail` rejected an address. Seen when Quick Mail verification is off.
 
@@ -116,7 +131,7 @@ __Translators and Programmers__
 
 * A .pot file is included for translators.
 
-* Includes Russian, Spanish, French translations.
+* Includes French, Russian, Spanish translations.
 
 * See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.
 

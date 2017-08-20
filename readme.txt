@@ -4,11 +4,11 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: mail, email, comments, mailgun, sendgrid, attachment, accessibility, comment, idn, multisite, rich text, tinymce
 Requires at least: 4.6
 Tested up to: 4.9
-Stable tag: 3.1.8
+Stable tag: 3.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 
-Send text or html email with attachments and shortcodes. Send private replies to comments. Select recipient from users or commenters.
+Send reliable text or html email with attachments and shortcodes. Send private replies to comments. Select recipient from users or commenters.
 
 == Description ==
 
@@ -25,6 +25,8 @@ Mail is sent with user's name and email. Recognizes credentials from [Mailgun](h
 Multiple files from up to six directories (folders) can be attached to a message.
 
 = Features =
+
+* Includes a [WP-CLI](https://wp-cli.org/) command to send a file, or the the contents of a Web page.
 
 * Sends text or html mails to multiple recipients. Content type is determined from message.
 
@@ -48,8 +50,6 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * Select recipient from users or commenters.
 
-* Includes a [WP-CLI](https://wp-cli.org/) command to send the contents of a Web page.
-
 = Learn More =
 
 * See [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
@@ -69,6 +69,8 @@ Multiple files from up to six directories (folders) can be attached to a message
 = Who can send mail? =
 
 * Users must be able to [publish a post](http://codex.wordpress.org/Roles_and_Capabilities#publish_posts) to send an email. Minimum permission can be changed with a filter.
+
+* WP-CLI: Only administrators can send mail with the `quick-mail` WP-CLI command.
 
 = Who can send rich text messages? =
 
@@ -151,7 +153,7 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 = 3.2.2 =
 * Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
-* Option to send file contents with quick-mail WP CLI command.
+* Send URL or file contents with quick-mail WP CLI command.
 * Uses Mailgun credentials, if the plugin is active and set to use API.
 * Option to use Sendgrid credentials, if the plugin is active.
 * Organized plugin files into multiple directories.
@@ -201,7 +203,7 @@ Refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
 
-= 3.2.0 =
+= 3.2.2 =
 * Upgrade recommended.
 
 = 3.1.8 =
@@ -230,7 +232,7 @@ Refer to the separate changelog.txt for changes of previous versions.
 
 == License ==
 
-Quick Mail is free for personal or commercial use. Please encourage future development with a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY "Donate with PayPal").
+Quick Mail is free for personal or commercial use. Encourage future development with a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY "Donate with PayPal").
 
 == Translators and Programmers ==
 
@@ -238,7 +240,7 @@ Quick Mail is free for personal or commercial use. Please encourage future devel
 
 * Includes French, Russian, Spanish translations.
 
-* See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.
+* Visit [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.
 
 == Credits ==
 

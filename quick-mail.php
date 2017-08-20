@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.2.2 Beta
+Version: 3.2.2
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/
@@ -89,7 +89,6 @@ class QuickMail {
 	   	add_filter( 'plugin_action_links', array($this, 'qm_action_links'), 10, 2 );
 	   	add_filter( 'quick_mail_setup_capability', array($this, 'let_editor_set_quick_mail_option') );
 
-	   	// let_user_replace_sender
 	   	add_action( 'init', array($this, 'let_user_replace_sender'), 10, 0 );
 	   	add_action( 'load-tools_page_quick_mail_form', array( $this, 'add_qm_help' ), 20, 0 );
 	   	add_action( 'plugins_loaded', array($this, 'show_qm_pointer' ), 10, 0 );
@@ -143,15 +142,15 @@ class QuickMail {
 	public function qm_get_role() {
 		if ( current_user_can( 'activate_plugins' ) ) {
 			return 'administrator';
-		}
+		} // end if administrator
 
 		if ( current_user_can( 'delete_others_pages' ) ) {
 			return 'editor';
-		}
+		} // end if editor
 
 		if ( current_user_can( 'publish_posts' ) ) {
 			return 'author';
-		}
+		} // end if author
 
 		return 'n/a';
 	} // end qm_get_role
@@ -939,7 +938,7 @@ jQuery(document).ready( function() {
     $from = "From: \"{$your_name}\" <{$your_email}>\r\n";
     if ( empty( $your_email ) ) {
        $error = '<a href="/wp-admin/profile.php">' . __( 'Error: Incomplete User Profile', 'quick-mail' ) . '</a>';
-    }
+    } // end if missing email after replacement.
 
       if ( 'POST' == $_SERVER['REQUEST_METHOD']  && !empty( $_POST['qm205'] ) ) {
          if ( ! wp_verify_nonce( $_POST['qm205'], 'qm205' ) ) {
@@ -2326,7 +2325,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 				$sg_email = get_option( 'sendgrid_from_email', '' );
 			} // end if multisite
 
-			return !empty( $sg_email ); 	// TODO is this a valid email address?
+			return !empty( $sg_email );
 		} else {
 			return true;
 		} // end if want to check for Sendgrid from address

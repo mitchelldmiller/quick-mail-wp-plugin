@@ -61,6 +61,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 				$temp_msg = __( 'File not found', 'quick-mail' );
 				WP_CLI::error( $temp_msg ); // exit
 			}
+			// MIME type TODO
 			$url = $args[2];
 			$sending_file = true;
 		} // end if URL
@@ -117,9 +118,15 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		} // end if missing first or last name
 
 		$message = '';
-		$fname = '';
+		$attachments = array();
 		if ( $sending_file ) {
-			$message = file_get_contents( $url );
+			if ( 'text/' != substr( mime_content_type($url), 0, 5) ) {
+				$message = sprintf('%s : %s', __( 'Please see attachment', 'quick-mail' ), basename( $url ) );
+				$attachments = array($url); // ignored $this->content_type = 'multipart/form-data';
+			} else {
+				$message = file_get_contents( $url );
+			} // end if not text file
+
 			if ( empty( $message ) ) {
 				$temp_msg = __( 'Empty file', 'quick-mail' );
 				$hurl = htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false);
@@ -134,9 +141,8 @@ class Quick_Mail_Command extends WP_CLI_Command {
 				$subject = __( 'For Your Eyes Only', 'quick-mail' );
 			} // end if no subject
 
-			$fname = basename( $url );
 			$temp_msg = sprintf( '%s %s %s %s', __( 'Sending file', 'quick-mail' ),
-					$fname, __( 'to', 'quick-mail' ), $to );
+					basename( $url ), __( 'to', 'quick-mail' ), $to );
 			WP_CLI::line( $temp_msg );
 		} // end if sending file
 		else {
@@ -171,7 +177,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		add_filter( 'wp_mail_from', array($this, 'from_filter'), 1, 1 );
 		add_filter( 'wp_mail_from_name', array($this, 'name_filter'), 1, 1 );
 
-		if ( ! wp_mail( $to, $subject, $message ) ) {
+		if ( ! wp_mail( $to, $subject, $message, '', $attachments ) ) {
 			$this->remove_qm_filters();
 			$temp_msg = __( 'Error sending mail', 'quick-mail' );
 			WP_CLI::error( $temp_msg );
@@ -180,7 +186,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		$this->remove_qm_filters();
 		if ( $sending_file ) {
 			$temp_msg = sprintf('%s %s %s %s', __( 'Sent', 'quick-mail' ),
-					$fname, __( 'to', 'quick-mail' ), $to );
+					basename( $url ), __( 'to', 'quick-mail' ), $to );
 		} else {
 			$temp_msg = sprintf( '%s %s', __( 'Sent email to', 'quick-mail' ), $to );
 		} // end if sending file

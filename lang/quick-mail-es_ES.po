@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Quick Mail v3.2.1\n"
+"Project-Id-Version: Quick Mail v3.2.2 Beta\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-08-19 19:16:48+0000\n"
+"PO-Revision-Date: 2017-08-20 04:33:13+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -45,7 +45,7 @@ msgstr "Error de carga de archivo"
 msgid "Missing temporary directory"
 msgstr "Falta el directorio temporal"
 
-#: inc/quick-mail-cli.php:176
+#: inc/quick-mail-cli.php:182
 #: quick-mail.php:1112
 #: quick-mail.php:1114
 #@ quick-mail
@@ -770,12 +770,6 @@ msgstr "Mostrar todos los usuarios ordenados por nickname"
 msgid "Show users with names, sorted by last name"
 msgstr "Mostrar usuarios con nombres, ordenados por apellidos"
 
-#. translators: plugin header field 'PluginURI'
-#: quick-mail.php:0
-#@ quick-mail
-msgid "https://wheredidmybraingo.com/how-to-send-private-comment-replies-with-wordpress/"
-msgstr "https://wheredidmybraingo.com/how-to-send-private-comment-replies-with-wordpress/"
-
 #: quick-mail.php:870
 #@ quick-mail
 msgid "Comments disabled by system administrator."
@@ -827,17 +821,17 @@ msgstr "Deje que los editores vean la lista de usuarios."
 msgid "Quick Mail requires WordPress 4.6 or greater."
 msgstr "El correo rápido requiere WordPress 4,6 o superior."
 
-#: inc/quick-mail-cli.php:185
+#: inc/quick-mail-cli.php:191
 #@ quick-mail
 msgid "Sent email to"
 msgstr "Correo electrónico enviado a"
 
-#: inc/quick-mail-cli.php:268
+#: inc/quick-mail-cli.php:274
 #@ quick-mail
 msgid "Not found"
 msgstr "No se encontró"
 
-#: inc/quick-mail-cli.php:272
+#: inc/quick-mail-cli.php:278
 #@ quick-mail
 msgid "Cannot connect to"
 msgstr "No se puede conectar a"
@@ -877,58 +871,52 @@ msgstr "Dominio no válido"
 msgid "File not found"
 msgstr "No se encontró el archivo"
 
-#: inc/quick-mail-cli.php:94
+#: inc/quick-mail-cli.php:95
 #@ quick-mail
 msgid "Invalid user"
 msgstr "Usuario no válido"
 
-#: inc/quick-mail-cli.php:124
+#: inc/quick-mail-cli.php:131
 #@ quick-mail
 msgid "Empty file"
 msgstr "Archivo vacío"
 
-#: inc/quick-mail-cli.php:134
+#: inc/quick-mail-cli.php:141
 #@ quick-mail
 msgid "For Your Eyes Only"
 msgstr "Sólo para tus ojos"
 
-#: inc/quick-mail-cli.php:138
+#: inc/quick-mail-cli.php:144
 #@ quick-mail
 msgid "Sending file"
 msgstr "Enviando archivo"
 
-#: inc/quick-mail-cli.php:139
-#: inc/quick-mail-cli.php:144
-#: inc/quick-mail-cli.php:183
+#: inc/quick-mail-cli.php:145
+#: inc/quick-mail-cli.php:150
+#: inc/quick-mail-cli.php:189
 #@ quick-mail
 msgid "to"
 msgstr "para"
 
-#: inc/quick-mail-cli.php:143
+#: inc/quick-mail-cli.php:149
 #@ quick-mail
 msgid "Sending"
 msgstr "Envío"
 
-#: inc/quick-mail-cli.php:154
+#: inc/quick-mail-cli.php:160
 #@ quick-mail
 msgid "No content"
 msgstr "Sin contenido"
 
-#: inc/quick-mail-cli.php:182
+#: inc/quick-mail-cli.php:188
 #@ quick-mail
 msgid "Sent"
 msgstr "Enviado"
 
-#: inc/quick-mail-cli.php:273
+#: inc/quick-mail-cli.php:279
 #@ quick-mail
 msgid "Error"
 msgstr "Error"
-
-#. translators: plugin header field 'Version'
-#: quick-mail.php:0
-#@ quick-mail
-msgid "3.2.1"
-msgstr "3.2.1"
 
 #: quick-mail.php:1572
 #@ quick-mail
@@ -1011,13 +999,30 @@ msgstr "Sendgrid"
 msgid "Mailgun Error sending mail"
 msgstr "Error de Mailgun enviando correo"
 
-#: inc/quick-mail-cli.php:81
+#: inc/quick-mail-cli.php:82
 #@ quick-mail
 msgid "Invalid Recipient Address"
 msgstr "Dirección de destinatario no válida"
 
-#: inc/quick-mail-cli.php:86
+#: inc/quick-mail-cli.php:87
 #@ quick-mail
 msgid "Invalid Sender Address"
 msgstr "Dirección remitente no válida"
+
+#: inc/quick-mail-cli.php:124
+#@ quick-mail
+msgid "Please see attachment"
+msgstr "Consulte el anexo"
+
+#. translators: plugin header field 'PluginURI'
+#: quick-mail.php:0
+#@ quick-mail
+msgid "https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/"
+msgstr "https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/"
+
+#. translators: plugin header field 'Version'
+#: quick-mail.php:0
+#@ quick-mail
+msgid "3.2.2 Beta"
+msgstr "3.2.2 Beta"
 

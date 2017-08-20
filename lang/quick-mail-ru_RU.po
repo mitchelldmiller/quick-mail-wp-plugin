@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Quick Mail v3.2.1\n"
+"Project-Id-Version: Quick Mail v3.2.2 Beta\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-08-19 19:17:41+0000\n"
+"PO-Revision-Date: 2017-08-20 04:35:40+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -45,7 +45,7 @@ msgstr "Ошибка загрузки файла"
 msgid "Missing temporary directory"
 msgstr "Не найдена временная директория"
 
-#: inc/quick-mail-cli.php:176
+#: inc/quick-mail-cli.php:182
 #: quick-mail.php:1112
 #: quick-mail.php:1114
 #@ quick-mail
@@ -771,12 +771,6 @@ msgstr "Показать всех пользователей, отсортиро
 msgid "Show users with names, sorted by last name"
 msgstr "Отображение имен пользователей, отсортированных по фамилии"
 
-#. translators: plugin header field 'PluginURI'
-#: quick-mail.php:0
-#@ quick-mail
-msgid "https://wheredidmybraingo.com/how-to-send-private-comment-replies-with-wordpress/"
-msgstr "https://wheredidmybraingo.com/how-to-send-private-comment-replies-with-wordpress/"
-
 #: quick-mail.php:870
 #@ quick-mail
 msgid "Comments disabled by system administrator."
@@ -828,17 +822,17 @@ msgstr "Пусть редакторы видят список пользоват
 msgid "Quick Mail requires WordPress 4.6 or greater."
 msgstr "Для быстрой почты требуется 4,6 или более."
 
-#: inc/quick-mail-cli.php:185
+#: inc/quick-mail-cli.php:191
 #@ quick-mail
 msgid "Sent email to"
 msgstr "Отправлено по электронной почте"
 
-#: inc/quick-mail-cli.php:268
+#: inc/quick-mail-cli.php:274
 #@ quick-mail
 msgid "Not found"
 msgstr "Не найдено"
 
-#: inc/quick-mail-cli.php:272
+#: inc/quick-mail-cli.php:278
 #@ quick-mail
 msgid "Cannot connect to"
 msgstr "Не удается подключиться к"
@@ -878,58 +872,52 @@ msgstr "Недопустимый домен"
 msgid "File not found"
 msgstr "Файл не найден"
 
-#: inc/quick-mail-cli.php:94
+#: inc/quick-mail-cli.php:95
 #@ quick-mail
 msgid "Invalid user"
 msgstr "Недопустимый пользователь"
 
-#: inc/quick-mail-cli.php:124
+#: inc/quick-mail-cli.php:131
 #@ quick-mail
 msgid "Empty file"
 msgstr "Пустой файл"
 
-#: inc/quick-mail-cli.php:134
+#: inc/quick-mail-cli.php:141
 #@ quick-mail
 msgid "For Your Eyes Only"
 msgstr "Только для твоих глаз"
 
-#: inc/quick-mail-cli.php:138
+#: inc/quick-mail-cli.php:144
 #@ quick-mail
 msgid "Sending file"
 msgstr "Отправка файла"
 
-#: inc/quick-mail-cli.php:139
-#: inc/quick-mail-cli.php:144
-#: inc/quick-mail-cli.php:183
+#: inc/quick-mail-cli.php:145
+#: inc/quick-mail-cli.php:150
+#: inc/quick-mail-cli.php:189
 #@ quick-mail
 msgid "to"
 msgstr "Кому"
 
-#: inc/quick-mail-cli.php:143
+#: inc/quick-mail-cli.php:149
 #@ quick-mail
 msgid "Sending"
 msgstr "Отправка"
 
-#: inc/quick-mail-cli.php:154
+#: inc/quick-mail-cli.php:160
 #@ quick-mail
 msgid "No content"
 msgstr "Нет содержимого"
 
-#: inc/quick-mail-cli.php:182
+#: inc/quick-mail-cli.php:188
 #@ quick-mail
 msgid "Sent"
 msgstr "Отправлен"
 
-#: inc/quick-mail-cli.php:273
+#: inc/quick-mail-cli.php:279
 #@ quick-mail
 msgid "Error"
 msgstr "Ошибка"
-
-#. translators: plugin header field 'Version'
-#: quick-mail.php:0
-#@ quick-mail
-msgid "3.2.1"
-msgstr "3,2,1"
 
 #: quick-mail.php:1572
 #@ quick-mail
@@ -1012,13 +1000,30 @@ msgstr "Сендгрид"
 msgid "Mailgun Error sending mail"
 msgstr "Маилгун ошибка при отправке почты"
 
-#: inc/quick-mail-cli.php:81
+#: inc/quick-mail-cli.php:82
 #@ quick-mail
 msgid "Invalid Recipient Address"
 msgstr "Недопустимый адрес получателя"
 
-#: inc/quick-mail-cli.php:86
+#: inc/quick-mail-cli.php:87
 #@ quick-mail
 msgid "Invalid Sender Address"
 msgstr "Неправильный адрес отправителя"
+
+#: inc/quick-mail-cli.php:124
+#@ quick-mail
+msgid "Please see attachment"
+msgstr "См"
+
+#. translators: plugin header field 'PluginURI'
+#: quick-mail.php:0
+#@ quick-mail
+msgid "https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/"
+msgstr "https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/"
+
+#. translators: plugin header field 'Version'
+#: quick-mail.php:0
+#@ quick-mail
+msgid "3.2.2 Beta"
+msgstr "3,2,2 Бэта"
 

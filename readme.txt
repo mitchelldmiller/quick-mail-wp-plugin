@@ -54,15 +54,15 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * See [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [How to Send Private Comment Replies with WordPress](https://wheredidmybraingo.com/how-to-send-private-comment-replies-with-wordpress/) for update info.
+* See [Send Reliable Email from WordPress with Quick Mail](https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/) for update info.
 
-* [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/)
+* [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/).
 
 == Installation ==
 
-1. Download the plugin and unpack in your `/wp-content/plugins` directory
+1. Download the plugin and unpack in your `/wp-content/plugins` directory.
 
-1. Activate the plugin through the 'Plugins' menu in WordPress
+1. Activate the plugin through the 'Plugins' menu in WordPress.
 
 == Frequently Asked Questions ==
 
@@ -149,8 +149,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 == Changelog ==
 
-= 3.2.0 =
+= 3.2.2 =
 * Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
+* Option to send file contents with quick-mail WP CLI command.
 * Uses Mailgun credentials, if the plugin is active and set to use API.
 * Option to use Sendgrid credentials, if the plugin is active.
 * Organized plugin files into multiple directories.
@@ -241,4 +242,4 @@ Quick Mail is free for personal or commercial use. Please encourage future devel
 
 == Credits ==
 
-Banner image by [27707](https://pixabay.com/en/users/27707-27707/)
+Banner image by [27707](https://pixabay.com/en/users/27707-27707/).

@@ -2,10 +2,10 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.2.1 Beta
+Version: 3.2.2 Beta
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
-Plugin URI: https://wheredidmybraingo.com/how-to-send-private-comment-replies-with-wordpress/
+Plugin URI: https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/
 Text Domain: quick-mail
 Domain Path: /lang
 */

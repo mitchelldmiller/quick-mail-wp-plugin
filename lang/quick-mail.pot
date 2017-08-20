@@ -1,7 +1,7 @@
-"Project-Id-Version: Quick Mail v3.2.1\n"
+"Project-Id-Version: Quick Mail v3.2.2 Beta\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-08-19 19:16:48+0000\n"
+"PO-Revision-Date: 2017-08-20 04:33:13+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -43,7 +43,7 @@ msgstr ""
 msgid "Missing temporary directory"
 msgstr ""
 
-#: inc/quick-mail-cli.php:176
+#: inc/quick-mail-cli.php:182
 #: quick-mail.php:1112
 #: quick-mail.php:1114
 #@ quick-mail
@@ -768,12 +768,6 @@ msgstr ""
 msgid "Show users with names, sorted by last name"
 msgstr ""
 
-#. translators: plugin header field 'PluginURI'
-#: quick-mail.php:0
-#@ quick-mail
-msgid "https://wheredidmybraingo.com/how-to-send-private-comment-replies-with-wordpress/"
-msgstr ""
-
 #: quick-mail.php:870
 #@ quick-mail
 msgid "Comments disabled by system administrator."
@@ -825,17 +819,17 @@ msgstr ""
 msgid "Quick Mail requires WordPress 4.6 or greater."
 msgstr ""
 
-#: inc/quick-mail-cli.php:185
+#: inc/quick-mail-cli.php:191
 #@ quick-mail
 msgid "Sent email to"
 msgstr ""
 
-#: inc/quick-mail-cli.php:268
+#: inc/quick-mail-cli.php:274
 #@ quick-mail
 msgid "Not found"
 msgstr ""
 
-#: inc/quick-mail-cli.php:272
+#: inc/quick-mail-cli.php:278
 #@ quick-mail
 msgid "Cannot connect to"
 msgstr ""
@@ -875,57 +869,51 @@ msgstr ""
 msgid "File not found"
 msgstr ""
 
-#: inc/quick-mail-cli.php:94
+#: inc/quick-mail-cli.php:95
 #@ quick-mail
 msgid "Invalid user"
 msgstr ""
 
-#: inc/quick-mail-cli.php:124
+#: inc/quick-mail-cli.php:131
 #@ quick-mail
 msgid "Empty file"
 msgstr ""
 
-#: inc/quick-mail-cli.php:134
+#: inc/quick-mail-cli.php:141
 #@ quick-mail
 msgid "For Your Eyes Only"
 msgstr ""
 
-#: inc/quick-mail-cli.php:138
+#: inc/quick-mail-cli.php:144
 #@ quick-mail
 msgid "Sending file"
 msgstr ""
 
-#: inc/quick-mail-cli.php:139
-#: inc/quick-mail-cli.php:144
-#: inc/quick-mail-cli.php:183
+#: inc/quick-mail-cli.php:145
+#: inc/quick-mail-cli.php:150
+#: inc/quick-mail-cli.php:189
 #@ quick-mail
 msgid "to"
 msgstr ""
 
-#: inc/quick-mail-cli.php:143
+#: inc/quick-mail-cli.php:149
 #@ quick-mail
 msgid "Sending"
 msgstr ""
 
-#: inc/quick-mail-cli.php:154
+#: inc/quick-mail-cli.php:160
 #@ quick-mail
 msgid "No content"
 msgstr ""
 
-#: inc/quick-mail-cli.php:182
+#: inc/quick-mail-cli.php:188
 #@ quick-mail
 msgid "Sent"
 msgstr ""
 
-#: inc/quick-mail-cli.php:273
+#: inc/quick-mail-cli.php:279
 #@ quick-mail
 msgid "Error"
-msgstr ""
-
-#. translators: plugin header field 'Version'
-#: quick-mail.php:0
-#@ quick-mail
-msgid "3.2.1"
 msgstr ""
 
 #: quick-mail.php:1572
@@ -1009,12 +997,29 @@ msgstr ""
 msgid "Mailgun Error sending mail"
 msgstr ""
 
-#: inc/quick-mail-cli.php:81
+#: inc/quick-mail-cli.php:82
 #@ quick-mail
 msgid "Invalid Recipient Address"
 msgstr ""
 
-#: inc/quick-mail-cli.php:86
+#: inc/quick-mail-cli.php:87
 #@ quick-mail
 msgid "Invalid Sender Address"
+msgstr ""
+
+#: inc/quick-mail-cli.php:124
+#@ quick-mail
+msgid "Please see attachment"
+msgstr ""
+
+#. translators: plugin header field 'PluginURI'
+#: quick-mail.php:0
+#@ quick-mail
+msgid "https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/"
+msgstr ""
+
+#. translators: plugin header field 'Version'
+#: quick-mail.php:0
+#@ quick-mail
+msgid "3.2.2 Beta"
 msgstr ""

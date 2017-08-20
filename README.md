@@ -48,7 +48,7 @@ __Features__
 ### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [How to Send Private Comment Replies with WordPress](https://wheredidmybraingo.com/how-to-send-private-comment-replies-with-wordpress/) for update info.
+* See [Send Reliable Email from WordPress with Quick Mail](https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/) for update info.
 
 ### Installation ###
 

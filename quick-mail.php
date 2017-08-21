@@ -1054,7 +1054,7 @@ jQuery(document).ready( function() {
 					continue;
 				}
 				if ( 0 == $uploads['error'][$i] ) {
-                  	$temp = $this->qm_get_temp_path(); // @since 1.1.1
+                  	$temp = QuickMailUtil::qm_get_temp_path();
                   	if ( ! is_dir( $temp ) || ! is_writable( $temp ) ) {
                      	$error = __( 'Missing temporary directory', 'quick-mail' );
                   	} else {
@@ -2259,24 +2259,6 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
    public function init_quick_mail_translation() {
    	  load_plugin_textdomain( 'quick-mail', false, basename( dirname( __FILE__ ) ) . '/lang' );
    } // end init_quick_mail_translation
-
-   /**
-    *	find system temp path
-    *
-    *	test order: upload_tmp_dir, sys_get_temp_dir()
-    *
-    *	@since 1.1.1
-    *
-    *	@return string path or empty string if not found
-    */
-   public function qm_get_temp_path()
-   {
-      $path = ini_get( 'upload_tmp_dir' );
-      if ( ! empty( $path ) ) {
-         return trailingslashit( $path );
-      }
-      return trailingslashit( sys_get_temp_dir() );
-   } // end qm_get_temp_path
 
    /**
     * add helpful links to plugin description. filters plugin_row_meta.

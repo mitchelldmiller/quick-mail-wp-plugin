@@ -2086,6 +2086,11 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
     		$screen->add_help_tab( array('id' => 'qm_display_help',
         		'title'	=> __('User Display', 'quick-mail'), 'content' => $content) );
 
+    		$btitle = __('Send Reliable Email from WordPress with Quick Mail', 'quick-mail' );
+    		$blink = sprintf('<a href="https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/">%s</a>', $btitle );
+    		$my_link = sprintf('%s %s %s.',
+    				__('See', 'quick-mail'), $blink,
+    				__('for additional information', 'quick-mail') );
     		if ( $is_admin_user && !$this->got_replacement_info( false ) && !$this->got_mailgun_info( false ) ) {
     			$sp = sprintf("<a target='_blank' href='%s'>%s</a>",
     					__('https://wordpress.org/plugins/search/smtp/', 'quick-mail' ),
@@ -2099,9 +2104,6 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
     					$sg, __('are recommended', 'quick-mail') );
     			$btitle = __('Send Reliable Email from WordPress with Quick Mail', 'quick-mail' );
     			$blink = sprintf('<a href="https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/">%s</a>', $btitle );
-    			$me = sprintf('<p>%s %s %s.</p>',
-    					__('See', 'quick-mail'), $blink,
-    					__('for additional information', 'quick-mail') );
     			$content = sprintf('<h4>%s %s</h4>', __('How to Fix', 'quick-mail'),
     					__('Delivery Errors', 'quick-mail') );
     			$content .= sprintf('<p>%s.</p>',
@@ -2111,11 +2113,21 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
     			$content .= "<dd>{$svces}</dd>";
     			$content .= '<dd>' . __( 'Mailgun is free', 'quick-mail' ) . '.</dd>';
     			$content .= '<dt><strong>' . __('SMTP Plugins', 'quick-mail') . '</strong></dt>';
-    			$content .= "<dd>{$pline}</dd></dl>{$me}";
+    			$content .= "<dd>{$pline}</dd></dl><p>{$my_link}</p>";
     			$screen->add_help_tab( array('id' => 'qm_delivery_help',
     					'title'	=> __('Delivery Errors', 'quick-mail'), 'content' => $content) );
     		} // end if adding Delivery Problems
 
+    		if ( $is_admin_user ) {
+    			$cmd = __('wp help quick-mail', 'quick-mail');
+    			$content = sprintf('<dl><dt><strong>%s</strong></dt>', __('Use Quick Mail with WP-CLI', 'quick-mail') );
+    			$content .= sprintf('<dd>%s.</dd>', __('Send files and links from the command line', 'quick-mail') );
+    			$content .= sprintf('<dd>%s <code>%s</code> %s.</dd>', __('Enter', 'quick-mail'), $cmd,
+    					__('to get started', 'quick-mail') );
+    			$content .= "<dd>{$my_link}</dd></dl>";
+    			$screen->add_help_tab( array('id' => 'qm_wpcli_help',
+    					'title'	=> __('WP-CLI', 'quick-mail'), 'content' => $content) );
+    		} // end if WP-CLI is active
 	} // add_qm_settings_help
 
 	/**

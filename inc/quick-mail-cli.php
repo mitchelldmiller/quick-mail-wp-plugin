@@ -141,7 +141,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 				$attachments = array($url);
 			} else {
 				$message = file_get_contents( $url );
-				$this->content_type = $mime_type;
+				$this->content_type = ( 'text/html' == $mime_type ) ? $mime_type : 'text/plain';
 			} // end if not text file
 
 			if (empty($subject)) {

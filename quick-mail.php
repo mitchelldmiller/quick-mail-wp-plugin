@@ -2086,6 +2086,31 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
     		$screen->add_help_tab( array('id' => 'qm_display_help',
         		'title'	=> __('User Display', 'quick-mail'), 'content' => $content) );
 
+    		if ( !$this->got_replacement_info( false ) && !$this->got_mailgun_info( false ) ) {
+    			$sp = sprintf("<a target='_blank' href='%s'>%s</a>",
+    					__('https://wordpress.org/plugins/search/smtp/', 'quick-mail' ),
+    					__('SMTP Plugins', 'quick-mail') );
+    			$pline = sprintf('%s %s.', $sp, __('let you send mail from a public mail account', 'quick-mail') );
+    			$mg = sprintf("<a target='_blank' href='%s'>%s</a>",
+    					__('https://www.mailgun.com/', 'quick-mail' ), __('Mailgun', 'quick-mail') );
+    			$sg = sprintf("<a target='_blank' href='%s'>%s</a>",
+    					__('https://sendgrid.com/', 'quick-mail' ), __('Sendgrid', 'quick-mail') );
+    			$svces = sprintf('%s %s %s %s.', $mg, __('and', 'quick-mail'),
+    					$sg, __('are recommended', 'quick-mail') );
+    			$content = sprintf('<h4>%s %s</h4>', __('How to Fix', 'quick-mail'),
+    					__('Delivery Errors', 'quick-mail') );
+    			$content .= sprintf('<p>%s.</p>',
+    			__('Use these products and services with Quick Mail to fix delivery errors', 'quick-mail') );
+    			$content .= '<dl><dt><strong>' . __( 'Mail Delivery Service', 'quick-mail' ) . '</strong></dt>';
+    			$content .= '<dd>' . __( 'Use a mail delivery service to send reliable email anywhere', 'quick-mail' ) . '.</dd>';
+    			$content .= "<dd>{$svces}</dd>";
+    			$content .= '<dd>' . __( 'Mailgun is free', 'quick-mail' ) . '.</dd></dl>';
+    			$content .= '<dt><strong>' . __('SMTP Plugins', 'quick-mail') . '</strong></dt>';
+    			$content .= "<dd>{$pline}</dd>";
+    			$screen->add_help_tab( array('id' => 'qm_delivery_help',
+    					'title'	=> __('Delivery Errors', 'quick-mail'), 'content' => $content) );
+    		} // end if adding Delivery Problems
+
 	} // add_qm_settings_help
 
 	/**

@@ -181,7 +181,8 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		if ( $sending_file ) {
 			$mime_type = mime_content_type( $url );
 			if ( 'text/html' != $mime_type && 'text/plain' != $mime_type ) {
-				$message = sprintf('%s : %s', __( 'Please see attachment', 'quick-mail' ), basename( $url ) );
+				$amsg = sprintf('%s : %s', __( 'Please see attachment', 'quick-mail' ), basename( $url ) );
+				$message = apply_filters( 'quick-mail-cli-attachment-message', $amsg );
 				$attachments = array($url);
 			} else {
 				$message = file_get_contents( $url );
@@ -189,7 +190,8 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			} // end if not text file
 
 			if ( empty( $subject ) ) {
-				$subject = __( 'For Your Eyes Only', 'quick-mail' );
+				$smsg = __( 'For Your Eyes Only', 'quick-mail' );
+				$subject = apply_filters( 'quick-mail-cli-attachment-subject', $smsg );
 			} // end if no subject
 
 			$temp_msg = sprintf( '%s %s %s %s', __( 'Sending file', 'quick-mail' ),

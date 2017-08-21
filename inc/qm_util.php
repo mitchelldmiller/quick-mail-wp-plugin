@@ -169,4 +169,31 @@ class QuickMailUtil {
 
        return ( 'N' == $validate_option ) ? true : checkdnsrr( $a_split[1], 'MX' );
    } // end qm_valid_email_domain
+
+	/**
+	 * check if plugin is active.
+	 *
+	 * does not require exact name like WordPress is_plugin_active()
+	 *
+	 * @param string $pname
+	 *        	plugin name
+	 * @return boolean is this plugin active?
+	 */
+	public static function qm_is_plugin_active( $pname ) {
+		$result = false;
+		$your_plugins = is_multisite() ? get_blog_option( get_current_blog_id(), 'active_plugins', array() ) : get_option( 'active_plugins', array() );
+		if ( empty( $your_plugins ) || ! is_array( $your_plugins ) || 1 > count( $your_plugins ) ) {
+			return $result;
+		} // end if no plugins
+
+		foreach ( $your_plugins as $p ) {
+			if ($result = stristr( $p, $pname ) ) {
+				break;
+			} // end if match
+		} // end foreach
+
+		return $result;
+	} // end qm_is_plugin_active
+
+
 } // end class

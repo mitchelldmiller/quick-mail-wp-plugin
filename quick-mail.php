@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.2.2
+Version: 3.2.3
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/
@@ -26,6 +26,12 @@ class QuickMail {
     * @var string (text|html)
     */
    public $content_type = 'text/html';
+
+   /**
+    * Our directory for Quick Mail Filters plugin
+    * @var string directory name
+    */
+   public $directory = '';
 
    /**
     * Static property for our instance.
@@ -73,6 +79,10 @@ class QuickMail {
 		if ( ! function_exists( 'register_activation_hook' ) ) {
 	   		exit;
 	   	}
+
+	   	// TODO public directory to include / extend QuickMail
+	   	$this->directory = plugin_dir_path( __FILE__ );
+
 	   	register_activation_hook( __FILE__, array($this, 'check_wp_version') );
 	   	add_action( 'admin_init', array($this, 'add_email_scripts') );
 	   	add_action( 'admin_menu', array($this, 'init_quick_mail_menu') );
@@ -1833,7 +1843,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 		} // end if comments disabled by administrator
 
 		$qm = admin_url( "tools.php?page=quick_mail_form&comment_id={$id}\r\n" );
-		$title = apply_filters( 'quick-mail-reply-title',  __( 'Private Reply', 'quick-mail' ) ); // was Reply with Quick Mail
+		$title = apply_filters( 'quick_mail_reply_title',  __( 'Private Reply', 'quick-mail' ) ); // was Reply with Quick Mail
 		$left_link = "{$title}: {$qm}";
 		$right_link = "{$qm} : {$title}";
 		$text .= is_rtl() ? $right_link: $left_link;
@@ -1860,7 +1870,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 		} // end if site allows private replies to comments
 
 		$qm_url = admin_url( "tools.php?page=quick_mail_form&comment_id={$comment->comment_ID}");
-		$reply = apply_filters( 'quick-mail-reply-title',  __( 'Private Reply', 'quick-mail' ) );  // was Reply with Quick Mail
+		$reply = apply_filters( 'quick_mail_reply_title',  __( 'Private Reply', 'quick-mail' ) );  // was Reply with Quick Mail
 		$ereply = esc_attr( $reply );
 		$css = 'style="color: #e14d43;"'; // wp-ui-text-highlight
 		$retval = array();
@@ -1918,7 +1928,8 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 		$page = add_submenu_page( 'tools.php', $title, $title,
 		apply_filters( 'quick_mail_user_capability', $min_permission ), 'quick_mail_form', array($this, 'quick_mail_form') );
 		add_action( 'admin_print_styles-' . $page, array($this, 'init_quick_mail_style') );
-		$page = add_options_page( 'Quick Mail Options', $title, apply_filters( 'quick_mail_setup_capability', $min_permission ), 'quick_mail_options', array($this, 'quick_mail_options') );
+		$otitle =  __( 'Quick Mail Options', 'quick-mail' );
+		$page = add_options_page( $otitle, $title, apply_filters( 'quick_mail_setup_capability', $min_permission ), 'quick_mail_options', array($this, 'quick_mail_options') );
 		if ( !empty( $page ) ) {
 			add_action( 'admin_print_styles-' . $page, array($this, 'init_quick_mail_style') );
 			add_action('load-' . $page, array($this, 'add_qm_settings_help'));
@@ -2295,33 +2306,6 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	} // end qm_action_links
 
 	/**
-	 * check if plugin is active.
-	 *
-	 * does not require exact name like is_plugin_active()
-	 *
-	 * @param string $pname plugin name
-	 * @return boolean is this plugin active?
-	 * @since 3.2.0
-	 */
-	public function qm_is_plugin_active( $pname ) {
-		$result = false;
-		$your_plugins = is_multisite() ?
-		get_blog_option( get_current_blog_id(), 'active_plugins', array() ) :
-		get_option( 'active_plugins', array() );
-		if ( empty( $your_plugins ) || !is_array( $your_plugins ) || 1 > count( $your_plugins ) ) {
-			return $result;
-		} // end if no plugins
-
-		foreach ( $your_plugins as $p ) {
-			if ( $result = stristr( $p, $pname ) ) {
-				break;
-			} // end if match
-		} // end foreach
-
-		return $result;
-	} // end qm_is_plugin_active
-
-	/**
 	 * is site using Replacement? Check for active plugin with Sendgrid in name.
 	 *
 	 * @param $check_from boolean default false. check if Sengrid from mail is set?
@@ -2329,11 +2313,11 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	 * @since 3.1.9
 	 */
 	public function got_replacement_info( $check_from = false ) {
-		if ( $this->qm_is_plugin_active( 'mailgun' ) ) {
+		if ( QuickMailUtil::qm_is_plugin_active( 'mailgun' ) ) {
 			return false;
 		} // end if Mailgun is active. cannot use Sengrid with Mailgun.
 
-		if ( !$this->qm_is_plugin_active( 'sendgrid' ) ) {
+		if ( QuickMailUtil::qm_is_plugin_active( 'sendgrid' ) ) {
 			return false;
 		} // end if sendgrid is not active
 
@@ -2410,7 +2394,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	 * @since 3.2.0
 	 */
 	public function got_mailgun_info( $check_from ) {
-		if ( !$this->qm_is_plugin_active( 'mailgun' ) ) {
+		if ( QuickMailUtil::qm_is_plugin_active( 'mailgun' ) ) {
 			return false;
 		} // end if not active
 
@@ -2452,7 +2436,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	 * @since 3.2.0
 	 */
 	function get_mailgun_info( $wp_info ) {
-		if ( !$this->qm_is_plugin_active( 'mailgun' ) ) {
+		if ( QuickMailUtil::qm_is_plugin_active( 'mailgun' ) ) {
 			return $wp_info;
 		} // end if Mailgun is not active
 

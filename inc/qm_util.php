@@ -175,8 +175,7 @@ class QuickMailUtil {
 	 *
 	 * does not require exact name like WordPress is_plugin_active()
 	 *
-	 * @param string $pname
-	 *        	plugin name
+	 * @param string $pname plugin name, or unique portion of name.
 	 * @return boolean is this plugin active?
 	 */
 	public static function qm_is_plugin_active( $pname ) {

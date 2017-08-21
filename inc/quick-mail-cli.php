@@ -23,7 +23,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 *
 	 * <url or filename>
 	 * : Url or file to send.
-	 * Url or Text file is sent as a message. Binary file is sent as an attachment.
+	 * HTML or Text file is sent as a message. Other content is sent as an attachment.
 	 *
 	 * [<subject>]
 	 * : Optional subject.
@@ -133,26 +133,9 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		} // end if missing first or last name
 
 		$message = '';
+		$mime_type = '';
 		$attachments = array();
-		if ( $sending_file ) {
-			$mime_type = mime_content_type( $url );
-			if ( 'text/' != substr( $mime_type, 0, 5) ) {
-				$message = sprintf('%s : %s', __( 'Please see attachment', 'quick-mail' ), basename( $url ) );
-				$attachments = array($url);
-			} else {
-				$message = file_get_contents( $url );
-				$this->content_type = ( 'text/html' == $mime_type ) ? $mime_type : 'text/plain';
-			} // end if not text file
-
-			if (empty($subject)) {
-				$subject = __( 'For Your Eyes Only', 'quick-mail' );
-			} // end if no subject
-
-			$temp_msg = sprintf( '%s %s %s %s', __( 'Sending file', 'quick-mail' ),
-					basename( $url ), __( 'to', 'quick-mail' ), $to );
-			WP_CLI::line( $temp_msg );
-		} // end if sending file
-		else {
+		if ( !$sending_file ) {
 			$temp_msg = sprintf( '%s %s %s %s', __( 'Sending', 'quick-mail' ),
 					$domain, __( 'to', 'quick-mail' ), $to );
 			WP_CLI::line( $temp_msg );
@@ -166,18 +149,53 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			if ( empty( $message ) ) {
 				$temp_msg = __( 'No content', 'quick-mail' );
 				WP_CLI::error( $temp_msg );
-			}
+			} // end if no content
 
-			if ( empty( $subject ) ) {
+			$finfo = new finfo( FILEINFO_MIME );
+			$fdata = explode( ';', $finfo->buffer( $message ) );
+			$fmime = is_array( $fdata ) ? $fdata[0] : '';
+			if ( 'text/html' != $fmime && 'text/plain' != $fmime ) {
+				$ext = str_replace( '+', '_', explode( '/', $fmime ) ); // no + in file name
+				$fext = ( !is_array( $ext ) || empty( $ext[1] ) ) ? __('unknown', 'quick-mail') : $ext[1];
+				$temp = QuickMailUtil::qm_get_temp_path();
+				$fname = $temp . 'qm' . strval( time() ) . ".{$fext}"; // temp file name
+				if ( empty( file_put_contents( $fname, $message ) ) ) {
+					$temp_msg = __( 'Error saving content', 'quick-mail' ) . ' : ' . $fmime;
+					WP_CLI::error( $temp_msg );
+				} // end if cannot save temp file
+				$sending_file = true;
+				$url = $fname;
+			} // end if remote link cannot be sent as a mail message
+
+			if ( !$sending_file && empty( $subject ) ) {
 				$pattern = "/title>(.+)<\/title>/";
 				preg_match( $pattern, $message, $found );
 				if ( !empty( $found ) && !empty( $found[1] ) ) {
 					$subject = html_entity_decode( $found[1], ENT_QUOTES, self::$charset );
 				} else {
-					$subject = $this->get_wp_site_title( $domain );
+					$subject = $domain;
 				}
 			} // end if need subject
-		} // end else sending Web page
+		} // end if getting Web page
+
+		if ( $sending_file ) {
+			$mime_type = mime_content_type( $url );
+			if ( 'text/html' != $mime_type && 'text/plain' != $mime_type ) {
+				$message = sprintf('%s : %s', __( 'Please see attachment', 'quick-mail' ), basename( $url ) );
+				$attachments = array($url);
+			} else {
+				$message = file_get_contents( $url );
+				$this->content_type = ( 'text/html' == $mime_type ) ? $mime_type : 'text/plain';
+			} // end if not text file
+
+			if ( empty( $subject ) ) {
+				$subject = __( 'For Your Eyes Only', 'quick-mail' );
+			} // end if no subject
+
+			$temp_msg = sprintf( '%s %s %s %s', __( 'Sending file', 'quick-mail' ),
+					basename( $url ), __( 'to', 'quick-mail' ), $to );
+			WP_CLI::line( $temp_msg );
+		} // end if sending file
 
 		// set filters and send
 		add_filter( 'wp_mail_content_type', array($this, 'type_filter'), 1, 1 );
@@ -188,7 +206,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			$this->remove_qm_filters();
 			$temp_msg = __( 'Error sending mail', 'quick-mail' );
 			WP_CLI::error( $temp_msg );
-		} // end if error
+		} // end if error sending mail
 
 		$this->remove_qm_filters();
 		if ( $sending_file ) {
@@ -236,29 +254,6 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	public function name_filter( $n ) {
 		return $this->name;
 	} // end from_filter
-
-	/**
-	* Read the title of a URL. Return this site's name if URL is empty.
-	*
-	* @param string $site
-	* @return string title|error
-	*/
-	private function get_wp_site_title( $site ) {
-		$data = $this->get_wp_site_data( $site );
-		if ( is_string( $data ) ) {
-			return $data;
-		} // end if error
-
-		$html = wp_remote_retrieve_body( $data );
-		$pattern = "/title>(.+)<\/title>/";
-		preg_match( $pattern, $html, $found );
-		if ( empty( $found ) || empty( $found[1] ) )
-		{
-			return $site;
-		} // end if no title
-
-		return trim( $found[1] );
-	} // end get_wp_site_title
 
 	/**
 	 * Connect to remote site as Chrome browser. Return error string or array with data.

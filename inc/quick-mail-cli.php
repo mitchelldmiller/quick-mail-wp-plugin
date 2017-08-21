@@ -136,9 +136,6 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		$mime_type = '';
 		$attachments = array();
 		if ( !$sending_file ) {
-			$temp_msg = sprintf( '%s %s %s %s', __( 'Sending', 'quick-mail' ),
-					$domain, __( 'to', 'quick-mail' ), $to );
-			WP_CLI::line( $temp_msg );
 			$data = $this->get_wp_site_data( $url );
 			if ( is_wp_error( $data ) ) {
 				$temp_msg = preg_replace( '/curl error .+: /i', '',  WP_CLI::error_to_string( $data ) );
@@ -182,7 +179,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			$mime_type = mime_content_type( $url );
 			if ( 'text/html' != $mime_type && 'text/plain' != $mime_type ) {
 				$amsg = sprintf('%s : %s', __( 'Please see attachment', 'quick-mail' ), basename( $url ) );
-				$message = apply_filters( 'quick-mail-cli-attachment-message', $amsg );
+				$message = apply_filters( 'quick_mail_cli_attachment_message', $amsg );
 				$attachments = array($url);
 			} else {
 				$message = file_get_contents( $url );
@@ -191,12 +188,8 @@ class Quick_Mail_Command extends WP_CLI_Command {
 
 			if ( empty( $subject ) ) {
 				$smsg = __( 'For Your Eyes Only', 'quick-mail' );
-				$subject = apply_filters( 'quick-mail-cli-attachment-subject', $smsg );
+				$subject = apply_filters( 'quick_mail_cli_attachment_subject', $smsg );
 			} // end if no subject
-
-			$temp_msg = sprintf( '%s %s %s %s', __( 'Sending file', 'quick-mail' ),
-					basename( $url ), __( 'to', 'quick-mail' ), $to );
-			WP_CLI::line( $temp_msg );
 		} // end if sending file
 
 		// set filters and send

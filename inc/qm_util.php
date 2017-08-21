@@ -6,6 +6,20 @@ class QuickMailUtil {
 
    public function __construct() { }
 
+	/**
+	 * find system temp path.
+	 * test upload_tmp_dir, sys_get_temp_dir().
+	 *
+	 * @return string path
+	 */
+	public static function qm_get_temp_path() {
+		$path = ini_get( 'upload_tmp_dir' );
+		if ( !empty( $path ) ) {
+			return trailingslashit( $path );
+		}
+		return trailingslashit( sys_get_temp_dir() );
+	} // end qm_get_temp_path
+
    /**
     * find duplicates in array. does not check case.
     * @see QuickMailUtil::filter_email_input() for use

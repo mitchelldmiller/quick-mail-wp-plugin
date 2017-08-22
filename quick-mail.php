@@ -8,6 +8,8 @@ Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/
 Text Domain: quick-mail
 Domain Path: /lang
+License: GPL-2.0+
+License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 */
 
 require_once 'inc/qm_util.php';
@@ -82,7 +84,6 @@ class QuickMail {
 
 	   	// TODO public directory to include / extend QuickMail
 	   	$this->directory = plugin_dir_path( __FILE__ );
-
 	   	register_activation_hook( __FILE__, array($this, 'check_wp_version') );
 	   	add_action( 'admin_init', array($this, 'add_email_scripts') );
 	   	add_action( 'admin_menu', array($this, 'init_quick_mail_menu') );
@@ -2317,7 +2318,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 			return false;
 		} // end if Mailgun is active. cannot use Sengrid with Mailgun.
 
-		if ( QuickMailUtil::qm_is_plugin_active( 'sendgrid' ) ) {
+		if ( !QuickMailUtil::qm_is_plugin_active( 'sendgrid' ) ) {
 			return false;
 		} // end if sendgrid is not active
 
@@ -2394,7 +2395,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	 * @since 3.2.0
 	 */
 	public function got_mailgun_info( $check_from ) {
-		if ( QuickMailUtil::qm_is_plugin_active( 'mailgun' ) ) {
+		if ( !QuickMailUtil::qm_is_plugin_active( 'mailgun' ) ) {
 			return false;
 		} // end if not active
 
@@ -2436,7 +2437,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	 * @since 3.2.0
 	 */
 	function get_mailgun_info( $wp_info ) {
-		if ( QuickMailUtil::qm_is_plugin_active( 'mailgun' ) ) {
+		if ( !QuickMailUtil::qm_is_plugin_active( 'mailgun' ) ) {
 			return $wp_info;
 		} // end if Mailgun is not active
 

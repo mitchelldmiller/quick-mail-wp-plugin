@@ -103,23 +103,23 @@ class QuickMail {
 
 	   	$this->directory = plugin_dir_path( __FILE__ );
 	   	register_activation_hook( __FILE__, array($this, 'check_wp_version') );
+	   	add_action( 'activated_plugin', array($this, 'install_quick_mail'), 10, 0);
+	   	add_action( 'admin_footer', array($this, 'qm_get_comment_script') );
+	   	add_action( 'admin_footer', array($this, 'qm_get_title_script') );
 	   	add_action( 'admin_init', array($this, 'add_email_scripts') );
 	   	add_action( 'admin_menu', array($this, 'init_quick_mail_menu') );
-	   	add_action( 'plugins_loaded', array($this, 'init_quick_mail_translation') );
-	   	add_filter( 'comment_notification_text', array($this, 'qm_comment_reply'), 10, 2 );
 	   	add_filter( 'comment_row_actions', array($this, 'qm_filter_comment_link'), 10, 2 );
-	   	add_action( 'activated_plugin', array($this, 'install_quick_mail'), 10, 0);
+	   	add_filter( 'comment_notification_text', array($this, 'qm_comment_reply'), 10, 2 );
 	   	add_action( 'deactivated_plugin', array($this, 'unload_quick_mail_plugin'), 10, 0 );
-	   	add_action( 'wp_ajax_qm_get_comment', array($this, 'qm_get_comment') );
-	   	add_action( 'admin_footer', array($this, 'qm_get_comment_script') );
-	   	add_action( 'wp_ajax_qm_get_title', array($this, 'qm_get_title') );
-	   	add_action( 'admin_footer', array($this, 'qm_get_title_script') );
 	   	add_action( 'init', array($this, 'let_user_replace_sender'), 10, 0 );
 	   	add_action( 'load-tools_page_quick_mail_form', array( $this, 'add_qm_help' ), 20, 0 );
+	   	add_action( 'plugins_loaded', array($this, 'init_quick_mail_translation') );
 	   	add_action( 'plugins_loaded', array($this, 'show_qm_pointer' ), 10, 0 );
+	   	add_action( 'wp_ajax_qm_get_comment', array($this, 'qm_get_comment') );
+	   	add_action( 'wp_ajax_qm_get_title', array($this, 'qm_get_title') );
 
-	   	add_filter( 'plugin_row_meta', array($this, 'qm_plugin_links'), 10, 2 );
 	   	add_filter( 'plugin_action_links', array($this, 'qm_action_links'), 10, 2 );
+	   	add_filter( 'plugin_row_meta', array($this, 'qm_plugin_links'), 10, 2 );
 	   	add_filter( 'quick_mail_setup_capability', array($this, 'let_editor_set_quick_mail_option') );
    } // end constructor
 

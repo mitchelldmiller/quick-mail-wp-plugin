@@ -1,6 +1,6 @@
 <?php
 /**
- * Quick Mail validation functions for Javascript and quick-mail-cli.php
+ * Quick Mail utility functions for Javascript and quick-mail-cli.php
  */
 class QuickMailUtil {
 
@@ -186,13 +186,12 @@ class QuickMailUtil {
 		} // end if no plugins
 
 		foreach ( $your_plugins as $p ) {
-			if ($result = stristr( $p, $pname ) ) {
+			if ( $result = stristr( $p, $pname ) ) {
 				break;
 			} // end if match
 		} // end foreach
 
 		return $result;
 	} // end qm_is_plugin_active
-
 
 } // end class

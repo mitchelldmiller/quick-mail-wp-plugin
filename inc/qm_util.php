@@ -20,6 +20,25 @@ class QuickMailUtil {
 		return trailingslashit( sys_get_temp_dir() );
 	} // end qm_get_temp_path
 
+	/**
+	 * count input characters without spaces.
+	 *
+	 * @param string $text original text
+	 * @param integer $min_len minimum acceptable length
+	 * @param integer $max_len maximum acceptable length
+	 * @return boolean input length
+	 */
+	public static function check_char_count($text, $min_len = 1, $max_len = 80) {
+		$len = strlen( $text );
+		if ( $len < $min_len || $len > $max_len ) {
+			return false;
+		} // end if original string is too short or long
+
+		$content = preg_replace( '/\s/', '', $text );
+		$len = strlen( $content );
+		return ( $len >= $min_len );
+	} // end check_char_count
+
    /**
     * find duplicates in array. does not check case.
     * @see QuickMailUtil::filter_email_input() for use

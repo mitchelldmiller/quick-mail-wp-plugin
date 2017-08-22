@@ -1,17 +1,16 @@
 === Quick Mail ===
 Contributors: brainiac
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Tags: mail, email, comments, mailgun, sendgrid, attachment, accessibility, comment, idn, multisite, rich text, tinymce
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Requires at least: 4.6
 Tested up to: 4.9
-Stable tag: 3.2.2
+Stable tag: 3.2.3
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl.html
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Send reliable text or html email with attachments and shortcodes. Send private replies to comments. Select recipient from users or commenters.
 
 == Description ==
-
 >Quick Mail is the easiest way to send email with attachments to WordPress users on your site, or send private replies to comments. Compatible with multisite.
 
 Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds Quick Mail to Tools menu and comment replies.
@@ -24,48 +23,12 @@ Mail is sent with user's name and email. Recognizes credentials from [Mailgun](h
 
 Multiple files from up to six directories (folders) can be attached to a message.
 
-= Features =
-
-* Includes a [WP-CLI](https://wp-cli.org/) command to send a file, or the the contents of a Web page.
-
-* Sends text or html mails to multiple recipients. Content type is determined from message.
-
-* Send private replies with attachments to comments.
-
-* Multiple recipients can be selected from users or entered manually.
-
-* Saves message and subject on form to send repeat messages.
-
-* Saves last 12 email addresses entered on form.
-
-* Share a WordPress draft by copying / pasting its code into a message.
-
-* Option to validate recipient domains with [checkdnserr](http://php.net/manual/en/function.checkdnsrr.php) before mail is sent.
-
-* Validates international domains if [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php) is available to convert domain to [Punycode](https://tools.ietf.org/html/rfc3492).
-
-* Site options for administrators to hide their profile, and limit access to user list.
-
-* Option to add paragraphs and line breaks to HTML messages with [wpauto](https://codex.wordpress.org/Function_Reference/wpautop).
-
-* Select recipient from users or commenters.
-
-= Learn More =
-
-* See [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
-
-* See [Send Reliable Email from WordPress with Quick Mail](https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/) for update info.
-
-* [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/).
-
 == Installation ==
-
 1. Download the plugin and unpack in your `/wp-content/plugins` directory.
-
-1. Activate the plugin through the 'Plugins' menu in WordPress.
+2. Activate the plugin through the 'Plugins' menu in WordPress.
+3. Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
 
 == Frequently Asked Questions ==
-
 = Who can send mail? =
 
 * Users must be able to [publish a post](http://codex.wordpress.org/Roles_and_Capabilities#publish_posts) to send an email. Minimum permission can be changed with a filter.
@@ -90,8 +53,34 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * Option for administrators to use [Sendgrid API](https://sendgrid.com/solutions/sendgrid-api/).
 
-* Programmers can replace their credentials by adding a filter to _replace_quick_mail_sender_.  
+* Programmers can replace their credentials by adding a filter to replace_quick_mail_sender. This only works, if you are not using another mail plugin's credentials.
 
+= Customizing Quick Mail =
+
+* Add a filter to modify Quick Mail.
+
+* Programmers can replace their credentials by adding a filter to `replace_quick_mail_sender`.
+
+- What filters are available to modify Quick Mail?
+
+`quick_mail_cli_attachment_message`
+  Replace default CLI attachment message.
+  
+`quick_mail_cli_attachment_subject`
+  Replace default CLI attachment subject.
+  
+`quick_mail_comment_style`
+  Replace quick mail comment style.
+  
+`quick_mail_reply_title`	
+  Replace title for private comment reply on comments list.
+
+`quick_mail_user_capability`	
+  Replace minimum user capability.
+  
+`replace_quick_mail_sender`
+  Replace quick mail sender. Expects an associative array with values for `name` and `email`.
+  
 = Limitations =
 
 * Up to 12 manually entered recipients are saved in HTML Storage.
@@ -127,31 +116,22 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 * Quick Mail sends email with [wp_mail](https://developer.wordpress.org/reference/functions/wp_mail/).
 
-
   `wp_mail` error messages are displayed, if there is a problem.
 
 * "You must provide at least one recipient email address."
 
-
    `wp_mail` rejected an address. Seen when Quick Mail verification is off.
-   
+
+
 == Screenshots ==
 
 1. Selecting users on Quick Mail data entry form.
-
 2. Multiple attachments from different folders (directories).
-
 3. Selecting saved recipients.
-
-4. Quick Mail options.
-
-5. Full screen view.
-
-6. Reply to comment.
 
 == Changelog ==
 
-= 3.2.2 =
+= 3.2.3 =
 * Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
 * Send URL or file contents with quick-mail WP CLI command.
 * Uses Mailgun credentials, if the plugin is active and set to use API.
@@ -197,38 +177,11 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 * improved data entry form accessibility and design.
 * added visual editor.
 
-= Earlier versions =
-
-Refer to the separate changelog.txt for changes of previous versions.
-
 == Upgrade Notice ==
 
-= 3.2.2 =
-* Upgrade recommended.
+= 3.2.3 =
 
-= 3.1.8 =
-* Upgrade recommended.
-
-= 3.1.7 =
-* Upgrade recommended.
-
-= 3.0.5 =
-* Upgrade adds Russian translation.
-
-= 3.0.4 =
-* Upgrade recommended.
-
-= 3.0.3 =
-* Upgrade recommended.
-
-= 3.0.2 =
-* Upgrade recommended.
-
-= 3.0.1 =
-* Upgrade recommended.
-
-= 3.0.0 =
-* Upgrade recommended.
+* Upgrade recommended. Added features to send reliable mail and WP-CLI command.
 
 == License ==
 

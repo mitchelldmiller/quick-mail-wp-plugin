@@ -82,7 +82,31 @@ __Sending Mail from Other Addresses__
 
 * Option for administrators to use [Sendgrid API](https://sendgrid.com/solutions/sendgrid-api/). 
 
+__Modifying Quick Mail__
+
+* Add a filter to modify Quick Mail.
+
 * Programmers can replace their credentials by adding a filter to `replace_quick_mail_sender`.
+
+- What filters are available to modify Quick Mail?
+
+`quick_mail_cli_attachment_message`
+  Replace default CLI attachment message.
+  
+`quick_mail_cli_attachment_subject`
+  Replace default CLI attachment subject.
+  
+`quick_mail_comment_style`
+  Replace quick mail comment style.
+  
+`quick_mail_reply_title`	
+  Replace title for private comment reply on comments list.
+
+`quick_mail_user_capability`	
+  Replace minimum user capability.
+  
+`replace_quick_mail_sender`
+  Replace quick mail sender. Expects an associative array with values for `name` and `email`.
 
 __Limitations__
 

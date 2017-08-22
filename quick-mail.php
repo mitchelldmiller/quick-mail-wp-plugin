@@ -12,6 +12,25 @@ License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 */
 
+/*
+ * Quick Mail WordPress Plugin - Send mail from Wordpress using Quick Mail
+ * Copyright (C) 2015-2017 Mitchell D. Miller
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
 require_once 'inc/qm_util.php';
 
 // Load our WP-CLI command, if available
@@ -30,7 +49,7 @@ class QuickMail {
    public $content_type = 'text/html';
 
    /**
-    * Our directory for Quick Mail Filters plugin
+    * Our directory for Quick Mail helper plugins.
     * @var string directory name
     */
    public $directory = '';
@@ -82,7 +101,6 @@ class QuickMail {
 	   		exit;
 	   	}
 
-	   	// TODO public directory to include / extend QuickMail
 	   	$this->directory = plugin_dir_path( __FILE__ );
 	   	register_activation_hook( __FILE__, array($this, 'check_wp_version') );
 	   	add_action( 'admin_init', array($this, 'add_email_scripts') );
@@ -96,13 +114,13 @@ class QuickMail {
 	   	add_action( 'admin_footer', array($this, 'qm_get_comment_script') );
 	   	add_action( 'wp_ajax_qm_get_title', array($this, 'qm_get_title') );
 	   	add_action( 'admin_footer', array($this, 'qm_get_title_script') );
-	   	add_filter( 'plugin_row_meta', array($this, 'qm_plugin_links'), 10, 2 );
-	   	add_filter( 'plugin_action_links', array($this, 'qm_action_links'), 10, 2 );
-	   	add_filter( 'quick_mail_setup_capability', array($this, 'let_editor_set_quick_mail_option') );
-
 	   	add_action( 'init', array($this, 'let_user_replace_sender'), 10, 0 );
 	   	add_action( 'load-tools_page_quick_mail_form', array( $this, 'add_qm_help' ), 20, 0 );
 	   	add_action( 'plugins_loaded', array($this, 'show_qm_pointer' ), 10, 0 );
+
+	   	add_filter( 'plugin_row_meta', array($this, 'qm_plugin_links'), 10, 2 );
+	   	add_filter( 'plugin_action_links', array($this, 'qm_action_links'), 10, 2 );
+	   	add_filter( 'quick_mail_setup_capability', array($this, 'let_editor_set_quick_mail_option') );
    } // end constructor
 
    /**
@@ -1170,7 +1188,7 @@ jQuery(document).ready( function() {
 </div>
 <?php elseif ( !empty( $success ) ) : ?>
 <div id="qm-success" class="updated notice is-dismissible">
-   <p><?php echo $success; ?></p>
+   <p role="alert"><?php echo $success; ?></p>
 </div>
 <?php elseif ( !empty( $error ) ) : ?>
 <?php $ecss = ( mb_strstr( $error, 'profile.php', false, 'UTF-8' ) ) ? 'error notice': 'error notice is-dismissible'; ?>
@@ -1456,7 +1474,7 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 	      } // end if admin
       } // end if POST
       if ( $updated ) {
-      	echo '<div class="updated">', _e( 'Option Updated', 'quick-mail' ), '</div>';
+      	echo '<div class="updated"><p>', _e( 'Option Updated', 'quick-mail' ), '</p></div>';
       } // end if updated
 
       $user_query = new \WP_User_Query( array('count_total' => true) );
@@ -2344,12 +2362,11 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	 * get a name for text label of the replacement service settings and messages.
 	 *
 	 * @return string name of replacement service
-	 * @todo add a setting, or add option to get it from credentials function.
 	 * @since 3.2.1
 	 */
 	public function get_replacement_name() {
 		return $this->got_replacement_info() ? __( 'Sendgrid', 'quick-mail' ) : '';
-	} // end get_replacement_name TODO add setting
+	} // end get_replacement_name TODO add setting?
 
 	/**
 	 * get Sendgrid user info, if available

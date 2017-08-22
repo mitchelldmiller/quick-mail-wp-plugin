@@ -7,7 +7,7 @@
  */
 class Quick_Mail_Command extends WP_CLI_Command {
 
-	public $from = '', $name = '', $content_type = 'text/html';
+	public $from = '', $name = '', $attached_message = '', $content_type = 'text/html';
 	public static $charset = '';
 
 	/**
@@ -30,6 +30,10 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 * Default subject for Url is html document's title.
 	 * Default subject for text is "For Your Eyes Only."
 	 *
+	 * [<message attachment file>]
+	 * : Optional file to replace default message, when sending attachment.
+	 * Default message is "Please see attachment."
+	 *
 	 * ## EXAMPLES
 	 *
 	 *     * wp quick-mail fred@example.com mary@example.com https://example.com "Hello Mary"
@@ -45,7 +49,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 *     Default subject is "For Your Eyes Only."
 	 *     Default attachment message is "Please see attachment : filename."
 	 *
-	 * @synopsis <from> <to> <url|filename> [<subject>]
+	 * @synopsis <from> <to> <url|filename> [<subject>] [<message_attachment_file>]
 	 */
 	public function __invoke( $args, $assoc_args ) {
 		require_once plugin_dir_path( __FILE__ ) . 'qm_util.php';
@@ -79,6 +83,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		$subject = '';
 		$domain = '';
 		$sending_file = false;
+		$file = '';
 		if ( 'http' == substr( $args[2], 0, 4) ) {
 			$url = str_replace('&#038;', '&', esc_url( $args[2] ) );
 			if ( !filter_var( $url, FILTER_VALIDATE_URL ) ) {
@@ -107,8 +112,8 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		$subject = isset( $args[3] ) ? html_entity_decode( $args[3], ENT_QUOTES, self::$charset ) : '';
 
 		// get sender info
-		$args = array('search' => $this->from, 'search_columns' => array('user_email'), 'role' => 'Administrator');
-		$user_query = new WP_User_Query( $args );
+		$query_args = array('search' => $this->from, 'search_columns' => array('user_email'), 'role' => 'Administrator');
+		$user_query = new WP_User_Query( $query_args );
 		if ( 1 > count( $user_query->results ) ) {
 			$temp_msg = __( 'Invalid user', 'quick-mail' );
 			WP_CLI::error( $temp_msg ); // exit
@@ -178,8 +183,26 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		if ( $sending_file ) {
 			$mime_type = mime_content_type( $url );
 			if ( 'text/html' != $mime_type && 'text/plain' != $mime_type ) {
-				$amsg = sprintf('%s : %s', __( 'Please see attachment', 'quick-mail' ), basename( $url ) );
-				$message = apply_filters( 'quick_mail_cli_attachment_message', $amsg );
+				$file = isset( $args[4] ) ? $args[4] : ''; // removed sanitize_file_name()
+				if (empty($file)) {
+					$zq = print_r($args, true);
+					WP_CLI::error( "No arg? {$zq}" );
+				}
+				if ( !empty( $file ) ) {
+					if ( !file_exists( $file ) || empty( filesize ( $file ) ) ) {
+						$temp_msg = __( 'Invalid file attachment.', 'quick-mail' );
+						WP_CLI::error( $temp_msg . "{$file} = {$args[4]}" );
+					} // end if empty file or not found
+
+					$this->attached_message = $file;
+					add_filter( 'quick_mail_cli_attachment_message', 'quick_mail_cli_attachment_message', 1, 0 );
+					$temp_msg = __( 'Replaced attachment message.', 'quick-mail' );
+					WP_CLI::log( $temp_msg );
+				} else {
+					$amsg = sprintf('%s : %s', __( 'Please see attachment', 'quick-mail' ), basename( $url ) );
+					$message = apply_filters( 'quick_mail_cli_attachment_message', $amsg );
+				} // end if got separate attachment for message
+
 				$attachments = array($url);
 			} else {
 				$message = file_get_contents( $url );
@@ -190,12 +213,14 @@ class Quick_Mail_Command extends WP_CLI_Command {
 				$smsg = __( 'For Your Eyes Only', 'quick-mail' );
 				$subject = apply_filters( 'quick_mail_cli_attachment_subject', $smsg );
 			} // end if no subject
+
 		} // end if sending file
 
 		// set filters and send
 		add_filter( 'wp_mail_content_type', array($this, 'type_filter'), 1, 1 );
 		add_filter( 'wp_mail_from', array($this, 'from_filter'), 1, 1 );
 		add_filter( 'wp_mail_from_name', array($this, 'name_filter'), 1, 1 );
+		add_filter( 'wp_mail_failed', array($this, 'show_mail_failure'), 1, 1 );
 
 		if ( ! wp_mail( $to, $subject, $message, '', $attachments ) ) {
 			$this->remove_qm_filters();
@@ -218,10 +243,41 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 * convenience function to remove filters.
 	 */
 	public function remove_qm_filters() {
+		if ( $this->attached_message ) {
+			remove_filter( 'quick_mail_cli_attachment_message', array($this, 'quick_mail_cli_attachment_message'), 1 );
+		} // end if attached message
+
 		remove_filter( 'wp_mail_content_type', array($this, 'type_filter'), 1 );
 		remove_filter( 'wp_mail_from', array($this, 'from_filter'), 1 );
 		remove_filter( 'wp_mail_from_name', array($this, 'name_filter'), 1 );
+		remove_filter( 'wp_mail_failed', array($this, 'show_mail_failure'), 1 );
 	} // end remove_qm_filters
+
+	/**
+	 * supposed to display wp_mail error message. does not seem to work here.
+	 *
+	 * @param WP_Error $e
+	 */
+	public function show_mail_failure( $e ) {
+		WP_CLI::log( $e->get_error_message() );
+	} // end show_mail_failure
+
+	public function quick_mail_cli_attachment_message() {
+		// replace a message with a file
+		$message = __( 'You have an attachment.', 'quick-mail' );
+		if ( file_exists( $this->attached_message ) ) {
+			$data = file_get_contents( $this->attached_message );
+			$finfo = new finfo( FILEINFO_MIME );
+			$fdata = explode( ';', $finfo->buffer( $data ) );
+			$fmime = is_array( $fdata ) ? $fdata[0] : '';
+			if ( 'text/html' != $fmime && 'text/plain' != $fmime ) {
+				return $message;
+			} else {
+				return $data;
+			} // end if invalid attachment
+		} // end if
+		return $message;
+	} // end quick_mail_cli_attachment_message
 
 	/**
 	 * filter for wp_mail_content_type.

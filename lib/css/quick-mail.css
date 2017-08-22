@@ -61,6 +61,9 @@ td.p {
 	font-weight: normal;
 	text-shadow: none;
 }
+td.c, th.c {
+	text-align: center;
+}
 
 label.qm-label, span.qm-label {
 	font: normal 16px/16px Verdana,sans-serif;

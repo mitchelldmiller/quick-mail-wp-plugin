@@ -13,6 +13,8 @@ Description
 
 Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds Quick Mail to Tools menu and comment replies.
 
+Send a Web page, file, or message from the command line with quick-mail command for [WP-CLI](https://wp-cli.org/).
+
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
 Mail is sent with user's name and email. Recognizes credentials from [Mailgun](https://wordpress.org/plugins/mailgun/) and [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugins.
@@ -52,9 +54,16 @@ __Features__
 
 ### Installation ###
 
-1. Download [the latest release](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases/latest) and unpack in your `/wp-content/plugins/` directory.
+1. Download the plugin and unpack in your `/wp-content/plugins` directory.
 
-1. Activate the plugin through the WordPress 'Plugins' menu.
+2. Activate the plugin through the 'Plugins' menu in WordPress.
+
+3. Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
+
+4. Optional: [Install WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
+
+5. Optional: Install [Mailgun](http://wordpress.org/extend/plugins/mailgun/) or [Sendgrid](http://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
+
 
 ### Frequently Asked Questions ###
 
@@ -151,10 +160,6 @@ __Mail Errors__
 
    `wp_mail` rejected an address. Seen when Quick Mail verification is off.
    
-* Warning: Not sending file. Attachment message ignored.
-
-    WP-CLI quick-mail did not include attachment message, because you are not sending a file.
-
 __Translators and Programmers__
 
 * A .pot file is included for translators.

@@ -15,6 +15,8 @@ Send reliable text or html email with attachments and shortcodes. Send private r
 
 Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds Quick Mail to Tools menu and comment replies.
 
+Send a Web page, file, or message from the command line with quick-mail command for [WP-CLI](https://wp-cli.org/).
+
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
 User options for sending email to site users or others.
@@ -27,8 +29,11 @@ Multiple files from up to six directories (folders) can be attached to a message
 1. Download the plugin and unpack in your `/wp-content/plugins` directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
+4. Optional: [Install WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
+5. Optional: Install [Mailgun](http://wordpress.org/extend/plugins/mailgun/) or [Sendgrid](http://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
 
 == Frequently Asked Questions ==
+
 = Who can send mail? =
 
 * Users must be able to [publish a post](http://codex.wordpress.org/Roles_and_Capabilities#publish_posts) to send an email. Minimum permission can be changed with a filter.
@@ -122,21 +127,25 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
    `wp_mail` rejected an address. Seen when Quick Mail verification is off.
 
-* Warning: Not sending file. Attachment message ignored.
-
-    WP-CLI `quick-mail` did not include attachment message, because you are not sending a file.
-
 == Screenshots ==
 
 1. Selecting users on Quick Mail data entry form.
+
 2. Multiple attachments from different folders (directories).
+
 3. Selecting saved recipients.
+
+4. Quick Mail options.
+
+5. Full screen view.
+
+6. Reply to comment.
 
 == Changelog ==
 
 = 3.2.3 =
 * Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
-* Send URL or file contents with quick-mail WP CLI command.
+* Send URL or file contents with `quick-mail` WP CLI command.
 * Uses Mailgun credentials, if the plugin is active and set to use API.
 * Option to use Sendgrid credentials, if the plugin is active.
 * Organized plugin files into multiple directories.

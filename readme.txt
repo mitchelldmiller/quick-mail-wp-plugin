@@ -25,12 +25,21 @@ Mail is sent with user's name and email. Recognizes credentials from [Mailgun](h
 
 Multiple files from up to six directories (folders) can be attached to a message.
 
+= Learn More =
+
+* [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) is an introduction.
+
+* [Send Reliable Email from WordPress with Quick Mail](https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/) for update info.
+
+* [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/)
+
 == Installation ==
 1. Download the plugin and unpack in your `/wp-content/plugins` directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
-4. Optional: [Install WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
+4. Optional: Install [WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
 5. Optional: Install [Mailgun](http://wordpress.org/extend/plugins/mailgun/) or [Sendgrid](http://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
+6. Optional: Install experimental [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) plugin, to change administrator's credentials.
 
 == Frequently Asked Questions ==
 

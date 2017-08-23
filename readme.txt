@@ -201,8 +201,13 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 == Upgrade Notice ==
 
 = 3.2.3 =
-
 * Upgrade recommended. Added features to send reliable mail and WP-CLI command.
+
+= 3.1.8 =
+* Upgrade recommended.
+
+= 3.1.7 =
+* Upgrade recommended.
 
 == License ==
 

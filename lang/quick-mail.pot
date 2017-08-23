@@ -1,7 +1,7 @@
 "Project-Id-Version: Quick Mail v3.2.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-08-23 00:05:15+0000\n"
+"PO-Revision-Date: 2017-08-23 03:01:27+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1154,5 +1154,10 @@ msgstr ""
 #: inc/quick-mail-cli.php:281
 #@ quick-mail
 msgid "Invalid message type"
+msgstr ""
+
+#: inc/qm_util.php:124
+#@ quick-mail
+msgid "Duplicate"
 msgstr ""
 

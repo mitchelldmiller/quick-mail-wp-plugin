@@ -118,10 +118,13 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
   `wp_mail` error messages are displayed, if there is a problem.
 
-* "You must provide at least one recipient email address."
+* You must provide at least one recipient email address.
 
    `wp_mail` rejected an address. Seen when Quick Mail verification is off.
 
+* Warning: Not sending file. Attachment message ignored.
+
+    WP-CLI `quick-mail` did not include attachment message, because you are not sending a file.
 
 == Screenshots ==
 

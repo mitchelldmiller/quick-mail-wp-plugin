@@ -7,8 +7,13 @@
  */
 class Quick_Mail_Command extends WP_CLI_Command {
 
-	public $from = '', $name = '', $attached_message = '', $content_type = 'text/html';
+	public $from = '', $name = '', $content_type = 'text/html';
 	public static $charset = '';
+	/**
+	 * valid MIME types for messages.
+	 * @var array
+	 */
+	public static $VALID_MIME = array('text/plain', 'text/html'); // 'text/x-php'
 
 	/**
 	 * Mail the contents of a URL or file.
@@ -144,6 +149,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 
 		$message = '';
 		$mime_type = '';
+
 		$attachments = array();
 		if ( !$sending_file ) {
 			$data = $this->get_wp_site_data( $url );
@@ -161,7 +167,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			$finfo = new finfo( FILEINFO_MIME );
 			$fdata = explode( ';', $finfo->buffer( $message ) );
 			$fmime = is_array( $fdata ) ? $fdata[0] : '';
-			if ( 'text/html' != $fmime && 'text/plain' != $fmime ) {
+			if ( !in_array( $fmime, self::$VALID_MIME) ) {
 				$ext = str_replace( '+', '_', explode( '/', $fmime ) ); // no + in file name
 				$fext = ( !is_array( $ext ) || empty( $ext[1] ) ) ? __('unknown', 'quick-mail') : $ext[1];
 				$temp = QuickMailUtil::qm_get_temp_path();
@@ -187,25 +193,24 @@ class Quick_Mail_Command extends WP_CLI_Command {
 
 		if ( $sending_file ) {
 			$mime_type = mime_content_type( $url );
-			if ( 'text/html' != $mime_type && 'text/plain' != $mime_type ) {
+			// TODO only checking for replaced attachment title, if sending file.
+			// I could save the link to a file, and use this for a message.
+			if ( !in_array( $mime_type, self::$VALID_MIME) ) {
+				$attachments = array($url);
 				$file = isset( $args[4] ) ? $args[4] : ''; // removed sanitize_file_name()
-				if ( !empty( $file ) ) {
-					if ( !file_exists( $file ) || empty( filesize ( $file ) ) ) {
-						$temp_msg = __( 'Invalid file attachment.', 'quick-mail' );
-						WP_CLI::error( $temp_msg . "{$file} = {$args[4]}" );
-					} // end if empty file or not found
+				if ( !empty( $file ) && !$this->valid_attachment_message( $file ) 	) {
+					$file = '';
+				} // end if file OK
 
-					$this->attached_message = $file;
+				if ( !empty( $file ) ) {
 					add_filter( 'quick_mail_cli_attachment_message', array($this, 'quick_mail_cli_attachment_message'), 1, 1 );
-					$message = apply_filters( 'quick_mail_cli_attachment_message', '' );
+					$message = apply_filters( 'quick_mail_cli_attachment_message', $file );
 					$temp_msg = __( 'Replaced attachment message.', 'quick-mail' );
 					WP_CLI::log( $temp_msg );
 				} else {
 					$amsg = sprintf('%s : %s', __( 'Please see attachment', 'quick-mail' ), basename( $url ) );
 					$message = apply_filters( 'quick_mail_cli_attachment_message', $amsg );
 				} // end if got separate attachment for message
-
-				$attachments = array($url);
 			} else {
 				$message = file_get_contents( $url );
 				$this->content_type = ( 'text/html' == $mime_type ) ? $mime_type : 'text/plain';
@@ -215,7 +220,9 @@ class Quick_Mail_Command extends WP_CLI_Command {
 				$smsg = __( 'For Your Eyes Only', 'quick-mail' );
 				$subject = apply_filters( 'quick_mail_cli_attachment_subject', $smsg );
 			} // end if no subject
-
+		} elseif ( isset( $args[4] ) && !empty( $args[4])) {
+			$temp_msg = __( 'Not sending file. Attachment message ignored.', 'quick-mail' );
+			WP_CLI::warning( $temp_msg ); // extra arg
 		} // end if sending file
 
 		// set filters and send
@@ -229,7 +236,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			WP_CLI::error( $temp_msg );
 		} // end if error sending mail
 
-		$this->remove_qm_filters();
+		$this->remove_qm_filters( $file );
 		if ( $sending_file ) {
 			$temp_msg = sprintf('%s %s %s %s', __( 'Sent', 'quick-mail' ),
 					basename( $url ), __( 'to', 'quick-mail' ), $to );
@@ -242,9 +249,11 @@ class Quick_Mail_Command extends WP_CLI_Command {
 
 	/**
 	 * convenience function to remove filters.
+	 *
+	 * @param string $file if not empty, also remove attachment message filter.
 	 */
-	public function remove_qm_filters() {
-		if ( $this->attached_message ) {
+	public function remove_qm_filters( $file ) {
+		if ( !empty( $file ) ) {
 			remove_filter( 'quick_mail_cli_attachment_message', array($this, 'quick_mail_cli_attachment_message'), 1 );
 		} // end if attached message
 
@@ -253,18 +262,40 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		remove_filter( 'wp_mail_from_name', array($this, 'name_filter'), 1 );
 	} // end remove_qm_filters
 
+	/**
+	 * is the attachment message valid? does it exist and is text or HTML?
+	 *
+	 * displays warnings for invalid type and not found.
+	 *
+	 * @param string $filename
+	 * @return boolean if file is valid
+	 */
+	public function valid_attachment_message( $filename ) {
+		if ( file_exists( $filename ) && !empty( filesize ( $filename ) ) ) {
+			$data = file_get_contents( $filename );
+			$finfo = new finfo( FILEINFO_MIME );
+			$fdata = explode( ';', $finfo->buffer( $data ) );
+			$fmime = is_array( $fdata ) ? $fdata[0] : '';
+			$ok = in_array($fmime, self::$VALID_MIME ); // TODO
+			if (!$ok) {
+				$temp_msg = __( 'Invalid message type', 'quick-mail' ) . ' : ' . $fmime;
+				WP_CLI::warning( $temp_msg );
+			}
+			return $ok;
+		} // end if file exists
+		$temp_msg = __( 'File not found', 'quick-mail' ) . ' : ' . $filename;
+		WP_CLI::warning( $temp_msg );
+		return false;
+	} // end valid_attachment_message
+
 	public function quick_mail_cli_attachment_message( $orig_msg ) {
 		$message = __( 'You have an attachment.', 'quick-mail' );
-		if ( !empty( $this->attached_message ) ) {
-			$orig_msg = $this->attached_message;
-		} // end if modifying behavior for local changes
-
 		if ( file_exists( $orig_msg ) ) {
 			$data = file_get_contents( $orig_msg );
 			$finfo = new finfo( FILEINFO_MIME );
 			$fdata = explode( ';', $finfo->buffer( $data ) );
 			$fmime = is_array( $fdata ) ? $fdata[0] : '';
-			if ( 'text/html' != $fmime && 'text/plain' != $fmime ) {
+			if ( !in_array( $fmime, self::$VALID_MIME ) ) {
 				return $message;
 			} else {
 				return $data;

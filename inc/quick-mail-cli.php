@@ -236,7 +236,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			WP_CLI::error( $temp_msg );
 		} // end if error sending mail
 
-		$this->remove_qm_filters( $file );
+		$this->remove_qm_filters($file);
 		if ( $sending_file ) {
 			$temp_msg = sprintf('%s %s %s %s', __( 'Sent', 'quick-mail' ),
 					basename( $url ), __( 'to', 'quick-mail' ), $to );
@@ -253,7 +253,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 * @param string $file if not empty, also remove attachment message filter.
 	 */
 	public function remove_qm_filters( $file ) {
-		if ( !empty( $file ) ) {
+		if ( !empty($file) ) {
 			remove_filter( 'quick_mail_cli_attachment_message', array($this, 'quick_mail_cli_attachment_message'), 1 );
 		} // end if attached message
 

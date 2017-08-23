@@ -116,12 +116,14 @@ class QuickMailUtil {
 	   	} // end for
 
 	   	$saved = empty( $retval[0] ) ? '' : implode( ',', $retval );
-	   	if (!empty($invalid)) {
-	   		if (empty($duplicate)) {
+	   	if ( !empty( $invalid ) ) {
+	   		if ( empty( $duplicate ) ) {
 	   			return "{$invalid}\t" . $saved;
-	   		}
-	   		return "{$invalid}<br><br>Duplicate:<br>{$duplicate}\t" . $saved;
-	   	}
+	   		} // end if not duplicate
+
+	   		$word = __( 'Duplicate', 'quick-mail' );
+	   		return "{$invalid}<br><br>{$word}:<br>{$duplicate}\t" . $saved;
+	   	} // end if invalid
 
 	   	if ( !empty( $duplicate ) ) {
 	   		return " {$duplicate}\t" . $saved;
@@ -194,23 +196,33 @@ class QuickMailUtil {
 	 *
 	 * does not require exact name like WordPress is_plugin_active()
 	 *
-	 * @param string $pname plugin name, or unique portion of name.
+	 * @param string $pname 	plugin name, or unique portion of name.
 	 * @return boolean is this plugin active?
 	 */
-	public static function qm_is_plugin_active( $pname ) {
-		$result = false;
-		$your_plugins = is_multisite() ? get_blog_option( get_current_blog_id(), 'active_plugins', array() ) : get_option( 'active_plugins', array() );
-		if ( empty( $your_plugins ) || ! is_array( $your_plugins ) || 1 > count( $your_plugins ) ) {
-			return $result;
-		} // end if no plugins
+   public static function qm_is_plugin_active( $pname ) {
+      $result = false;
+      $your_plugins = is_multisite () ?
+      get_blog_option ( get_current_blog_id (), 'active_plugins', array () ) :
+      get_option ( 'active_plugins', array () );
 
-		foreach ( $your_plugins as $p ) {
-			if ( $result = stristr( $p, $pname ) ) {
-				break;
-			} // end if match
-		} // end foreach
+      if ( !is_multisite() && ( !is_array ( $your_plugins ) || 1 > count ( $your_plugins ) ) ) {
+         return $result;
+      } // end if not multisite and no plugins
 
-		return $result;
-	} // end qm_is_plugin_active
+      $all_plugins = array();
+      if ( is_multisite() ) {
+         $more_plugins = get_site_option ( 'active_sitewide_plugins' );
+         $all_plugins = array_unique( array_merge( $your_plugins, array_keys( $more_plugins ) ) );
+      } else {
+         $all_plugins = $your_plugins;
+      } // end if multisite
+      foreach ( $all_plugins as $one ) {
+         if ($result = stristr ( $one, $pname )) {
+            break;
+         } // end if match
+      } // end foreach
+
+      return $result;
+   } // end qm_is_plugin_active
 
 } // end class

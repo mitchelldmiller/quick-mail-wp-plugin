@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Quick Mail v3.2.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-08-22 20:33:18+0000\n"
+"PO-Revision-Date: 2017-08-23 00:06:47+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -45,7 +45,7 @@ msgstr "Ошибка загрузки файла"
 msgid "Missing temporary directory"
 msgstr "Не найдена временная директория"
 
-#: inc/quick-mail-cli.php:227
+#: inc/quick-mail-cli.php:235
 #: quick-mail.php:1140
 #: quick-mail.php:1142
 #@ quick-mail
@@ -825,17 +825,17 @@ msgstr "Пусть редакторы видят список пользоват
 msgid "Quick Mail requires WordPress 4.6 or greater."
 msgstr "Для быстрой почты требуется 4,6 или более."
 
-#: inc/quick-mail-cli.php:236
+#: inc/quick-mail-cli.php:244
 #@ quick-mail
 msgid "Sent email to"
 msgstr "Отправлено по электронной почте"
 
-#: inc/quick-mail-cli.php:326
+#: inc/quick-mail-cli.php:351
 #@ quick-mail
 msgid "Not found"
 msgstr "Не найдено"
 
-#: inc/quick-mail-cli.php:330
+#: inc/quick-mail-cli.php:355
 #@ quick-mail
 msgid "Cannot connect to"
 msgstr "Не удается подключиться к"
@@ -860,48 +860,49 @@ msgstr "Маилгун активен"
 msgid "Sending mail with Mailgun API."
 msgstr "Отправка почты с помощью API маилгун."
 
-#: inc/quick-mail-cli.php:90
+#: inc/quick-mail-cli.php:100
 #@ quick-mail
 msgid "Invalid URL"
 msgstr "Недопустимый URL-адрес"
 
-#: inc/quick-mail-cli.php:98
+#: inc/quick-mail-cli.php:108
+#: inc/quick-mail-cli.php:286
 #@ quick-mail
 msgid "File not found"
 msgstr "Файл не найден"
 
-#: inc/quick-mail-cli.php:118
-#: inc/quick-mail-cli.php:130
+#: inc/quick-mail-cli.php:128
+#: inc/quick-mail-cli.php:140
 #@ quick-mail
 msgid "Invalid user"
 msgstr "Недопустимый пользователь"
 
-#: inc/quick-mail-cli.php:103
+#: inc/quick-mail-cli.php:113
 #@ quick-mail
 msgid "Empty file"
 msgstr "Пустой файл"
 
-#: inc/quick-mail-cli.php:213
+#: inc/quick-mail-cli.php:220
 #@ quick-mail
 msgid "For Your Eyes Only"
 msgstr "Только для твоих глаз"
 
-#: inc/quick-mail-cli.php:234
+#: inc/quick-mail-cli.php:242
 #@ quick-mail
 msgid "to"
 msgstr "Кому"
 
-#: inc/quick-mail-cli.php:152
+#: inc/quick-mail-cli.php:163
 #@ quick-mail
 msgid "No content"
 msgstr "Нет содержимого"
 
-#: inc/quick-mail-cli.php:233
+#: inc/quick-mail-cli.php:241
 #@ quick-mail
 msgid "Sent"
 msgstr "Отправлен"
 
-#: inc/quick-mail-cli.php:331
+#: inc/quick-mail-cli.php:356
 #@ quick-mail
 msgid "Error"
 msgstr "Ошибка"
@@ -988,17 +989,17 @@ msgstr "Сендгрид"
 msgid "Mailgun Error sending mail"
 msgstr "Маилгун ошибка при отправке почты"
 
-#: inc/quick-mail-cli.php:78
+#: inc/quick-mail-cli.php:88
 #@ quick-mail
 msgid "Invalid Recipient Address"
 msgstr "Недопустимый адрес получателя"
 
-#: inc/quick-mail-cli.php:69
+#: inc/quick-mail-cli.php:79
 #@ quick-mail
 msgid "Invalid Sender Address"
 msgstr "Неправильный адрес отправителя"
 
-#: inc/quick-mail-cli.php:202
+#: inc/quick-mail-cli.php:211
 #@ quick-mail
 msgid "Please see attachment"
 msgstr "См"
@@ -1009,7 +1010,7 @@ msgstr "См"
 msgid "https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/"
 msgstr "https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/"
 
-#: inc/quick-mail-cli.php:67
+#: inc/quick-mail-cli.php:77
 #@ quick-mail
 msgid "Only administrators can send mail."
 msgstr "Отправлять почту могут только администраторы."
@@ -1122,12 +1123,12 @@ msgstr "Начало работы"
 msgid "WP-CLI"
 msgstr "WP-CLI"
 
-#: inc/quick-mail-cli.php:161
+#: inc/quick-mail-cli.php:172
 #@ quick-mail
 msgid "unknown"
 msgstr "неведомые"
 
-#: inc/quick-mail-cli.php:165
+#: inc/quick-mail-cli.php:176
 #@ quick-mail
 msgid "Error saving content"
 msgstr "Ошибка при сохранении содержимого"
@@ -1138,18 +1139,23 @@ msgstr "Ошибка при сохранении содержимого"
 msgid "3.2.3"
 msgstr "3,2,3"
 
-#: inc/quick-mail-cli.php:193
-#@ quick-mail
-msgid "Invalid file attachment."
-msgstr "Недопустимое вложение файла."
-
-#: inc/quick-mail-cli.php:199
+#: inc/quick-mail-cli.php:208
 #@ quick-mail
 msgid "Replaced attachment message."
 msgstr "Сообщение вложения заменено."
 
-#: inc/quick-mail-cli.php:267
+#: inc/quick-mail-cli.php:292
 #@ quick-mail
 msgid "You have an attachment."
 msgstr "У тебя есть вложение."
+
+#: inc/quick-mail-cli.php:224
+#@ quick-mail
+msgid "Not sending file. Attachment message ignored."
+msgstr "Не отсылает файл. Сообщение вложения игнорируется."
+
+#: inc/quick-mail-cli.php:281
+#@ quick-mail
+msgid "Invalid message type"
+msgstr "Недопустимый тип сообщения"
 

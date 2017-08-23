@@ -1,5 +1,5 @@
 @CHARSET "UTF-8";
-/* quick-mail.css 3.0.1 */
+/* quick-mail.css 3.2.3 */
 
 fieldset {
 border: 1px solid #d1d1d1;
@@ -55,6 +55,14 @@ h1, h2, td {
 	color: #000;
 	font-weight: bold;
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+}
+
+td.p {
+	font-weight: normal;
+	text-shadow: none;
+}
+td.c, th.c {
+	text-align: center;
 }
 
 label.qm-label, span.qm-label {

@@ -29,13 +29,13 @@ class QuickMailUtil {
 	 * @return boolean input length
 	 */
 	public static function check_char_count($text, $min_len = 1, $max_len = 80) {
-		$len = strlen( $text );
+		$len = mb_strlen( $text, 'UTF-8' );
 		if ( $len < $min_len || $len > $max_len ) {
 			return false;
 		} // end if original string is too short or long
 
 		$content = preg_replace( '/\s/', '', $text );
-		$len = strlen( $content );
+		$len = mb_strlen( $content );
 		return ( $len >= $min_len );
 	} // end check_char_count
 
@@ -52,7 +52,7 @@ class QuickMailUtil {
 		$j = count($orig_names);
 	   	for ($i = 0; $i < $j; $i++) {
 	   		$name = $orig_names[$i];
-	   		if ( 2 > strlen( $name ) ) {
+	   		if ( 2 > mb_strlen( $name ) ) {
 	   			continue;
 	   		}
 	   		$orig_names[$i] = '';

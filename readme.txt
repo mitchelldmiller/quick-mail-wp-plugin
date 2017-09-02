@@ -4,7 +4,7 @@ Tags: mail, email, comments, mailgun, sendgrid, attachment, accessibility, comme
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Requires at least: 4.6
 Tested up to: 4.9
-Stable tag: 3.2.3
+Stable tag: 3.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -152,6 +152,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 == Changelog ==
 
+= 3.2.4 =
+* character count checks for multibyte text.
+
 = 3.2.3 =
 * Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
 * Send URL or file contents with `quick-mail` WP CLI command.
@@ -201,13 +204,8 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 == Upgrade Notice ==
 
 = 3.2.3 =
+
 * Upgrade recommended. Added features to send reliable mail and WP-CLI command.
-
-= 3.1.8 =
-* Upgrade recommended.
-
-= 3.1.7 =
-* Upgrade recommended.
 
 == License ==
 

@@ -153,6 +153,7 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 == Changelog ==
 
 = 3.2.4 =
+* check for missing multibyte functions.
 * character count checks for multibyte text.
 
 = 3.2.3 =

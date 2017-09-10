@@ -4,7 +4,8 @@ Tags: mail, email, comments, mailgun, sendgrid, attachment, accessibility, comme
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Requires at least: 4.6
 Tested up to: 4.9
-Stable tag: 3.2.3
+Requires PHP: 5.3
+Stable tag: 3.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,7 +30,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) is an introduction.
 
-* [Send Reliable Email from WordPress with Quick Mail](https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/) for update info.
+* [Quick Mail 3.2.4 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-2-4-maintenance-release/) for update info.
 
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/)
 
@@ -152,6 +153,10 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 == Changelog ==
 
+= 3.2.4 =
+* check for missing multibyte functions.
+* character count checks for multibyte text.
+
 = 3.2.3 =
 * Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
 * Send URL or file contents with `quick-mail` WP CLI command.
@@ -201,13 +206,8 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 == Upgrade Notice ==
 
 = 3.2.3 =
+
 * Upgrade recommended. Added features to send reliable mail and WP-CLI command.
-
-= 3.1.8 =
-* Upgrade recommended.
-
-= 3.1.7 =
-* Upgrade recommended.
 
 == License ==
 
@@ -223,4 +223,4 @@ Quick Mail is free for personal or commercial use. Encourage future development 
 
 == Credits ==
 
-Banner image by [27707](https://pixabay.com/en/users/27707-27707/).
+Banner image by [Tumisu](https://pixabay.com/en/users/Tumisu-148124/).

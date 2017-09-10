@@ -29,13 +29,15 @@ class QuickMailUtil {
 	 * @return boolean input length
 	 */
 	public static function check_char_count($text, $min_len = 1, $max_len = 80) {
-		$len = strlen( $text );
+		$charset = is_multisite() ? get_blog_option( get_current_blog_id(), 'blog_charset', 'UTF-8' ) : get_option( 'blog_charset', 'UTF-8' );
+
+		$len = function_exists( 'mb_strlen' ) ? mb_strlen( $text, $charset ) : strlen( $text );
 		if ( $len < $min_len || $len > $max_len ) {
 			return false;
 		} // end if original string is too short or long
 
 		$content = preg_replace( '/\s/', '', $text );
-		$len = strlen( $content );
+		$len = function_exists( 'mb_strlen' ) ? mb_strlen( $content, $charset ) : strlen( $content );
 		return ( $len >= $min_len );
 	} // end check_char_count
 
@@ -52,7 +54,8 @@ class QuickMailUtil {
 		$j = count($orig_names);
 	   	for ($i = 0; $i < $j; $i++) {
 	   		$name = $orig_names[$i];
-	   		if ( 2 > strlen( $name ) ) {
+	   		$your_len = function_exists( 'mb_strlen' ) ? mb_strlen( $name, 'UTF-8' ) : strlen( $name );
+	   		if ( 2 > $your_len ) {
 	   			continue;
 	   		}
 	   		$orig_names[$i] = '';

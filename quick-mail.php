@@ -2,10 +2,10 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.2.3
+Version: 3.2.4
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
-Plugin URI: https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/
+Plugin URI: https://wheredidmybraingo.com/quick-mail-3-2-4-maintenance-release/
 Text Domain: quick-mail
 Domain Path: /lang
 License: GPL-2.0+
@@ -55,6 +55,12 @@ class QuickMail {
    public $directory = '';
 
    /**
+    * Your character set for multibyte functions.
+    * @var string $charset default UTF-8
+    */
+   public $charset = 'UTF-8';
+
+   /**
     * Static property for our instance.
     *
     * @since 1.0.0
@@ -102,6 +108,8 @@ class QuickMail {
 	   	}
 
 	   	$this->directory = plugin_dir_path( __FILE__ );
+	   	$this->charset = is_multisite() ? get_blog_option( get_current_blog_id(), 'blog_charset', 'UTF-8' ) : get_option( 'blog_charset', 'UTF-8' );
+
 	   	register_activation_hook( __FILE__, array($this, 'check_wp_version') );
 	   	add_action( 'activated_plugin', array($this, 'install_quick_mail'), 10, 0);
 	   	add_action( 'admin_footer', array($this, 'qm_get_comment_script') );
@@ -710,9 +718,14 @@ jQuery(document).ready( function() {
 
 	   		// extend visible title on desktop 3.1.1
 	   		$maxlen = wp_is_mobile() ? 45 : 120;
-	   		if ( $maxlen < mb_strlen( $title, 'UTF-8' ) ) {
-	   			$title = mb_substr( $title, 0, $maxlen -1, 'UTF-8' ) . '&hellip;';
+
+	   		// check for mb_ functions 3.2.4
+	   		$your_len = function_exists( 'mb_strlen' ) ? mb_strlen( $title, $this->charset ) : strlen( $title );
+	   		$your_sub = function_exists( 'mb_substr' ) ? mb_substr( $title, 0, $maxlen -1, $this->charset ) : substr( $title, 0, $maxlen -1 );
+	   		if ( $maxlen < $your_len ) {
+	   			$title = $your_sub . '&hellip;';
 	   		} // end if long title
+
 	   		$address = urlencode( "\"{$comment->comment_author}\" <{$comment->comment_author_email}>" );
 	   		$select .= "\r\n<option {$attributes} value='{$address}' class='qmopt'>{$comment->comment_author} &nbsp; ({$title})</option>";
 	   		$matches++;
@@ -910,8 +923,10 @@ jQuery(document).ready( function() {
 				$to = $info['comment_author_email'];
    				$title = get_the_title( $info['comment_post_ID'] );
    				$maxlen = wp_is_mobile() ? 45 : 120;
-   				if ( $maxlen < mb_strlen( $title, 'UTF-8' ) ) {
-   					$subject = mb_substr( $title, 0, $maxlen -1, 'UTF-8' ) . '&hellip;';
+   				$your_len = function_exists( 'mb_strlen' ) ? mb_strlen( $title, $this->charset ) : strlen( $title );
+   				$your_sub = function_exists( 'mb_substr' ) ? mb_substr( $title, 0, $maxlen -1, $this->charset ) : substr( $title, 0, $maxlen -1 );
+   				if ( $maxlen < $your_len ) {
+   					$subject = $your_sub . '&hellip;';
    				} else {
    					$subject = $title;
    				} // end if long title
@@ -981,9 +996,10 @@ jQuery(document).ready( function() {
 
          $rec_type = empty($_POST['qm_bcc']) ? 'Cc' : 'Bcc';
          if (isset($_POST['qm-cc']) && is_array($_POST['qm-cc'])) {
-         	$e = mb_strtolower( urldecode( $_POST['qm-email'] ), 'UTF-8' );
+         	$e = function_exists( 'mb_strtolower' ) ? mb_strtolower( urldecode( $_POST['qm-email'] ), $this->charset ) : strtolower( urldecode( $_POST['qm-email'] ) );
          	foreach ($_POST['qm-cc'] as $c) {
-         		if ( $e == mb_strtolower( urldecode( $c ),'UTF-8' ) ) {
+         		$your_lower = function_exists( 'mb_strtolower' ) ? mb_strtolower( urldecode( $c ), $this->charset ) : strtolower( urldecode( $c ) );
+         		if ( $e == $your_lower ) {
          			$error = __( 'Duplicate mail address', 'quick-mail' );
          			break;
          		} // end if
@@ -1048,11 +1064,13 @@ jQuery(document).ready( function() {
          } // end subject check
 
          $raw_msg = urldecode( stripslashes( $_POST['quickmailmessage'] ) );
-         if ( empty( $error ) && 2 > mb_strlen( $raw_msg, 'UTF-8' ) ) {
+         $your_len = function_exists( 'mb_strlen' ) ? mb_strlen( $raw_msg, $this->charset ) : strlen( $raw_msg );
+         if ( empty( $error ) && 2 > $your_len ) {
          	$error = __( 'Please enter your message', 'quick-mail' );
          } else {
 	         $message = do_shortcode( $raw_msg );
-	         if ( strcmp( $raw_msg, $message ) || is_string( mb_strstr( $message, '</', false, 'UTF-8' ) ) ) {
+	         $your_str = function_exists( 'mb_strstr' ) ? is_string( mb_strstr( $message, '</', false, $this->charset ) ) : is_string( strstr( $message, '</' ) );
+	         if ( strcmp( $raw_msg, $message ) || $your_str ) {
 				$this->content_type = 'text/html';
 	         } else {
 	         	$this->content_type = 'text/plain';
@@ -1191,7 +1209,10 @@ jQuery(document).ready( function() {
    <p role="alert"><?php echo $success; ?></p>
 </div>
 <?php elseif ( !empty( $error ) ) : ?>
-<?php $ecss = ( mb_strstr( $error, 'profile.php', false, 'UTF-8' ) ) ? 'error notice': 'error notice is-dismissible'; ?>
+<?php
+$your_str = function_exists( 'mb_strstr' ) ? mb_strstr( $error, 'profile.php', false, $this->charset ) : strstr( $error, 'profile.php' );
+$ecss = $your_str ? 'error notice': 'error notice is-dismissible';
+?>
 <div id="qm_error" class="<?php echo $ecss; ?>">
    <p role="alert"><?php echo $error; ?></p>
 </div>
@@ -1214,7 +1235,7 @@ jQuery(document).ready( function() {
 <fieldset>
 <?php
 $the_from = htmlspecialchars( substr( $from, 6 ), ENT_QUOTES );
-$tlen = mb_strlen( $the_from, 'UTF-8' ) + 2;
+$tlen = function_exists( 'mb_strlen' ) ? mb_strlen( $the_from, $this->charset ) + 2 : strlen( $the_from ) + 2;
 if ( 75 < $tlen ) {
 	$tlen = 75;
 }

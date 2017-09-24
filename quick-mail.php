@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.2.4
+Version: 3.2.5
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/quick-mail-3-2-4-maintenance-release/
@@ -111,6 +111,7 @@ class QuickMail {
 	   	$this->charset = is_multisite() ? get_blog_option( get_current_blog_id(), 'blog_charset', 'UTF-8' ) : get_option( 'blog_charset', 'UTF-8' );
 
 	   	register_activation_hook( __FILE__, array($this, 'check_wp_version') );
+
 	   	add_action( 'activated_plugin', array($this, 'install_quick_mail'), 10, 0);
 	   	add_action( 'admin_footer', array($this, 'qm_get_comment_script') );
 	   	add_action( 'admin_footer', array($this, 'qm_get_title_script') );
@@ -449,21 +450,26 @@ jQuery(document).ready( function() {
 		} // end if multisite
 	} // end unload_quick_mail_plugin
 
-   /**
-    * load quick-mail.js for email select and quick-mail-addresses.js to count saved addresses.
-    *
-    * @since 1.2.0
-    */
-   public function add_email_scripts()
-   {
-      wp_enqueue_script( 'qmScript', plugins_url('/lib/js/quick-mail.js', __FILE__), array('jquery'), null, false );
-      wp_enqueue_script( 'qmCount', plugins_url('/lib/js/quick-mail-addresses.js', __FILE__), array('jquery'), null, false );
-      $data = array(
-      		'one' => __( 'Clear 1 saved address', 'quick-mail' ),
-      		'many' => sprintf( __( 'Clear %s saved addresses', 'quick-mail' ), '{number}' )
-      );
-      wp_localize_script( 'qmCount', 'quick_mail_saved', $data );
-   } // end add_email_scripts
+	/**
+	 * load quick-mail.js for email select and quick-mail-addresses.js to count saved addresses.
+	 *
+	 * @since 1.2.0
+	 */
+	public function add_email_scripts() {
+		if ( !strstr( $_SERVER['REQUEST_URI'], 'quick_mail' ) ) {
+			return;
+		} // end if script not needed here.
+
+		wp_enqueue_script( 'qmScript', plugins_url( '/lib/js/quick-mail.js', __FILE__ ),
+				array('jquery'), null, false );
+		wp_enqueue_script( 'qmCount', plugins_url( '/lib/js/quick-mail-addresses.js', __FILE__ ),
+				array('jquery'), null, false );
+		$data = array(
+				'one' => __( 'Clear 1 saved address', 'quick-mail' ),
+				'many' => sprintf( __( 'Clear %s saved addresses', 'quick-mail' ), '{number}' )
+		);
+		wp_localize_script( 'qmCount', 'quick_mail_saved', $data );
+	} // end add_email_scripts
 
    /**
     * create and display recipient input. user list or text input.
@@ -812,8 +818,12 @@ jQuery(document).ready( function() {
    	 * get Javascript to load comment and move cursor to end of textarea or TinyMCE.
    	 */
 	public function qm_get_comment_script() {
+		if ( !strstr( $_SERVER['REQUEST_URI'], 'quick_mail_form&comment_id' ) ) {
+			return;
+		} // end if script not needed here.
+
 		$ajax_nonce = wp_create_nonce( 'qm_get_comment' );
-	?>
+?>
 		<script type="text/javascript">
 		// modified: https://davidwalsh.name/caret-end
 		function move_cursor_to_end_of_textarea() {

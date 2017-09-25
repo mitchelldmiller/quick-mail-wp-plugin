@@ -5,7 +5,7 @@ Description: Send text or html email with attachments from user's credentials. S
 Version: 3.2.5
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
-Plugin URI: https://wheredidmybraingo.com/quick-mail-3-2-4-maintenance-release/
+Plugin URI: https://wheredidmybraingo.com/quick-mail-3-2-5-maintenance-release/
 Text Domain: quick-mail
 Domain Path: /lang
 License: GPL-2.0+
@@ -115,7 +115,7 @@ class QuickMail {
 	   	add_action( 'activated_plugin', array($this, 'install_quick_mail'), 10, 0);
 	   	add_action( 'admin_footer', array($this, 'qm_get_comment_script') );
 	   	add_action( 'admin_footer', array($this, 'qm_get_title_script') );
-	   	add_action( 'admin_init', array($this, 'add_email_scripts') );
+	   	add_action( 'admin_enqueue_scripts', array($this, 'add_email_scripts') );
 	   	add_action( 'admin_menu', array($this, 'init_quick_mail_menu') );
 	   	add_filter( 'comment_row_actions', array($this, 'qm_filter_comment_link'), 10, 2 );
 	   	add_filter( 'comment_notification_text', array($this, 'qm_comment_reply'), 10, 2 );
@@ -1919,7 +1919,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 			return $actions;
 		} // end if site allows private replies to comments
 
-		$qm_url = admin_url( "tools.php?page=quick_mail_form&comment_id={$comment->comment_ID}");
+		$qm_url = admin_url( "tools.php?page=quick_mail_form&amp;comment_id={$comment->comment_ID}");
 		$reply = apply_filters( 'quick_mail_reply_title',  __( 'Private Reply', 'quick-mail' ) );  // was Reply with Quick Mail
 		$ereply = esc_attr( $reply );
 		$css = 'style="color: #e14d43;"'; // wp-ui-text-highlight

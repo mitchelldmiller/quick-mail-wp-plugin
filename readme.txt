@@ -1,6 +1,6 @@
 === Quick Mail ===
 Contributors: brainiac
-Tags: mail, email, comments, mailgun, sendgrid, attachment, accessibility, comment, idn, multisite, rich text, tinymce
+Tags: mail, email, comments, attachment, wp-cli, mailgun, sendgrid, accessibility, idn, multisite
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Requires at least: 4.6
 Tested up to: 4.9
@@ -30,7 +30,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) is an introduction.
 
-* [Quick Mail 3.2.4 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-2-4-maintenance-release/) for update info.
+* See [Quick Mail 3.2.5 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-2-5-maintenance-release/) for update info.
 
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/)
 
@@ -68,7 +68,9 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * Option for administrators to use [Sendgrid API](https://sendgrid.com/solutions/sendgrid-api/).
 
-* Programmers can replace their credentials by adding a filter to replace_quick_mail_sender. This only works, if you are not using another mail plugin's credentials.
+* [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) is an experimental plugin that changes the Quick Mail sender's name and email address.
+
+* Programmers can replace their credentials by adding a filter to `replace_quick_mail_sender`. This only works if you are not using another mail plugin's credentials.
 
 = Customizing Quick Mail =
 
@@ -207,6 +209,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 * added visual editor.
 
 == Upgrade Notice ==
+
+= 3.2.5 =
+* Upgrade optional.
 
 = 3.2.3 =
 

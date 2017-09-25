@@ -50,20 +50,19 @@ __Features__
 ### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* [Quick Mail 3.2.4 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-2-4-maintenance-release/) for update info.
+* See [Quick Mail 3.2.5 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-2-5-maintenance-release/) for update info.
 
 ### Installation ###
 
-1. Download the plugin and unpack in your `/wp-content/plugins` directory.
+* Download the plugin and unpack in your `/wp-content/plugins` directory.
 
-2. Activate the plugin through the 'Plugins' menu in WordPress.
+* Activate the plugin through the 'Plugins' menu in WordPress.
 
-3. Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
+* Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
 
-4. Optional: [Install WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
+* Optional: [Install WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
 
-5. Optional: Install [Mailgun](http://wordpress.org/extend/plugins/mailgun/) or [Sendgrid](http://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
-
+* Optional: Install [Mailgun](http://wordpress.org/extend/plugins/mailgun/) or [Sendgrid](http://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
 
 ### Frequently Asked Questions ###
 
@@ -90,6 +89,10 @@ __Sending Mail from Other Addresses__
 * Uses Mailgun plugin settings for Administrators, if the plugin is activated, using `Override "From" Details` and [Mailgun API](https://documentation.mailgun.com/en/latest/api_reference.html).
 
 * Option for administrators to use [Sendgrid API](https://sendgrid.com/solutions/sendgrid-api/). 
+
+* [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) is an experimental plugin that changes the Quick Mail sender's name and email address.
+
+* Programmers can replace their credentials by adding a filter to `replace_quick_mail_sender`. This only works if you are not using another mail plugin's credentials.
 
 __Modifying Quick Mail__
 

@@ -2,10 +2,10 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.2.5
+Version: 3.2.6
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
-Plugin URI: https://wheredidmybraingo.com/quick-mail-3-2-5-maintenance-release/
+Plugin URI: https://wheredidmybraingo.com/quick-mail-3-2-6-maintenance-release/
 Text Domain: quick-mail
 Domain Path: /lang
 License: GPL-2.0+
@@ -456,19 +456,17 @@ jQuery(document).ready( function() {
 	 * @since 1.2.0
 	 */
 	public function add_email_scripts() {
-		if ( !strstr( $_SERVER['REQUEST_URI'], 'quick_mail' ) ) {
-			return;
-		} // end if script not needed here.
+		if ( strstr( $_SERVER['REQUEST_URI'], 'quick_mail' ) ) {
+			wp_enqueue_script( 'qmScript', plugins_url( '/lib/js/quick-mail.js', __FILE__ ),
+				array('jquery'), null, false );
+		} // end if on quick mail form
 
-		wp_enqueue_script( 'qmScript', plugins_url( '/lib/js/quick-mail.js', __FILE__ ),
-				array('jquery'), null, false );
-		wp_enqueue_script( 'qmCount', plugins_url( '/lib/js/quick-mail-addresses.js', __FILE__ ),
-				array('jquery'), null, false );
-		$data = array(
-				'one' => __( 'Clear 1 saved address', 'quick-mail' ),
-				'many' => sprintf( __( 'Clear %s saved addresses', 'quick-mail' ), '{number}' )
-		);
-		wp_localize_script( 'qmCount', 'quick_mail_saved', $data );
+		if ( strstr( $_SERVER['REQUEST_URI'], 'quick_mail_options' ) ) {
+			wp_enqueue_script( 'qmCount', plugins_url( '/lib/js/quick-mail-addresses.js', __FILE__ ), array('jquery'), null, false );
+			$data = array( 'one' => __( 'Clear 1 saved address', 'quick-mail' ),
+				'many' => sprintf( __( 'Clear %s saved addresses', 'quick-mail' ), '{number}' ) );
+			wp_localize_script( 'qmCount', 'quick_mail_saved', $data );
+		} // end if on options page
 	} // end add_email_scripts
 
    /**

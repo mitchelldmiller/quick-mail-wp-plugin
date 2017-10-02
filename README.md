@@ -50,7 +50,7 @@ __Features__
 ### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail 3.2.5 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-2-5-maintenance-release/) for update info.
+* See [Quick Mail 3.2.6 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-2-6-maintenance-release/) for update info.
 
 ### Installation ###
 

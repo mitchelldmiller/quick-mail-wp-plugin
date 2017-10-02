@@ -1,5 +1,55 @@
 == Quick Mail Changelog ==
 
+= 3.2.4 =
+* check for missing multibyte functions.
+* character count checks for multibyte text.
+
+= 3.2.3 =
+* Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
+* Send URL or file contents with `quick-mail` WP CLI command.
+* Uses Mailgun credentials, if the plugin is active and set to use API.
+* Option to use Sendgrid credentials, if the plugin is active.
+* Organized plugin files into multiple directories.
+* Fixed "Login Expired" error when form was requested with POST from another plugin.
+
+= 3.1.8 =
+* Fixed error that presented user list to administrator when there are less than 3 users on site.
+
+= 3.1.7 =
+* Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
+* Many changes to improve private comment replies.
+
+= 3.1.1 =
+* reply to comments with Quick Mail from Comments list. 
+* fix error displaying multibyte post titles.
+
+= 3.1.0 =
+* reply to comments.
+* improved performance.
+
+= 3.0.5 =
+* added Russian translation. Props @orlov562
+
+= 3.0.4 =
+* fixed reset email content type.
+* preserves shortcodes in messages.
+
+= 3.0.3 =
+* fixed email content type compatibility error.
+* fixed settings display error.
+
+= 3.0.2 =
+* added wpauto option for HTML messages.
+* display user nickname instead of `user_nicename`.
+
+= 3.0.1 =
+* added Blind Carbon Copy (BCC).
+* improved HTML messages.
+
+= 3.0.0 =
+* improved data entry form accessibility and design.
+* added visual editor.
+
 = 2.0.5 =
 * improved multiple file uploads.
 * hide some admininstrative options when User List is not available.

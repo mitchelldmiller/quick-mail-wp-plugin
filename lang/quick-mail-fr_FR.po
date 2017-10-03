@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Quick Mail v3.2.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-10-01 23:20:03+0000\n"
+"PO-Revision-Date: 2017-10-03 18:51:45+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,44 +20,44 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Textdomain-Support: yes"
 
-#: quick-mail.php:992
+#: quick-mail.php:1015
 #@ quick-mail
 msgid "Error: Incomplete User Profile"
 msgstr "Erreur : Profil d’utilisateur incomplet"
 
-#: quick-mail.php:997
+#: quick-mail.php:1020
 #@ quick-mail
 msgid "Login Expired. Refresh Page."
 msgstr "Session expirée. Actualisez la Page."
 
-#: quick-mail.php:1121
+#: quick-mail.php:1144
 #@ quick-mail
 msgid "Error moving file to"
 msgstr "Erreur lors du déplacement du fichier dans"
 
-#: quick-mail.php:1128
+#: quick-mail.php:1151
 #@ quick-mail
 msgid "File Upload Error"
 msgstr "Erreur de téléversement du fichier"
 
-#: quick-mail.php:1114
+#: quick-mail.php:1137
 #@ quick-mail
 msgid "Missing temporary directory"
 msgstr "Répertoire temporaire manquant"
 
 #: inc/quick-mail-cli.php:235
-#: quick-mail.php:1166
-#: quick-mail.php:1168
+#: quick-mail.php:1189
+#: quick-mail.php:1191
 #@ quick-mail
 msgid "Error sending mail"
 msgstr "Erreur lors de l'envoi"
 
-#: quick-mail.php:1154
+#: quick-mail.php:1177
 #@ quick-mail
 msgid "Message Sent"
 msgstr "Message envoyé"
 
-#: quick-mail.php:1180
+#: quick-mail.php:1203
 #@ quick-mail
 msgid "Error Deleting Upload"
 msgstr "Erreur de suppression de Upload"
@@ -65,56 +65,56 @@ msgstr "Erreur de suppression de Upload"
 #. translators: plugin header field 'Name'
 #: quick-mail.php:0
 #: quick-mail.php:155
-#: quick-mail.php:1210
-#: quick-mail.php:1968
+#: quick-mail.php:1233
+#: quick-mail.php:2006
 #@ quick-mail
 msgid "Quick Mail"
 msgstr "Courrier Rapide"
 
-#: quick-mail.php:1157
-#: quick-mail.php:1159
-#: quick-mail.php:1251
-#: quick-mail.php:1279
+#: quick-mail.php:1180
+#: quick-mail.php:1182
+#: quick-mail.php:1274
+#: quick-mail.php:1302
 #@ quick-mail
 msgid "To"
 msgstr "À l'attention de"
 
-#: quick-mail.php:502
-#: quick-mail.php:538
-#: quick-mail.php:612
-#: quick-mail.php:648
+#: quick-mail.php:504
+#: quick-mail.php:540
+#: quick-mail.php:614
+#: quick-mail.php:650
 #@ quick-mail
 msgid "Enter mail address"
 msgstr "Saisissez l'adresse email"
 
-#: quick-mail.php:1299
-#: quick-mail.php:1302
+#: quick-mail.php:1322
+#: quick-mail.php:1325
 #@ quick-mail
 msgid "Subject"
 msgstr "Sujet"
 
-#: quick-mail.php:1306
-#: quick-mail.php:1310
-#: quick-mail.php:1314
-#: quick-mail.php:1318
-#: quick-mail.php:1322
-#: quick-mail.php:1326
+#: quick-mail.php:1329
+#: quick-mail.php:1333
+#: quick-mail.php:1337
+#: quick-mail.php:1341
+#: quick-mail.php:1345
+#: quick-mail.php:1349
 #@ quick-mail
 msgid "Attachment"
 msgstr "Pièce-jointe"
 
-#: quick-mail.php:1252
+#: quick-mail.php:1275
 #@ quick-mail
 msgid "Message"
 msgstr "Messages"
 
-#: quick-mail.php:1335
+#: quick-mail.php:1358
 #@ quick-mail
 msgid "Enter your message"
 msgstr "Entrez votre message"
 
-#: quick-mail.php:1349
-#: quick-mail.php:1350
+#: quick-mail.php:1369
+#: quick-mail.php:1370
 #@ quick-mail
 msgid "Send Mail"
 msgstr "Envoyer"
@@ -125,191 +125,191 @@ msgstr "Envoyer"
 msgid "Mitchell D. Miller"
 msgstr "Mitchell D. Miller"
 
-#: quick-mail.php:1255
+#: quick-mail.php:1278
 #@ quick-mail
 msgid "From"
 msgstr "De"
 
-#: quick-mail.php:1506
+#: quick-mail.php:1534
 #@ quick-mail
 msgid "Option Updated"
 msgstr "Option mise à jour"
 
-#: quick-mail.php:1656
-#: quick-mail.php:1979
+#: quick-mail.php:1688
+#: quick-mail.php:2017
 #@ quick-mail
 msgid "Quick Mail Options"
 msgstr "Options Quick Mail"
 
-#: quick-mail.php:1716
-#: quick-mail.php:2146
+#: quick-mail.php:1748
+#: quick-mail.php:2191
 #@ quick-mail
 msgid "User Display"
 msgstr "Affichage du nom"
 
-#: quick-mail.php:1734
-#: quick-mail.php:2135
+#: quick-mail.php:1772
+#: quick-mail.php:2180
 #@ quick-mail
 msgid "Show All Users"
 msgstr "Afficher tous les utilisateurs"
 
-#: quick-mail.php:1753
-#: quick-mail.php:2139
+#: quick-mail.php:1791
+#: quick-mail.php:2184
 #@ quick-mail
 msgid "Show Users with Names"
 msgstr "Afficher les utilisateurs avec les noms"
 
-#: quick-mail.php:1575
-#: quick-mail.php:1773
-#: quick-mail.php:2142
+#: quick-mail.php:1607
+#: quick-mail.php:1811
+#: quick-mail.php:2187
 #@ quick-mail
 msgid "Do Not Show Users"
 msgstr "Ne pas afficher les utilisateurs."
 
-#: quick-mail.php:1787
+#: quick-mail.php:1825
 #@ quick-mail
 msgid "Save Options"
 msgstr "Sauvegarder les options"
 
-#: quick-mail.php:1002
-#: quick-mail.php:1026
-#: quick-mail.php:1035
-#: quick-mail.php:1060
-#: quick-mail.php:1229
+#: quick-mail.php:1025
+#: quick-mail.php:1049
+#: quick-mail.php:1058
+#: quick-mail.php:1083
+#: quick-mail.php:1252
 #@ quick-mail
 msgid "Invalid mail address"
 msgstr "Adresse e-mail invalide"
 
-#: quick-mail.php:1742
-#: quick-mail.php:1762
+#: quick-mail.php:1780
+#: quick-mail.php:1800
 #@ quick-mail
 msgid "matching users"
 msgstr "utilisateurs correspondants"
 
-#: quick-mail.php:1785
+#: quick-mail.php:1823
 #@ quick-mail
 msgid "Enter address to send mail."
 msgstr "Entrez l’adresse pour envoyer un mail."
 
-#: quick-mail.php:1662
-#: quick-mail.php:1670
-#: quick-mail.php:2076
-#: quick-mail.php:2105
+#: quick-mail.php:1694
+#: quick-mail.php:1702
+#: quick-mail.php:2114
+#: quick-mail.php:2150
 #@ quick-mail
 msgid "Administration"
 msgstr "Configuration"
 
-#: quick-mail.php:2071
+#: quick-mail.php:2109
 #@ quick-mail
 msgid "Grant Editors access to user list"
 msgstr "Accorder l&rsquo;accès aux Editeurs"
 
-#: quick-mail.php:1126
+#: quick-mail.php:1149
 #@ quick-mail
 msgid "Uploaded file was too large"
 msgstr "Le fichier téléchargé est trop volumineux"
 
-#: quick-mail.php:1279
-#: quick-mail.php:1294
+#: quick-mail.php:1302
+#: quick-mail.php:1317
 #@ quick-mail
 msgid "Recent"
 msgstr "Récent"
 
 #: quick-mail.php:142
 #: quick-mail.php:143
-#: quick-mail.php:1581
-#: quick-mail.php:2334
+#: quick-mail.php:1613
+#: quick-mail.php:2379
 #@ quick-mail
 msgid "FAQ"
 msgstr "FAQ"
 
 #: quick-mail.php:144
 #: quick-mail.php:167
-#: quick-mail.php:2079
-#: quick-mail.php:2335
+#: quick-mail.php:2117
+#: quick-mail.php:2380
 #@ quick-mail
 msgid "Support"
 msgstr "Support"
 
 #: quick-mail.php:328
-#: quick-mail.php:919
-#: quick-mail.php:1002
+#: quick-mail.php:942
+#: quick-mail.php:1025
 #@ quick-mail
 msgid "Mail Error"
 msgstr "Erreur sur l'email"
 
-#: quick-mail.php:1071
+#: quick-mail.php:1094
 #@ quick-mail
 msgid "No subject"
 msgstr "Pas d&apos;objet"
 
-#: quick-mail.php:1573
+#: quick-mail.php:1605
 #@ quick-mail
 msgid "Checks domain with"
 msgstr "Vérifie domaine avec"
 
-#: quick-mail.php:1575
+#: quick-mail.php:1607
 #@ quick-mail
 msgid "when"
 msgstr "lorsque"
 
-#: quick-mail.php:1576
+#: quick-mail.php:1608
 #@ quick-mail
 msgid "is selected"
 msgstr "est sélectionné."
 
-#: quick-mail.php:1577
+#: quick-mail.php:1609
 #@ quick-mail
 msgid "Verifies domain with"
 msgstr "Vérifie domaine avec"
 
-#: quick-mail.php:1584
+#: quick-mail.php:1616
 #@ quick-mail
 msgid "function not found"
 msgstr "fonction pas trouvée"
 
-#: quick-mail.php:1585
+#: quick-mail.php:1617
 #@ quick-mail
 msgid "Cannot verify international domains"
 msgstr "Vous ne pouvez pas vérifier domaines internationaux"
 
-#: quick-mail.php:1585
+#: quick-mail.php:1617
 #@ quick-mail
 msgid "because"
 msgstr "parce que"
 
-#: quick-mail.php:1586
+#: quick-mail.php:1618
 #@ quick-mail
 msgid "Please read"
 msgstr "Merci de lire"
 
-#: quick-mail.php:1572
+#: quick-mail.php:1604
 #@ quick-mail
 msgid "http://php.net/manual/en/function.checkdnsrr.php"
 msgstr "http://fr.php.net/manual/fr/function.checkdnsrr.php"
 
 #: quick-mail.php:141
-#: quick-mail.php:1580
+#: quick-mail.php:1612
 #@ quick-mail
 msgid "https://wordpress.org/plugins/quick-mail/faq/"
 msgstr "https://fr.wordpress.org/plugins/quick-mail/faq/"
 
-#: quick-mail.php:1582
+#: quick-mail.php:1614
 #@ quick-mail
 msgid "http://php.net/manual/en/function.idn-to-ascii.php"
 msgstr "http://fr.php.net/manual/fr/function.idn-to-ascii.php"
 
-#: quick-mail.php:1077
+#: quick-mail.php:1100
 #@ quick-mail
 msgid "Please enter your message"
 msgstr "Merci de saisir votre message."
 
-#: quick-mail.php:384
+#: quick-mail.php:385
 #@ quick-mail
 msgid "Welcome to Quick Mail"
 msgstr "Bienvenue à Quick Mail"
 
-#: quick-mail.php:385
+#: quick-mail.php:386
 #@ quick-mail
 msgid "Please verify your settings before using Quick Mail."
 msgstr "S'il vous plaît vérifier vos paramètres avant d'utiliser Quick Mail."
@@ -334,45 +334,45 @@ msgstr "Ressources"
 msgid "has more information"
 msgstr "has more information"
 
-#: quick-mail.php:971
-#: quick-mail.php:2269
+#: quick-mail.php:994
+#: quick-mail.php:2314
 #@ quick-mail
 msgid "File uploads are not available on your device"
 msgstr "Téléchargements de fichiers ne sont pas disponibles sur votre appareil"
 
-#: quick-mail.php:973
-#: quick-mail.php:2267
+#: quick-mail.php:996
+#: quick-mail.php:2312
 #@ quick-mail
 msgid "File uploads were disabled by system administrator"
 msgstr "Téléchargements de fichiers ont été désactivés par l’administrateur système"
 
-#: quick-mail.php:1011
-#: quick-mail.php:1062
-#: quick-mail.php:1232
+#: quick-mail.php:1034
+#: quick-mail.php:1085
+#: quick-mail.php:1255
 #@ quick-mail
 msgid "Duplicate mail address"
 msgstr "Adresse de messagerie en double"
 
-#: quick-mail.php:1155
-#: quick-mail.php:1285
-#: quick-mail.php:1287
-#: quick-mail.php:1294
+#: quick-mail.php:1178
+#: quick-mail.php:1308
+#: quick-mail.php:1310
+#: quick-mail.php:1317
 #@ quick-mail
 msgid "CC"
 msgstr "CC"
 
-#: quick-mail.php:1234
+#: quick-mail.php:1257
 #@ quick-mail
 msgid "Quick Mail requires Javascript"
 msgstr "Courrier Rapide nécessite Javascript"
 
-#: quick-mail.php:1682
-#: quick-mail.php:2069
+#: quick-mail.php:1714
+#: quick-mail.php:2107
 #@ quick-mail
 msgid "Hide Administrator Profiles"
 msgstr "Masquer les profils administrateur"
 
-#: quick-mail.php:1685
+#: quick-mail.php:1717
 #, php-format
 #@ quick-mail
 msgid "%s administrator profile"
@@ -380,119 +380,119 @@ msgid_plural "%s administrator profiles"
 msgstr[0] "%s profil administrateur"
 msgstr[1] "%s profils administrateur"
 
-#: quick-mail.php:1686
+#: quick-mail.php:1718
 #@ quick-mail
 msgid "User list will not include"
 msgstr "Liste des utilisateurs ne comprendra pas"
 
-#: quick-mail.php:1702
-#: quick-mail.php:2073
+#: quick-mail.php:1734
+#: quick-mail.php:2111
 #@ quick-mail
 msgid "Verify recipient email domains"
 msgstr "Vérifier les domaines de messagerie destinataire"
 
-#: quick-mail.php:1538
-#: quick-mail.php:2008
+#: quick-mail.php:1570
+#: quick-mail.php:2046
 #@ quick-mail
 msgid "NOTE"
 msgstr "REMARQUE"
 
-#: quick-mail.php:2009
+#: quick-mail.php:2047
 #@ quick-mail
 msgid "Sender, recipient, CC."
 msgstr "Expéditeur, destinataire, CC."
 
-#: quick-mail.php:2025
+#: quick-mail.php:2063
 #@ default
 msgid "You do not have sufficient privileges to access user lists on this site."
 msgstr "Vous n’avez pas de privilèges suffisants pour accéder aux listes d’utilisateurs sur ce site."
 
-#: quick-mail.php:2027
+#: quick-mail.php:2065
 #@ default
 msgid "You do not have sufficient privileges to access user lists."
 msgstr "Vous n’avez pas de privilèges suffisants pour accéder aux listes d’utilisateurs."
 
-#: quick-mail.php:2030
+#: quick-mail.php:2068
 #@ quick-mail
 msgid "User totals are adjusted because administrator profiles are hidden"
 msgstr "Totaux de l’utilisateur sont ajustés car les profils administrateur sont masquées"
 
-#: quick-mail.php:2035
+#: quick-mail.php:2073
 #@ quick-mail
 msgid "Three non-administrator profiles are required for user lists."
 msgstr "Trois profils non administrateur sont requis pour les listes d’utilisateurs."
 
-#: quick-mail.php:2037
+#: quick-mail.php:2075
 #@ default
 msgid "Three user profiles are required for user lists."
 msgstr "Trois profils d’utilisateur sont requis pour les listes d’utilisateurs."
 
-#: quick-mail.php:2136
+#: quick-mail.php:2181
 #@ quick-mail
 msgid "Select users by WordPress nickname"
 msgstr "Sélectionnez les utilisateurs par WordPress"
 
-#: quick-mail.php:2140
+#: quick-mail.php:2185
 #@ quick-mail
 msgid "Select users with first and last names"
 msgstr "Sélectionnez les utilisateurs avec des noms et prénoms"
 
-#: quick-mail.php:2143
+#: quick-mail.php:2188
 #@ quick-mail
 msgid "Enter user addresses. 12 addresses are saved"
 msgstr "Entrez les adresses de l’utilisateur. 12 adresses sont enregistrées"
 
-#: quick-mail.php:2070
+#: quick-mail.php:2108
 #@ quick-mail
 msgid "Prevent users from sending email to administrators"
 msgstr "Empêcher les utilisateurs de courrier aux administrateurs"
 
-#: quick-mail.php:2072
+#: quick-mail.php:2110
 #@ quick-mail
 msgid "Otherwise only administrators can view the user list"
 msgstr "Dans le cas contraire seuls les administrateurs peuvent afficher la liste de l’utilisateur"
 
-#: quick-mail.php:2074
+#: quick-mail.php:2112
 #@ quick-mail
 msgid "Check if recipient domain accepts email. Detects typos."
 msgstr "Vérifier si domaine destinataire accepte les messages. Détecte les fautes de frappe."
 
-#: quick-mail.php:2245
+#: quick-mail.php:2290
 #@ quick-mail
 msgid "Adding CC"
 msgstr "Ajout de CC"
 
-#: quick-mail.php:2246
+#: quick-mail.php:2291
 #@ quick-mail
 msgid "Enter multiple addresses by separating them with a space or comma."
 msgstr "Entrez plusieurs adresses en les séparant par un espace ou une virgule."
 
-#: quick-mail.php:2248
+#: quick-mail.php:2293
 #@ quick-mail
 msgid "Press &lt;Control&gt; while clicking, to select multiple users."
 msgstr "Appuyez sur &lt;Ctrl&gt; en cliquant, pour sélectionner plusieurs utilisateurs."
 
-#: quick-mail.php:2249
+#: quick-mail.php:2294
 #@ quick-mail
 msgid "You can select multiple users"
 msgstr "Vous pouvez sélectionner plusieurs utilisateurs"
 
-#: quick-mail.php:2262
+#: quick-mail.php:2307
 #@ quick-mail
 msgid "Attachments"
 msgstr "Pièces jointes"
 
-#: quick-mail.php:2271
+#: quick-mail.php:2316
 #@ quick-mail
 msgid "You can attach multiple files to your message"
 msgstr "Vous pouvez joindre plusieurs fichiers à votre message"
 
-#: quick-mail.php:2273
+#: quick-mail.php:2318
 #@ quick-mail
 msgid "from up to six directories"
 msgstr "de répertoires jusqu'à six"
 
-#: quick-mail.php:1105
+#: quick-mail.php:1128
 #@ quick-mail
 msgid "Duplicate attachments"
 msgstr "Accessoires en double"
@@ -502,28 +502,28 @@ msgstr "Accessoires en double"
 msgid "Help Others"
 msgstr "Aider les autres"
 
-#: quick-mail.php:466
+#: quick-mail.php:468
 #@ quick-mail
 msgid "Clear 1 saved address"
 msgstr "Effacer 1 adresse enregistrée"
 
-#: quick-mail.php:467
+#: quick-mail.php:469
 #, php-format
 #@ quick-mail
 msgid "Clear %s saved addresses"
 msgstr "Claire %s adresses enregistrées"
 
-#: quick-mail.php:1778
+#: quick-mail.php:1816
 #@ quick-mail
 msgid "Need three users to display User List for sender, recipient, CC."
 msgstr "Besoin de trois utilisateurs pour afficher la liste des utilisateurs expéditeur, destinataire, CC."
 
-#: quick-mail.php:1780
+#: quick-mail.php:1818
 #@ quick-mail
 msgid "User List was disabled by system administrator."
 msgstr "Liste des utilisateurs a été désactivée par l’administrateur système."
 
-#: quick-mail.php:1785
+#: quick-mail.php:1823
 #@ quick-mail
 msgid "Saves 12 addresses."
 msgstr "Enregistre les 12 adresses."
@@ -534,179 +534,179 @@ msgstr "Enregistre les 12 adresses."
 msgid "https://wheredidmybraingo.com/"
 msgstr "https://wheredidmybraingo.com/"
 
-#: quick-mail.php:1155
-#: quick-mail.php:1286
-#: quick-mail.php:1287
+#: quick-mail.php:1178
+#: quick-mail.php:1309
+#: quick-mail.php:1310
 #@ quick-mail
 msgid "BCC"
 msgstr "BCC"
 
-#: quick-mail.php:2276
+#: quick-mail.php:2321
 #@ quick-mail
 msgid "Press &lt;Command&gt; while clicking, to select multiple files."
 msgstr "Appuyez sur ⌘ en cliquant, pour sélectionner plusieurs fichiers."
 
-#: quick-mail.php:2277
+#: quick-mail.php:2322
 #@ quick-mail
 msgid "Press &lt;Control&gt; while clicking, to select multiple files."
 msgstr "Appuyez sur &lt;Ctrl&gt; tout en cliquant, pour sélectionner plusieurs fichiers."
 
-#: quick-mail.php:2278
+#: quick-mail.php:2323
 #@ quick-mail
 msgid "You can select multiple files"
 msgstr "Vous pouvez sélectionner plusieurs fichiers"
 
-#: quick-mail.php:2247
+#: quick-mail.php:2292
 #@ quick-mail
 msgid "Press &lt;Command&gt; while clicking, to select multiple users."
 msgstr "Appuyez sur &lt;Commande&gt; + en cliquant, pour sélectionner plusieurs utilisateurs."
 
-#: quick-mail.php:1709
-#: quick-mail.php:2124
-#: quick-mail.php:2130
+#: quick-mail.php:1741
+#: quick-mail.php:2169
+#: quick-mail.php:2175
 #@ quick-mail
 msgid "Add Paragraphs"
 msgstr "Ajouter des paragraphes"
 
-#: quick-mail.php:1711
+#: quick-mail.php:1743
 #@ quick-mail
 msgid "Add Paragraphs to sent mail"
 msgstr "Ajouter les paragraphes au courrier envoyé"
 
-#: quick-mail.php:2119
+#: quick-mail.php:2164
 #@ quick-mail
 msgid "Add line breaks and paragraphs to HTML mail"
 msgstr "Ajouter des sauts de ligne et paragraphes à mail HTML"
 
-#: quick-mail.php:2120
+#: quick-mail.php:2165
 #@ quick-mail
 msgid "with"
 msgstr "avec"
 
-#: quick-mail.php:2121
+#: quick-mail.php:2166
 #@ quick-mail
 msgid "Many plugins change the WordPress editor"
 msgstr "Nombreux plugins modifier l’éditeur de WordPress"
 
-#: quick-mail.php:2122
+#: quick-mail.php:2167
 #@ quick-mail
 msgid "Test this option on your system to know if you need it"
 msgstr "Tester cette option sur votre système pour savoir si vous en avez besoin"
 
 #: quick-mail.php:150
 #: quick-mail.php:169
-#: quick-mail.php:2081
+#: quick-mail.php:2119
 #@ quick-mail
 msgid "to ask questions and report problems"
 msgstr "pour poser des questions et de signaler les problèmes"
 
 #: quick-mail.php:149
 #: quick-mail.php:168
-#: quick-mail.php:2080
+#: quick-mail.php:2118
 #@ quick-mail
 msgid "Please use"
 msgstr "S’il vous plaît utiliser"
 
-#: quick-mail.php:2350
+#: quick-mail.php:2395
 #@ quick-mail
 msgid "Settings"
 msgstr "Paramètres"
 
-#: quick-mail.php:1590
+#: quick-mail.php:1622
 #@ quick-mail
 msgid "Apply"
 msgstr "Appliquer"
 
-#: quick-mail.php:1592
+#: quick-mail.php:1624
 #@ quick-mail
 msgid "to HTML messages"
 msgstr "aux messages HTML"
 
-#: quick-mail.php:924
+#: quick-mail.php:947
 #@ quick-mail
 msgid "You"
 msgstr "Vous"
 
-#: quick-mail.php:926
+#: quick-mail.php:949
 #@ quick-mail
 msgid "said"
 msgstr "dit"
 
-#: quick-mail.php:947
+#: quick-mail.php:970
 #@ quick-mail
 msgid "Cannot reply. Invalid mail address."
 msgstr "Ne peut pas répondre. Adresse mail non valide."
 
-#: quick-mail.php:692
+#: quick-mail.php:696
 #@ quick-mail
 msgid "No comments for you."
 msgstr "Pas de commentaires pour vous."
 
-#: quick-mail.php:1251
-#: quick-mail.php:2084
+#: quick-mail.php:1274
+#: quick-mail.php:2122
 #@ quick-mail
 msgid "Commenters"
 msgstr "Commentateurs"
 
-#: quick-mail.php:1539
+#: quick-mail.php:1571
 #@ quick-mail
 msgid "Quick Mail needs three non-admin users for sender, recipient, CC to access User List."
 msgstr "Quick mail a besoin de trois utilisateurs non-admin pour l'expéditeur, destinataire, CC, pour accéder à la liste des utilisateurs."
 
-#: quick-mail.php:1696
-#: quick-mail.php:2101
+#: quick-mail.php:1728
+#: quick-mail.php:2146
 #@ quick-mail
 msgid "Grant Authors permission to reply to comments"
 msgstr "Permettre Authors de répondre aux commentaires"
 
-#: quick-mail.php:1697
+#: quick-mail.php:1729
 #@ quick-mail
 msgid "Authors will not have access to user list."
 msgstr "Les auteurs n'auront pas accès à la liste des utilisateurs."
 
-#: quick-mail.php:2089
+#: quick-mail.php:2127
 #@ quick-mail
 msgid "enabling comments"
 msgstr "activation des commentaires"
 
-#: quick-mail.php:2090
+#: quick-mail.php:2128
 #@ quick-mail
 msgid "discussion settings"
 msgstr "paramètres de discussion"
 
-#: quick-mail.php:2091
-#: quick-mail.php:2151
+#: quick-mail.php:2129
+#: quick-mail.php:2196
 #@ quick-mail
 msgid "See"
 msgstr "Voir"
 
-#: quick-mail.php:2092
+#: quick-mail.php:2130
 #@ quick-mail
 msgid "for additional information."
 msgstr "pour plus d'informations."
 
-#: quick-mail.php:2093
-#: quick-mail.php:2162
+#: quick-mail.php:2131
+#: quick-mail.php:2207
 #@ quick-mail
 msgid "and"
 msgstr "et"
 
-#: quick-mail.php:2094
+#: quick-mail.php:2132
 #@ quick-mail
 msgid "Reply to comments on your published content."
 msgstr "Répondez aux commentaires sur votre contenu publié."
 
-#: quick-mail.php:2086
+#: quick-mail.php:2124
 #@ quick-mail
 msgid "Display list of commenters, instead of users."
 msgstr "Afficher la liste des commentateurs, au lieu des utilisateurs."
 
-#: quick-mail.php:2096
+#: quick-mail.php:2134
 #@ quick-mail
 msgid "Comments are often disabled on older content."
 msgstr "Les commentaires sont souvent désactivés sur un contenu plus ancien."
 
-#: quick-mail.php:2104
+#: quick-mail.php:2149
 #@ quick-mail
 msgid "to let authors use this feature"
 msgstr "pour permettre aux auteurs d'utiliser cette fonctionnalité"
@@ -717,28 +717,28 @@ msgstr "pour permettre aux auteurs d'utiliser cette fonctionnalité"
 msgid "Send text or html email with attachments from user's credentials. Select recipient from users or commenters."
 msgstr "Envoyez du texte ou des courriels HTML avec des pièces jointes des informations d'identification de l'utilisateur. Sélectionnez destinataire des utilisateurs ou des commentaires."
 
-#: quick-mail.php:1599
+#: quick-mail.php:1631
 #@ quick-mail
 msgid "Display Commenters instead of users"
 msgstr "Affichage des commentaires au lieu des utilisateurs"
 
 #: quick-mail.php:164
-#: quick-mail.php:1723
+#: quick-mail.php:1756
 #@ quick-mail
 msgid "Send private replies to comments."
 msgstr "Envoyer des réponses privées aux commentaires."
 
-#: quick-mail.php:2097
+#: quick-mail.php:2135
 #@ quick-mail
 msgid "Comments must be enabled to reply."
 msgstr "Les commentaires doivent être activés pour répondre."
 
-#: quick-mail.php:2098
+#: quick-mail.php:2136
 #@ quick-mail
 msgid "Invalid mail addresses are not displayed."
 msgstr "Les adresses de messagerie non valides ne sont pas affichées."
 
-#: quick-mail.php:1699
+#: quick-mail.php:1731
 #@ quick-mail
 msgid "Grant Editors access to user list."
 msgstr "Grant Editors accès à la liste des utilisateurs."
@@ -763,58 +763,58 @@ msgstr "Le sujet et le message sont automatiquement ajoutés."
 msgid "Reply to Comments"
 msgstr "Répondre aux commentaires"
 
-#: quick-mail.php:1739
+#: quick-mail.php:1777
 #@ quick-mail
 msgid "Show all users sorted by nickname"
 msgstr "Afficher tous les utilisateurs triés par Pseudo"
 
-#: quick-mail.php:1758
+#: quick-mail.php:1796
 #@ quick-mail
 msgid "Show users with names, sorted by last name"
 msgstr "Afficher les utilisateurs avec les noms, triés par nom"
 
-#: quick-mail.php:919
+#: quick-mail.php:942
 #@ quick-mail
 msgid "Comments disabled by system administrator."
 msgstr "Commentaires désactivés par l'administrateur système."
 
-#: quick-mail.php:1252
+#: quick-mail.php:1275
 #@ quick-mail
 msgid "Reply"
 msgstr "Réponse"
 
-#: quick-mail.php:1597
+#: quick-mail.php:1629
 #@ quick-mail
 msgid "Select recipient from commenters"
 msgstr "Sélectionner un destinataire à partir de commentateurs"
 
-#: quick-mail.php:1693
+#: quick-mail.php:1725
 #@ quick-mail
 msgid "Disable Replies to Comments"
 msgstr "Disable Replies to Comments"
 
-#: quick-mail.php:1694
+#: quick-mail.php:1726
 #@ quick-mail
 msgid "Users will not see commenter list."
 msgstr "Les utilisateurs ne verront pas la liste des commentateurs."
 
-#: quick-mail.php:1894
-#: quick-mail.php:1921
+#: quick-mail.php:1932
+#: quick-mail.php:1959
 #@ quick-mail
 msgid "Private Reply"
 msgstr "Réponse privée"
 
-#: quick-mail.php:2087
+#: quick-mail.php:2125
 #@ quick-mail
 msgid "Select recipient from commenters."
 msgstr "Sélectionnez destinataire à partir des commentaires."
 
-#: quick-mail.php:2100
+#: quick-mail.php:2145
 #@ quick-mail
 msgid "Select Disable Replies to Comments to remove this feature."
 msgstr "Sélectionnez Désactiver les réponses aux commentaires pour supprimer cette fonctionnalité."
 
-#: quick-mail.php:1700
+#: quick-mail.php:1732
 #@ quick-mail
 msgid "Let editors see user list."
 msgstr "Let Editors Voir la liste des utilisateurs."
@@ -839,22 +839,22 @@ msgstr "Pas trouvé"
 msgid "Cannot connect to"
 msgstr "Impossible de se connecter à"
 
-#: quick-mail.php:1624
+#: quick-mail.php:1656
 #@ quick-mail
 msgid "Using Mailgun credentials"
 msgstr "Utilisation des informations d'identification Mailgun"
 
-#: quick-mail.php:1625
+#: quick-mail.php:1657
 #@ quick-mail
 msgid "Sending mail with your Mailgun name and mail address."
 msgstr "Envoi de courrier avec votre nom de Mailgun et adresse postale."
 
-#: quick-mail.php:1627
+#: quick-mail.php:1659
 #@ quick-mail
 msgid "Mailgun is active"
 msgstr "Mailgun est actif"
 
-#: quick-mail.php:1631
+#: quick-mail.php:1663
 #@ quick-mail
 msgid "Sending mail with Mailgun API."
 msgstr "Envoi de courrier avec Mailgun API."
@@ -906,84 +906,84 @@ msgstr "Envoyé"
 msgid "Error"
 msgstr "Erreur"
 
-#: quick-mail.php:1629
+#: quick-mail.php:1661
 #@ quick-mail
 msgid "Administrator is using Mailgun to send mail."
 msgstr "L'administrateur utilise Mailgun pour envoyer du courrier."
 
-#: quick-mail.php:1640
+#: quick-mail.php:1672
 #@ quick-mail
 msgid "Use"
 msgstr "Utiliser"
 
-#: quick-mail.php:1641
-#: quick-mail.php:1644
-#: quick-mail.php:2061
+#: quick-mail.php:1673
+#: quick-mail.php:1676
+#: quick-mail.php:2099
 #@ quick-mail
 msgid "credentials"
 msgstr "identifiants"
 
-#: quick-mail.php:1643
-#: quick-mail.php:1650
-#: quick-mail.php:2060
+#: quick-mail.php:1675
+#: quick-mail.php:1682
+#: quick-mail.php:2098
 #@ quick-mail
 msgid "Using"
 msgstr "Utilisant"
 
-#: quick-mail.php:1644
-#: quick-mail.php:2061
+#: quick-mail.php:1676
+#: quick-mail.php:2099
 #@ quick-mail
 msgid "to send mail for Administrators"
 msgstr "pour envoyer des messages aux administrateurs"
 
-#: quick-mail.php:1647
+#: quick-mail.php:1679
 #@ quick-mail
 msgid "Administrator is using"
 msgstr "Administrateur utilise"
 
-#: quick-mail.php:1648
-#: quick-mail.php:1651
+#: quick-mail.php:1680
+#: quick-mail.php:1683
 #@ quick-mail
 msgid "to send mail"
 msgstr "pour envoyer du courrier"
 
-#: quick-mail.php:2046
+#: quick-mail.php:2084
 #@ quick-mail
 msgid "Mailgun plugin is active"
 msgstr "Mailgun plugin est actif"
 
-#: quick-mail.php:2048
+#: quick-mail.php:2086
 #@ quick-mail
 msgid "Administrators send mail with Mailgun credentials"
 msgstr "Les administrateurs envoient le courrier avec les informations d'identification Mailgun"
 
-#: quick-mail.php:2050
+#: quick-mail.php:2088
 #@ quick-mail
 msgid "Sending mail with Mailgun plugin"
 msgstr "Envoi de courrier avec Mailgun plugin"
 
-#: quick-mail.php:2057
+#: quick-mail.php:2095
 #@ quick-mail
 msgid "plugin is active"
 msgstr "plugin est actif"
 
-#: quick-mail.php:2063
+#: quick-mail.php:2101
 #@ quick-mail
 msgid "Sending mail with"
 msgstr "Envoi de courrier avec"
 
-#: quick-mail.php:2064
+#: quick-mail.php:2102
 #@ quick-mail
 msgid "plugin"
 msgstr "plugin"
 
-#: quick-mail.php:2161
-#: quick-mail.php:2397
+#: quick-mail.php:2206
+#: quick-mail.php:2442
 #@ quick-mail
 msgid "Sendgrid"
 msgstr "Sendgrid"
 
-#: quick-mail.php:1163
+#: quick-mail.php:1186
 #@ quick-mail
 msgid "Mailgun Error sending mail"
 msgstr "Erreur Mailgun envoi de courrier"
@@ -1008,110 +1008,110 @@ msgstr "S'il vous plaît voir pièce jointe"
 msgid "Only administrators can send mail."
 msgstr "Seuls les administrateurs peuvent envoyer du courrier."
 
-#: quick-mail.php:2148
-#: quick-mail.php:2164
+#: quick-mail.php:2193
+#: quick-mail.php:2209
 #@ quick-mail
 msgid "Send Reliable Email from WordPress with Quick Mail"
 msgstr "Envoyez e-mail fiable de WordPress avec Quick mail"
 
-#: quick-mail.php:2152
+#: quick-mail.php:2197
 #@ quick-mail
 msgid "for additional information"
 msgstr "pour de plus amples informations"
 
-#: quick-mail.php:2155
+#: quick-mail.php:2200
 #@ quick-mail
 msgid "https://wordpress.org/plugins/search/smtp/"
 msgstr "https://fr.wordpress.org/plugins/search/smtp/"
 
-#: quick-mail.php:2156
-#: quick-mail.php:2174
+#: quick-mail.php:2201
+#: quick-mail.php:2219
 #@ quick-mail
 msgid "SMTP Plugins"
 msgstr "Plugins SMTP"
 
-#: quick-mail.php:2157
+#: quick-mail.php:2202
 #@ quick-mail
 msgid "let you send mail from a public mail account"
 msgstr "vous permet d'envoyer du courrier à partir d'un compte de courrier public"
 
-#: quick-mail.php:2159
+#: quick-mail.php:2204
 #@ quick-mail
 msgid "https://www.mailgun.com/"
 msgstr "https://www.mailgun.com/"
 
-#: quick-mail.php:2159
+#: quick-mail.php:2204
 #@ quick-mail
 msgid "Mailgun"
 msgstr "Mailgun"
 
-#: quick-mail.php:2161
+#: quick-mail.php:2206
 #@ quick-mail
 msgid "https://sendgrid.com/"
 msgstr "https://sendgrid.com/"
 
-#: quick-mail.php:2163
+#: quick-mail.php:2208
 #@ quick-mail
 msgid "are recommended"
 msgstr "sont recommandés"
 
-#: quick-mail.php:2166
+#: quick-mail.php:2211
 #@ quick-mail
 msgid "How to Fix"
 msgstr "Comment fixer"
 
-#: quick-mail.php:2167
-#: quick-mail.php:2177
+#: quick-mail.php:2212
+#: quick-mail.php:2222
 #@ quick-mail
 msgid "Delivery Errors"
 msgstr "Erreurs de livraison"
 
-#: quick-mail.php:2169
+#: quick-mail.php:2214
 #@ quick-mail
 msgid "Use these products and services with Quick Mail to fix delivery errors"
 msgstr "Utilisez ces produits et services avec Quick Mail pour corriger les erreurs de livraison"
 
-#: quick-mail.php:2170
+#: quick-mail.php:2215
 #@ quick-mail
 msgid "Mail Delivery Service"
 msgstr "Service de livraison de courrier"
 
-#: quick-mail.php:2171
+#: quick-mail.php:2216
 #@ quick-mail
 msgid "Use a mail delivery service to send reliable email anywhere"
 msgstr "Utiliser un service de livraison de courrier pour envoyer des e-mails fiables partout"
 
-#: quick-mail.php:2173
+#: quick-mail.php:2218
 #@ quick-mail
 msgid "Mailgun is free"
 msgstr "Mailgun est gratuit"
 
-#: quick-mail.php:2181
+#: quick-mail.php:2226
 #@ quick-mail
 msgid "wp help quick-mail"
 msgstr "wp help quick-mail"
 
-#: quick-mail.php:2182
+#: quick-mail.php:2227
 #@ quick-mail
 msgid "Use Quick Mail with WP-CLI"
 msgstr "Utilisez Quick mail avec WP-CLI"
 
-#: quick-mail.php:2183
+#: quick-mail.php:2228
 #@ quick-mail
 msgid "Send files and links from the command line"
 msgstr "Envoyer des fichiers et des liens depuis la ligne de commande"
 
-#: quick-mail.php:2184
+#: quick-mail.php:2229
 #@ quick-mail
 msgid "Enter"
 msgstr "Entrer"
 
-#: quick-mail.php:2185
+#: quick-mail.php:2230
 #@ quick-mail
 msgid "to get started"
 msgstr "pour commencer"
 
-#: quick-mail.php:2188
+#: quick-mail.php:2233
 #@ quick-mail
 msgid "WP-CLI"
 msgstr "WP-CLI"
@@ -1162,4 +1162,31 @@ msgstr "https://wheredidmybraingo.com/quick-mail-3-2-6-maintenance-release/"
 #@ quick-mail
 msgid "3.2.6"
 msgstr "3.2.6"
+
+#: quick-mail.php:696
+#@ quick-mail
+msgid "No recent comments for you."
+msgstr "Pas de commentaires récents pour vous."
+
+#: quick-mail.php:1760
+#: quick-mail.php:2137
+#@ quick-mail
+msgid "Limit comments"
+msgstr "Limiter les commentaires"
+
+#: quick-mail.php:1761
+#: quick-mail.php:2138
+#@ quick-mail
+msgid "Limit displayed comments to past 7 days."
+msgstr "Limiter les commentaires affichés aux 7 derniers jours."
+
+#: quick-mail.php:2139
+#@ quick-mail
+msgid "Hide comments to posts modified over 7 days ago."
+msgstr "Masquer les commentaires aux messages modifiés il y a plus de 7 jours."
+
+#: quick-mail.php:2152
+#@ quick-mail
+msgid "Email domains are always validated."
+msgstr "Les domaines de messagerie sont toujours validés."
 

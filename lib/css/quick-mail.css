@@ -1,5 +1,5 @@
 @CHARSET "UTF-8";
-/* quick-mail.css 3.2.3 */
+/* quick-mail.css 3.2.6 */
 
 fieldset {
 border: 1px solid #d1d1d1;
@@ -7,15 +7,14 @@ margin: 0 0 1.75em;
 padding: 1em;
 }
 
-#qm-validate, #qm_row, #qm_cc_row, #qm_cc_changed, #qm-duplicate,
-.qm-second, .qm-third, .qm-fourth, .qm-fifth, .qm-sixth {
+#qm-validate, #qm_row, #qm_cc_row, #qm_cc_changed, #qm-duplicate, #limit_commenters_row {
 	display: none;
 }
-.qm-row-second, .qm-row-third, .qm-row-fourth, .qm-row-fifth, .qm-row-sixth {
+.qm-second, .qm-third, .qm-fourth, .qm-fifth, .qm-sixth, .qm-row-second, .qm-row-third, .qm-row-fourth, .qm-row-fifth, .qm-row-sixth {
 	display: none;
 }
 
-#qm_error {
+#qm_error, #qm_error p {
 	color: #c33;
 	font: bold 16px bold Georgia,serif;
 	text-align: center;
@@ -57,6 +56,10 @@ h1, h2, td {
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
 }
 
+dt.qm-help, dd.qm-help {
+	font-weight: bold;
+	margin-top: 2em;
+}
 td.p {
 	font-weight: normal;
 	text-shadow: none;

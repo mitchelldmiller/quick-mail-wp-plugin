@@ -86,6 +86,9 @@ Multiple files from up to six directories (folders) can be attached to a message
 `quick_mail_cli_attachment_subject`
   Replace default CLI attachment subject.
   
+`quick_mail_comment_limit`
+  Number of days for recent comments. Default 7. 
+  
 `quick_mail_comment_style`
   Replace quick mail comment style.
   
@@ -159,6 +162,7 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 * Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
 * only load comment script on comment reply.
 * only load delete saved address script on options page.
+* added option to load 7 days of comments.
 
 = Earlier versions =
 

@@ -87,6 +87,11 @@ span.qm-label {
 	padding-top: 1em;
 	padding-bottom: 0;
 }
+span.mock-qm-label {
+	color: #11169b;
+	font: normal 16px/16px Verdana,sans-serif;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+}
 
 input.qm-input { 
 	font-size: 16px !important;

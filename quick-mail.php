@@ -165,10 +165,11 @@ class QuickMail {
 		$qm_how =  __( 'Select a commenter to send a message.', 'quick-mail' );
 		$qm_info = __( 'Subject and message are automatically added.', 'quick-mail' );
 		$slink = '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
+		$to_settings = '<dd><a href="' . admin_url( 'options-general.php?page=quick_mail_options' ) . '">' . __( 'See settings', 'quick-mail' ) . '</a> ' . __( 'to limit displayed comments', 'quick-mail' ). '.</dd>';
 		$use_str = __( 'Please use', 'quick-mail' );
 		$to_ask = __( 'to ask questions and report problems', 'quick-mail' );
-		$rc5 = "<dd style='font-weight:bold; margin-top:2em;'>{$use_str} {$slink} {$to_ask}.</dd>";
-		$qm_content = "<dl><dt style='font-weight:bold; margin-bottom:1em;'>{$qm_desc}</dt><dd>{$qm_how}</dd><dd>{$qm_info}</dd>{$rc5}</dl>";
+		$rc5 = "<dt class='qm-help'>{$use_str} {$slink} {$to_ask}.</dt>";
+		$qm_content = "<dl><dt style='font-weight:bold; margin-bottom:1em;'>{$qm_desc}</dt><dd>{$qm_how}</dd><dd>{$qm_info}</dd>{$to_settings}{$rc5}</dl>";
 		return array('id' => 'qm_chelp', 'title'	=> __('Reply to Comments', 'quick-mail'), 'content' => $qm_content);
 	} // end get_qm_comment_help_tab
 
@@ -373,7 +374,7 @@ class QuickMail {
       	$this->qm_update_option( 'show_quick_mail_users', $code );
       	$this->qm_update_option( 'qm_wpautop', '0' ); // TODO this should be Y/N like others
       	$this->qm_update_option( 'show_quick_mail_commenters', 'N');
-      	$this->qm_update_option( 'limit_quick_mail_commenters', '0');
+      	$this->qm_update_option( 'limit_quick_mail_commenters', '7');
    } // install_quick_mail
 
    /**
@@ -692,19 +693,18 @@ jQuery(document).ready( function() {
     */
 	public function get_commenters() {
 		$you = wp_get_current_user();
-		$days = get_user_option( 'limit_quick_mail_commenters', $you->ID );
-		$msg = ( '0' == $days) ? __( 'No comments for you.', 'quick-mail') : __( 'No recent comments for you.', 'quick-mail');
+		$days = intval( get_user_option( 'limit_quick_mail_commenters', $you->ID ) );
+		if ( is_bool( $days ) && false === $days ) {
+			$days = 7;
+			update_user_meta( $you->ID, 'limit_quick_mail_commenters', $days, $previous );
+		} // end if new value was not set 3.2.6
+
+		$msg = empty( 998 < $days ) ? __( 'No comments for you.', 'quick-mail') : __( 'No recent comments for you.', 'quick-mail');
 		$problem = new WP_Error( 'no_comments', $msg, 'quick-mail' );
-		$args = array();
-		if ( '0' == $days ) {
-			$args = array('orderby' => 'comment_author', 'order' => 'ASC', 'post_author' => get_current_user_id(),
-				'post_status' => 'publish', 'status' => 'approve', 'count' => false);
-		} else {
-			$dquery = array( array( 'after' => "{$days} days ago", 'inclusive' => true, 'column' => 'post_modified' ) );
-			$args = array('orderby' => 'comment_author', 'order' => 'ASC', 'post_author' => get_current_user_id(),
-				'post_status' => 'publish', 'status' => 'approve', 'count' => false,
-				'date_query' => $dquery);
-		} // end if
+		$dquery = array( array( 'after' => "{$days} days ago", 'inclusive' => true, 'column' => 'post_modified' ) );
+		$args = array('orderby' => 'comment_author', 'order' => 'ASC', 'post_author' => get_current_user_id(),
+			'post_status' => 'publish', 'status' => 'approve', 'count' => false,
+			'date_query' => $dquery);
 	   	$cquery = get_comments( $args );
 	   	if (empty( $cquery ) ) {
 	   		return $problem;
@@ -1381,7 +1381,11 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
       $updated = false;
       $blog = is_multisite() ? get_current_blog_id() : 0;
       $you = wp_get_current_user();
-      // show_quick_mail_commenters
+      $previous = get_user_option( 'limit_quick_mail_commenters', $you->ID );
+      if ( is_bool( $previous ) && false === $previous ) {
+      	update_user_meta( $you->ID, 'limit_quick_mail_commenters', 7, $previous );
+      } // end if new value was not set 3.2.6
+
       if ( ! empty( $_POST['show_quick_mail_users'] ) && 1 == strlen( $_POST['show_quick_mail_users'] ) ) {
          $previous = $this->qm_get_display_option( $blog );
          if ( $previous != $_POST['show_quick_mail_users'] ) {
@@ -1401,10 +1405,9 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 	  	} // end if show_quick_mail_commenters changed
 
 	  	$previous = get_user_option( 'limit_quick_mail_commenters', $you->ID );
-	  	$current = empty($_POST['limit_quick_mail_commenters']) ? '0' : $_POST['limit_quick_mail_commenters'];
-	  	if ( $current != $previous ) {
-	  		$climit = apply_filters('quick_mail_comment_limit', $current);
-	  		update_user_meta( $you->ID, 'limit_quick_mail_commenters', $climit, $previous );
+	  	$current = empty( $_POST['limit_quick_mail_commenters']) ? 0 : intval( trim( $_POST['limit_quick_mail_commenters'] ) );
+	  	if ( -1 < $current && $current != $previous ) {
+	  		update_user_meta( $you->ID, 'limit_quick_mail_commenters', $current, $previous );
 	  		$updated = true;
 	  	} // end if limit_quick_mail_commenters changed
 
@@ -1558,10 +1561,7 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 
       $check_wpautop = ( '1' == get_user_meta( $you->ID, 'qm_wpautop', true ) ) ? 'checked="checked"' : '';
       $check_commenters = $this->user_can_reply_to_comments( false ) ? 'checked="checked"' : '';
-      $limit_commenters = '';
-      if ( !empty($check_commenters) && ! empty( get_user_meta( $you->ID, 'limit_quick_mail_commenters', true ) ) ) {
-      	$limit_commenters = 'checked="checked"';
-      }
+      $limit_commenters = get_user_option( 'limit_quick_mail_commenters', $you->ID );
       $check_all    = ( 'A' == $this->qm_get_display_option( $blog ) ) ? 'checked="checked"' : '';
       $check_names  = ( 'N' == $this->qm_get_display_option( $blog ) ) ? 'checked="checked"' : '';
       $check_none   = ( 'X' == $this->qm_get_display_option( $blog ) ) ? 'checked="checked"' : '';
@@ -1692,7 +1692,7 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 <?php if ( defined('NOT_NOW') && !$this->qm_is_admin( $you->ID, $blog ) && $this->got_mailgun_info( false ) ) : ?>
 <fieldset>
 <legend class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></legend>
-<p><input readonly aria-readonly="true" aria-describedby="qm_mailgun_desc" aria-labelledby="qm_mailgun_label" class="qm-input" name="using_Mailgun" type="checkbox" checked="checked" onclick='return false;'>
+<p><input readonly aria-readonly="true" aria-describedby="qm_mailgun_desc" aria-labelledby="qm_mailgun_label" class="qm-input" name="using_Mailgun" type="checkbox" checked="checked" tabindex="10" onclick='return false;'>
 <label id="qm_mailgun_label" class="qm-label"><?php echo $mg_label; ?>.</label>
 <span id="qm_mailgun_desc" class="qm-label"><?php echo $mg_message; ?></span></p>
 </fieldset>
@@ -1701,16 +1701,16 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 <fieldset>
 <legend class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></legend>
 <?php if ( $this->got_mailgun_info(false) ) : ?>
-<p><input readonly aria-readonly="true" aria-describedby="qm_mailgun_desc" aria-labelledby="qm_mailgun_label" class="qm-input" name="using_Mailgun" type="checkbox" checked="checked" onclick='return false;'>
+<p><input tabindex="20" readonly aria-readonly="true" aria-describedby="qm_mailgun_desc" aria-labelledby="qm_mailgun_label" class="qm-input" name="using_Mailgun" type="checkbox" checked="checked" onclick='return false;'>
 <label id="qm_mailgun_label" class="qm-label"><?php echo $mg_label; ?>.</label>
 <span id="qm_mailgun_desc" class="qm-label"><?php echo $mg_message; ?></span></p>
 <?php elseif ( $this->got_replacement_info() ) : ?>
-<p><input aria-describedby="qm_sendgrid_desc" aria-labelledby="qm_sendgrid_label" class="qm-input" name="replace_quick_mail_sender" type="checkbox" <?php echo $check_sendgrid; ?>>
+<p><input tabindex="30" aria-describedby="qm_sendgrid_desc" aria-labelledby="qm_sendgrid_label" class="qm-input" name="replace_quick_mail_sender" type="checkbox" <?php echo $check_sendgrid; ?>>
 <label id="qm_sendgrid_label" class="qm-label"><?php echo $replacement_label; ?>.</label>
 <span id="qm_sendgrid_desc" class="qm-label"><?php echo $replacement_desc; ?></span></p>
 <?php endif; ?>
 <?php if ( $this->multiple_matching_users( 'A', $blog ) ) : ?>
-<p><input aria-describedby="qm_hide_desc" aria-labelledby="qm_hide_label" class="qm-input" name="hide_quick_mail_admin" type="checkbox" <?php echo $check_admin; ?>>
+<p><input tabindex="40" aria-describedby="qm_hide_desc" aria-labelledby="qm_hide_label" class="qm-input" name="hide_quick_mail_admin" type="checkbox" <?php echo $check_admin; ?>>
 <label id="qm_hide_label" class="qm-label"><?php _e( 'Hide Administrator Profiles', 'quick-mail' ); ?>.</label>
 <?php
 $admins = $this->qm_admin_count( $blog );
@@ -1719,18 +1719,18 @@ echo sprintf('<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User 
 ?>
 <?php endif; ?>
 <input name="showing_quick_mail_admin" type="hidden" value="Y"></p>
-<p><input aria-describedby="quick_mail_cannot_reply_desc" id="quick_mail_cannot_reply"
+<p><input tabindex="50" aria-describedby="quick_mail_cannot_reply_desc" id="quick_mail_cannot_reply"
 aria-labelledby="quick_mail_cannot_reply_label" class="qm-input"
 name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?>>
 <label id="quick_mail_cannot_reply_label" class="qm-label"><?php _e( 'Disable Replies to Comments', 'quick-mail' ); ?>.</label>
 <span id="quick_mail_cannot_reply_desc" class="qm-label"><?php _e( 'Users will not see commenter list.', 'quick-mail' ); ?></span></p>
-<p id="qm-authors"><input aria-describedby="qm_author_desc" aria-labelledby="qm_author_label" class="qm-input" name="authors_quick_mail_privilege" type="checkbox" <?php echo $check_author; ?>>
+<p id="qm-authors"><input tabindex="60" aria-describedby="qm_author_desc" aria-labelledby="qm_author_label" class="qm-input" name="authors_quick_mail_privilege" type="checkbox" <?php echo $check_author; ?>>
 <label id="qm_author_label" class="qm-label"><?php _e( 'Grant Authors permission to reply to comments', 'quick-mail' ); ?>.</label>
 <span id="qm_author_desc" class="qm-label"><?php _e( 'Authors will not have access to user list.', 'quick-mail' ); ?></span></p>
-<p><input aria-describedby="qm_grant_desc" aria-labelledby="qm_grant_label" class="qm-input" name="editors_quick_mail_privilege" type="checkbox" <?php echo $check_editor; ?>>
+<p><input tabindex="70" aria-describedby="qm_grant_desc" aria-labelledby="qm_grant_label" class="qm-input" name="editors_quick_mail_privilege" type="checkbox" <?php echo $check_editor; ?>>
 <label id="qm_grant_label" class="qm-label"><?php _e( 'Grant Editors access to user list.', 'quick-mail' ); ?></label>
 <span id="qm_grant_desc" class="qm-label"><?php _e( 'Let editors see user list.', 'quick-mail' ); ?></span></p>
-<p><input aria-describedby="qm_verify_desc" aria-labelledby="qm_verify_label" class="qm-input" name="verify_quick_mail_addresses" type="checkbox" <?php echo $check_verify; ?>>
+<p><input tabindex="80" aria-describedby="qm_verify_desc" aria-labelledby="qm_verify_label" class="qm-input" name="verify_quick_mail_addresses" type="checkbox" <?php echo $check_verify; ?>>
 <label id="qm_verify_label" class="qm-label"><?php _e( 'Verify recipient email domains', 'quick-mail' ); ?>.</label>
 <span id="qm_verify_desc" class="qm-label"><?php echo $verify_note; ?></span></p>
 </fieldset>
@@ -1739,7 +1739,7 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 if ( user_can_richedit() ) : ?>
 <fieldset>
 <legend class="recipients"><?php _e( 'Add Paragraphs', 'quick-mail' ); ?></legend>
-<p><input aria-describedby="qm_par_desc" aria-labelledby="qm_par_label" id="qm_add_par" class="qm-input" name="qm_wpautop" type="checkbox" value="1" <?php echo $check_wpautop; ?>>
+<p><input tabindex="90" aria-describedby="qm_par_desc" aria-labelledby="qm_par_label" id="qm_add_par" class="qm-input" name="qm_wpautop" type="checkbox" value="1" <?php echo $check_wpautop; ?>>
 <label id="qm_par_label" for="qm_add_par" class="qm-label"><?php _e( 'Add Paragraphs to sent mail', 'quick-mail' ); ?></label></p>
 <p><span id="qm_par_desc" class="qm-label"><?php echo $wam; ?></span></p>
 </fieldset>
@@ -1748,23 +1748,23 @@ if ( user_can_richedit() ) : ?>
 <legend class="recipients"><?php _e( 'User Display', 'quick-mail' ); ?></legend>
 <?php if ( empty( $comment_label ) ) : ?>
 <input type="hidden" name="show_quick_mail_commenters" value="N">
-<input type="hidden" name="limit_quick_mail_commenters" value="0">
+<input type="hidden" name="limit_quick_mail_commenters" value="<?php echo $limit_commenters; ?>">
 <?php else : ?>
-      <p id="show_commenters_row"><input aria-describedby="qm_commenter_desc" aria-labelledby="qm_commenter_label" id="show_quick_mail_commenters" class="qm-input" name="show_quick_mail_commenters"
+      <p id="show_commenters_row"><input tabindex="100" aria-describedby="qm_commenter_desc" aria-labelledby="qm_commenter_label" id="show_quick_mail_commenters" class="qm-input" name="show_quick_mail_commenters"
       type="checkbox" value="Y" <?php echo $check_commenters; ?>>
       <label id="qm_commenter_label" for="show_quick_mail_commenters" class="qm-label"><?php echo $comment_label; ?></label>
       <span id="qm_commenter_desc" class="qm-label"><?php _e( 'Send private replies to comments.', 'quick-mail' ); ?></span></p>
-
-      <p id="limit_commenters_row"><input aria-describedby="qm_limit_desc" aria-labelledby="qm_limit_label" id="limit_quick_mail_commenters" class="qm-input" name="limit_quick_mail_commenters"
-      type="checkbox" value="7" <?php echo $limit_commenters; ?>>
-      <label id="qm_limit_label" for="limit_quick_mail_commenters" class="qm-label"><?php _e( 'Limit comments', 'quick-mail' ); ?></label>
-      <span id="qm_limit_desc" class="qm-label"><?php _e( 'Limit displayed comments to past 7 days.', 'quick-mail' ); ?></span></p>
+      <div id="limit_commenters_row">
+      <p><label id="qm_limit_label" for="limit_quick_mail_commenters" class="qm-label"><?php _e( 'Limit comments', 'quick-mail' ); ?></label>
+      <input tabindex="110" type="number" min="0" max="100000" aria-labelledby="te_label" value="<?php echo $limit_commenters; ?>" name="limit_quick_mail_commenters" id="limit_quick_mail_commenters">&nbsp;<span class="mock-qm-label"><?php _e( 'days', 'quick-mail' ); ?></span><br>
+      <span id="qm_limit_desc" class="qm-label"><?php _e( 'Limit displayed comments to a number of days.', 'quick-mail' ); ?></span></p>
+      </div>
 <?php endif; ?>
       <?php if (!empty($list_warning)) : ?>
       <p role="alert" id="qm-warning"><?php echo $list_warning; ?></p>
       <?php endif; ?>
       <?php if ( $this->multiple_matching_users( 'A', $blog ) ) : ?>
-      <p><input aria-describedby="qm_all_desc" aria-labelledby="qm_all_label" id="qm_all_users" class="qm-input" name="show_quick_mail_users" type="radio" value="A" <?php echo $check_all; ?>>
+      <p><input tabindex="120" aria-describedby="qm_all_desc" aria-labelledby="qm_all_label" id="qm_all_users" class="qm-input" name="show_quick_mail_users" type="radio" value="A" <?php echo $check_all; ?>>
       <label id="qm_all_label" for="qm_all_users" class="qm-label">
 <?php
 $css = ('Y' == $hide_admin) ? 'qm-admin' : 'qm-total';
@@ -1783,7 +1783,7 @@ if ($total > 0) {
 .</span></p>
      <?php endif; ?>
 	  <?php if ( $this->multiple_matching_users( 'N', $blog ) ) : ?>
-      <p><input aria-describedby="qm_names_desc" aria-labelledby="qm_names_label" class="qm-input" name="show_quick_mail_users" type="radio" value="N" <?php echo $check_names; ?>>
+      <p><input tabindex="130" aria-describedby="qm_names_desc" aria-labelledby="qm_names_label" class="qm-input" name="show_quick_mail_users" type="radio" value="N" <?php echo $check_names; ?>>
       <label id="qm_names_label" class="qm-label">
 <?php
 $css = ('Y' == $hide_admin) ? 'qm-admin' : 'qm-total';
@@ -1802,7 +1802,7 @@ if ($total > 0) {
 ?>
 .</span></p>
       <?php endif; ?>
-<p<?php echo $space; ?>><input aria-describedby="qm_none_desc" aria-labelledby="qm_none_label" class="qm-input" name="show_quick_mail_users" type="radio" value="X"
+<p<?php echo $space; ?>><input tabindex="140" aria-describedby="qm_none_desc" aria-labelledby="qm_none_label" class="qm-input" name="show_quick_mail_users" type="radio" value="X"
 <?php
 echo $check_none;
 if (! $this->multiple_matching_users( 'A', $blog ) ) {
@@ -1822,7 +1822,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 ?>
 <span id="qm_none_desc" class="qm-label"><?php _e( 'Enter address to send mail.', 'quick-mail' ); ?> <?php _e( 'Saves 12 addresses.', 'quick-mail' ); ?></span></p>
 </fieldset>
-<p class="submit"><input type="submit" name="qm-submit" class="button button-primary qm-input" value="<?php _e( 'Save Options', 'quick-mail' ); ?>"></p>
+<p class="submit"><input tabindex="150" type="submit" name="qm-submit" class="button button-primary qm-input" value="<?php _e( 'Save Options', 'quick-mail' ); ?>"></p>
 </div>
 </form>
 <?php
@@ -2118,7 +2118,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
     		$use_str = __( 'Please use', 'quick-mail' );
     		$to_ask = __( 'to ask questions and report problems', 'quick-mail' );
     		$rc5 = "<dt class='qm-help'>{$use_str} {$slink} {$to_ask}.</dt>";
-    		if ( $this->user_can_reply_to_comments( false ) ) {
+    		if ( $this->user_can_reply_to_comments( true ) ) {
 	   		$dc_title = __( 'Commenters', 'quick-mail' );
 	   		$dc_head = $this->multiple_matching_users( 'A', $blog ) ?
 	   		__( 'Display list of commenters, instead of users.', 'quick-mail' ) :
@@ -2135,8 +2135,8 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	    		$dc4 = '<dd>' . __( 'Comments must be enabled to reply.', 'quick-mail' ) . '</dd>';
 	    		$dc_val = '<dd>' . __( 'Invalid mail addresses are not displayed.', 'quick-mail' ) . '</dd>';
 	    		$lc_head = __( 'Limit comments', 'quick-mail');
-	    		$lc1 = '<dd>' . __( 'Limit displayed comments to past 7 days.', 'quick-mail' ) . '</dd>';
-	    		$lc3 = '<dd>' . __( 'Hide comments to posts modified over 7 days ago.', 'quick-mail' ) . '</dd>';
+	    		$lc1 = '<dd>' . __( 'Limit displayed comments to past number of days.', 'quick-mail' ) . '</dd>';
+	    		$lc3 = '<dd>' . __( 'Hide comments to posts modified over selected days ago.', 'quick-mail' ) . '</dd>';
 	    		$lcontent = "<dt class='qm-help'>{$lc_head}</dt>{$lc1}{$lc3}";
 	    		$dc5 = "<dd>{$dc_see} {$dc_enabled} {$dc_info}</dd>";
 	    		$dcontent = "<dl><dt><strong>{$dc_head}</strong></dt>{$dc1}{$dc3}{$dc4}{$dc_val}{$dc5}{$lcontent}";
@@ -2155,7 +2155,6 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	    		} // end if admin
 
 	    		$dcontent .= "{$rc5}</dl>";
-	    		// error_log("2159 QM: {$dcontent}");
 			$screen->add_help_tab( array('id' => 'qm_commenter_help', 'title'	=> $dc_title, 'content' => $dcontent) );
 		} // add comment help, if user can reply to comments
 
@@ -2335,19 +2334,16 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 			$attachment_help .= "<p>{$nhelp}</p>";
 		} // end if uploads
 		$screen->add_help_tab( self::get_qm_help_tab() );
-		$you = wp_get_current_user();
-		if ( 'Y' == get_user_option( 'show_quick_mail_commenters', $you->ID ) ) {
+		if ( $this->user_can_reply_to_comments( true ) &&
+			( 'Y' == get_user_option( 'show_quick_mail_commenters', get_current_user_id() ) ) ) {
 			$screen->add_help_tab( self::get_qm_comment_help_tab() );
 		} else {
-			$screen->add_help_tab( array(
-					'id'	=> 'qm_cc_help_tab',
-					'title'	=> $cc_title,
-					'content'	=> "<p>{$cc_help}</p>"));
+			$screen->add_help_tab( array('id' => 'qm_cc_help_tab',
+					'title'	=> $cc_title, 'content'	=> "<p>{$cc_help}</p>") );
 		} // end if replying to commenters
 
 		$screen->add_help_tab( array('id' => 'qm_attach_help_tab',
-				'title'	=> $attachment_title,
-				'content'	=> $attachment_help) );
+				'title'	=> $attachment_title, 'content' => $attachment_help) );
 	} // end add_qm_help
 
    /**

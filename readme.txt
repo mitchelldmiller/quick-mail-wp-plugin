@@ -162,7 +162,7 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 * Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
 * only load comment script on comment reply.
 * only load delete saved address script on options page.
-* added option to load 7 days of comments.
+* added option to limit displayed comments by date.
 
 = Earlier versions =
 

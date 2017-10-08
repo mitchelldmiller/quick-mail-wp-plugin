@@ -86,9 +86,6 @@ Multiple files from up to six directories (folders) can be attached to a message
 `quick_mail_cli_attachment_subject`
   Replace default CLI attachment subject.
   
-`quick_mail_comment_limit`
-  Number of days for recent comments. Default 7. 
-  
 `quick_mail_comment_style`
   Replace quick mail comment style.
   

@@ -1,11 +1,11 @@
 === Quick Mail ===
 Contributors: brainiac
-Tags: mail, email, comments, mailgun, sendgrid, attachment, accessibility, comment, idn, multisite, rich text, tinymce
+Tags: mail, email, comments, attachment, wp-cli, mailgun, sendgrid, accessibility, idn, multisite
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Requires at least: 4.6
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 3.2.4
+Stable tag: 3.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,7 +30,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) is an introduction.
 
-* [Quick Mail 3.2.4 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-2-4-maintenance-release/) for update info.
+* See [Quick Mail 3.2.6 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-2-6-maintenance-release/) for update info.
 
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/)
 
@@ -68,7 +68,9 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * Option for administrators to use [Sendgrid API](https://sendgrid.com/solutions/sendgrid-api/).
 
-* Programmers can replace their credentials by adding a filter to replace_quick_mail_sender. This only works, if you are not using another mail plugin's credentials.
+* [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) is an experimental plugin that changes the Quick Mail sender's name and email address.
+
+* Programmers can replace their credentials by adding a filter to `replace_quick_mail_sender`. This only works if you are not using another mail plugin's credentials.
 
 = Customizing Quick Mail =
 
@@ -83,6 +85,9 @@ Multiple files from up to six directories (folders) can be attached to a message
   
 `quick_mail_cli_attachment_subject`
   Replace default CLI attachment subject.
+  
+`quick_mail_comment_limit`
+  Number of days for recent comments. Default 7. 
   
 `quick_mail_comment_style`
   Replace quick mail comment style.
@@ -153,60 +158,25 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 == Changelog ==
 
-= 3.2.4 =
-* check for missing multibyte functions.
-* character count checks for multibyte text.
-
-= 3.2.3 =
+= 3.2.6 =
 * Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
-* Send URL or file contents with `quick-mail` WP CLI command.
-* Uses Mailgun credentials, if the plugin is active and set to use API.
-* Option to use Sendgrid credentials, if the plugin is active.
-* Organized plugin files into multiple directories.
-* Fixed "Login Expired" error when form was requested with POST from another plugin.
+* only load comment script on comment reply.
+* only load delete saved address script on options page.
+* added option to limit displayed comments by date.
 
-= 3.1.8 =
-* Fixed error that presented user list to administrator when there are less than 3 users on site.
+= Earlier versions =
 
-= 3.1.7 =
-* Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
-* Many changes to improve private comment replies.
-
-= 3.1.1 =
-* reply to comments with Quick Mail from Comments list. 
-* fix error displaying multibyte post titles.
-
-= 3.1.0 =
-* reply to comments.
-* improved performance.
-
-= 3.0.5 =
-* added Russian translation. Props @orlov562
-
-= 3.0.4 =
-* fixed reset email content type.
-* preserves shortcodes in messages.
-
-= 3.0.3 =
-* fixed email content type compatibility error.
-* fixed settings display error.
-
-= 3.0.2 =
-* added wpauto option for HTML messages.
-* display user nickname instead of `user_nicename`.
-
-= 3.0.1 =
-* added Blind Carbon Copy (BCC).
-* improved HTML messages.
-
-= 3.0.0 =
-* improved data entry form accessibility and design.
-* added visual editor.
+Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
 
-= 3.2.3 =
+= 3.2.6 =
+* Upgrade optional.
 
+= 3.2.4 =
+* Upgrade recommended if your language uses multibyte characters.
+
+= 3.2.3 =
 * Upgrade recommended. Added features to send reliable mail and WP-CLI command.
 
 == License ==

@@ -32,7 +32,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * See [Quick Mail 3.2.6 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-2-6-maintenance-release/) for update info.
 
-* [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/)
+* [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/).
 
 == Installation ==
 1. Download the plugin and unpack in your `/wp-content/plugins` directory.
@@ -157,6 +157,7 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 = 3.2.6 =
 * Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
+* fixed bug where user without comments could not send mail after selecting reply to comments.
 * only load comment script on comment reply.
 * only load delete saved address script on options page.
 * added option to limit displayed comments by date.

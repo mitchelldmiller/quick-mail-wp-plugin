@@ -977,28 +977,9 @@ jQuery(document).ready( function() {
       $domain = '';
       $file = '';
       $mcc = '';
-      $no_uploads = '';
       $success = '';
       $from = '';
       $attachments = array();
-      $commenter_list = (empty( $commenter ) && $this->user_can_reply_to_comments( false ) ) ? $this->get_commenters() : null;
-      if ( is_wp_error( $commenter_list ) ) {
-      	$error = $commenter_list->get_error_message();
-      } elseif ( is_string( $commenter_list ) ) {
-      	$commenter = 'Yes';
-      } // end if no comments
-      if ( 'GET' == $_SERVER['REQUEST_METHOD'] && empty( $_GET['quick-mail-uploads'] ) ) {
-         $can_upload = strtolower( ini_get( 'file_uploads' ) );
-         $pattern = '/(OS 5_.+like Mac OS X)/';
-         if ( !empty( $_SERVER['HTTP_USER_AGENT'] ) && 1 == preg_match( $pattern, $_SERVER['HTTP_USER_AGENT'] ) ) {
-			$no_uploads = __( 'File uploads are not available on your device', 'quick-mail' );
-         } else if ( '1' != $can_upload && 'true' != $can_upload && 'on' != $can_upload ) {
-            $no_uploads = __( 'File uploads were disabled by system administrator', 'quick-mail' );
-         }
-         if ( !empty( $no_uploads ) ) {
-         	$no_uploads .= '.';
-         } // add a period
-      } // end if uploads not allowed
 
     $your_vals = array('name' => '', 'email' => $you->user_email);
     if ( !empty( $you->user_firstname ) && !empty( $you->user_lastname ) ) {
@@ -1013,7 +994,7 @@ jQuery(document).ready( function() {
     $from = "From: \"{$your_name}\" <{$your_email}>\r\n";
     if ( empty( $your_email ) ) {
        $error = '<a href="/wp-admin/profile.php">' . __( 'Error: Incomplete User Profile', 'quick-mail' ) . '</a>';
-    } // end if missing email after replacement.
+	} // end if missing email after replacement.
 
       if ( 'POST' == $_SERVER['REQUEST_METHOD']  && !empty( $_POST['qm205'] ) ) {
          if ( ! wp_verify_nonce( $_POST['qm205'], 'qm205' ) ) {
@@ -1212,6 +1193,26 @@ jQuery(document).ready( function() {
             } // end if file uploaded
          } // end if no error
       } // end if POST
+
+      $no_uploads = '';
+      $commenter_list = (empty( $commenter ) && $this->user_can_reply_to_comments( false ) ) ? $this->get_commenters() : null;
+      if ( is_wp_error( $commenter_list ) ) {
+      	$error = $commenter_list->get_error_message();
+      } elseif ( is_string( $commenter_list ) ) {
+      	$commenter = 'Yes';
+      } // end if no comments
+      if ( 'GET' == $_SERVER['REQUEST_METHOD'] && empty( $_GET['quick-mail-uploads'] ) ) {
+      	$can_upload = strtolower( ini_get( 'file_uploads' ) );
+      	$pattern = '/(OS 5_.+like Mac OS X)/';
+      	if ( !empty( $_SERVER['HTTP_USER_AGENT'] ) && 1 == preg_match( $pattern, $_SERVER['HTTP_USER_AGENT'] ) ) {
+      		$no_uploads = __( 'File uploads are not available on your device', 'quick-mail' );
+      	} else if ( '1' != $can_upload && 'true' != $can_upload && 'on' != $can_upload ) {
+      		$no_uploads = __( 'File uploads were disabled by system administrator', 'quick-mail' );
+      	}
+      	if ( !empty( $no_uploads ) ) {
+      		$no_uploads .= '.';
+      	} // add a period
+      } // end if uploads not allowed
 
       $orig_link = plugins_url( '/inc/qm_validate.php', __FILE__ );
       $site = untrailingslashit( network_site_url( '/' ) );

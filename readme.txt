@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Requires at least: 4.6
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 3.2.6
+Stable tag: 3.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -155,6 +155,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 == Changelog ==
 
+= 3.2.7 =
+* fixed syntax error, unexpected '998' (T_LNUMBER) . See [Github issue 9](https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues/9)
+
 = 3.2.6 =
 * Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
 * fixed bug where user without comments could not send mail after selecting reply to comments.
@@ -167,6 +170,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.2.7 =
+* Upgrade recommended.
 
 = 3.2.6 =
 * Upgrade optional.

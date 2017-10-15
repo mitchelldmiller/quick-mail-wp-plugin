@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Quick Mail v3.2.6\n"
+"Project-Id-Version: Quick Mail v3.2.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-10-09 16:56:09+0000\n"
+"PO-Revision-Date: 2017-10-15 14:08:06+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1158,12 +1158,6 @@ msgstr "Дубликат"
 msgid "https://wheredidmybraingo.com/quick-mail-3-2-6-maintenance-release/"
 msgstr "https://wheredidmybraingo.com/quick-mail-3-2-6-maintenance-release/"
 
-#. translators: plugin header field 'Version'
-#: quick-mail.php:0
-#@ quick-mail
-msgid "3.2.6"
-msgstr "3,2,6"
-
 #: quick-mail.php:702
 #@ quick-mail
 msgid "No recent comments for you."
@@ -1209,4 +1203,10 @@ msgstr "Ограничение отображаемых комментариев
 #@ quick-mail
 msgid "Hide comments to posts modified over selected days ago."
 msgstr "Скрытие комментариев к должностям, измененным в течение выбранных дней назад."
+
+#. translators: plugin header field 'Version'
+#: quick-mail.php:0
+#@ quick-mail
+msgid "3.2.7"
+msgstr "3,2,7"
 

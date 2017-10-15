@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.2.6
+Version: 3.2.7
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/quick-mail-3-2-6-maintenance-release/
@@ -14,7 +14,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
 /*
  * Quick Mail WordPress Plugin - Send mail from Wordpress using Quick Mail
- * Copyright (C) 2015-2017 Mitchell D. Miller
+ * Copyright (C) 2014-2017 Mitchell D. Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -699,7 +699,7 @@ jQuery(document).ready( function() {
 			update_user_meta( $you->ID, 'limit_quick_mail_commenters', $days, $previous );
 		} // end if new value was not set 3.2.6
 
-		$msg = empty( 998 < $days ) ? __( 'No comments for you.', 'quick-mail') : __( 'No recent comments for you.', 'quick-mail');
+		$msg = ( 998 < $days ) ? __( 'No comments for you.', 'quick-mail') : __( 'No recent comments for you.', 'quick-mail');
 		$problem = new WP_Error( 'no_comments', $msg, 'quick-mail' );
 		$dquery = array( array( 'after' => "{$days} days ago", 'inclusive' => true, 'column' => 'post_modified' ) );
 		$args = array('orderby' => 'comment_author', 'order' => 'ASC', 'post_author' => get_current_user_id(),

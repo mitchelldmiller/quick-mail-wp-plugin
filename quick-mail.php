@@ -5,7 +5,7 @@ Description: Send text or html email with attachments from user's credentials. S
 Version: 3.2.7
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
-Plugin URI: https://wheredidmybraingo.com/quick-mail-3-2-6-maintenance-release/
+Plugin URI: https://wheredidmybraingo.com/quick-mail-3-2-7-maintenance-release/
 Text Domain: quick-mail
 Domain Path: /lang
 License: GPL-2.0+

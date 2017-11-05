@@ -2,10 +2,10 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.2.7
+Version: 3.2.8
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
-Plugin URI: https://wheredidmybraingo.com/quick-mail-3-2-7-maintenance-release/
+Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
 Text Domain: quick-mail
 Domain Path: /lang
 License: GPL-2.0+
@@ -375,6 +375,9 @@ class QuickMail {
       	$this->qm_update_option( 'qm_wpautop', '0' ); // TODO this should be Y/N like others
       	$this->qm_update_option( 'show_quick_mail_commenters', 'N');
       	$this->qm_update_option( 'limit_quick_mail_commenters', '7');
+
+      	add_user_meta(get_current_user_id(), 'want_quick_mail_privacy', 'N');
+      	add_user_meta(get_current_user_id(), 'save_quick_mail_addresses', 'N');
    } // install_quick_mail
 
    /**
@@ -431,6 +434,8 @@ jQuery(document).ready( function() {
 		delete_metadata( 'user', 1, 'show_quick_mail_users', '', true );
 		delete_metadata( 'user', 1, 'show_quick_mail_commenters', '', true );
 		delete_metadata( 'user', 1, 'limit_quick_mail_commenters', '', true );
+		delete_metadata( 'user', 1, 'want_quick_mail_privacy', '', true );
+		delete_metadata( 'user', 1, 'save_quick_mail_addresses', '', true );
 		if ( is_multisite() ) {
 			$sites = get_sites();
 			foreach ($sites as $site) {
@@ -924,6 +929,18 @@ jQuery(document).ready( function() {
 		$message = '';
 		$raw_msg = '';
 
+		$want_privacy = get_user_option( 'want_quick_mail_privacy', get_current_user_id() );
+		if ( 'Y' == $want_privacy ) {
+			$direction = is_rtl() ? 'rtl' : 'ltr';
+			$args = array('response' => 200, 'back_link' => false, 'text_direction' => $direction);
+			$qm_link = admin_url( 'options-general.php?page=quick_mail_options' );
+			wp_die( sprintf( '<span role="alert" class="quick-mail-title"><a href="%s">%s</a></span>', $qm_link, __( 'Please grant permission to use your email address and save recipient addresses.', 'quick-mail' ) ), __( 'Privacy Error', 'quick-mail' ), $args );
+		} // end if
+
+		$save_addresses = get_user_option( 'save_quick_mail_addresses', get_current_user_id() );
+		if ( empty( $save_addresses ) ) {
+			$save_addresses = 'N';
+		}
 		$blog = is_multisite() ? get_current_blog_id() : 0;
 		if ( is_multisite() ) {
 			$verify = get_blog_option( $blog, 'verify_quick_mail_addresses', 'N' );
@@ -1261,6 +1278,7 @@ $ecss = $your_str ? 'error notice': 'error notice is-dismissible';
 		<div class="indented">
 <?php wp_nonce_field( 'qm205', 'qm205', false, true ); ?>
 <input type="hidden" name="qm-invalid" id="qm-invalid" value="0">
+<input id="save_addresses" name="save_addresses" type="hidden" value="<?php echo $save_addresses; ?>">
 <?php if ( ! empty( $no_uploads ) || ! empty( $_POST['quick-mail-uploads'] ) ) : ?>
 	<input type="hidden" name="quick-mail-uploads" value="No">
 <?php endif; ?>
@@ -1382,6 +1400,15 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
       $updated = false;
       $blog = is_multisite() ? get_current_blog_id() : 0;
       $you = wp_get_current_user();
+      $want_privacy = get_user_option( 'want_quick_mail_privacy', $you->ID );
+      if ( empty( $want_privacy ) ) {
+      	$want_privacy = 'N';
+      }
+      $save_addresses = get_user_option( 'save_quick_mail_addresses', $you->ID );
+      if ( empty( $save_addresses ) ) {
+      	$save_addresses = 'N';
+      }
+
       $previous = get_user_option( 'limit_quick_mail_commenters', $you->ID );
       if ( is_bool( $previous ) && false === $previous ) {
       	update_user_meta( $you->ID, 'limit_quick_mail_commenters', 7, $previous );
@@ -1397,12 +1424,30 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
          } // end if display option changed
       } // end if received display option
 
-	  if ( 'POST' == $_SERVER['REQUEST_METHOD']) {
+	  	if ( 'POST' == $_SERVER['REQUEST_METHOD']  && !empty( $_POST['qm205'] ) ) {
+	  		if ( ! wp_verify_nonce( $_POST['qm205'], 'qm205' ) ) {
+	  			wp_die( '<h1 role="alert">' . __( 'Login Expired. Refresh Page.', 'quick-mail' ). '</h1>' );
+	  		}
+
 	  	$previous = get_user_option( 'show_quick_mail_commenters', $you->ID );
 	  	$current = empty($_POST['show_quick_mail_commenters']) ? 'N' : $_POST['show_quick_mail_commenters'];
 	  	if ( $current != $previous ) {
 	  		update_user_meta( $you->ID, 'show_quick_mail_commenters', $current, $previous );
 	  		$updated = true;
+	  	} // end if show_quick_mail_commenters changed
+
+	  	$current = empty( $_POST['want_quick_mail_privacy'] ) ? 'Y' : 'N';
+	  	if ( $current != $want_privacy ) {
+	  		update_user_meta( $you->ID, 'want_quick_mail_privacy', $current, $want_privacy );
+	  		$updated = true;
+	  		$want_privacy = $current;
+	  	} // end if show_quick_mail_commenters changed
+
+	  	$current = empty( $_POST['save_quick_mail_addresses'] ) ? 'N' : 'Y';
+	  	if ( $current != $save_addresses ) {
+	  		update_user_meta( $you->ID, 'save_quick_mail_addresses', $current, $save_addresses );
+	  		$updated = true;
+	  		$save_addresses = $current;
 	  	} // end if show_quick_mail_commenters changed
 
 	  	$previous = get_user_option( 'limit_quick_mail_commenters', $you->ID );
@@ -1560,6 +1605,8 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
          } // end if
       } // end for
 
+      $check_save = ( 'Y' == $save_addresses) ? 'checked="checked"' : '';
+      $check_privacy = ( 'N' == $want_privacy) ? 'checked="checked"' : '';
       $check_wpautop = ( '1' == get_user_meta( $you->ID, 'qm_wpautop', true ) ) ? 'checked="checked"' : '';
       $check_commenters = $this->user_can_reply_to_comments( false ) ? 'checked="checked"' : '';
       $limit_commenters = get_user_option( 'limit_quick_mail_commenters', $you->ID );
@@ -1601,6 +1648,8 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
       $check_verify = ( 'Y' == $verify_option ) ? 'checked="checked"' : '';
       $check_sendgrid = ( 'Y' == $sendgrid_option ) ? 'checked="checked"' : '';
       $check_cannot_reply = ( 'Y' == $cannot_reply_option ) ? 'checked="checked"' : '';
+      $check_privacy  = ( 'N' == $want_privacy ) ? 'checked="checked"' : '';
+      $check_save = ( 'Y' == $save_addresses ) ? 'checked="checked"' : '';
 
       $english_dns = __('http://php.net/manual/en/function.checkdnsrr.php', 'quick-mail');
       $z = __( 'Checks domain with', 'quick-mail' );
@@ -1689,11 +1738,25 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 <h1 id="quick-mail-title" class="quick-mail-title"><?php _e( 'Quick Mail Options', 'quick-mail' ); ?></h1>
 <form id="quick-mail-settings" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 <div class="indented">
+<?php wp_nonce_field( 'qm205', 'qm205', false, true ); ?>
+<fieldset>
+<legend class="recipients"><?php _e( 'Privacy', 'quick-mail' ); ?></legend>
+<p><input autofocus tabindex="8" aria-describedby="qm_privacy_desc" aria-labelledby="qm_privacy_label" class="qm-input" name="want_quick_mail_privacy" type="checkbox" <?php echo $check_privacy; ?>>
+<label id="qm_privacy_label" class="qm-label"><?php _e( 'Grant Quick Mail permission to use your email address.', 'quick-mail' ); ?></label>
+<span id="qm_privacy_desc" class="qm-label"><?php _e( 'Permission is required to send mail.', 'quick-mail' ); ?></span></p>
+
+<p><input tabindex="9" aria-describedby="qm_save_desc" aria-labelledby="qm_save_label" class="qm-input" name="save_quick_mail_addresses" type="checkbox" <?php echo $check_save; ?>>
+<label id="qm_save_label" class="qm-label"><?php _e( 'Grant Quick Mail permission to save recipient addresses.', 'quick-mail' ); ?></label>
+<span id="qm_save_desc" class="qm-label"><?php _e( 'Permission is required to save addresses.', 'quick-mail' ); ?></span></p>
+
 <div id="qm_saved"></div>
+<input id="save_addresses" name="save_addresses" type="hidden" value="<?php echo $save_addresses; ?>">
+</fieldset>
+
 <?php if ( defined('NOT_NOW') && !$this->qm_is_admin( $you->ID, $blog ) && $this->got_mailgun_info( false ) ) : ?>
 <fieldset>
 <legend class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></legend>
-<p><input readonly aria-readonly="true" aria-describedby="qm_mailgun_desc" aria-labelledby="qm_mailgun_label" class="qm-input" name="using_Mailgun" type="checkbox" checked="checked" tabindex="10" onclick='return false;'>
+<p><input readonly aria-readonly="true" aria-describedby="qm_mailgun_desc" aria-labelledby="qm_mailgun_label" class="qm-input" name="using_Mailgun" type="checkbox" checked="checked" tabindex="18" onclick='return false;'>
 <label id="qm_mailgun_label" class="qm-label"><?php echo $mg_label; ?>.</label>
 <span id="qm_mailgun_desc" class="qm-label"><?php echo $mg_message; ?></span></p>
 </fieldset>

@@ -21,6 +21,8 @@ Mail is sent with user's name and email. Recognizes credentials from [Mailgun](h
 
 Multiple files from up to six directories (folders) can be attached to a message.
 
+Privacy options to comply with [General Data Protection Regulation](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation).
+
 __Features__
 
 * Includes a [WP-CLI](https://wp-cli.org/) command to send a file, or the the contents of a Web page.

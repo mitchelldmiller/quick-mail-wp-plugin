@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.2.8
+Version: 3.3.0
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
@@ -112,14 +112,14 @@ class QuickMail {
 
 	   	register_activation_hook( __FILE__, array($this, 'check_wp_version') );
 
-	   	add_action( 'activated_plugin', array($this, 'install_quick_mail'), 10, 0);
+	   	add_action( 'activated_plugin', array($this, 'install_quick_mail'), 10, 2);
 	   	add_action( 'admin_footer', array($this, 'qm_get_comment_script') );
 	   	add_action( 'admin_footer', array($this, 'qm_get_title_script') );
 	   	add_action( 'admin_enqueue_scripts', array($this, 'add_email_scripts'), 10, 0 );
 	   	add_action( 'admin_menu', array($this, 'init_quick_mail_menu') );
 	   	add_filter( 'comment_row_actions', array($this, 'qm_filter_comment_link'), 10, 2 );
 	   	add_filter( 'comment_notification_text', array($this, 'qm_comment_reply'), 10, 2 );
-	   	add_action( 'deactivated_plugin', array($this, 'unload_quick_mail_plugin'), 10, 0 );
+	   	add_action( 'deactivated_plugin', array($this, 'unload_quick_mail_plugin'), 10, 2 );
 	   	add_action( 'init', array($this, 'let_user_replace_sender'), 10, 0 );
 	   	add_action( 'load-tools_page_quick_mail_form', array( $this, 'add_qm_help' ), 20, 0 );
 	   	add_action( 'plugins_loaded', array($this, 'init_quick_mail_translation') );
@@ -354,9 +354,16 @@ class QuickMail {
     *
     * add options, do not autoload them.
     *
+    * @param string $plugin name of plugin
+    * @param boolean $network are we on a network?
+    *
     * @since 1.2.0
     */
-	public function install_quick_mail() {
+	public function install_quick_mail($plugin, $network) {
+		if ( !strstr($plugin, 'quick-mail.php') ) {
+			return;
+		} // end if not Quick Mail
+
 		$blog = is_multisite() ? get_current_blog_id() : 0;
 		$qm_options = array('replace_quick_mail_sender', 'hide_quick_mail_admin', 'quick_mail_cannot_reply', 'authors_quick_mail_privilege', 'editors_quick_mail_privilege', 'verify_quick_mail_addresses');
 		foreach ($qm_options as $option) {
@@ -376,7 +383,7 @@ class QuickMail {
       	$this->qm_update_option( 'show_quick_mail_commenters', 'N');
       	$this->qm_update_option( 'limit_quick_mail_commenters', '7');
 
-      	add_user_meta(get_current_user_id(), 'want_quick_mail_privacy', 'N');
+      	add_user_meta(get_current_user_id(), 'want_quick_mail_privacy', 'Y');
       	add_user_meta(get_current_user_id(), 'save_quick_mail_addresses', 'N');
    } // install_quick_mail
 
@@ -424,13 +431,49 @@ jQuery(document).ready( function() {
    } // end qm_pointer_setup
 
    /**
+    * remove Quick Mail pointer on deactivation.
+    * @since 3.2.9
+    */
+	public static function remove_qm_pointer() {
+	   	$you = get_current_user_id();
+	   	$key = 'dismissed_wp_pointers';
+	   	$dismissed = array_filter( explode( ',', (string)get_user_meta( $you, $key, true ) ) );
+	   	if ( !in_array( self::$pointer_name, $dismissed ) ) {
+	   		return;
+	   	} // end if not found
+
+	   	$meta_value = '';
+	   	$j = count( $dismissed );
+	   	for ( $i = 0; $i < $j; $i++ ) {
+	   		if ( $dismissed[$i] == self::$pointer_name ) {
+	   			continue;
+	   		}
+	   		$meta_value .= "{$dismissed[$i]},";
+	   	} // end for
+
+	   	$len = strlen( $meta_value );
+	   	if ( $len && ',' == $meta_value[$len - 1] ) {
+	   		$meta_value = substr( $meta_value, 0, -1 );
+	   	} // end if trailing comma
+
+	   	update_user_meta( $you, $key, $meta_value );
+   } // end remove_qm_pointer
+
+   /**
     * delete options when Quick Mail is deactivated.
     *
     * delete global and user options.
     *
+    * @param string $plugin name of plugin
+    * @param boolean $network are we on a network?
     * @since 1.1.1
     */
-	public function unload_quick_mail_plugin() {
+	public function unload_quick_mail_plugin($plugin, $network) {
+		if ( !strstr($plugin, 'quick-mail.php') ) {
+			return;
+		} // end if not Quick Mail
+
+		self::remove_qm_pointer();
 		delete_metadata( 'user', 1, 'show_quick_mail_users', '', true );
 		delete_metadata( 'user', 1, 'show_quick_mail_commenters', '', true );
 		delete_metadata( 'user', 1, 'limit_quick_mail_commenters', '', true );
@@ -930,11 +973,14 @@ jQuery(document).ready( function() {
 		$raw_msg = '';
 
 		$want_privacy = get_user_option( 'want_quick_mail_privacy', get_current_user_id() );
+		if ( $want_privacy != 'N') {
+			$want_privacy = 'Y';
+		} // end if not set
 		if ( 'Y' == $want_privacy ) {
 			$direction = is_rtl() ? 'rtl' : 'ltr';
 			$args = array('response' => 200, 'back_link' => false, 'text_direction' => $direction);
 			$qm_link = admin_url( 'options-general.php?page=quick_mail_options' );
-			wp_die( sprintf( '<span role="alert" class="quick-mail-title"><a href="%s">%s</a></span>', $qm_link, __( 'Please grant permission to use your email address and save recipient addresses.', 'quick-mail' ) ), __( 'Privacy Error', 'quick-mail' ), $args );
+			wp_die( sprintf( '<span role="alert" class="quick-mail-title highlight"><a class="highlight" href="%s">%s</a></span>', $qm_link, __( 'Please grant permission to use your email address.', 'quick-mail' ) ), __( 'Privacy Error', 'quick-mail' ), $args );
 		} // end if
 
 		$save_addresses = get_user_option( 'save_quick_mail_addresses', get_current_user_id() );
@@ -1402,7 +1448,7 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
       $you = wp_get_current_user();
       $want_privacy = get_user_option( 'want_quick_mail_privacy', $you->ID );
       if ( empty( $want_privacy ) ) {
-      	$want_privacy = 'N';
+      	$want_privacy = 'Y';
       }
       $save_addresses = get_user_option( 'save_quick_mail_addresses', $you->ID );
       if ( empty( $save_addresses ) ) {

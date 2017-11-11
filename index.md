@@ -13,11 +13,15 @@ Description
 
 Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds Quick Mail to Tools menu and comment replies.
 
+Send a Web page, file, or message from the command line with quick-mail command for [WP-CLI](https://wp-cli.org/).
+
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
 Mail is sent with user's name and email. Recognizes credentials from [Mailgun](https://wordpress.org/plugins/mailgun/) and [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugins.
 
 Multiple files from up to six directories (folders) can be attached to a message.
+
+Privacy options to comply with [General Data Protection Regulation](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation).
 
 __Features__
 
@@ -48,13 +52,19 @@ __Features__
 ### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Send Reliable Email from WordPress with Quick Mail](https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/) for update info.
+* See [Quick Mail Respects Your Privacy](https://wheredidmybraingo.com/quick-mail-respects-privacy/) for update info.
 
 ### Installation ###
 
-1. Download [the latest release](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases/latest) and unpack in your `/wp-content/plugins/` directory.
+* Download the plugin and unpack in your `/wp-content/plugins` directory.
 
-1. Activate the plugin through the WordPress 'Plugins' menu.
+* Activate the plugin through the 'Plugins' menu in WordPress.
+
+* Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
+
+* Optional: [Install WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
+
+* Optional: Install [Mailgun](http://wordpress.org/extend/plugins/mailgun/) or [Sendgrid](http://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
 
 ### Frequently Asked Questions ###
 
@@ -82,7 +92,41 @@ __Sending Mail from Other Addresses__
 
 * Option for administrators to use [Sendgrid API](https://sendgrid.com/solutions/sendgrid-api/). 
 
+* [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) is an experimental plugin that changes the Quick Mail sender's name and email address.
+
+* Programmers can replace their credentials by adding a filter to `replace_quick_mail_sender`. This only works if you are not using another mail plugin's credentials.
+
+__Privacy__
+
+* Requires permission to use your email address.
+
+* Requires permission to save email addresses. Saved addresses are cleared if permission option is changed.
+
+__Modifying Quick Mail__
+
+* Add a filter to modify Quick Mail.
+
 * Programmers can replace their credentials by adding a filter to `replace_quick_mail_sender`.
+
+- What filters are available to modify Quick Mail?
+
+`quick_mail_cli_attachment_message`
+  Replace default CLI attachment message.
+  
+`quick_mail_cli_attachment_subject`
+  Replace default CLI attachment subject.
+
+`quick_mail_comment_style`
+  Replace quick mail comment style.
+  
+`quick_mail_reply_title`	
+  Replace title for private comment reply on comments list.
+
+`quick_mail_user_capability`	
+  Replace minimum user capability.
+  
+`replace_quick_mail_sender`
+  Replace quick mail sender. Expects an associative array with values for `name` and `email`.
 
 __Limitations__
 
@@ -126,7 +170,7 @@ __Mail Errors__
 * "You must provide at least one recipient email address."
 
    `wp_mail` rejected an address. Seen when Quick Mail verification is off.
-
+   
 __Translators and Programmers__
 
 * A .pot file is included for translators.

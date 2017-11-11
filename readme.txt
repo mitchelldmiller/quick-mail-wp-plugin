@@ -1,11 +1,11 @@
 === Quick Mail ===
 Contributors: brainiac
-Tags: mail, email, comments, attachment, wp-cli, mailgun, sendgrid, accessibility, idn, multisite
+Tags: mail, email, comments, wp-cli, attachment, mailgun, sendgrid, accessibility, idn, multisite
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Requires at least: 4.6
 Tested up to: 4.9
 Requires PHP: 5.3
-Stable tag: 3.2.8
+Stable tag: 3.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,7 +32,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) is an introduction.
 
-* See [Quick Mail 3.2.7 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-2-6-maintenance-release/) for update info.
+* See [Quick Mail Respects Your Privacy](https://wheredidmybraingo.com/quick-mail-respects-privacy/) for update info.
 
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/).
 
@@ -73,6 +73,12 @@ Multiple files from up to six directories (folders) can be attached to a message
 * [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) is an experimental plugin that changes the Quick Mail sender's name and email address.
 
 * Programmers can replace their credentials by adding a filter to `replace_quick_mail_sender`. This only works if you are not using another mail plugin's credentials.
+
+= Privacy =
+
+* Requires permission to use your email address.
+
+* Requires permission to save email addresses. Saved addresses are cleared if permission option is changed.
 
 = Customizing Quick Mail =
 
@@ -157,6 +163,13 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 == Changelog ==
 
+= 3.3.0 =
+* added requirement for consent to use sender's email address.
+* added option to allow saving email addresses.
+* saved email addresses are deleted if saving option changed.
+* "Please verify your settings" is always displayed on activation.
+* fixed bug on deactivate plugin.
+
 = 3.2.7 =
 * fixed syntax error, unexpected '998' (T_LNUMBER) . See [Github issue 9](https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues/9)
 
@@ -172,6 +185,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.3.0 =
+* Upgrade recommended.
 
 = 3.2.7 =
 * Upgrade recommended.

@@ -52,7 +52,7 @@ __Features__
 ### Learn More
 * See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail 3.2.7 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-2-7-maintenance-release/) for update info.
+* See [Quick Mail Respects Your Privacy](https://wheredidmybraingo.com/quick-mail-respects-privacy/) for update info.
 
 ### Installation ###
 
@@ -95,6 +95,12 @@ __Sending Mail from Other Addresses__
 * [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) is an experimental plugin that changes the Quick Mail sender's name and email address.
 
 * Programmers can replace their credentials by adding a filter to `replace_quick_mail_sender`. This only works if you are not using another mail plugin's credentials.
+
+__Privacy__
+
+* Requires permission to use your email address.
+
+* Requires permission to save email addresses. Saved addresses are cleared if permission option is changed.
 
 __Modifying Quick Mail__
 
@@ -176,4 +182,3 @@ __Translators and Programmers__
 __License__
 
 This plugin is free for personal or commercial use. 
-

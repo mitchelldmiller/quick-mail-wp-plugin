@@ -427,7 +427,7 @@ jQuery(document).ready( function() {
    public function qm_pointer_setup() {
       wp_enqueue_style ( 'wp-pointer' );
       wp_enqueue_script ( 'wp-pointer' );
-      add_action ( 'admin_print_footer_scripts', array ($this, 'quick_mail_pointer_scripts') );
+      add_action ( 'admin_print_footer_scripts', array($this, 'quick_mail_pointer_scripts') );
    } // end qm_pointer_setup
 
    /**
@@ -1793,7 +1793,7 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 
 <p><input tabindex="9" aria-describedby="qm_save_desc" aria-labelledby="qm_save_label" class="qm-input" name="save_quick_mail_addresses" type="checkbox" <?php echo $check_save; ?>>
 <label id="qm_save_label" class="qm-label"><?php _e( 'Grant Quick Mail permission to save recipient addresses.', 'quick-mail' ); ?></label>
-<span id="qm_save_desc" class="qm-label"><?php _e( 'Permission is required to save addresses.', 'quick-mail' ); ?></span></p>
+<span id="qm_save_desc" class="qm-label"><?php _e( 'Permission is required to save addresses. Addresses will not be shared.', 'quick-mail' ); ?></span></p>
 
 <div id="qm_saved"></div>
 <input id="save_addresses" name="save_addresses" type="hidden" value="<?php echo $save_addresses; ?>">

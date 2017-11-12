@@ -1,5 +1,5 @@
 @CHARSET "UTF-8";
-/* quick-mail.css 3.2.6 */
+/* quick-mail.css 3.2.8 */
 
 fieldset {
 border: 1px solid #d1d1d1;
@@ -7,7 +7,7 @@ margin: 0 0 1.75em;
 padding: 1em;
 }
 
-#qm-validate, #qm_row, #qm_cc_row, #qm_cc_changed, #qm-duplicate, #limit_commenters_row {
+#qm-validate, #qm_row, #qm_cc_row, #qm_cc_changed, #qm-duplicate, #limit_commenters_row, #save_addresses {
 	display: none;
 }
 .qm-second, .qm-third, .qm-fourth, .qm-fifth, .qm-sixth, .qm-row-second, .qm-row-third, .qm-row-fourth, .qm-row-fifth, .qm-row-sixth {

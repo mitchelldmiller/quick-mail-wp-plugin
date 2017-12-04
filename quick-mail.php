@@ -2,10 +2,10 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.3.0
+Version: 3.3.1 Beta
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
-Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
+Plugin URI: https://wheredidmybraingo.com/quick-mail-respects-privacy/
 Text Domain: quick-mail
 Domain Path: /lang
 License: GPL-2.0+
@@ -59,6 +59,13 @@ class QuickMail {
     * @var string $charset default UTF-8
     */
    public $charset = 'UTF-8';
+
+   /**
+    * Local function used to filter replace_quick_mail_sender
+    * @var string filter name
+    * @since 3.3.1
+    */
+   public $filter_sender = '';
 
    /**
     * Static property for our instance.
@@ -1051,6 +1058,12 @@ jQuery(document).ready( function() {
       	$your_vals['name'] = $you->display_name;
     } // end if user has first and last names
 
+    /**
+     * $replaced used by replace_quick_mail_sender filter, ReplaceQuickMailSender class
+     *
+     * @var array 'name' => $name, 'email' => $email
+     * @see https://github.com/mitchelldmiller/replace-quick-mail-sender
+     */
     $replaced = apply_filters( 'replace_quick_mail_sender', $your_vals );
     $your_email = $replaced['email'];
     $your_name = $replaced['name'];
@@ -1211,7 +1224,6 @@ jQuery(document).ready( function() {
          	// set content type and redirect error before sending mail.
          	add_filter( 'wp_mail_content_type', array($this, 'get_mail_content_type'), 99, 1 );
          	add_filter( 'wp_mail_failed', array($this, 'show_mail_failure'), 99, 1 );
-         	// do not use Mailgun credentials for non-admin users
          	$mg_toggle = $this->got_mailgun_info( true );
 			if ( $mg_toggle ) {
 				$this->toggle_mailgun_override();
@@ -1237,6 +1249,10 @@ jQuery(document).ready( function() {
          	} // end else error
 
          	// reset filters after send
+         	if ( !empty( $this->filter_sender ) ) {
+         		remove_filter( 'replace_quick_mail_sender', array($this, $this->filter_sender, 10) );
+         	} // end if added sender filter
+
          	remove_filter( 'wp_mail_content_type', array($this, 'get_mail_content_type'), 99 );
          	remove_filter( 'wp_mail_failed', array($this, 'show_mail_failure'), 99 );
          	if ( $mg_toggle ) {
@@ -1810,7 +1826,7 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 <?php if ( $this->qm_is_admin( $you->ID, $blog ) ) : ?>
 <fieldset>
 <legend class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></legend>
-<?php if ( $this->got_mailgun_info(false) ) : ?>
+<?php if ( $this->got_mailgun_info( false ) ) : ?>
 <p><input tabindex="20" readonly aria-readonly="true" aria-describedby="qm_mailgun_desc" aria-labelledby="qm_mailgun_label" class="qm-input" name="using_Mailgun" type="checkbox" checked="checked" onclick='return false;'>
 <label id="qm_mailgun_label" class="qm-label"><?php echo $mg_label; ?>.</label>
 <span id="qm_mailgun_desc" class="qm-label"><?php echo $mg_message; ?></span></p>
@@ -2588,7 +2604,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	 * do we have Mailgun plugin and credentials?
 	 *
 	 * @param $check_from boolean should we check if Mailgun override-from is set?
-	 * @return boolean got mailgun info
+	 * @return boolean got Mailgun info
 	 * @since 3.2.0
 	 */
 	public function got_mailgun_info( $check_from ) {
@@ -2619,7 +2635,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 		} // end if not using API or missing key / domain
 
 		$email = empty($options['from-address']) ? '' : $options['from-address'];
-		if (empty($email) ) {
+		if (empty( $email ) ) {
 			return false;
 		} // end if missing email address
 
@@ -2661,7 +2677,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 		} // end if not using API or missing key / domain
 
 		$email = empty($options['from-address']) ? '' : $options['from-address'];
-		if (empty($email) ) {
+		if (empty( $email ) ) {
 			return $wp_info;
 		} // end if missing email address
 
@@ -2679,7 +2695,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	} // end get_mailgun_info
 
 	/**
-	 * toggle mailgun override from credentials.
+	 * toggle Mailgun override from credentials.
 	 *
 	 * override credentials for non-admin users.
 	 *
@@ -2734,7 +2750,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 				$can_send = get_option( 'replace_quick_mail_sender', 'N' );
 			} // end if multisite
 
-			return ('Y' == $can_send) ? $this->got_replacement_info( true ) : false;
+			return ( 'Y' == $can_send ) ? $this->got_replacement_info( true ) : false;
 		} // end if admin
 		return false;
 	} // end user_has_replaced_sender
@@ -2744,7 +2760,6 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	 *
 	 * Use Mailgun or Sengrid credentials. Mailgun has priority, it replaces wp_mail()
 	 *
-	 * @return boolean if user can replace sender
 	 * @since 3.1.9
 	 * @see Mailgun
 	 */
@@ -2759,12 +2774,15 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 			} // end if multisite
 			if ( 'Y' == $can_send || $this->got_mailgun_info( true ) ) {
 				if ( $this->got_mailgun_info( true )  ) {
+					$this->filter_sender = 'get_mailgun_info';
 					add_filter('replace_quick_mail_sender', array($this, 'get_mailgun_info'), 10, 1);
 				} else if ( $this->got_replacement_info( true ) ) {
+					$this->filter_sender = 'get_replacement_credentials';
 					add_filter('replace_quick_mail_sender', array($this, 'get_replacement_credentials'), 10, 1);
 				} // end if got Mailgun
 			} // end if allowed to replace sender by option
 		} // end if admin
 	} // end let_user_replace_sender
+
 } // end class
 $quick_mail_plugin = QuickMail::get_instance();

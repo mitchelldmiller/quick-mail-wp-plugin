@@ -58,6 +58,12 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * Anyone can send HTML by pasting it into a message.
 
+= Where Do I Find Sent Emails? =
+
+* You should be able to find sent emails in your email account's Sent Mail folder.
+
+* Delivery services like [Mailgun](https://www.mailgun.com/) and [Sendgrid](https://sendgrid.com/) also provide this information.
+
 = Selecting Recipients =
 
 * Options to send mail to any user, or limit to users with first and last names on their profile.
@@ -163,7 +169,11 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 == Changelog ==
 
+= 3.3.1 =
+* Remove replace_quick_mail_sender filter after sending mail.
+
 = 3.3.0 =
+* Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
 * added requirement for consent to use sender's email address.
 * added option to allow saving email addresses.
 * saved email addresses are deleted if saving option changed.
@@ -185,6 +195,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.3.1 =
+* Upgrade recommended.
 
 = 3.3.0 =
 * Upgrade recommended.

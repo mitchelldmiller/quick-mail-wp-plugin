@@ -80,6 +80,12 @@ __Who can send rich text messages?__
 
 * Anyone can send HTML by pasting it into a message.
 
+__Where Do I Find Sent Emails?__
+
+* You should be able to find sent emails in your email account's Sent Mail folder.
+
+* Delivery services like [Mailgun](https://www.mailgun.com/) and [Sendgrid](https://sendgrid.com/) also provide this information. 
+
 __Selecting Recipients__
 
 * Options to send mail to any user, or limit to users with first and last names on their profile.

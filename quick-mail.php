@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.3.1 Beta
+Version: 3.3.1 Pre Release
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/quick-mail-respects-privacy/
@@ -1051,12 +1051,9 @@ jQuery(document).ready( function() {
       $from = '';
       $attachments = array();
 
+      // FIXME 12-10-17
     $your_vals = array('name' => '', 'email' => $you->user_email);
-    if ( !empty( $you->user_firstname ) && !empty( $you->user_lastname ) ) {
-      	$your_vals['name'] = "{$you->user_firstname} {$you->user_lastname}";
-    } else {
-      	$your_vals['name'] = $you->display_name;
-    } // end if user has first and last names
+    $your_vals['name'] = QuickMailUtil::get_wp_user_name();
 
     /**
      * $replaced used by replace_quick_mail_sender filter, ReplaceQuickMailSender class
@@ -1228,6 +1225,10 @@ jQuery(document).ready( function() {
 			if ( $mg_toggle ) {
 				$this->toggle_mailgun_override();
 			} // end if do not replace sender name on non-admin user
+			$sp_toggle = false;
+			if ( !empty( $attachments ) && $this->got_sparkpost_info( true ) ) {
+				$sp_toggle = QuickMailUtil::toggle_sparkpost_transactional( $attachments );
+			} // end if toggle SparkPost transactional
 
             if ( wp_mail( $to, $subject, $message, $headers, $attachments ) ) {
 	            	$success = __( 'Message Sent', 'quick-mail' );
@@ -1240,6 +1241,8 @@ jQuery(document).ready( function() {
             } else {
             		if ( $this->got_mailgun_info( false ) ) {
             			$error = __( 'Mailgun Error sending mail', 'quick-mail' );
+            		} elseif ( $this->got_sparkpost_info( false ) ) {
+            			$error = __( 'SparkPost Error sending mail', 'quick-mail' );
             		} elseif ( $this->got_replacement_info() ) {
             			$rname = $this->get_replacement_name();
             			$error = "{$rname} " . __( 'Error sending mail', 'quick-mail' );
@@ -1258,6 +1261,18 @@ jQuery(document).ready( function() {
          	if ( $mg_toggle ) {
          		$this->toggle_mailgun_override();
          	} // end if do not replace sender name on non-admin user
+
+         	if ( $sp_toggle ) {
+         		remove_filter('wpsp_transactional', '__return_zero', 2017);
+         	} // end if restore SparkPost toggle
+
+         	if ( has_filter( 'wpsp_sender_name', array('QuickMailUtil', 'get_wp_user_name') ) ) {
+         		remove_filter( 'wpsp_sender_name', array('QuickMailUtil', 'get_wp_user_name') );
+         	} // end if have SparkPost name filter
+
+         	if ( has_filter( 'wpsp_sender_email', array('QuickMailUtil', 'get_wp_user_email') ) ) {
+         		remove_filter( 'wpsp_sender_email', array('QuickMailUtil', 'get_wp_user_email') );
+         	} // end if have SparkPost name filter
 
             if ( ! empty( $file ) ) {
                $e = '<br>' . __( 'Error Deleting Upload', 'quick-mail' );
@@ -1369,9 +1384,7 @@ $crecipient = '';
 if (is_string($commenter_list) && !empty($commenter_list) ) {
 	$crecipient = $commenter_list;
 } else {
-	$crecipient = "<input aria-labelledby='qme_label' value='{$to}'
-	id='qm-email' name='qm-email' type='email' required aria-required='true' tabindex='6000'
-	readonly aria-readonly='true' size='35'>";
+	$crecipient = "<input aria-labelledby='qme_label' value='{$to}' id='qm-email' name='qm-email' type='email' required aria-required='true' tabindex='6000' readonly aria-readonly='true' size='35'>";
 } // end if
 ?>
 <p><?php echo $crecipient; ?></p>
@@ -1775,6 +1788,19 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			$mg_message = __( 'Sending mail with Mailgun API.', 'quick-mail' );
 		} // end if
 	} // end if got mailgun info
+	$sp_label = '';
+	$sp_message = '';
+	if ( $this->qm_is_admin( $you->ID, $blog ) && $this->got_sparkpost_info( true ) ) {
+		$sp_label = __( 'Using SparkPost credentials', 'quick-mail' );
+		$sp_message = __( 'Sending mail with your SparkPost name and mail address.', 'quick-mail' );
+	} elseif ( $this->got_sparkpost_info( false ) ) {
+		$sp_label = __( 'Mailgun is active', 'quick-mail' );
+		if ( !$this->qm_is_admin( $you->ID, $blog ) ) {
+			$sp_message = __( 'Administrator is using SparkPost to send mail.', 'quick-mail' );
+		} else {
+			$sp_message = __( 'Sending mail with SparkPost API.', 'quick-mail' );
+		} // end if
+	} // end if got mailgun info
 
 	$rname = '';
 	$replacement_label = '';
@@ -1830,6 +1856,10 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 <p><input tabindex="20" readonly aria-readonly="true" aria-describedby="qm_mailgun_desc" aria-labelledby="qm_mailgun_label" class="qm-input" name="using_Mailgun" type="checkbox" checked="checked" onclick='return false;'>
 <label id="qm_mailgun_label" class="qm-label"><?php echo $mg_label; ?>.</label>
 <span id="qm_mailgun_desc" class="qm-label"><?php echo $mg_message; ?></span></p>
+<?php elseif ( $this->got_sparkpost_info( false ) ) : ?>
+<p><input tabindex="20" readonly aria-readonly="true" aria-describedby="qm_sparkpost_desc" aria-labelledby="qm_sparkpost_label" class="qm-input" name="using_sparkpost" type="checkbox" checked="checked" onclick='return false;'>
+<label id="qm_sparkpost_label" class="qm-label"><?php echo $sp_label; ?>.</label>
+<span id="qm_sparkpost_desc" class="qm-label"><?php echo $sp_message; ?></span></p>
 <?php elseif ( $this->got_replacement_info() ) : ?>
 <p><input tabindex="30" aria-describedby="qm_sendgrid_desc" aria-labelledby="qm_sendgrid_label" class="qm-input" name="replace_quick_mail_sender" type="checkbox" <?php echo $check_sendgrid; ?>>
 <label id="qm_sendgrid_label" class="qm-label"><?php echo $replacement_label; ?>.</label>
@@ -2736,6 +2766,73 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	} // end toggle_mailgun_override
 
 	/**
+	 * do we have SparkPost plugin and credentials?
+	 *
+	 * @param $check_from boolean should we check if SparkPost name, email are set?
+	 * @return boolean got SparkPost info
+	 * @since 3.3.1
+	 */
+	public function got_sparkpost_info( $check_from ) {
+		if ( !QuickMailUtil::qm_is_plugin_active( 'sparkpost' ) ) {
+			return false;
+		} // end if not active
+
+		if ( !class_exists( 'WPSparkPost\SparkPost' ) ) {
+			return false;
+		} // end if cannot find class
+
+		$pw = WPSparkPost\SparkPost::get_setting( 'password' );
+		$active = WPSparkPost\SparkPost::get_setting( 'enable_sparkpost' );
+		if ( empty( $pw ) || empty( $active ) ) {
+			return false;
+		}
+
+		$from_name = WPSparkPost\SparkPost::get_setting( 'from_name' );
+		$from_email = WPSparkPost\SparkPost::get_setting( 'from_email' );
+		if ( $check_from ) {
+			return ( !empty( $from_name ) && !empty( $from_email ) );
+		}
+
+		return true;
+	} // end got_sparkpost_info
+
+	/**
+	 * get SparkPost credentials.
+	 *
+	 * @param array $wp_info 'name' => $name, 'email' => $email
+	 * @return string[] original or updated array
+	 * @since 3.3.1
+	 */
+	public function get_sparkpost_info( $wp_info ) {
+		if ( !$this->got_sparkpost_info( true ) ) {
+			return $wp_info;
+		} // end if sparkpost is not active
+
+		$name = WPSparkPost\SparkPost::get_setting( 'from_name' );
+		$email = WPSparkPost\SparkPost::get_setting( 'from_email' );
+		return array('name' => $name, 'email' => $email);
+	} // end get_sparkpost_info
+
+	/**
+	 * get SparkPost name.
+	 *
+	 * @return string SparkPost sender name or name part of email address.
+	 * @since 3.3.1
+	 */
+	public function get_sparkpost_name() {
+		$name = WPSparkPost\SparkPost::get_setting( 'from_name' );
+		$email = WPSparkPost\SparkPost::get_setting( 'from_email' );
+		if (empty($name)) {
+			$split = explode( '@', $email );
+			if ( is_array( $split ) ) {
+				$name = $split[0];
+			} // end if found amphora
+		} // end if missing sender name
+
+		return $name;
+	} // end get_sparkpost_name
+
+	/**
 	 * check if user is admin and replaced sender.
 	 * @return boolean user replaced sender
 	 * @since 3.2.1
@@ -2758,10 +2855,9 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	/**
 	 * is user allowed to replace sender?
 	 *
-	 * Use Mailgun or Sengrid credentials. Mailgun has priority, it replaces wp_mail()
+	 * Use Mailgun, SparkPost or Sengrid credentials.
 	 *
 	 * @since 3.1.9
-	 * @see Mailgun
 	 */
 	public function let_user_replace_sender() {
 		$blog = is_multisite() ? get_current_blog_id() : 0;
@@ -2772,15 +2868,23 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 			} else {
 				$can_send = get_option( 'replace_quick_mail_sender', 'N' );
 			} // end if multisite
-			if ( 'Y' == $can_send || $this->got_mailgun_info( true ) ) {
+			if ( 'Y' == $can_send || $this->got_mailgun_info( true ) || $this->got_sparkpost_info( true ) ) {
 				if ( $this->got_mailgun_info( true )  ) {
 					$this->filter_sender = 'get_mailgun_info';
 					add_filter('replace_quick_mail_sender', array($this, 'get_mailgun_info'), 10, 1);
+				} else if ( $this->got_sparkpost_info( true ) ) {
+					$this->filter_sender = 'get_sparkpost_info';
+					add_filter('replace_quick_mail_sender', array($this, 'get_sparkpost_info'), 10, 1);
 				} else if ( $this->got_replacement_info( true ) ) {
 					$this->filter_sender = 'get_replacement_credentials';
 					add_filter('replace_quick_mail_sender', array($this, 'get_replacement_credentials'), 10, 1);
 				} // end if got Mailgun
 			} // end if allowed to replace sender by option
+		} else {
+			if ( $this->got_sparkpost_info( true ) ) {
+				add_filter( 'wpsp_sender_name', array('QuickMailUtil', 'get_wp_user_name'), 99, 1 );
+				add_filter( 'wpsp_sender_email', array('QuickMailUtil', 'get_wp_user_email'), 99, 1 );
+			} // end if SparkPost and not admin - do not use SparkPost sender
 		} // end if admin
 	} // end let_user_replace_sender
 

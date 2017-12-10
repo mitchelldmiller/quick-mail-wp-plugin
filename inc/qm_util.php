@@ -1,6 +1,8 @@
 <?php
 /**
  * Quick Mail utility functions for Javascript and quick-mail-cli.php
+ * @package QuickMail
+ * @version 3.3.1
  */
 class QuickMailUtil {
 
@@ -228,4 +230,46 @@ class QuickMailUtil {
       return $result;
    } // end qm_is_plugin_active
 
+	/**
+	 * get default sender name from WP
+	 * @return string sender name
+	 * @since 3.3.1
+	 */
+	public static function get_wp_user_name() {
+   		$you = wp_get_current_user();
+   		$name = '';
+	   	if ( !empty( $you->user_firstname ) && !empty( $you->user_lastname ) ) {
+	   		$name = "{$you->user_firstname} {$you->user_lastname}";
+	   	} else {
+	   		$name = $you->display_name;
+	   	} // end if user has first and last names
+
+	   	return $name;
+   } // end get_wp_user_name
+
+   /**
+    * get default user name from WP
+    * @return string email address
+    * @since 3.3.1
+    */
+	public static function get_wp_user_email() {
+		$you = wp_get_current_user();
+		return $you->user_email;
+   } // end get_wp_user_name
+
+	/**
+	 * should SparkPost transaction be toggled for attachments?
+	 *
+	 * @param array $attachments
+	 * @since 3.3.1
+	 */
+	function toggle_sparkpost_transactional( $attachments ) {
+   		$retval = false;
+   		$trans = WPSparkPost\SparkPost::get_setting( 'transactional' );
+   		if ( !empty( $trans ) && is_array( $attachments ) && !empty( $attachments ) ) {
+   			$retval = true;
+   			add_filter( 'wpsp_transactional', '__return_zero', 2017, 0 );
+   		} // end if
+   		return $retval;
+	} // end toggle_sparkpost_transactional
 } // end class

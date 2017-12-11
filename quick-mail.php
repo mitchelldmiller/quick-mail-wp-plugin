@@ -2,10 +2,10 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.3.1 Pre Release
+Version: 3.3.2 Alpha
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
-Plugin URI: https://wheredidmybraingo.com/quick-mail-respects-privacy/
+Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
 Text Domain: quick-mail
 Domain Path: /lang
 License: GPL-2.0+
@@ -1051,7 +1051,6 @@ jQuery(document).ready( function() {
       $from = '';
       $attachments = array();
 
-      // FIXME 12-10-17
     $your_vals = array('name' => '', 'email' => $you->user_email);
     $your_vals['name'] = QuickMailUtil::get_wp_user_name();
 
@@ -1266,13 +1265,15 @@ jQuery(document).ready( function() {
          		remove_filter('wpsp_transactional', '__return_zero', 2017);
          	} // end if restore SparkPost toggle
 
-         	if ( has_filter( 'wpsp_sender_name', array('QuickMailUtil', 'get_wp_user_name') ) ) {
-         		remove_filter( 'wpsp_sender_name', array('QuickMailUtil', 'get_wp_user_name') );
-         	} // end if have SparkPost name filter
+         	if ( $this->got_sparkpost_info( true ) ) {
+	         	if ( has_filter( 'wpsp_sender_name', array('QuickMailUtil', 'get_wp_user_name') ) ) {
+	         		remove_filter( 'wpsp_sender_name', array('QuickMailUtil', 'get_wp_user_name') );
+	         	} // end if have SparkPost name filter
 
-         	if ( has_filter( 'wpsp_sender_email', array('QuickMailUtil', 'get_wp_user_email') ) ) {
-         		remove_filter( 'wpsp_sender_email', array('QuickMailUtil', 'get_wp_user_email') );
-         	} // end if have SparkPost name filter
+	         	if ( has_filter( 'wpsp_sender_email', array('QuickMailUtil', 'get_wp_user_email') ) ) {
+	         		remove_filter( 'wpsp_sender_email', array('QuickMailUtil', 'get_wp_user_email') );
+	         	} // end if have SparkPost name filter
+         	} // end if using SparkPost
 
             if ( ! empty( $file ) ) {
                $e = '<br>' . __( 'Error Deleting Upload', 'quick-mail' );
@@ -1504,33 +1505,33 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 	  			wp_die( '<h1 role="alert">' . __( 'Login Expired. Refresh Page.', 'quick-mail' ). '</h1>' );
 	  		}
 
-	  	$previous = get_user_option( 'show_quick_mail_commenters', $you->ID );
-	  	$current = empty($_POST['show_quick_mail_commenters']) ? 'N' : $_POST['show_quick_mail_commenters'];
-	  	if ( $current != $previous ) {
-	  		update_user_meta( $you->ID, 'show_quick_mail_commenters', $current, $previous );
-	  		$updated = true;
-	  	} // end if show_quick_mail_commenters changed
+		  	$previous = get_user_option( 'show_quick_mail_commenters', $you->ID );
+		  	$current = empty($_POST['show_quick_mail_commenters']) ? 'N' : $_POST['show_quick_mail_commenters'];
+		  	if ( $current != $previous ) {
+		  		update_user_meta( $you->ID, 'show_quick_mail_commenters', $current, $previous );
+		  		$updated = true;
+		  	} // end if show_quick_mail_commenters changed
 
-	  	$current = empty( $_POST['want_quick_mail_privacy'] ) ? 'Y' : 'N';
-	  	if ( $current != $want_privacy ) {
-	  		update_user_meta( $you->ID, 'want_quick_mail_privacy', $current, $want_privacy );
-	  		$updated = true;
-	  		$want_privacy = $current;
-	  	} // end if show_quick_mail_commenters changed
+		  	$current = empty( $_POST['want_quick_mail_privacy'] ) ? 'Y' : 'N';
+		  	if ( $current != $want_privacy ) {
+		  		update_user_meta( $you->ID, 'want_quick_mail_privacy', $current, $want_privacy );
+		  		$updated = true;
+		  		$want_privacy = $current;
+		  	} // end if show_quick_mail_commenters changed
 
-	  	$current = empty( $_POST['save_quick_mail_addresses'] ) ? 'N' : 'Y';
-	  	if ( $current != $save_addresses ) {
-	  		update_user_meta( $you->ID, 'save_quick_mail_addresses', $current, $save_addresses );
-	  		$updated = true;
-	  		$save_addresses = $current;
-	  	} // end if show_quick_mail_commenters changed
+		  	$current = empty( $_POST['save_quick_mail_addresses'] ) ? 'N' : 'Y';
+		  	if ( $current != $save_addresses ) {
+		  		update_user_meta( $you->ID, 'save_quick_mail_addresses', $current, $save_addresses );
+		  		$updated = true;
+		  		$save_addresses = $current;
+		  	} // end if show_quick_mail_commenters changed
 
-	  	$previous = get_user_option( 'limit_quick_mail_commenters', $you->ID );
-	  	$current = empty( $_POST['limit_quick_mail_commenters']) ? 0 : intval( trim( $_POST['limit_quick_mail_commenters'] ) );
-	  	if ( -1 < $current && $current != $previous ) {
-	  		update_user_meta( $you->ID, 'limit_quick_mail_commenters', $current, $previous );
-	  		$updated = true;
-	  	} // end if limit_quick_mail_commenters changed
+		  	$previous = get_user_option( 'limit_quick_mail_commenters', $you->ID );
+		  	$current = empty( $_POST['limit_quick_mail_commenters']) ? 0 : intval( trim( $_POST['limit_quick_mail_commenters'] ) );
+		  	if ( -1 < $current && $current != $previous ) {
+		  		update_user_meta( $you->ID, 'limit_quick_mail_commenters', $current, $previous );
+		  		$updated = true;
+		  	} // end if limit_quick_mail_commenters changed
 
 	      $previous = get_user_meta( $you->ID, 'qm_wpautop', true );
 	      $current = empty($_POST['qm_wpautop']) ? '0' : $_POST['qm_wpautop'];
@@ -1787,7 +1788,8 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 		} else {
 			$mg_message = __( 'Sending mail with Mailgun API.', 'quick-mail' );
 		} // end if
-	} // end if got mailgun info
+	} // end if got Mailgun info
+
 	$sp_label = '';
 	$sp_message = '';
 	if ( $this->qm_is_admin( $you->ID, $blog ) && $this->got_sparkpost_info( true ) ) {
@@ -1800,7 +1802,7 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 		} else {
 			$sp_message = __( 'Sending mail with SparkPost API.', 'quick-mail' );
 		} // end if
-	} // end if got mailgun info
+	} // end if got SparkPost info
 
 	$rname = '';
 	$replacement_label = '';

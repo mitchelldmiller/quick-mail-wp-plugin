@@ -1,6 +1,6 @@
 === Quick Mail ===
 Contributors: brainiac
-Tags: mail, email, comments, wp-cli, attachment, mailgun, sendgrid, accessibility, idn, multisite
+Tags: mail, email, comments, wp-cli, attachment, mailgun, sparkpost, sendgrid, accessibility, idn, multisite
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Requires at least: 4.6
 Tested up to: 4.9
@@ -24,7 +24,7 @@ User options for sending email to site users or others.
 
 Privacy options to comply with [General Data Protection Regulation](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation).
 
-Mail is sent with user's name and email. Recognizes credentials from [Mailgun](https://wordpress.org/plugins/mailgun/) and [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugins.
+Mail is sent with user's name and email. Recognizes credentials from [Mailgun](https://wordpress.org/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugins.
 
 Multiple files from up to six directories (folders) can be attached to a message.
 
@@ -32,7 +32,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) is an introduction.
 
-* See [Quick Mail Respects Your Privacy](https://wheredidmybraingo.com/quick-mail-respects-privacy/) for update info.
+* [Everything you ever wanted to know about Quick Mail](https://wheredidmybraingo.com/tag/quick-mail/).
 
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/).
 
@@ -41,7 +41,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
 4. Optional: Install [WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
-5. Optional: Install [Mailgun](http://wordpress.org/extend/plugins/mailgun/) or [Sendgrid](http://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
+5. Optional: Install [Mailgun](http://wordpress.org/extend/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](http://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
 6. Optional: Install experimental [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) plugin, to change administrator's credentials.
 
 == Frequently Asked Questions ==
@@ -62,7 +62,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * You should be able to find sent emails in your email account's Sent Mail folder.
 
-* Delivery services like [Mailgun](https://www.mailgun.com/) and [Sendgrid](https://sendgrid.com/) also provide this information.
+* Delivery services like [Mailgun](https://www.mailgun.com/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://sendgrid.com/) also provide this information.
 
 = Selecting Recipients =
 
@@ -72,7 +72,9 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 = Sending Mail from Other Addresses =
 
-* Uses Mailgun plugin settings for Administrators, if the plugin is activated, using `Override "From" Details` and [Mailgun API](https://documentation.mailgun.com/en/latest/api_reference.html).
+* Uses [Mailgun plugin](http://wordpress.org/extend/plugins/mailgun/) settings for Administrators, if the plugin is activated, using `Override "From" Details` and [Mailgun API](https://documentation.mailgun.com/en/latest/api_reference.html).
+
+* Uses [SparkPost plugin](https://wordpress.org/plugins/sparkpost/) settings for Administrator name and email address.
 
 * Option for administrators to use [Sendgrid API](https://sendgrid.com/solutions/sendgrid-api/).
 
@@ -169,6 +171,10 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 == Changelog ==
 
+= 3.3.2 =
+* Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
+* Added support for [SparkPost](https://sparkpost.com/) email delivery service and plugin.
+
 = 3.3.1 =
 * Remove replace_quick_mail_sender filter after sending mail.
 
@@ -196,7 +202,7 @@ Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
 
-= 3.3.1 =
+= 3.3.2 =
 * Upgrade recommended.
 
 = 3.3.0 =

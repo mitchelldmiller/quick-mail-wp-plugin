@@ -2,7 +2,7 @@
 /**
  * Quick Mail utility functions for Javascript and quick-mail-cli.php
  * @package QuickMail
- * @version 3.3.1
+ * @version 3.3.2
  */
 class QuickMailUtil {
 
@@ -181,6 +181,18 @@ class QuickMailUtil {
 			return false;
 		} // return false if missing amphora
 
+		if ( !filter_var( $qm_address, FILTER_VALIDATE_EMAIL ) ) {
+			return false;
+		} // end if PHP rejects address
+
+		if ( false !== filter_var( $a_split[1], FILTER_VALIDATE_IP ) ) {
+			return true;
+		} // end if IP address
+
+		if ( ! strpos( $a_split[1], '.' ) ) {
+			return false;
+		} // end if no dots - localhost?
+
 		if ( function_exists( 'idn_to_ascii' ) ) {
 			$intl = idn_to_ascii( $a_split[1] );
 			if ( !empty( $intl ) ) {
@@ -189,11 +201,10 @@ class QuickMailUtil {
 			}
 		} // end if we have idn_to_ascii
 
-		if ( !filter_var( $qm_address, FILTER_VALIDATE_EMAIL ) ) {
-			return false;
-		} // end if PHP rejects address
-
-       return ( 'N' == $validate_option ) ? true : checkdnsrr( $a_split[1], 'MX' );
+		$dots = explode( '.', $a_split[1] );
+		$j = count( $dots );
+		$domain = ( $j > 2 ) ?  "{$dots[$j - 2]}.{$dots[$j - 1]}" : $a_split[1];
+       return ( 'N' == $validate_option ) ? true : checkdnsrr( $domain, 'MX' );
    } // end qm_valid_email_domain
 
 	/**

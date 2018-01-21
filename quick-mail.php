@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.4.0 rc2
+Version: 3.4.0 rc3
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
@@ -3004,7 +3004,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 		if ( empty( $sp_email ) ) {
 			$sp_email = apply_filters( 'wpsp_sender_email', $wp_info['email'] );
 		} // end if
-		$email = empty($sp_email) ? $wp_info['email'] : $sp_email;
+		$email = empty( $sp_email ) ? $wp_info['email'] : $sp_email;
 
 		$sp_name = WPSparkPost\SparkPost::get_setting( 'from_name' );
 		if ( empty( $sp_name ) ) {

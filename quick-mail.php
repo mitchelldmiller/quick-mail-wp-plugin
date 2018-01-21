@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.3.2 Beta
+Version: 3.4.0 rc2
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
@@ -32,8 +32,9 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
 
 require_once 'inc/qm_util.php';
+require_once 'inc/quick-mail-sender.php';
 
-// Load our WP-CLI command, if available
+// Load our WP-CLI command, if needed.
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	require_once dirname( __FILE__ ) . '/inc/quick-mail-cli.php';
 }
@@ -66,6 +67,13 @@ class QuickMail {
     * @since 3.3.1
     */
    public $filter_sender = '';
+
+   /**
+    * Local function used to filter quick mail sender
+    * @var string filter name
+    * @since 3.3.3
+    */
+   public $filter_name = '';
 
    /**
     * Static property for our instance.
@@ -124,16 +132,15 @@ class QuickMail {
 	   	add_action( 'admin_footer', array($this, 'qm_get_title_script') );
 	   	add_action( 'admin_enqueue_scripts', array($this, 'add_email_scripts'), 10, 0 );
 	   	add_action( 'admin_menu', array($this, 'init_quick_mail_menu') );
-	   	add_filter( 'comment_row_actions', array($this, 'qm_filter_comment_link'), 10, 2 );
-	   	add_filter( 'comment_notification_text', array($this, 'qm_comment_reply'), 10, 2 );
 	   	add_action( 'deactivated_plugin', array($this, 'unload_quick_mail_plugin'), 10, 2 );
-	   	add_action( 'init', array($this, 'let_user_replace_sender'), 10, 0 );
 	   	add_action( 'load-tools_page_quick_mail_form', array( $this, 'add_qm_help' ), 20, 0 );
 	   	add_action( 'plugins_loaded', array($this, 'init_quick_mail_translation') );
 	   	add_action( 'plugins_loaded', array($this, 'show_qm_pointer' ), 10, 0 );
 	   	add_action( 'wp_ajax_qm_get_comment', array($this, 'qm_get_comment') );
 	   	add_action( 'wp_ajax_qm_get_title', array($this, 'qm_get_title') );
 
+	   	add_filter( 'comment_row_actions', array($this, 'qm_filter_comment_link'), 10, 2 );
+	   	add_filter( 'comment_notification_text', array($this, 'qm_comment_reply'), 10, 2 );
 	   	add_filter( 'plugin_action_links', array($this, 'qm_action_links'), 10, 2 );
 	   	add_filter( 'plugin_row_meta', array($this, 'qm_plugin_links'), 10, 2 );
 	   	add_filter( 'quick_mail_setup_capability', array($this, 'let_editor_set_quick_mail_option') );
@@ -145,18 +152,27 @@ class QuickMail {
     */
 	public static function get_qm_help_tab() {
 		$qm_desc =  __( 'Quick Mail is the easiest way to send email with attachments to WordPress users on your site, or send private replies to comments.', 'quick-mail' );
+		$want_privacy = get_user_option( 'want_quick_mail_privacy', get_current_user_id() );
+		if ( $want_privacy != 'N') {
+			$want_privacy = 'Y';
+		} // end if not set
+		if ( 'Y' == $want_privacy ) {
+			$qm_desc = sprintf("<h3 class='wp-ui-text-highlight'>%s</h3>",
+				__( 'Please grant permission to use your mail address.', 'quick-mail' ) );
+		} // end if
+
 		$english_faq = __('https://wordpress.org/plugins/quick-mail/faq/', 'quick-mail');
 		$faq = __( 'FAQ', 'quick-mail' );
 		$flink = '<a href="https://wordpress.org/plugins/quick-mail/faq/" target="_blank">' . __( 'FAQ', 'quick-mail' ) . '</a>';
 		$slink = '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
 		$rlink = '<a href="https://wordpress.org/support/plugin/quick-mail/reviews/" target="_blank">' . __( 'Please leave a review', 'quick-mail' ) . '</a>';
 		$others = __( 'to help others find Quick Mail', 'quick-mail' );
-		$questions = __( 'Resources', 'quick-mail' );
+		$resources = __( 'Resources', 'quick-mail' );
 		$more_info = __( 'has more information', 'quick-mail' );
 		$use_str = __( 'Please use', 'quick-mail' );
 		$to_ask = __( 'to ask questions and report problems', 'quick-mail' );
 		$help_others = __( 'Help Others', 'quick-mail' );
-		$qm_top = "<p>{$qm_desc}</p><h4>{$questions}</h4><ul><li>{$flink} {$more_info}</li><li>{$use_str} {$slink} {$to_ask}</li></ul>";
+		$qm_top = "<p>{$qm_desc}</p><h4>{$resources}</h4><ul><li>{$flink} {$more_info}</li><li>{$use_str} {$slink} {$to_ask}</li></ul>";
 		$qm_bot = "<h4>{$help_others}</h4><ul><li>{$rlink} {$others}</li></ul>";
 		$qm_content = $qm_top . $qm_bot;
 		return array('id' => 'qm_intro', 'title'	=> __('Quick Mail', 'quick-mail'), 'content' => $qm_content);
@@ -333,7 +349,7 @@ class QuickMail {
       if ( is_wp_error( $e ) ) {
          $direction = is_rtl() ? 'rtl' : 'ltr';
          $args = array( 'response' => 200, 'back_link' => true, 'text_direction' => $direction );
-         wp_die( sprintf( '<h1 role="alert">%s</h1>', $e->get_error_message() ), __( 'Mail Error', 'quick-mail' ), $args );
+         wp_die( sprintf( '<h1 role="alert">%s</h1>', $e->get_error_message() , __( 'Mail Error', 'quick-mail' ), $args ) );
       } // end if error
    } // end show_mail_failure
 
@@ -761,7 +777,7 @@ jQuery(document).ready( function() {
 			'post_status' => 'publish', 'status' => 'approve', 'count' => false,
 			'date_query' => $dquery);
 	   	$cquery = get_comments( $args );
-	   	if (empty( $cquery ) ) {
+	   	if ( empty( $cquery ) ) {
 	   		return $problem;
 	   	} // end if no recent comments
 
@@ -994,7 +1010,13 @@ jQuery(document).ready( function() {
 		if ( empty( $save_addresses ) ) {
 			$save_addresses = 'N';
 		}
+
+		// get sender name, email, reply to
+
 		$blog = is_multisite() ? get_current_blog_id() : 0;
+		$you = wp_get_current_user();
+		$you_are_admin = $this->qm_is_admin( $you->ID, $blog );
+
 		if ( is_multisite() ) {
 			$verify = get_blog_option( $blog, 'verify_quick_mail_addresses', 'N' );
 		} else {
@@ -1004,7 +1026,6 @@ jQuery(document).ready( function() {
 			$verify = 'N';
 		} // end if verify disabled, because not displaying user list.
 
-		$you = wp_get_current_user();
 		if ( !empty( $_REQUEST['comment_id'] ) ) {
 			if ( !$this->user_can_reply_to_comments( true ) ) {
 				$direction = is_rtl() ? 'rtl' : 'ltr';
@@ -1049,20 +1070,104 @@ jQuery(document).ready( function() {
       $mcc = '';
       $success = '';
       $from = '';
+      $reply_to = '';
       $attachments = array();
+      $headers = array();
+      $our_filters = array();
 
-    $your_vals = array('name' => '', 'email' => $you->user_email);
+	// your name, email, reply to, were values defined?
+    $your_vals = array('name' => '', 'email' => '', 'reply_to' => '', 'defined' => false);
     $your_vals['name'] = QuickMailUtil::get_wp_user_name();
+    $your_vals['email'] = QuickMailUtil::get_wp_user_email();
+    $your_vals['reply_to'] = "{$your_vals['name']} <{$your_vals['email']}>";
 
     /**
      * $replaced used by replace_quick_mail_sender filter, ReplaceQuickMailSender class
      *
-     * @var array 'name' => $name, 'email' => $email
+     * @var array 'name' => $name, 'email' => $email, 'reply_to' => $reply_to
+     *
      * @see https://github.com/mitchelldmiller/replace-quick-mail-sender
      */
     $replaced = apply_filters( 'replace_quick_mail_sender', $your_vals );
     $your_email = $replaced['email'];
     $your_name = $replaced['name'];
+    $reply_to = !empty( $replaced['reply_to'] ) ? $replaced['reply_to'] : "{$your_name} <$your_email>";
+
+    // are we using a replacement sender?
+    $service = '';
+
+    // if admin, use mail plugin values or replace sender plugin values
+    // if not admin, cannot change sender, if value changed by plugin
+
+    	// SparkPost first - no defines
+    	if ( $this->got_sparkpost_info( false ) ) {
+    		$service = 'sparkpost';
+    		$found = $this->get_sparkpost_info( $replaced );
+    		if ($you_are_admin) {
+    			$your_name = $found['name'];
+    			if ( $found['email'] != $your_email ) {
+    				$our_filters[] = new QuickMailSender( $service, 'reply_to', $reply_to );
+    			} // end if might not be able to get replies
+    			$your_email = $found['email']; //
+    		} else {
+    			// can change name, reply to
+			if ( $found['name'] != $your_name ) {
+    				$our_filters[] = new QuickMailSender($service, 'name', $your_name);
+			} // end if different name
+
+			if ( $found['email'] != $your_email ) {
+				$our_filters[] = new QuickMailSender( $service, 'reply_to', $reply_to );
+			} // end if need reply-to filter for SparkPost
+		} // end if admin
+    	} // end if SparkPost
+
+    	// Mailgun next.
+    	if ( $this->got_mailgun_info( false ) ) {
+    		$service = 'mailgun';
+    		$found = $this->get_mailgun_info( $replaced );
+    		if ($you_are_admin) {
+    			$your_name = $found['name'];
+    			$your_email = $found['email'];
+    			if ( $found['email'] != $your_email ) {
+    				$our_filters[] = new QuickMailSender($service, 'reply_to', $reply_to );
+			} // end if need reply to
+    		} else {
+			if ($found['name'] != $your_name) {
+    				$our_filters[] = new QuickMailSender($service, 'name', $your_name);
+			} // end if different name. might have been defined as constant
+
+			if ( $found['email'] != $your_email ) {
+				$our_filters[] = new QuickMailSender($service, 'reply_to', $reply_to );
+			} // end if need reply to
+    		} // end if admin
+    	} // end if
+
+    	// SendGrid next.
+    	if ( $this->got_replacement_info( false ) ) {
+    		$service = 'sendgrid';
+    		$found = $this->get_replacement_info( $replaced );
+    		if ($you_are_admin) {
+    			$your_name = $found['name'];
+    			$your_email = $found['email'];
+    			if ( $found['email'] != $your_email ) {
+    				$our_filters[] = new QuickMailSender($service, 'reply_to', $reply_to );
+    			}
+    		} else {
+    			// can change name, reply to
+			if ($found['name'] != $your_name) {
+    				$our_filters[] = new QuickMailSender($service, 'name', $your_name);
+			} // end if different name
+
+			if ( $found['email'] != $your_email ) {
+				$our_filters[] = new QuickMailSender($service, 'reply_to', $reply_to );
+			} // end if need reply to
+    		} // end if admin
+    	} // end if
+
+    	if ( empty( $our_filters ) && !empty( $reply_to ) ) {
+    		$our_filters[] = new QuickMailSender($service, 'reply_to', $reply_to );
+    	}
+
     $from = "From: \"{$your_name}\" <{$your_email}>\r\n";
     if ( empty( $your_email ) ) {
        $error = '<a href="/wp-admin/profile.php">' . __( 'Error: Incomplete User Profile', 'quick-mail' ) . '</a>';
@@ -1079,7 +1184,7 @@ jQuery(document).ready( function() {
          } // end if user circumvented Javascript
 
          $rec_type = empty($_POST['qm_bcc']) ? 'Cc' : 'Bcc';
-         if (isset($_POST['qm-cc']) && is_array($_POST['qm-cc'])) {
+         if ( isset( $_POST['qm-cc'] ) && is_array( $_POST['qm-cc'] ) ) {
          	$e = function_exists( 'mb_strtolower' ) ? mb_strtolower( urldecode( $_POST['qm-email'] ), $this->charset ) : strtolower( urldecode( $_POST['qm-email'] ) );
          	foreach ($_POST['qm-cc'] as $c) {
          		$your_lower = function_exists( 'mb_strtolower' ) ? mb_strtolower( urldecode( $c ), $this->charset ) : strtolower( urldecode( $c ) );
@@ -1101,7 +1206,7 @@ jQuery(document).ready( function() {
          if ( !QuickMailUtil::qm_valid_email_domain( $to, $verify ) ) {
             $error = __( 'Invalid mail address', 'quick-mail' ) . '<br>' . htmlspecialchars( $to );
          }
-         if (! empty( $_POST['qm-cc'] )) {
+         if (! empty( $_POST['qm-cc'] ) ) {
          	$raw_cc = array();
          	if ( !is_array( $_POST['qm-cc'] ) ) {
          		$mcc = QuickMailUtil::filter_email_input( $to, urldecode( $_POST['qm-cc'] ), $verify );
@@ -1128,7 +1233,7 @@ jQuery(document).ready( function() {
          	} // end for
 
          	$all_cc = array_unique( $raw_cc );
-         	if ( empty( $error ) && !empty( $all_cc[0] ) && empty( $mcc )) {
+         	if ( empty( $error ) && !empty( $all_cc[0] ) && empty( $mcc ) ) {
 	         	$mcc = implode( ',', $all_cc );
 	         	$j = count( $all_cc );
 	            	for ( $i = 0; $i < $j && empty( $error ); $i++ ) {
@@ -1207,11 +1312,20 @@ jQuery(document).ready( function() {
             } // end if has attachment
          } // end if valid email address and has attachment
 
-         if ( empty( $error ) ) {
-         	$headers = array( $from );
+ 		if ( empty( $error ) ) {
+         	$headers[] = $from;
          	if ( !empty( $mcc ) ) {
          		$headers[] = "{$rec_type}: {$mcc}";
          	} // end if CC
+
+         	$reply_to = '';
+         	foreach ( $our_filters as $f ) {
+         		$reply_to = $f->get_reply_to();
+         		if ( !empty( $reply_to ) ) {
+         			$headers[] = "Reply-To: {$reply_to}\r\n";
+         			break;
+         		} // end if
+         	} // end if
 
          	if ( user_can_richedit() && 'text/html' == $this->content_type && '1' == get_user_meta( get_current_user_id(), 'qm_wpautop', true ) ) {
          		$message = wpautop( $message );
@@ -1232,7 +1346,7 @@ jQuery(document).ready( function() {
             if ( wp_mail( $to, $subject, $message, $headers, $attachments ) ) {
 	            	$success = __( 'Message Sent', 'quick-mail' );
 	            	$rec_label = ($rec_type == 'Cc') ? __( 'CC', 'quick-mail' ) : __( 'BCC', 'quick-mail' );
-	    			if (empty( $mcc ) ) {
+	    			if ( empty( $mcc ) ) {
 					$success .= sprintf("<br>%s %s", __( 'To', 'quick-mail' ), $to);
 				} else {
 					$success .= sprintf("<br>%s %s<br>%s %s", __( 'To', 'quick-mail' ), $to, $rec_label, $mcc);
@@ -1240,7 +1354,7 @@ jQuery(document).ready( function() {
             } else {
             		if ( $this->got_mailgun_info( false ) ) {
             			$error = __( 'Mailgun Error sending mail', 'quick-mail' );
-            		} elseif ( $this->got_sparkpost_info( false ) ) {
+            		} elseif ( $this->got_sparkpost_info( true ) ) {
             			$error = __( 'SparkPost Error sending mail', 'quick-mail' );
             		} elseif ( $this->got_replacement_info() ) {
             			$rname = $this->get_replacement_name();
@@ -1265,15 +1379,9 @@ jQuery(document).ready( function() {
          		remove_filter('wpsp_transactional', '__return_zero', 2017);
          	} // end if restore SparkPost toggle
 
-         	if ( $this->got_sparkpost_info( true ) ) {
-	         	if ( has_filter( 'wpsp_sender_name', array('QuickMailUtil', 'get_wp_user_name') ) ) {
-	         		remove_filter( 'wpsp_sender_name', array('QuickMailUtil', 'get_wp_user_name') );
-	         	} // end if have SparkPost name filter
-
-	         	if ( has_filter( 'wpsp_sender_email', array('QuickMailUtil', 'get_wp_user_email') ) ) {
-	         		remove_filter( 'wpsp_sender_email', array('QuickMailUtil', 'get_wp_user_email') );
-	         	} // end if have SparkPost name filter
-         	} // end if using SparkPost
+         	foreach ($our_filters as $q) {
+         		$q->remove_sender_filter();
+         	} // end foreach remove mail filter
 
             if ( ! empty( $file ) ) {
                $e = '<br>' . __( 'Error Deleting Upload', 'quick-mail' );
@@ -1290,7 +1398,7 @@ jQuery(document).ready( function() {
       } // end if POST
 
       $no_uploads = '';
-      $commenter_list = (empty( $commenter ) && $this->user_can_reply_to_comments( false ) ) ? $this->get_commenters() : null;
+      $commenter_list = ( empty( $commenter ) && $this->user_can_reply_to_comments( false ) ) ? $this->get_commenters() : null;
       if ( is_wp_error( $commenter_list ) ) {
       	$error = $commenter_list->get_error_message();
       } elseif ( is_string( $commenter_list ) ) {
@@ -1312,7 +1420,7 @@ jQuery(document).ready( function() {
       $orig_link = plugins_url( '/inc/qm_validate.php', __FILE__ );
       $site = untrailingslashit( network_site_url( '/' ) );
       $link = str_replace( $site, '', $orig_link );
-      if ( !$this->qm_is_admin( get_current_user_id(), $blog ) && 'X' != $this->qm_get_display_option( $blog ) ) {
+      if ( !$you_are_admin && 'X' != $this->qm_get_display_option( $blog ) ) {
       	$editors = '';
       	if ( is_multisite() ) {
       		$editors = get_blog_option( get_current_blog_id(), 'editors_quick_mail_privilege', 'N' );
@@ -1323,8 +1431,10 @@ jQuery(document).ready( function() {
       		$this->qm_update_option( 'show_quick_mail_users', 'X' );
       	} // end if adjusted display
       } // end if might adjust display
-      echo "<script>var qm_validate = '{$link}', val_option = '{$verify}';</script>";
-      $qm_link = admin_url( 'tools.php?page=quick_mail_form' );
+    echo "<script>var qm_validate = '{$link}', val_option = '{$verify}';</script>";
+	$qm_link = admin_url( 'tools.php?page=quick_mail_form' );
+	$invalid_msg = ( 'Y' == $verify ) ? __( 'Cannot verify address', 'quick-mail' ) : __( 'Invalid mail address', 'quick-mail' );
+	// let user know Quick Mail is verifying addresses
 ?>
 <h1 id="quick-mail-title" class="quick-mail-title"><?php _e( 'Quick Mail', 'quick-mail' ); ?></h1>
 <?php if ( !empty( $no_uploads ) ) : ?>
@@ -1345,7 +1455,7 @@ $ecss = $your_str ? 'error notice': 'error notice is-dismissible';
 </div>
 <?php endif; ?>
 <div id="qm-validate" role="alert" class="error notice is-dismissible">
-   <p role="alert"><?php _e( 'Invalid mail address', 'quick-mail' ); ?><span id="qm-ima"> </span></p>
+   <p role="alert"><?php echo $invalid_msg; ?><span id="qm-ima"> </span></p>
 </div>
 <div id="qm-duplicate" role="alert" class="error notice is-dismissible">
    <p role="alert"><?php _e( 'Duplicate mail address', 'quick-mail' ); ?> <span id="qm-dma"> </span></p>
@@ -1476,6 +1586,7 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
       $updated = false;
       $blog = is_multisite() ? get_current_blog_id() : 0;
       $you = wp_get_current_user();
+      $you_are_admin = $this->qm_is_admin( $you->ID, $blog );
       $want_privacy = get_user_option( 'want_quick_mail_privacy', $you->ID );
       if ( empty( $want_privacy ) ) {
       	$want_privacy = 'Y';
@@ -1559,9 +1670,8 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
       			$updated = true;
 	      	} // end if value changed
 
-		      $previous = '';
+		      $previous = ''; // used by SendGrid
 		      $current = empty( $_POST['replace_quick_mail_sender'] ) ? 'N' : 'Y';
-
 		      if ( is_multisite() ) {
 		      	$previous = get_blog_option( $blog, 'replace_quick_mail_sender', 'N' );
 		      } else {
@@ -1728,7 +1838,6 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
       $check_save = ( 'Y' == $save_addresses ) ? 'checked="checked"' : '';
 
       $english_dns = __('http://php.net/manual/en/function.checkdnsrr.php', 'quick-mail');
-      $z = __( 'Checks domain with', 'quick-mail' );
       $dnserr_link = "<a target='_blank' href='{$english_dns}'>checkdnsrr</a>";
       $when = __( 'when', 'quick-mail') . ' &ldquo;' . __( 'Do Not Show Users', 'quick-mail' ) .
       '&rdquo; ' . __( 'is selected', 'quick-mail') . '.';
@@ -1744,7 +1853,10 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
          $faq = __( 'Please read', 'quick-mail' ) . ' ' . $faq_link . '.';
          $verify_problem = '<br><br><span role="alert">' . $cannot . $nf . '<br>' . $faq . '</span>';
       } // end if idn_to_ascii is available
-      $verify_note = $verify_message . $verify_problem;
+	$vtemplate = "<br><br><span role='alert' class='wp-ui-text-highlight'>%s<br>%s</span>";
+	$verify_warning = sprintf($vtemplate, __( 'This is not guaranteed to be accurate.', 'quick-mail' ), __( 'Turn verification off if Quick Mail rejects a valid address.', 'quick-mail' ) );
+    // $verify_note = $verify_message . $verify_problem . $verify_warning;
+    $verify_note = $verify_message . $verify_problem;
       $wam = sprintf("%s %s %s",	__( 'Apply', 'quick-mail'),
       		'<a target="_blank" href="https://codex.wordpress.org/Function_Reference/wpautop">wpautop</a>',
       		__( 'to HTML messages', 'quick-mail'));
@@ -1757,7 +1869,7 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 		$comment_label = __( 'Display Commenters instead of users', 'quick-mail' );
 	} // end if no users
 
-      if ( !$this->qm_is_admin( get_current_user_id(), $blog ) ) {
+      if ( !$you_are_admin ) {
       	$cannot_reply = '';
       	if ( is_multisite() ) {
       		$cannot_reply = get_blog_option( $blog, 'quick_mail_cannot_reply', 'N' );
@@ -1778,12 +1890,12 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
       } // end if not admin
 	$mg_label = '';
 	$mg_message = '';
-	if ( $this->qm_is_admin( $you->ID, $blog ) && $this->got_mailgun_info( true ) ) {
+	if ( $you_are_admin && $this->got_mailgun_info( true ) ) {
 		$mg_label = __( 'Using Mailgun credentials', 'quick-mail' );
 		$mg_message = __( 'Sending mail with your Mailgun name and mail address.', 'quick-mail' );
 	} elseif ( $this->got_mailgun_info( false ) ) {
 		$mg_label = __( 'Mailgun is active', 'quick-mail' );
-		if ( !$this->qm_is_admin( $you->ID, $blog ) ) {
+		if ( !$you_are_admin ) {
 			$mg_message = __( 'Administrator is using Mailgun to send mail.', 'quick-mail' );
 		} else {
 			$mg_message = __( 'Sending mail with Mailgun API.', 'quick-mail' );
@@ -1792,12 +1904,12 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 
 	$sp_label = '';
 	$sp_message = '';
-	if ( $this->qm_is_admin( $you->ID, $blog ) && $this->got_sparkpost_info( true ) ) {
+	if ( $you_are_admin && $this->got_sparkpost_info( true ) ) {
 		$sp_label = __( 'Using SparkPost credentials', 'quick-mail' );
 		$sp_message = __( 'Sending mail with your SparkPost name and mail address.', 'quick-mail' );
 	} elseif ( $this->got_mailgun_info( false ) ) {
 		$sp_label = __( 'Mailgun is active', 'quick-mail' );
-		if ( !$this->qm_is_admin( $you->ID, $blog ) ) {
+		if ( !$you_are_admin ) {
 			$sp_message = __( 'Administrator is using Mailgun to send mail.', 'quick-mail' );
 		} else {
 			$sp_message = __( 'Sending mail with Mailgun API.', 'quick-mail' );
@@ -1815,7 +1927,7 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			$replacement_desc = sprintf('%s %s %s %s', __( 'Using', 'quick-mail' ),
 				$rname, 	__( 'credentials', 'quick-mail' ), __( 'to send mail for Administrators', 'quick-mail' ) );
 		} else {
-			if ( !$this->qm_is_admin( $you->ID, $blog ) ) {
+			if ( !$you_are_admin ) {
 				$replacement_desc = sprintf('%s %s %s.	', __( 'Administrator is using', 'quick-mail' ),
 						$rname, 	__( 'to send mail', 'quick-mail' ) );
 			} else {
@@ -1843,7 +1955,7 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 <input id="save_addresses" name="save_addresses" type="hidden" value="<?php echo $save_addresses; ?>">
 </fieldset>
 
-<?php if ( defined('NOT_NOW') && !$this->qm_is_admin( $you->ID, $blog ) && $this->got_mailgun_info( false ) ) : ?>
+<?php if ( defined('NOT_NOW') && !$you_are_admin && $this->got_mailgun_info( false ) ) : ?>
 <fieldset>
 <legend class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></legend>
 <p><input readonly aria-readonly="true" aria-describedby="qm_mailgun_desc" aria-labelledby="qm_mailgun_label" class="qm-input" name="using_Mailgun" type="checkbox" checked="checked" tabindex="18" onclick='return false;'>
@@ -1851,7 +1963,7 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 <span id="qm_mailgun_desc" class="qm-label"><?php echo $mg_message; ?></span></p>
 </fieldset>
 <?php endif; ?>
-<?php if ( $this->qm_is_admin( $you->ID, $blog ) ) : ?>
+<?php if ( $you_are_admin ) : ?>
 <fieldset>
 <legend class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></legend>
 <?php if ( $this->got_mailgun_info( true ) ) : ?>
@@ -1918,7 +2030,7 @@ if ( user_can_richedit() ) : ?>
       <span id="qm_limit_desc" class="qm-label"><?php _e( 'Limit displayed comments to a number of days.', 'quick-mail' ); ?></span></p>
       </div>
 <?php endif; ?>
-      <?php if (!empty($list_warning)) : ?>
+      <?php if ( !empty( $list_warning ) ) : ?>
       <p role="alert" id="qm-warning"><?php echo $list_warning; ?></p>
       <?php endif; ?>
       <?php if ( $this->multiple_matching_users( 'A', $blog ) ) : ?>
@@ -1970,7 +2082,7 @@ if (! $this->multiple_matching_users( 'A', $blog ) ) {
 <?php
 if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	echo '<br><br><span class="qm-label" role="alert">';
-	if ( $this->qm_is_admin( $you->ID, $blog ) ) {
+	if ( $you_are_admin ) {
 		_e( 'Need three users to display User List for sender, recipient, CC.', 'quick-mail' );
 	} else {
 		_e( 'User List was disabled by system administrator.', 'quick-mail' );
@@ -2052,7 +2164,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 					'include' => array($id), 'count_total' => true, 'blog_id' => $blog ) );
 		} // end if not multisite
 
-		return (0 < $user_query->get_total());
+		return ( 0 < $user_query->get_total() );
 	} // end qm_is_editor
 
 	/**
@@ -2125,7 +2237,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 			}
 		} // end foreach
 
-		if (empty($retval['quickmail'])) {
+		if ( empty( $retval['quickmail'] ) ) {
 			$retval['quickmail'] = "<a {$css} href='{$qm_url}' aria-label='{$ereply}'>{$reply}</a>";
 		} // end if missing reply option
 
@@ -2176,7 +2288,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 		$page = add_options_page( $otitle, $title, apply_filters( 'quick_mail_setup_capability', $min_permission ), 'quick_mail_options', array($this, 'quick_mail_options') );
 		if ( !empty( $page ) ) {
 			add_action( 'admin_print_styles-' . $page, array($this, 'init_quick_mail_style') );
-			add_action('load-' . $page, array($this, 'add_qm_settings_help'));
+			add_action( 'load-' . $page, array($this, 'add_qm_settings_help') );
 		} // end if added submenu
    } // end init_quick_mail_menu
 
@@ -2194,7 +2306,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 			$hide_admin = get_option( 'hide_quick_mail_admin', 'N' );
 		} // end if
 
-		$is_admin_user = $this->qm_is_admin( get_current_user_id(), $blog );
+		$you_are_admin = $this->qm_is_admin( get_current_user_id(), $blog );
 		$is_editor_user = $this->qm_is_editor( get_current_user_id(), $blog );
 		$user_query = new \WP_User_Query( array('count_total' => true) );
     		$users = $user_query->get_total();
@@ -2215,8 +2327,8 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
     		} // end if multisite
 
     		$content = '';
-    		$not_editor_or_admin = !$is_admin_user && !$is_editor_user;
-    		if ( ( !$is_admin_user && !$is_editor_user ) || ( 'N' == $editors && !$is_admin_user ) ) {
+    		$not_editor_or_admin = !$you_are_admin && !$is_editor_user;
+    		if ( ( !$you_are_admin && !$is_editor_user ) || ( 'N' == $editors && !$you_are_admin ) ) {
     			if ( is_multisite() ) {
     				$content .= '<p>' . $note . __( 'You do not have sufficient privileges to access user lists on this site.' ) . '.</p>';
     			} else {
@@ -2235,7 +2347,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
     		} // end if 'A' not possible
 
     		$screen->add_help_tab( self::get_qm_help_tab() );
-    		if ( $is_admin_user ) {
+    		if ( $you_are_admin ) {
     			$content = '<dl>';
     			// check for SparkPost, Mailgun, SendGrid
     			if ($this->got_sparkpost_info( false ) ) {
@@ -2276,7 +2388,14 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
     			$content .= '<dt><strong>' . __( 'Grant Editors access to user list', 'quick-mail' ) . '</strong></dt>';
     			$content .= '<dd>' . __(  'Otherwise only administrators can view the user list', 'quick-mail' ) . '</dd>';
     			$content .= '<dt><strong>' . __( 'Verify recipient email domains', 'quick-mail' ) . '</strong></dt>';
-    			$content .= '<dd>' . __( 'Check if recipient domain accepts email. Detects typos.', 'quick-mail' ) . '.</dd></dl>';
+    			$content .= '<dd>' . __( 'Check if recipient domain accepts email.', 'quick-mail' ) . '.</dd>';
+
+    			$english_dns = __('http://php.net/manual/en/function.checkdnsrr.php', 'quick-mail');
+    			$z = __( 'Checks domain with', 'quick-mail' );
+    			$dnserr_link = "<a target='_blank' href='{$english_dns}'>checkdnsrr</a>";
+
+    			$content .= "<dd>{$z} {$dnserr_link}</dd>";
+			$content .= '<dd class="wp-ui-text-highlight">' . __( 'Turn verification off if Quick Mail rejects a valid address.', 'quick-mail' ) . '</dd></dl>';
     			$screen->add_help_tab( array('id'	=> 'qm_admin_display_help',
     					'title'	=> __('Administration', 'quick-mail'), 'content' => $content) );
     		} // end if
@@ -2308,7 +2427,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	    		$dc5 = "<dd>{$dc_see} {$dc_enabled} {$dc_info}</dd>";
 	    		$dcontent = "<dl><dt><strong>{$dc_head}</strong></dt>{$dc1}{$dc3}{$dc4}{$dc_val}{$dc5}{$lcontent}";
 
-	    		if ( $is_admin_user ) {
+	    		if ( $you_are_admin ) {
 	    			$dc_disable = '<strong>' . __('Select Disable Replies to Comments to remove this feature.', 'quick-mail') . '</strong>';
 	    			$dc_grant = __('Grant Authors permission to reply to comments', 'quick-mail');
 	    			$dc_author = admin_url('options-general.php?page=quick_mail_options#qm-authors');
@@ -2356,31 +2475,32 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
     		$screen->add_help_tab( array('id' => 'qm_display_help',
         		'title'	=> __('User Display', 'quick-mail'), 'content' => $content) );
 
-    		$btitle = __('Send Reliable Email from WordPress with Quick Mail', 'quick-mail' );
-    		$blink = sprintf('<a href="https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/">%s</a>', $btitle );
-    		$my_link = sprintf('%s %s %s.',
-    				__('See', 'quick-mail'), $blink,
-    				__('for additional information', 'quick-mail') );
-    		if ( $is_admin_user && !$this->got_replacement_info( false ) && !$this->got_mailgun_info( false ) ) {
-    			$sp = sprintf("<a target='_blank' href='%s'>%s</a>",
-    					__('https://wordpress.org/plugins/search/smtp/', 'quick-mail' ),
-    					__('SMTP Plugins', 'quick-mail') );
-    			$pline = sprintf('%s %s.', $sp, __('let you send mail from a public mail account', 'quick-mail') );
-    			$mg = sprintf("<a target='_blank' href='%s'>%s</a>",
-    					__('https://www.mailgun.com/', 'quick-mail' ), __('Mailgun', 'quick-mail') );
-    			$sg = sprintf("<a target='_blank' href='%s'>%s</a>",
-    					__('https://sendgrid.com/', 'quick-mail' ), __('SendGrid', 'quick-mail') );
+    		$btitle = __( 'Send Reliable Email from WordPress with Quick Mail', 'quick-mail' );
+    		$blink = sprintf( '<a href="https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/">%s</a>', $btitle );
+    		$my_link = sprintf( '%s %s %s.',
+    				__( 'See', 'quick-mail' ), $blink,
+    				__( 'for additional information', 'quick-mail' ) );
+    		if ( $you_are_admin && !$this->got_replacement_info( false ) && !$this->got_mailgun_info( false ) ) {
+    			$sp = sprintf("%s <a target='_blank' href='%s'>%s</a>",
+    					__( 'Several', 'quick-mail' ),
+    					__( 'https://wordpress.org/plugins/search/smtp/', 'quick-mail' ),
+    					__( 'SMTP Plugins', 'quick-mail' ) );
+    			$pline = sprintf( '%s %s.', $sp, __('let you send mail from a public mail account', 'quick-mail' ) );
+    			$mg = sprintf( "<a target='_blank' href='%s'>%s</a>",
+    					__( 'https://www.mailgun.com/', 'quick-mail' ), __('Mailgun', 'quick-mail' ) );
+    			$sg = sprintf( "<a target='_blank' href='%s'>%s</a>",
+    					__( 'https://sendgrid.com/', 'quick-mail' ), __('SendGrid', 'quick-mail' ) );
     			$spark = sprintf("<a target='_blank' href='%s'>%s</a>",
-    					__('https://sparkpost.com/', 'quick-mail' ), __('SparkPost', 'quick-mail') );
+    					__( 'https://sparkpost.com/', 'quick-mail' ), __('SparkPost', 'quick-mail' ) );
 
-    			$svces = sprintf('%s %s %s %s.', $mg, __('and', 'quick-mail'),
-    					$sg, __('are recommended', 'quick-mail') );
-    			$btitle = __('Send Reliable Email from WordPress with Quick Mail', 'quick-mail' );
-    			$blink = sprintf('<a href="https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/">%s</a>', $btitle );
-    			$content = sprintf('<h4>%s %s</h4>', __('How to Fix', 'quick-mail'),
-    					__('Delivery Errors', 'quick-mail') );
+    			$svces = sprintf( '%s, %s %s %s %s.', $mg, $spark, __('and', 'quick-mail' ),
+    					$sg, __( 'are recommended', 'quick-mail') );
+    			$btitle = __( 'Send Reliable Email from WordPress with Quick Mail', 'quick-mail' );
+    			$blink = sprintf( '<a href="https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/">%s</a>', $btitle );
+    			$content = sprintf( '<h4>%s %s</h4>', __('How to Fix', 'quick-mail' ),
+    					__( 'Delivery Errors', 'quick-mail' ) );
     			$mailservice = '';
-    			if ( $this->got_sparkpost_info( true ) ) {
+    			if ( $this->got_sparkpost_info( false ) ) {
     				$mailservice = __( 'Using SparkPost', 'quick-mail' );
     			} else if ( $this->got_mailgun_info( true ) ) {
     				$mailservice = __( 'Using Mailgun', 'quick-mail' );
@@ -2390,30 +2510,30 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 
     			if ( !empty( $mailservice ) ) {
     				$mailservice = __( 'Excellent!', 'quick-mail' ) . ' ' . $mailservice . ' ' . __( 'to deliver mail.', 'quick-mail' );
-    				$content .= "<div class='wp-ui-notification'>{$mailservice}</div>";
+    				$content .= "<div class='wp-ui-text-notification'>{$mailservice}</div>";
     			} // end if using service to send mail
 
-    			$content .= sprintf('<p>%s.</p>',
-    			__('Use these products and services with Quick Mail to fix delivery errors', 'quick-mail') );
+    			$content .= sprintf( '<p>%s.</p>',
+    			__( 'Use these products and services with Quick Mail to fix delivery errors', 'quick-mail' ) );
     			$content .= '<dl><dt><strong>' . __( 'Mail Delivery Service', 'quick-mail' ) . '</strong></dt>';
     			$content .= '<dd>' . __( 'Use a mail delivery service to send reliable email anywhere', 'quick-mail' ) . '.</dd>';
     			$content .= "<dd>{$svces}</dd>";
-    			$content .= '<dd>' . __( 'Mailgun is free', 'quick-mail' ) . '.</dd>';
-    			$content .= '<dt><strong>' . __('SMTP Plugins', 'quick-mail') . '</strong></dt>';
+    			$content .= '<dd>' . __( 'Mailgun and SparkPost are free', 'quick-mail' ) . '.</dd>';
+    			$content .= '<dt><strong>' . __( 'SMTP Plugins', 'quick-mail' ) . '</strong></dt>';
     			$content .= "<dd>{$pline}</dd></dl><p>{$my_link}</p>";
     			$screen->add_help_tab( array('id' => 'qm_delivery_help',
-    					'title'	=> __('Delivery Errors', 'quick-mail'), 'content' => $content) );
+    					'title'	=> __( 'Delivery Errors', 'quick-mail' ), 'content' => $content) );
     		} // end if adding Delivery Problems
 
-    		if ( $is_admin_user ) {
-    			$cmd = __('wp help quick-mail', 'quick-mail');
-    			$content = sprintf('<dl><dt><strong>%s</strong></dt>', __('Use Quick Mail with WP-CLI', 'quick-mail') );
-    			$content .= sprintf('<dd>%s.</dd>', __('Send files and links from the command line', 'quick-mail') );
-    			$content .= sprintf('<dd>%s <code>%s</code> %s.</dd>', __('Enter', 'quick-mail'), $cmd,
-    					__('to get started', 'quick-mail') );
+    		if ( $you_are_admin ) {
+    			$cmd = __( 'wp help quick-mail', 'quick-mail' );
+    			$content = sprintf( '<dl><dt><strong>%s</strong></dt>', __( 'Use Quick Mail with WP-CLI', 'quick-mail' ) );
+    			$content .= sprintf( '<dd>%s.</dd>', __( 'Send files and links from the command line', 'quick-mail' ) );
+    			$content .= sprintf( '<dd>%s <code>%s</code> %s.</dd>', __( 'Enter', 'quick-mail' ), $cmd,
+    					__( 'to get started', 'quick-mail' ) );
     			$content .= "<dd>{$my_link}</dd></dl>";
-    			$screen->add_help_tab( array('id' => 'qm_wpcli_help',
-    					'title'	=> __('WP-CLI', 'quick-mail'), 'content' => $content) );
+    			$screen->add_help_tab( array( 'id' => 'qm_wpcli_help',
+    					'title'	=> __( 'WP-CLI', 'quick-mail' ), 'content' => $content) );
     		} // end if WP-CLI is active
 	} // add_qm_settings_help
 
@@ -2476,7 +2596,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 		$win_names = __( 'Press &lt;Control&gt; while clicking, to select multiple users.', 'quick-mail' );
 		$mob_names = __( 'You can select multiple users', 'quick-mail' );
 		$nhelp = '';
-		if (wp_is_mobile()) {
+		if ( wp_is_mobile() ) {
 			$nhelp = $mob_names;
 		} else {
 			$b = empty($_SERVER['HTTP_USER_AGENT']) ? '' : $_SERVER['HTTP_USER_AGENT'];
@@ -2505,10 +2625,10 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 			$win_files = __( 'Press &lt;Control&gt; while clicking, to select multiple files.', 'quick-mail' );
 			$mob_files = __( 'You can select multiple files', 'quick-mail' );
 			$nhelp = '';
-			if (wp_is_mobile()) {
+			if ( wp_is_mobile() ) {
 				$nhelp = $mob_files;
 			} else {
-				$b = empty($_SERVER['HTTP_USER_AGENT']) ? '' : $_SERVER['HTTP_USER_AGENT'];
+				$b = empty( $_SERVER['HTTP_USER_AGENT'] ) ? '' : $_SERVER['HTTP_USER_AGENT'];
 				if ( preg_match( '/macintosh|mac os x/i', $b ) ) {
 					$nhelp = $mac_files;
 				} else {
@@ -2590,26 +2710,36 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 			return false;
 		} // end if Mailgun is active. cannot use Sengrid with Mailgun.
 
+		if ( class_exists( 'WPSparkPost\SparkPost' ) ) {
+			$active = WPSparkPost\SparkPost::get_setting( 'enable_sparkpost' );
+			if ( !empty( $active ) ) {
+				return false;
+			} // end if SparkPost is active
+		} // end if have SparkPost
+
 		if ( !QuickMailUtil::qm_is_plugin_active( 'sendgrid' ) ) {
 			return false;
 		} // end if sendgrid is not active
 
-		// check for SendGrid email
-		if ( $check_from ) {
-			$sg_email = '';
-			if ( is_multisite() ) {
-				$sg_email = get_site_option( 'sendgrid_from_email', '');
-				if ( empty( $sg_email ) ) {
-					$sg_email = get_blog_option( get_current_blog_id(), 'sendgrid_from_email', 'N' );
-				} // end if
-			} else {
-				$sg_email = get_option( 'sendgrid_from_email', '' );
-			} // end if multisite
-
-			return !empty( $sg_email );
-		} else {
+		if ( false == $check_from ) {
 			return true;
-		} // end if want to check for SendGrid from address
+		} // end if not checking name, email
+
+		// check for SendGrid email
+		if ( defined( 'SENDGRID_FROM_EMAIL') && SENDGRID_FROM_EMAIL ) {
+			return true;
+		}
+		$sg_email = '';
+		if ( is_multisite() ) {
+			$sg_email = get_site_option( 'sendgrid_from_email', '');
+			if ( empty( $sg_email ) ) {
+				$sg_email = get_blog_option( get_current_blog_id(), 'sendgrid_from_email', 'N' );
+			} // end if
+		} else {
+			$sg_email = get_option( 'sendgrid_from_email', '' );
+		} // end if multisite
+
+		return !empty( $sg_email );
 	} // end got_replacement_info
 
 	/**
@@ -2629,34 +2759,40 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	 * @return array updated array
 	 * @since 3.1.9
 	 */
-	public function get_replacement_credentials( $wp_info ) {
+	public function get_replacement_info( $wp_info ) {
 		if ( ! $this->got_replacement_info() ) {
 			return $wp_info;
 		}
-		$sg_name = '';
-		$sg_email = '';
+		$sg_name = defined( 'SENDGRID_FROM_NAME' ) ? SENDGRID_FROM_NAME : '';
+		$sg_email = defined( 'SENDGRID_FROM_EMAIL' ) ? SENDGRID_FROM_EMAIL : '';
+		$sg_reply_to = defined( 'SENDGRID_REPLY_TO' ) ? SENDGRID_REPLY_TO : '';
+		// Sendgrid_Tools::get_from_name, get_from_email, get_reply_to test for define first.
+
 		if ( is_multisite() ) {
-			$sg_name = get_site_option( 'sendgrid_from_name', '');
-			if ( empty( $sg_name ) ) {
-			$sg_name = get_blog_option( get_current_blog_id(), 'sendgrid_from_name', 'N' );
-			} // end if
-			$sg_email = get_site_option( 'sendgrid_from_email', '');
-			if ( empty( $sg_email ) ) {
-				$sg_email = get_blog_option( get_current_blog_id(), 'sendgrid_from_email', 'N' );
-			} // end if
+			$sg_name = empty($sg_name) ? get_site_option( 'sendgrid_from_name', '') : get_blog_option( get_current_blog_id(), 'sendgrid_from_name', '' );
+			$sg_email = empty($sg_email) ? get_site_option( 'sendgrid_from_email', '') : get_blog_option( get_current_blog_id(), 'sendgrid_from_email', '' );
 		} else {
-			$sg_name = get_option( 'sendgrid_from_name' );
-			$sg_email = get_option( 'sendgrid_from_email' );
+			if ( empty( $sg_name) ) {
+				$sg_name = get_option( 'sendgrid_from_name' );
+			}
+			if ( empty( $sg_email) ) {
+				$sg_email = get_option( 'sendgrid_from_email' );
+			}
 		} // end if multisite
 
-		if ( empty( $sg_email ) ) {
-			return $wp_info;
-		} // end if no SendGrid email
-		if ( empty( $sg_name ) ) {
-			$sg_name = $sg_email;
-		} // end if no SendGrid name
-		return array('name' => $sg_name, 'email' => $sg_email);
-	} // end get_replacement_credentials
+		$email = empty( $sg_email ) ? $wp_info['email'] : $sg_email;
+		$name = empty( $sg_name ) ? $wp_info['name'] : $sg_name;
+		$reply_to = '';
+		if ( !empty( $sg_reply_to ) ) {
+			$reply_to = $sg_reply_to;
+		} else if ( empty( $wp_info['reply_to'] ) ) {
+			$reply_to = $wp_info['reply_to'];
+		} else {
+			$reply_to = $email;
+		} // end if
+
+		return array('name' => $name, 'email' => $email, 'reply_to' => $reply_to);
+	} // end get_replacement_info
 
 	/**
 	 * do we have Mailgun plugin and credentials?
@@ -2680,30 +2816,28 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 			} // end if no site option
 		} // end if not multisite
 
+		// from Mailgun plugin
+		$apiKey = (defined('MAILGUN_APIKEY') && MAILGUN_APIKEY) ? MAILGUN_APIKEY : $options['apiKey'];
+		$domain = (defined('MAILGUN_DOMAIN') && MAILGUN_DOMAIN) ? MAILGUN_DOMAIN : $options['domain'];
+		if ( empty( $domain ) || empty( $apiKey ) ) {
+			return false;
+		} // end if not using API or missing key / domain
+
+		if ( false == $check_from ) {
+			return true;
+		} // end if not checking name, email
+
 		if ( $check_from && empty( $options['override-from'] ) ) {
 			return false;
 		} // end if do not replace sender credentials
 
-		// from Mailgun plugin
-		$apiKey = (defined('MAILGUN_APIKEY') && MAILGUN_APIKEY) ? MAILGUN_APIKEY : $options['apiKey'];
-		$domain = (defined('MAILGUN_DOMAIN') && MAILGUN_DOMAIN) ? MAILGUN_DOMAIN : $options['domain'];
-		$useapi = (defined('MAILGUN_USEAPI') && MAILGUN_USEAPI) ? MAILGUN_USEAPI : $options['useAPI'];
-		if ( empty($useapi) || empty($domain) || empty($apiKey) ) {
-			return false;
-		} // end if not using API or missing key / domain
-
-		$email = empty($options['from-address']) ? '' : $options['from-address'];
-		if (empty( $email ) ) {
-			return false;
-		} // end if missing email address
-
-		return true;
+		return !empty( $options['from-address'] );
 	} // end got_mailgun_info
 
 	/**
 	 * get Mailgun credentials.
 	 *
-	 * @param array $wp_info 'name' => $name, 'email' => $email
+	 * @param array $wp_info 'name' => $name, 'email' => $email, 'reply_to' => $reply_to
 	 * @return string[] original or updated array
 	 * @since 3.2.0
 	 */
@@ -2729,27 +2863,41 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 		$apiKey = (defined('MAILGUN_APIKEY') && MAILGUN_APIKEY) ? MAILGUN_APIKEY : $options['apiKey'];
 		// from mailgun.php
 		$domain = (defined('MAILGUN_DOMAIN') && MAILGUN_DOMAIN) ? MAILGUN_DOMAIN : $options['domain'];
-		$useapi = (defined('MAILGUN_USEAPI') && MAILGUN_USEAPI) ? MAILGUN_USEAPI : $options['useAPI'];
-		if ( empty( $useapi ) || empty( $domain ) || empty( $apiKey ) ) {
+		if (  empty( $domain ) || empty( $apiKey ) ) {
 			return $wp_info;
 		} // end if not using API or missing key / domain
 
-		$email = empty($options['from-address']) ? '' : $options['from-address'];
-		if (empty( $email ) ) {
-			return $wp_info;
-		} // end if missing email address
+		$email = $wp_info['email'];
+		/* from Mailgun:
+		 	* 1. From address given by headers - {@param $from_addr_header}
+ 			*  2. From address set in Mailgun settings
+ 			*  3. From `MAILGUN_FROM_ADDRESS` constant
+ 			*  4. From address constructed as `wordpress@<your_site_domain>`
+ 			*  sender domain should match Mailgun domain
+		 */
 
-		$name = '';
+		$mg_email = '';
+		if ( !empty( $options['from-address'] ) ) {
+			$mg_email = $options['from-address'];
+		} else if ( defined('MAILGUN_FROM_ADDRESS') ) {
+			$mg_email = MAILGUN_FROM_ADDRESS;
+		}
+
+		if ( !empty( $mg_email ) ) {
+			if ( !QuickMailUtil::matches_email_domain( $email, $mg_email ) ) {
+				$email = $mg_email;
+			} // end if
+		} // end if got Mailgun value
+
+		$name = $wp_info['name'];
 		if ( !empty( $options['from-name'] ) ) {
 			$name = $options['from-name'];
-		} else {
-			$split = explode( '@', $email );
-			if ( is_array( $split ) ) {
-				$name = $split[0];
-			} // end if found amphora
-		} // end if missing sender name
+		} else if ( defined('MAILGUN_FROM_NAME') ) {
+			$name = MAILGUN_FROM_NAME;
+		}  // end if have sender name
 
-		return array('name' => $name, 'email' => $email);
+		// Mailgun plugin does not have reply-to setting.
+		return array('name' => $name, 'email' => $email, 'reply_to' => $wp_info['reply_to']);
 	} // end get_mailgun_info
 
 	/**
@@ -2809,25 +2957,40 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 			return false;
 		} // end if cannot find class
 
-		$pw = WPSparkPost\SparkPost::get_setting( 'password' );
 		$active = WPSparkPost\SparkPost::get_setting( 'enable_sparkpost' );
-		if ( empty( $pw ) || empty( $active ) ) {
+		if ( empty( $active ) ) {
 			return false;
 		}
 
-		$from_name = WPSparkPost\SparkPost::get_setting( 'from_name' );
-		$from_email = WPSparkPost\SparkPost::get_setting( 'from_email' );
-		if ( $check_from ) {
-			return !empty( $from_name ) && !empty( $from_email ) && QuickMailUtil::qm_valid_email_domain( $from_email, 'Y' );
-		}
+		$pw = WPSparkPost\SparkPost::get_setting( 'password' );
+		if ( empty( $pw ) ) {
+			return false;
+		} // end if no password
 
+		if ( false == $check_from ) {
+			return true;
+		} // end if checking install
+
+		// this should be enough
+		$from_name = WPSparkPost\SparkPost::get_setting( 'from_name' );
+		$from_name = apply_filters( 'wpsp_sender_name', $from_name );
+
+		$from_email = WPSparkPost\SparkPost::get_setting( 'from_email' );
+		$from_email = apply_filters( 'wpsp_sender_email', $from_email );
+
+		if ( empty( $from_email) && empty( $from_name) ) {
+			return false;
+		} // end if no name or email
+
+		// we have name or email
+		// not validating email. QuickMailUtil::qm_valid_email_domain( $from_email, 'Y' )
 		return true;
 	} // end got_sparkpost_info
 
 	/**
 	 * get SparkPost credentials.
 	 *
-	 * @param array $wp_info 'name' => $name, 'email' => $email
+	 * @param array $wp_info 'name' => $name, 'email' => $email, 'reply_to' => $reply_to
 	 * @return string[] original or updated array
 	 * @since 3.3.1
 	 */
@@ -2836,29 +2999,21 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 			return $wp_info;
 		} // end if sparkpost is not active
 
-		$name = WPSparkPost\SparkPost::get_setting( 'from_name' );
-		$email = WPSparkPost\SparkPost::get_setting( 'from_email' );
-		return array('name' => $name, 'email' => $email);
+		// SparkPost does not use definitions
+		$sp_email = WPSparkPost\SparkPost::get_setting( 'from_email' );
+		if ( empty( $sp_email ) ) {
+			$sp_email = apply_filters( 'wpsp_sender_email', $wp_info['email'] );
+		} // end if
+		$email = empty($sp_email) ? $wp_info['email'] : $sp_email;
+
+		$sp_name = WPSparkPost\SparkPost::get_setting( 'from_name' );
+		if ( empty( $sp_name ) ) {
+			$sp_name = apply_filters( 'wpsp_sender_name', $wp_info['name'] );
+		}
+		$name = empty( $sp_name ) ? $wp_info['name'] : $sp_name;
+		$reply_to = apply_filters( 'wpsp_reply_to', $wp_info['reply_to'] );
+		return array('name' => $name, 'email' => $email, 'reply_to' => $reply_to);
 	} // end get_sparkpost_info
-
-	/**
-	 * get SparkPost name.
-	 *
-	 * @return string SparkPost sender name or name part of email address.
-	 * @since 3.3.1
-	 */
-	public function get_sparkpost_name() {
-		$name = WPSparkPost\SparkPost::get_setting( 'from_name' );
-		$email = WPSparkPost\SparkPost::get_setting( 'from_email' );
-		if (empty($name)) {
-			$split = explode( '@', $email );
-			if ( is_array( $split ) ) {
-				$name = $split[0];
-			} // end if found amphora
-		} // end if missing sender name
-
-		return $name;
-	} // end get_sparkpost_name
 
 	/**
 	 * check if user is admin and replaced sender.
@@ -2879,42 +3034,6 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 		} // end if admin
 		return false;
 	} // end user_has_replaced_sender
-
-	/**
-	 * is user allowed to replace sender?
-	 *
-	 * Use Mailgun, SparkPost or Sengrid credentials.
-	 *
-	 * @since 3.1.9
-	 */
-	public function let_user_replace_sender() {
-		$blog = is_multisite() ? get_current_blog_id() : 0;
-		if ( $this->qm_is_admin( get_current_user_id(), $blog ) ) {
-			$can_send = '';
-			if ( is_multisite() ) {
-				$can_send = get_blog_option( get_current_blog_id(), 'replace_quick_mail_sender', 'N' );
-			} else {
-				$can_send = get_option( 'replace_quick_mail_sender', 'N' );
-			} // end if multisite
-			if ( 'Y' == $can_send || $this->got_mailgun_info( true ) || $this->got_sparkpost_info( true ) ) {
-				if ( $this->got_mailgun_info( true )  ) {
-					$this->filter_sender = 'get_mailgun_info';
-					add_filter('replace_quick_mail_sender', array($this, 'get_mailgun_info'), 10, 1);
-				} else if ( $this->got_sparkpost_info( true ) ) {
-					$this->filter_sender = 'get_sparkpost_info';
-					add_filter('replace_quick_mail_sender', array($this, 'get_sparkpost_info'), 10, 1);
-				} else if ( $this->got_replacement_info( true ) ) {
-					$this->filter_sender = 'get_replacement_credentials';
-					add_filter('replace_quick_mail_sender', array($this, 'get_replacement_credentials'), 10, 1);
-				} // end if got Mailgun
-			} // end if allowed to replace sender by option
-		} else {
-			if ( $this->got_sparkpost_info( true ) ) {
-				add_filter( 'wpsp_sender_name', array('QuickMailUtil', 'get_wp_user_name'), 99, 1 );
-				add_filter( 'wpsp_sender_email', array('QuickMailUtil', 'get_wp_user_email'), 99, 1 );
-			} // end if SparkPost and not admin - do not use SparkPost sender
-		} // end if admin
-	} // end let_user_replace_sender
 
 } // end class
 $quick_mail_plugin = QuickMail::get_instance();

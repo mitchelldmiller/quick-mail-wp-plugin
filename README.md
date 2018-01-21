@@ -96,7 +96,7 @@ __Sending Mail from Other Addresses__
 
 * Uses [Mailgun plugin](http://wordpress.org/extend/plugins/mailgun/) settings for Administrators, if the plugin is activated, using `Override "From" Details` and [Mailgun API](https://documentation.mailgun.com/en/latest/api_reference.html).
 
-* Uses [SparkPost plugin](https://wordpress.org/plugins/sparkpost/) settings for Administrator name and email address.
+* * Uses [SparkPost plugin](https://wordpress.org/plugins/sparkpost/) settings for Administrator name and email address, if plugin is activated and `Overrides` for name and email are set.
 
 * Option for administrators to use [Sendgrid API](https://sendgrid.com/solutions/sendgrid-api/). 
 
@@ -168,6 +168,8 @@ __Address Validation__
 
 
   An MX record tells senders how to send mail to the domain.
+  
+  *This is not always accurate. Turn verification off if Quick Mail rejects a valid address.*
 
 __Mail Errors__
 

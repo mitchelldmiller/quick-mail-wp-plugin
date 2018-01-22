@@ -2,10 +2,10 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.4.0 rc3
+Version: 3.4.0
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
-Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
+Plugin URI: https://wheredidmybraingo.com/quick-mail-supports-sparkpost/
 Text Domain: quick-mail
 Domain Path: /lang
 License: GPL-2.0+
@@ -389,7 +389,7 @@ class QuickMail {
 
 		$blog = is_multisite() ? get_current_blog_id() : 0;
 		$qm_options = array('replace_quick_mail_sender', 'hide_quick_mail_admin', 'quick_mail_cannot_reply', 'authors_quick_mail_privilege', 'editors_quick_mail_privilege', 'verify_quick_mail_addresses');
-		foreach ($qm_options as $option) {
+		foreach ( $qm_options as $option ) {
 			if ( is_multisite() ) {
 				add_blog_option( $blog, $option, 'N' );
 			} else {
@@ -504,7 +504,7 @@ jQuery(document).ready( function() {
 		delete_metadata( 'user', 1, 'save_quick_mail_addresses', '', true );
 		if ( is_multisite() ) {
 			$sites = get_sites();
-			foreach ($sites as $site) {
+			foreach ( $sites as $site ) {
 				delete_blog_option( $site->blog_id, 'show_quick_mail_users' );
 				delete_blog_option( $site->blog_id, 'hide_quick_mail_admin' );
 				delete_blog_option( $site->blog_id, 'editors_quick_mail_privilege' );
@@ -1186,7 +1186,7 @@ jQuery(document).ready( function() {
          $rec_type = empty($_POST['qm_bcc']) ? 'Cc' : 'Bcc';
          if ( isset( $_POST['qm-cc'] ) && is_array( $_POST['qm-cc'] ) ) {
          	$e = function_exists( 'mb_strtolower' ) ? mb_strtolower( urldecode( $_POST['qm-email'] ), $this->charset ) : strtolower( urldecode( $_POST['qm-email'] ) );
-         	foreach ($_POST['qm-cc'] as $c) {
+         	foreach ( $_POST['qm-cc'] as $c ) {
          		$your_lower = function_exists( 'mb_strtolower' ) ? mb_strtolower( urldecode( $c ), $this->charset ) : strtolower( urldecode( $c ) );
          		if ( $e == $your_lower ) {
          			$error = __( 'Duplicate mail address', 'quick-mail' );
@@ -1376,10 +1376,10 @@ jQuery(document).ready( function() {
          	} // end if do not replace sender name on non-admin user
 
          	if ( $sp_toggle ) {
-         		remove_filter('wpsp_transactional', '__return_zero', 2017);
+         		remove_filter( 'wpsp_transactional', '__return_zero', 2017 );
          	} // end if restore SparkPost toggle
 
-         	foreach ($our_filters as $q) {
+         	foreach ( $our_filters as $q ) {
          		$q->remove_sender_filter();
          	} // end foreach remove mail filter
 
@@ -2230,7 +2230,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 		$ereply = esc_attr( $reply );
 		$css = 'style="color: #e14d43;"'; // wp-ui-text-highlight
 		$retval = array();
-		foreach ($actions as $k => $v) {
+		foreach ( $actions as $k => $v ) {
 			$retval[$k] = $v;
 			if ('reply' == $k) {
 				$retval['quickmail'] = "<a {$css} href='{$qm_url}' aria-label='{$ereply}'>{$reply}</a>";
@@ -2763,14 +2763,15 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 		if ( ! $this->got_replacement_info() ) {
 			return $wp_info;
 		}
+
+		// Sendgrid_Tools::get_from_name, get_from_email, get_reply_to test for define first.
 		$sg_name = defined( 'SENDGRID_FROM_NAME' ) ? SENDGRID_FROM_NAME : '';
 		$sg_email = defined( 'SENDGRID_FROM_EMAIL' ) ? SENDGRID_FROM_EMAIL : '';
 		$sg_reply_to = defined( 'SENDGRID_REPLY_TO' ) ? SENDGRID_REPLY_TO : '';
-		// Sendgrid_Tools::get_from_name, get_from_email, get_reply_to test for define first.
 
 		if ( is_multisite() ) {
-			$sg_name = empty($sg_name) ? get_site_option( 'sendgrid_from_name', '') : get_blog_option( get_current_blog_id(), 'sendgrid_from_name', '' );
-			$sg_email = empty($sg_email) ? get_site_option( 'sendgrid_from_email', '') : get_blog_option( get_current_blog_id(), 'sendgrid_from_email', '' );
+			$sg_name = empty( $sg_name ) ? get_site_option( 'sendgrid_from_name', '') : get_blog_option( get_current_blog_id(), 'sendgrid_from_name', '' );
+			$sg_email = empty( $sg_email ) ? get_site_option( 'sendgrid_from_email', '') : get_blog_option( get_current_blog_id(), 'sendgrid_from_email', '' );
 		} else {
 			if ( empty( $sg_name) ) {
 				$sg_name = get_option( 'sendgrid_from_name' );

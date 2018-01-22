@@ -2,7 +2,7 @@
 /**
  * Quick Mail utility functions for Javascript and quick-mail-cli.php
  * @package QuickMail
- * @version 3.3.5
+ * @version 3.4.0
  */
 class QuickMailUtil {
 

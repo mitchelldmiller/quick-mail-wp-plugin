@@ -1,11 +1,11 @@
 === Quick Mail ===
 Contributors: brainiac
-Tags: mail, email, comments, wp-cli, attachment, mailgun, sparkpost, sendgrid, accessibility, idn, multisite
+Tags: mail, email, comments, mailgun, sparkpost, wp-cli, attachment, sendgrid, accessibility, idn, multisite
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Requires at least: 4.6
-Tested up to: 4.9
+Tested up to: 5.0
 Requires PHP: 5.3
-Stable tag: 3.3.0
+Stable tag: 3.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,7 +24,7 @@ User options for sending email to site users or others.
 
 Privacy options to comply with [General Data Protection Regulation](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation).
 
-Mail is sent with user's name and email. Recognizes credentials from [Mailgun](https://wordpress.org/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugins.
+Uses sender's name, sets reply to sender's address. Recognizes settings from [Mailgun](https://wordpress.org/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugins.
 
 Multiple files from up to six directories (folders) can be attached to a message.
 
@@ -173,9 +173,11 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 == Changelog ==
 
-= 3.3.2 =
+= 3.4.0 =
 * Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
 * Added support for [SparkPost](https://sparkpost.com/) email delivery service and plugin.
+* Better support for mail delivery service settings.
+* Sets reply-to address to sender's address.
 
 = 3.3.1 =
 * Remove replace_quick_mail_sender filter after sending mail.
@@ -204,7 +206,7 @@ Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
 
-= 3.3.2 =
+= 3.4.0 =
 * Upgrade recommended.
 
 = 3.3.0 =

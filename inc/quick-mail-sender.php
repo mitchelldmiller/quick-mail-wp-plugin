@@ -47,7 +47,6 @@ class QuickMailSender {
 		self::$priority = date('Y');
 		$this->reply_to = '';
 
-		// FIXME remove exceptions
 		$invalid = false;
 		if ( empty( $service ) || empty( $field ) ) {
 			$invalid = true;

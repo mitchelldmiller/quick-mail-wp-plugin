@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Quick Mail v3.4.0 rc3\n"
+"Project-Id-Version: Quick Mail v3.4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-01-21 19:06:31+0000\n"
+"PO-Revision-Date: 2018-01-22 21:10:44+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -236,7 +236,7 @@ msgstr "Support"
 
 #: inc/qm_util.php:261
 #: inc/qm_util.php:281
-#: inc/quick-mail-sender.php:71
+#: inc/quick-mail-sender.php:70
 #: quick-mail.php:352
 #: quick-mail.php:1033
 #: quick-mail.php:1183
@@ -1335,7 +1335,7 @@ msgstr "Plusieurs"
 msgid "Mailgun and SparkPost are free"
 msgstr "Mailgun et SparkPost sont gratuits"
 
-#: inc/quick-mail-sender.php:71
+#: inc/quick-mail-sender.php:70
 #@ quick-mail
 msgid "Unknown Mail Service"
 msgstr "Service de courrier inconnu"
@@ -1343,6 +1343,6 @@ msgstr "Service de courrier inconnu"
 #. translators: plugin header field 'Version'
 #: quick-mail.php:0
 #@ quick-mail
-msgid "3.4.0 rc3"
-msgstr "3.4.0 rc3"
+msgid "3.4.0"
+msgstr "3.4.0"
 

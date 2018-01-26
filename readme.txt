@@ -32,7 +32,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) is an introduction.
 
-* [Everything you ever wanted to know about Quick Mail](https://wheredidmybraingo.com/tag/quick-mail/).
+* [Quick Mail Supports SparkPost](https://wheredidmybraingo.com/quick-mail-supports-sparkpost/).
 
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/).
 

@@ -50,9 +50,9 @@ __Features__
 * Select recipient from users or commenters.
 
 ### Learn More
-* See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
+* Read [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* [Quick Mail Supports SparkPost](https://wheredidmybraingo.com/quick-mail-supports-sparkpost/).
+* Read [Quick Mail Supports SparkPost](https://wheredidmybraingo.com/quick-mail-supports-sparkpost/) for update info.
 
 ### Installation ###
 

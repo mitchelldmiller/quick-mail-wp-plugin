@@ -5,7 +5,7 @@ Description: Send text or html email with attachments from user's credentials. S
 Version: 3.4.0
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
-Plugin URI: https://wheredidmybraingo.com/quick-mail-supports-sparkpost/
+Plugin URI: https://wheredidmybraingo.com/quick-mail-wordpress-plugin-supports-sparkpost/
 Text Domain: quick-mail
 Domain Path: /lang
 License: GPL-2.0+

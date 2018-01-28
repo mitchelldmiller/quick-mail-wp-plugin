@@ -50,9 +50,9 @@ __Features__
 * Select recipient from users or commenters.
 
 ### Learn More
-* Read [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
+* Read [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* Read [Quick Mail Supports SparkPost](https://wheredidmybraingo.com/quick-mail-supports-sparkpost/) for update info.
+* Read [Quick Mail Supports SparkPost](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-supports-sparkpost/) for update info.
 
 ### Installation ###
 
@@ -64,7 +64,7 @@ __Features__
 
 * Optional: [Install WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
 
-* Optional: Install [Mailgun](http://wordpress.org/extend/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](http://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
+* Optional: Install [Mailgun](https://wordpress.org/extend/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
 
 ### Frequently Asked Questions ###
 
@@ -164,7 +164,7 @@ __Address Validation__
 
   This is displayed when Quick Mail cannot verify domains containing non-ASCII characters.
 
-* [checkdnsrr](http://php.net/manual/en/function.checkdnsrr.php) is used to check a domain for an [MX record](http://www.google.com/support/enterprise/static/postini/docs/admin/en/activate/mx_faq.html).
+* [checkdnsrr](http://php.net/manual/en/function.checkdnsrr.php) is used to check a domain for an [MX record](https://en.wikipedia.org/wiki/MX_record).
 
 
   An MX record tells senders how to send mail to the domain.

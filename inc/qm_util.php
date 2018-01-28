@@ -1,6 +1,8 @@
 <?php
 /**
  * Quick Mail utility functions for Javascript and quick-mail-cli.php
+ * @package QuickMail
+ * @version 3.4.0
  */
 class QuickMailUtil {
 
@@ -179,19 +181,31 @@ class QuickMailUtil {
 			return false;
 		} // return false if missing amphora
 
-		if ( function_exists( 'idn_to_ascii' ) ) {
-			$intl = idn_to_ascii( $a_split[1] );
-			if ( !empty( $intl ) ) {
-				$a_split[1] = $intl;
-				$qm_address = "{$a_split[0]}@{$a_split[1]}";
-			}
-		} // end if we have idn_to_ascii
-
 		if ( !filter_var( $qm_address, FILTER_VALIDATE_EMAIL ) ) {
 			return false;
 		} // end if PHP rejects address
 
-       return ( 'N' == $validate_option ) ? true : checkdnsrr( $a_split[1], 'MX' );
+		$is_ip = is_string( filter_var( $a_split[1], FILTER_VALIDATE_IP ) ); // IP address
+
+		if ( ! strpos( $a_split[1], '.' ) ) {
+			return false;
+		} // end if no dots - localhost?
+
+		if ( false == filter_var( $a_split[1], FILTER_VALIDATE_IP )  ) {
+			if ( function_exists( 'idn_to_ascii' ) ) {
+				$intl = idn_to_ascii( $a_split[1] );
+				if ( !empty( $intl ) ) {
+					$a_split[1] = $intl;
+					$qm_address = "{$a_split[0]}@{$a_split[1]}";
+				}
+			} // end if we have idn_to_ascii
+
+			$dots = explode( '.', $a_split[1] );
+			$j = count( $dots );
+			$domain = ( $j > 2 ) ?  "{$dots[$j - 2]}.{$dots[$j - 1]}" : $a_split[1];
+		} // end if not IP address
+
+       return ( 'N' == $validate_option ) ? true : checkdnsrr( $domain, 'MX' );
    } // end qm_valid_email_domain
 
 	/**
@@ -227,5 +241,121 @@ class QuickMailUtil {
 
       return $result;
    } // end qm_is_plugin_active
+
+	/**
+	 * get default sender name from WP
+	 * @param string $old_name for filter
+	 * @return string sender name
+	 * @since 3.3.1
+	 */
+	public static function get_wp_user_name($old_name = '') {
+   		$you = wp_get_current_user();
+   		$name = '';
+	   	if ( !empty( $you->user_firstname ) && !empty( $you->user_lastname ) ) {
+	   		$name = "{$you->user_firstname} {$you->user_lastname}";
+	   	} else {
+	   		$name = $you->display_name;
+	   	} // end if user has first and last names
+
+	   	if (empty($name) ) {
+	   		$title = __( 'Mail Error', 'quick-mail' );
+	   		$message = __( 'Error: Incomplete User Profile', 'quick-mail' );
+	   		$link = "<a href='/wp-admin/profile.php'>{$title}</a>";
+	   		$direction = is_rtl() ? 'rtl' : 'ltr';
+	   		$args = array( 'response' => 200, 'back_link' => true, 'text_direction' => $direction );
+	   		wp_die( sprintf( '<h1 role="alert">%s</h1>', $title, $message, $args ) );
+	   	} // end if no name
+
+	   	return $name;
+   } // end get_wp_user_name
+
+   /**
+    * get default user email from WP
+    * @param string email arg for filter (not used)
+    * @return string email address
+    * @since 3.3.1
+    */
+	public static function get_wp_user_email($email = '') {
+		$you = wp_get_current_user();
+		if ( empty( $you->user_email ) ) {
+			$title = __( 'Mail Error', 'quick-mail' );
+			$message = __( 'Error: Incomplete User Profile', 'quick-mail' );
+			$link = "<a href='/wp-admin/profile.php'>{$title}</a>";
+			$direction = is_rtl() ? 'rtl' : 'ltr';
+			$args = array( 'response' => 200, 'back_link' => true, 'text_direction' => $direction );
+			wp_die( sprintf( '<h1 role="alert">%s</h1>', $title, $message, $args ) );
+		} // end if no email
+
+		return $you->user_email;
+   } // end get_wp_user_name
+
+	/**
+	 * is user using the same domain as SparkPost?
+	 * @return boolean if user and SparkPost are using the same domain.
+	 * @since 3.3.3
+	 */
+	public static function using_sparkpost_domain() {
+		$wp_domain = '';
+		$spark_domain = '';
+   		$wpmail = self::get_wp_user_email();
+   		$sparkmail  = WPSparkPost\SparkPost::get_setting( 'from_email' );
+   		$qsplit = explode( '@', $sparkmail );
+   		if ( is_array( $qsplit ) && !empty( $qsplit[1] ) ) {
+   			$spark_domain = $qsplit[1];
+   		} // end if
+
+   		$qsplit = explode( '@', $wpmail );
+   		if ( is_array( $qsplit ) && !empty( $qsplit[1] ) ) {
+   			$wp_domain = $qsplit[1];
+   		} // end if
+
+   		return ( !empty( $spark_domain ) && $spark_domain == $wp_domain );
+	} // end using sparkpost domain
+
+	/**
+	 * should SparkPost transaction be toggled for attachments?
+	 *
+	 * @param array $attachments
+	 * @since 3.3.1
+	 */
+	public static function toggle_sparkpost_transactional( $attachments ) {
+   		$retval = false;
+   		$trans = WPSparkPost\SparkPost::get_setting( 'transactional' );
+   		if ( !empty( $trans ) && is_array( $attachments ) && !empty( $attachments ) ) {
+   			$retval = true;
+   			add_filter( 'wpsp_transactional', '__return_zero', 2017, 0 );
+   		} // end if
+   		return $retval;
+	} // end toggle_sparkpost_transactional
+
+	/**
+	 * get email domain to check for matching service sender domain
+	 * @param string $email email address
+	 * @return string domain or empty if missing amphora
+	 * @since 3.3.5
+	 */
+	public static function get_email_domain( $email ) {
+		$a_split = explode( '@', trim( $email ) );
+		if ( ! is_array( $a_split ) || 2 != count( $a_split ) || empty( $a_split[0] ) || empty( $a_split[1] ) ) {
+			return '';
+		} // return false if missing amphora
+
+		return $a_split[1];
+	} // end get_email_domain
+
+	/**
+	 * check if both email addresses use the same top level domain.
+	 * @param string $e1 email 1
+	 * @param string $e2 email 2
+	 * @return boolean do addresses use the same domain?
+	 */
+	public static function matches_email_domain( $e1, $e2 ) {
+		$d1 = self::get_email_domain( $e1 );
+		$d2 = self::get_email_domain( $e2 );
+		$len1 = strlen( $d1 );
+		$len2 = strlen( $d2 );
+		$result = ( $len1 > $len2 ) ? strstr( $d1, $d2 ) : strstr( $d2, $d1 );
+		return is_string( $result );
+	} // end matches_email_domain
 
 } // end class

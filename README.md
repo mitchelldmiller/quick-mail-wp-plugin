@@ -17,7 +17,7 @@ Send a Web page, file, or message from the command line with quick-mail command 
 
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
-Mail is sent with user's name and email. Recognizes credentials from [Mailgun](https://wordpress.org/plugins/mailgun/) and [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugins.
+Uses sender's name, sets reply to sender's address. Recognizes settings from [Mailgun](https://wordpress.org/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugins.
 
 Multiple files from up to six directories (folders) can be attached to a message.
 
@@ -50,9 +50,9 @@ __Features__
 * Select recipient from users or commenters.
 
 ### Learn More
-* See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
+* Read [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail Respects Your Privacy](https://wheredidmybraingo.com/quick-mail-respects-privacy/) for update info.
+* Read [Quick Mail Supports SparkPost](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-supports-sparkpost/) for update info.
 
 ### Installation ###
 
@@ -64,7 +64,7 @@ __Features__
 
 * Optional: [Install WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
 
-* Optional: Install [Mailgun](http://wordpress.org/extend/plugins/mailgun/) or [Sendgrid](http://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
+* Optional: Install [Mailgun](https://wordpress.org/extend/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
 
 ### Frequently Asked Questions ###
 
@@ -80,6 +80,12 @@ __Who can send rich text messages?__
 
 * Anyone can send HTML by pasting it into a message.
 
+__Where Do I Find Sent Emails?__
+
+* You should be able to find sent emails in your email account's Sent Mail folder.
+
+* Delivery services like [Mailgun](https://www.mailgun.com/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://sendgrid.com/) also provide this information. 
+
 __Selecting Recipients__
 
 * Options to send mail to any user, or limit to users with first and last names on their profile.
@@ -88,7 +94,9 @@ __Selecting Recipients__
 
 __Sending Mail from Other Addresses__
 
-* Uses Mailgun plugin settings for Administrators, if the plugin is activated, using `Override "From" Details` and [Mailgun API](https://documentation.mailgun.com/en/latest/api_reference.html).
+* Uses [Mailgun plugin](http://wordpress.org/extend/plugins/mailgun/) settings for Administrators, if the plugin is activated, using `Override "From" Details` and [Mailgun API](https://documentation.mailgun.com/en/latest/api_reference.html).
+
+* Uses [SparkPost plugin](https://wordpress.org/plugins/sparkpost/) settings for Administrator name and email address, if plugin is activated and `Overrides` for name and email are set.
 
 * Option for administrators to use [Sendgrid API](https://sendgrid.com/solutions/sendgrid-api/). 
 
@@ -156,10 +164,12 @@ __Address Validation__
 
   This is displayed when Quick Mail cannot verify domains containing non-ASCII characters.
 
-* [checkdnsrr](http://php.net/manual/en/function.checkdnsrr.php) is used to check a domain for an [MX record](http://www.google.com/support/enterprise/static/postini/docs/admin/en/activate/mx_faq.html).
+* [checkdnsrr](http://php.net/manual/en/function.checkdnsrr.php) is used to check a domain for an [MX record](https://en.wikipedia.org/wiki/MX_record).
 
 
   An MX record tells senders how to send mail to the domain.
+  
+  *This is not always accurate. Turn verification off if Quick Mail rejects a valid address.*
 
 __Mail Errors__
 

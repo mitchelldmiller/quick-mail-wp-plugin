@@ -110,32 +110,6 @@ __Privacy__
 
 * Requires permission to save email addresses. Saved addresses are cleared if permission option is changed.
 
-__Modifying Quick Mail__
-
-* Add a filter to modify Quick Mail.
-
-* Programmers can replace their credentials by adding a filter to `replace_quick_mail_sender`.
-
-- What filters are available to modify Quick Mail?
-
-`quick_mail_cli_attachment_message`
-  Replace default CLI attachment message.
-  
-`quick_mail_cli_attachment_subject`
-  Replace default CLI attachment subject.
-
-`quick_mail_comment_style`
-  Replace quick mail comment style.
-  
-`quick_mail_reply_title`	
-  Replace title for private comment reply on comments list.
-
-`quick_mail_user_capability`	
-  Replace minimum user capability.
-  
-`replace_quick_mail_sender`
-  Replace quick mail sender. Expects an associative array with values for `name` and `email`.
-
 __Limitations__
 
 * Up to 12 manually entered recipients are saved in HTML Storage.
@@ -189,6 +163,36 @@ __Translators and Programmers__
 
 * See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.
 
+__Modifying Quick Mail__
+
+* Add a filter to modify Quick Mail.
+
+- What filters are available to modify Quick Mail?
+
+`replace_quick_mail_sender`
+
+  Replace sender credentials. Expects an associative array with values for `name` and `email`. See [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender) plugin for examples.
+
+`quick_mail_cli_attachment_message`
+
+  Replace default CLI attachment message.
+  
+`quick_mail_cli_attachment_subject`
+
+  Replace default CLI attachment subject.
+
+`quick_mail_comment_style`
+
+  Replace quick mail comment style.
+  
+`quick_mail_reply_title`
+  
+  Replace title for private comment reply on comments list.
+
+`quick_mail_user_capability`
+  
+  Replace minimum user capability.
+  
 __License__
 
 This plugin is free for personal or commercial use. 

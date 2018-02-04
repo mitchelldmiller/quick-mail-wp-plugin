@@ -2,7 +2,7 @@
 /**
  * Quick Mail utility functions for Javascript and quick-mail-cli.php
  * @package QuickMail
- * @version 3.4.0
+ * @version 3.4.1
  */
 class QuickMailUtil {
 
@@ -288,6 +288,276 @@ class QuickMailUtil {
 
 		return $you->user_email;
    } // end get_wp_user_name
+
+   /**
+    * do we have SparkPost plugin and credentials?
+    *
+    * @param $check_from boolean should we check if SparkPost name, email are set?
+    * @return boolean got SparkPost info
+    * @since 3.3.1
+    */
+	public static function got_sparkpost_info( $check_from ) {
+	   	if ( !self::qm_is_plugin_active( 'sparkpost' ) ) {
+	   		return false;
+	   	} // end if not active
+
+	   	if ( !class_exists( 'WPSparkPost\SparkPost' ) ) {
+	   		return false;
+	   	} // end if cannot find class
+
+	   	$active = WPSparkPost\SparkPost::get_setting( 'enable_sparkpost' );
+	   	if ( empty( $active ) ) {
+	   		return false;
+	   	}
+
+	   	$pw = WPSparkPost\SparkPost::get_setting( 'password' );
+	   	if ( empty( $pw ) ) {
+	   		return false;
+	   	} // end if no password
+
+	   	if ( false == $check_from ) {
+	   		return true;
+	   	} // end if checking install
+
+	   	// this should be enough
+	   	$from_name = WPSparkPost\SparkPost::get_setting( 'from_name' );
+	   	$from_name = apply_filters( 'wpsp_sender_name', $from_name );
+
+	   	$from_email = WPSparkPost\SparkPost::get_setting( 'from_email' );
+	   	$from_email = apply_filters( 'wpsp_sender_email', $from_email );
+
+	   	if ( empty( $from_email) && empty( $from_name) ) {
+	   		return false;
+	   	} // end if no name or email
+
+	   	// we have name or email
+	   	// not validating email. QuickMailUtil::qm_valid_email_domain( $from_email, 'Y' )
+		return true;
+	} // end got_sparkpost_info
+
+   /**
+    * get SparkPost credentials.
+    *
+    * @param array $wp_info 'name' => $name, 'email' => $email, 'reply_to' => $reply_to
+    * @return string[] original or updated array
+    * @since 3.3.1
+    */
+   public static function get_sparkpost_info( $wp_info ) {
+   	if ( !self::got_sparkpost_info( true ) ) {
+   		return $wp_info;
+   	} // end if sparkpost is not active
+
+   	// SparkPost does not use definitions
+   	$sp_email = WPSparkPost\SparkPost::get_setting( 'from_email' );
+   	if ( empty( $sp_email ) ) {
+   		$sp_email = apply_filters( 'wpsp_sender_email', $wp_info['email'] );
+   	} // end if
+   	$email = empty( $sp_email ) ? $wp_info['email'] : $sp_email;
+
+   	$sp_name = WPSparkPost\SparkPost::get_setting( 'from_name' );
+   	if ( empty( $sp_name ) ) {
+   		$sp_name = apply_filters( 'wpsp_sender_name', $wp_info['name'] );
+   	}
+   	$name = empty( $sp_name ) ? $wp_info['name'] : $sp_name;
+   	$reply_to = apply_filters( 'wpsp_reply_to', $wp_info['reply_to'] );
+   	return array('name' => $name, 'email' => $email, 'reply_to' => $reply_to);
+   } // end get_sparkpost_info
+
+   /**
+    * do we have Mailgun plugin and credentials?
+    *
+    * @param $check_from boolean should we check if Mailgun override-from is set?
+    * @return boolean got Mailgun info
+    * @since 3.2.0
+    */
+	public static function got_mailgun_info( $check_from ) {
+	   	if ( !self::qm_is_plugin_active( 'mailgun' ) ) {
+	   		return false;
+	   	} // end if not active
+
+	   	$options = array();
+	   	if ( !is_multisite() ) {
+	   		$options = get_option( 'mailgun', array() );
+	   	} else {
+	   		$options = get_site_option( 'mailgun', array() );
+	   		if ( empty($options) ) {
+	   			$options = get_blog_option( get_current_blog_id(), 'mailgun', array() );
+	   		} // end if no site option
+	   	} // end if not multisite
+
+	   	// from Mailgun plugin
+	   	$apiKey = (defined('MAILGUN_APIKEY') && MAILGUN_APIKEY) ? MAILGUN_APIKEY : $options['apiKey'];
+	   	$domain = (defined('MAILGUN_DOMAIN') && MAILGUN_DOMAIN) ? MAILGUN_DOMAIN : $options['domain'];
+	   	if ( empty( $domain ) || empty( $apiKey ) ) {
+	   		return false;
+	   	} // end if not using API or missing key / domain
+
+	   	if ( false == $check_from ) {
+	   		return true;
+	   	} // end if not checking name, email
+
+	   	if ( $check_from && empty( $options['override-from'] ) ) {
+	   		return false;
+	   	} // end if do not replace sender credentials
+
+		return !empty( $options['from-address'] );
+   } // end got_mailgun_info
+
+   /**
+    * get Mailgun credentials.
+    *
+    * @param array $wp_info 'name' => $name, 'email' => $email, 'reply_to' => $reply_to
+    * @return string[] original or updated array
+    * @since 3.2.0
+    */
+   public static function get_mailgun_info( $wp_info ) {
+   	if ( !self::qm_is_plugin_active( 'mailgun' ) ) {
+   		return $wp_info;
+   	} // end if Mailgun is not active
+
+   	$options = array();
+   	if ( !is_multisite() ) {
+   		$options = get_option( 'mailgun', array() );
+   	} else {
+   		$options = get_site_option( 'mailgun', array() );
+   		if ( empty($options) ) {
+   			$options = get_blog_option( get_current_blog_id(), 'mailgun', array() );
+   		} // end if no site option
+   	} // end if not multisite
+
+   	if ( empty( $options['override-from'] ) || empty( $options['useAPI'] ) ) {
+   		return $wp_info;
+   	} // end if not using API or override from not set
+
+   	$apiKey = (defined('MAILGUN_APIKEY') && MAILGUN_APIKEY) ? MAILGUN_APIKEY : $options['apiKey'];
+   	// from mailgun.php
+   	$domain = (defined('MAILGUN_DOMAIN') && MAILGUN_DOMAIN) ? MAILGUN_DOMAIN : $options['domain'];
+   	if (  empty( $domain ) || empty( $apiKey ) ) {
+   		return $wp_info;
+   	} // end if not using API or missing key / domain
+
+   	$email = $wp_info['email'];
+   	/* from Mailgun:
+   	 * 1. From address given by headers - {@param $from_addr_header}
+   	 *  2. From address set in Mailgun settings
+   	 *  3. From `MAILGUN_FROM_ADDRESS` constant
+   	 *  4. From address constructed as `wordpress@<your_site_domain>`
+   	 *  sender domain should match Mailgun domain
+   	 */
+
+   	$mg_email = '';
+   	if ( !empty( $options['from-address'] ) ) {
+   		$mg_email = $options['from-address'];
+   	} else if ( defined('MAILGUN_FROM_ADDRESS') ) {
+   		$mg_email = MAILGUN_FROM_ADDRESS;
+   	}
+
+   	if ( !empty( $mg_email ) ) {
+   		if ( !self::matches_email_domain( $email, $mg_email ) ) {
+   			$email = $mg_email;
+   		} // end if
+   	} // end if got Mailgun value
+
+   	$name = $wp_info['name'];
+   	if ( !empty( $options['from-name'] ) ) {
+   		$name = $options['from-name'];
+   	} else if ( defined('MAILGUN_FROM_NAME') ) {
+   		$name = MAILGUN_FROM_NAME;
+   	}  // end if have sender name
+
+   	// Mailgun plugin does not have reply-to setting.
+   	return array('name' => $name, 'email' => $email, 'reply_to' => $wp_info['reply_to']);
+   } // end get_mailgun_info
+
+   /**
+    * is site using SendGrid? Check for active plugin with SendGrid in name.
+    *
+    * @param $check_from boolean default false. check if Sengrid from mail is set?
+    * @return boolean replace is active and optionally if config has an email address.
+    * @since 3.1.9
+    */
+   	public static function got_sendgrid_info( $check_from = false ) {
+	   	if ( self::qm_is_plugin_active( 'mailgun' ) ) {
+	   		return false;
+	   	} // end if Mailgun is active. cannot use Sengrid with Mailgun.
+
+	   	if ( class_exists( 'WPSparkPost\SparkPost' ) ) {
+	   		$active = WPSparkPost\SparkPost::get_setting( 'enable_sparkpost' );
+	   		if ( !empty( $active ) ) {
+	   			return false;
+	   		} // end if SparkPost is active
+	   	} // end if have SparkPost
+
+	   	if ( !self::qm_is_plugin_active( 'sendgrid' ) ) {
+	   		return false;
+	   	} // end if sendgrid is not active
+
+	   	if ( false == $check_from ) {
+	   		return true;
+	   	} // end if not checking name, email
+
+	   	// check for SendGrid email
+	   	if ( defined( 'SENDGRID_FROM_EMAIL') && SENDGRID_FROM_EMAIL ) {
+	   		return true;
+	   	}
+	   	$sg_email = '';
+	   	if ( is_multisite() ) {
+	   		$sg_email = get_site_option( 'sendgrid_from_email', '');
+	   		if ( empty( $sg_email ) ) {
+	   			$sg_email = get_blog_option( get_current_blog_id(), 'sendgrid_from_email', 'N' );
+	   		} // end if
+	   	} else {
+	   		$sg_email = get_option( 'sendgrid_from_email', '' );
+	   	} // end if multisite
+
+	   	return !empty( $sg_email );
+	} // end got_sendgrid_info
+
+
+
+   /**
+    * get SendGrid user info, if available
+    *
+    * @param array $wp_info 'name' => $name, 'email' => $email
+    * @return array updated array
+    * @since 3.1.9
+    */
+   public static function get_sendgrid_info( $wp_info ) {
+   	if ( ! self::got_sendgrid_info() ) {
+   		return $wp_info;
+   	}
+
+   	// Sendgrid_Tools::get_from_name, get_from_email, get_reply_to test for define first.
+   	$sg_name = defined( 'SENDGRID_FROM_NAME' ) ? SENDGRID_FROM_NAME : '';
+   	$sg_email = defined( 'SENDGRID_FROM_EMAIL' ) ? SENDGRID_FROM_EMAIL : '';
+   	$sg_reply_to = defined( 'SENDGRID_REPLY_TO' ) ? SENDGRID_REPLY_TO : '';
+
+   	if ( is_multisite() ) {
+   		$sg_name = empty( $sg_name ) ? get_site_option( 'sendgrid_from_name', '') : get_blog_option( get_current_blog_id(), 'sendgrid_from_name', '' );
+   		$sg_email = empty( $sg_email ) ? get_site_option( 'sendgrid_from_email', '') : get_blog_option( get_current_blog_id(), 'sendgrid_from_email', '' );
+   	} else {
+   		if ( empty( $sg_name) ) {
+   			$sg_name = get_option( 'sendgrid_from_name' );
+   		}
+   		if ( empty( $sg_email) ) {
+   			$sg_email = get_option( 'sendgrid_from_email' );
+   		}
+   	} // end if multisite
+
+   	$email = empty( $sg_email ) ? $wp_info['email'] : $sg_email;
+   	$name = empty( $sg_name ) ? $wp_info['name'] : $sg_name;
+   	$reply_to = '';
+   	if ( !empty( $sg_reply_to ) ) {
+   		$reply_to = $sg_reply_to;
+   	} else if ( empty( $wp_info['reply_to'] ) ) {
+   		$reply_to = $wp_info['reply_to'];
+   	} else {
+   		$reply_to = $email;
+   	} // end if
+
+   	return array('name' => $name, 'email' => $email, 'reply_to' => $reply_to);
+   } // end get_sendgrid_info
+
 
 	/**
 	 * is user using the same domain as SparkPost?

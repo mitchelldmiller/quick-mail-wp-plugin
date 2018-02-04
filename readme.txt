@@ -88,32 +88,6 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * Requires permission to save email addresses. Saved addresses are cleared if permission option is changed.
 
-= Customizing Quick Mail =
-
-* Add a filter to modify Quick Mail.
-
-* Programmers can replace their credentials by adding a filter to `replace_quick_mail_sender`.
-
-- What filters are available to modify Quick Mail?
-
-`quick_mail_cli_attachment_message`
-  Replace default CLI attachment message.
-  
-`quick_mail_cli_attachment_subject`
-  Replace default CLI attachment subject.
-  
-`quick_mail_comment_style`
-  Replace quick mail comment style.
-  
-`quick_mail_reply_title`	
-  Replace title for private comment reply on comments list.
-
-`quick_mail_user_capability`	
-  Replace minimum user capability.
-  
-`replace_quick_mail_sender`
-  Replace quick mail sender. Expects an associative array with values for `name` and `email`.
-  
 = Limitations =
 
 * Up to 12 manually entered recipients are saved in HTML Storage.
@@ -157,6 +131,32 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
    `wp_mail` rejected an address. Seen when Quick Mail verification is off.
 
+= Customizing Quick Mail =
+
+* Add a filter to modify Quick Mail.
+
+* Programmers can replace their credentials by adding a filter to `replace_quick_mail_sender`.
+
+- What filters are available to modify Quick Mail?
+
+`quick_mail_cli_attachment_message`
+  Replace default CLI attachment message.
+  
+`quick_mail_cli_attachment_subject`
+  Replace default CLI attachment subject.
+  
+`quick_mail_comment_style`
+  Replace quick mail comment style.
+  
+`quick_mail_reply_title`    
+  Replace title for private comment reply on comments list.
+
+`quick_mail_user_capability`    
+  Replace minimum user capability.
+  
+`replace_quick_mail_sender`
+  Replace sender credentials. Expects an associative array with values for `name` and `email`. See [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender) plugin for examples.
+  
 == Screenshots ==
 
 1. Selecting users on Quick Mail data entry form.

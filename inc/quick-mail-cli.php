@@ -2,18 +2,12 @@
 
 /**
  * Mail a Web page or file with quick-mail.
- * @version 3.4.1
+ * @version 3.4.1 Beta
  * @author mitchelldmiller
  */
 class Quick_Mail_Command extends WP_CLI_Command {
 
 	public $from = '', $name = '', $content_type = 'text/html';
-
-	/**
-	 * were credentials replaced?
-	 * @var boolean
-	 */
-	private $replaced_credentials = false;
 
 	public static $charset = '';
 
@@ -81,21 +75,23 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		require_once plugin_dir_path( __FILE__ ) . 'qm_util.php';
 		self::$charset = get_bloginfo( 'charset' );
 		$temp_msg = ''; // TODO
+		$active = '';
 		foreach ( self::$services as $k ) {
 			$s = strtolower( $k );
 			$func = array('QuickMailUtil', "got_{$s}_info");
 			// if ( $func( true ) ) {
-			$this->replaced_credentials = call_user_func($func, true);
-			if ( $this->replaced_credentials ) {
+			$replaced_credentials = call_user_func($func, true);
+			if ( $replaced_credentials ) {
+				$active = $k;
 				$temp_msg = sprintf( "%s %s %s", 	__( 'Using', 'quick-mail' ),
 						$k, 	__( 'credentials', 'quick-mail' ) );
 				break;
 			} // end if
 		} // end foreach
 
-		if (!empty($temp_msg)) {
+		if ( !empty( $temp_msg) ) {
 			WP_CLI::warning( $temp_msg );
-		}
+		} // end if using service
 
 		$verify_domain = '';
 		if ( is_multisite() ) {
@@ -261,21 +257,28 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		// set filters and send
 		add_filter( 'wp_mail_content_type', array($this, 'type_filter'), 2500, 2500 );
 		// if not replaced, set name and from
-		if ( !$this->replaced_credentials ) {
+		if ( empty( $active ) ) {
 			add_filter( 'wp_mail_from', array($this, 'from_filter'), 2500, 2500 );
 			add_filter( 'wp_mail_from_name', array($this, 'name_filter'), 2500, 2500 );
 		} // end if
 
+		// need from to avoid missing SERVER_NAME in wp_mail
+		$headers = array("From: \"{$this->name}\" <{$this->from}>\r\n");
 		// add reply to
-		$headers = array("Reply-To: {$this->from}\r\n");
+		if ( 'SparkPost' == $active ) {
+			add_filter( 'wpsp_reply_to', array($this, 'get_sender_value' ), 2500 );
+			WP_CLI::log( 'Filtering SparkPost reply-to' );
+		} else {
+			$headers[] = "Reply-To: {$this->from}\r\n";
+		}
 
-		if ( ! wp_mail( $to, $subject, $message, '', $attachments ) ) {
-			$this->remove_qm_filters();
+		if ( ! wp_mail( $to, $subject, $message, $headers, $attachments ) ) {
+			$this->remove_qm_filters($file, $active);
 			$temp_msg = __( 'Error sending mail', 'quick-mail' );
 			WP_CLI::error( $temp_msg );
 		} // end if error sending mail
 
-		$this->remove_qm_filters($file);
+		$this->remove_qm_filters($file, $active);
 		if ( $sending_file ) {
 			$temp_msg = sprintf('%s %s %s %s', __( 'Sent', 'quick-mail' ),
 					basename( $url ), __( 'to', 'quick-mail' ), $to );
@@ -287,17 +290,31 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	} // end _invoke
 
 	/**
+	 * get send value for reply-to filters
+	 * @param string $old_value
+	 * @since 3.4.1
+	 */
+	public function get_sender_value( $old_value ) {
+		return $this->from;
+	} // end get_sender_value
+
+	/**
 	 * convenience function to remove filters.
 	 *
 	 * @param string $file if not empty, also remove attachment message filter.
+	 * @param string $active name of active service
 	 */
-	public function remove_qm_filters( $file = '' ) {
+	public function remove_qm_filters( $file, $active ) {
 		if ( !empty($file) ) {
 			remove_filter( 'quick_mail_cli_attachment_message', array($this, 'quick_mail_cli_attachment_message'), 1 );
 		} // end if attached message
 
+		if ( 'SparkPost' == $active ) {
+			remove_filter( 'wpsp_reply_to', array($this, 'get_sender_value' ), 2500 );
+		} // end if SparkPost
+
 		remove_filter( 'wp_mail_content_type', array($this, 'type_filter'), 2500 );
-		if ( !$this->replaced_credentials ) {
+		if ( empty( $active ) ) {
 			remove_filter( 'wp_mail_from', array($this, 'from_filter'), 2500 );
 			remove_filter( 'wp_mail_from_name', array($this, 'name_filter'), 2500 );
 		} // end if
@@ -379,7 +396,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 * @param string $site
 	 * @return string|array
 	 */
-	private function get_wp_site_data($site) {
+	private function get_wp_site_data( $site ) {
 		$chrome = 'Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3';
 		$args = array('user-agent' => $chrome);
 		$data = wp_remote_get( $site, $args );

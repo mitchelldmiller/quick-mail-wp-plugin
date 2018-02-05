@@ -173,6 +173,10 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 == Changelog ==
 
+= 3.4.1 =
+* WP-CLI command recognizes SparkPost credentials.
+* add reply-to to WP-CLI command.
+
 = 3.4.0 =
 * Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
 * Added support for [SparkPost](https://sparkpost.com/) email delivery service and plugin.

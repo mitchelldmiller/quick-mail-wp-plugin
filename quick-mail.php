@@ -1091,7 +1091,7 @@ jQuery(document).ready( function() {
     $replaced = apply_filters( 'replace_quick_mail_sender', $your_vals );
     $your_email = $replaced['email'];
     $your_name = $replaced['name'];
-    $reply_to = !empty( $replaced['reply_to'] ) ? $replaced['reply_to'] : "{$your_name} <$your_email>";
+    $reply_to = !empty( $replaced['reply_to'] ) ? $replaced['reply_to'] : "{$your_name} <{$your_email}>";
 
     // are we using a replacement sender?
     $service = '';

@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Quick Mail v3.4.0\n"
+"Project-Id-Version: Quick Mail v3.4.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-01-28 17:40:38+0000\n"
+"PO-Revision-Date: 2018-02-09 17:33:32+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -236,7 +236,7 @@ msgstr "Support"
 
 #: inc/qm_util.php:261
 #: inc/qm_util.php:281
-#: inc/quick-mail-sender.php:70
+#: inc/quick-mail-sender.php:66
 #: quick-mail.php:352
 #: quick-mail.php:1033
 #: quick-mail.php:1183
@@ -1329,20 +1329,20 @@ msgstr "Plusieurs"
 msgid "Mailgun and SparkPost are free"
 msgstr "Mailgun et SparkPost sont gratuits"
 
-#: inc/quick-mail-sender.php:70
+#: inc/quick-mail-sender.php:66
 #@ quick-mail
 msgid "Unknown Mail Service"
 msgstr "Service de courrier inconnu"
 
-#. translators: plugin header field 'Version'
-#: quick-mail.php:0
-#@ quick-mail
-msgid "3.4.0"
-msgstr "3.4.0"
-
 #. translators: plugin header field 'PluginURI'
 #: quick-mail.php:0
 #@ quick-mail
-msgid "https://wheredidmybraingo.com/quick-mail-supports-sparkpost/"
+msgid "https://wheredidmybraingo.com/quick-mail-wordpress-plugin-supports-sparkpost/"
 msgstr "https://wheredidmybraingo.com/quick-mail-wordpress-plugin-supports-sparkpost/"
+
+#. translators: plugin header field 'Version'
+#: quick-mail.php:0
+#@ quick-mail
+msgid "3.4.1"
+msgstr "3.4.1"
 

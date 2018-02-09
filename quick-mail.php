@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.4.0
+Version: 3.4.1
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/quick-mail-wordpress-plugin-supports-sparkpost/
@@ -14,7 +14,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
 /*
  * Quick Mail WordPress Plugin - Send mail from Wordpress using Quick Mail
- * Copyright (C) 2014-2017 Mitchell D. Miller
+ * Copyright (C) 2014-2018 Mitchell D. Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1164,7 +1164,7 @@ jQuery(document).ready( function() {
     		} // end if admin
     	} // end if
 
-    	if ( empty( $our_filters ) && !empty( $reply_to ) ) {
+    	if ( empty( $service ) && !empty( $reply_to ) ) {
     		$our_filters[] = new QuickMailSender($service, 'reply_to', $reply_to );
     	}
 

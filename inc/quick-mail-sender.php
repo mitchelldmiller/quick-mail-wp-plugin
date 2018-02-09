@@ -1,5 +1,5 @@
 <?php
-// quick-mail-sender.php 1.1.0 January 21, 2018
+// quick-mail-sender.php 1.1.1 February 9, 2018
 
 class QuickMailSender {
 
@@ -46,13 +46,9 @@ class QuickMailSender {
 
 		self::$priority = date('Y');
 		$this->reply_to = '';
-
-		$invalid = false;
-		if ( empty( $service ) || empty( $field ) ) {
-			$invalid = true;
-		}
-		if ( empty( $value ) && $service != 'reply_to' ) {
-			$invalid = true;
+		if ( empty( $service ) && $field == 'reply_to' ) {
+			$this->reply_to = $value;
+			return;
 		}
 
 		$lservice = strtolower($service);

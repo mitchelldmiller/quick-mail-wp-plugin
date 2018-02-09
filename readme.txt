@@ -1,11 +1,11 @@
 === Quick Mail ===
 Contributors: brainiac
-Tags: mail, email, comments, mailgun, sparkpost, wp-cli, attachment, sendgrid, accessibility, idn, multisite
+Tags: mail, email, comments, wp-cli, mailgun, sparkpost, attachment, sendgrid, accessibility, idn, multisite
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Requires at least: 4.6
 Tested up to: 5.0
 Requires PHP: 5.3
-Stable tag: 3.4.0
+Stable tag: 3.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -173,9 +173,12 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 == Changelog ==
 
-= 3.4.1 =
+= 3.4.2 =
 * WP-CLI command recognizes SparkPost credentials.
 * add reply-to to WP-CLI command.
+
+= 3.4.1 =
+* Fixed Unknown Service error
 
 = 3.4.0 =
 * Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
@@ -209,6 +212,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.4.1 =
+* Upgrade recommended.
 
 = 3.4.0 =
 * Upgrade recommended.

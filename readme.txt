@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Requires at least: 4.6
 Tested up to: 5.0
 Requires PHP: 5.3
-Stable tag: 3.4.1
+Stable tag: 3.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,12 +37,20 @@ Multiple files from up to six directories (folders) can be attached to a message
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/).
 
 == Installation ==
+= Automated =
+1. Select _Plugins -> Add New_ from Dashboard.
+2. Enter **Quick Mail** in _Search Plugins_.
+3. Select _Activate Plugin_ to activate Quick Mail.
+
+= Manual =
 1. Download the plugin and unpack in your `/wp-content/plugins` directory.
-2. Activate the plugin through the 'Plugins' menu in WordPress.
-3. Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
-4. Optional: Install [WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
-5. Optional: Install [Mailgun](https://wordpress.org/extend/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
-6. Optional: Install experimental [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) plugin, to change administrator's credentials.
+2. Activate the plugin through the WordPress _Plugins_ menu.
+
+= Configuration =
+1. Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
+2. Optional: Install [WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
+3. Optional: Install [Mailgun](https://wordpress.org/extend/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
+4. Optional: Install experimental [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) plugin, to change administrator's credentials.
 
 == Frequently Asked Questions ==
 
@@ -130,6 +138,14 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 * You must provide at least one recipient email address.
 
    `wp_mail` rejected an address. Seen when Quick Mail verification is off.
+   
+= Incompatible Plugins =
+
+* [Stop Emails](https://wordpress.org/plugins/stop-emails/)
+
+Stop Emails displays _To send emails, disable the plugin._
+
+If you are using an email delivery service, you can ignore this message.
 
 = Customizing Quick Mail =
 
@@ -175,10 +191,11 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 = 3.4.2 =
 * WP-CLI command recognizes SparkPost credentials.
-* add reply-to to WP-CLI command.
+* fixed reply-to for SparkPost.
+* added reply-to to WP-CLI command.
 
 = 3.4.1 =
-* Fixed Unknown Service error
+* Fixed Unknown Service error.
 
 = 3.4.0 =
 * Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
@@ -186,32 +203,14 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 * Better support for mail delivery service settings.
 * Sets reply-to address to sender's address.
 
-= 3.3.1 =
-* Remove replace_quick_mail_sender filter after sending mail.
-
-= 3.3.0 =
-* Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
-* added requirement for consent to use sender's email address.
-* added option to allow saving email addresses.
-* saved email addresses are deleted if saving option changed.
-* "Please verify your settings" is always displayed on activation.
-* fixed bug on deactivate plugin.
-
-= 3.2.7 =
-* fixed syntax error, unexpected '998' (T_LNUMBER) . See [Github issue 9](https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues/9)
-
-= 3.2.6 =
-* Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
-* fixed bug where user without comments could not send mail after selecting reply to comments.
-* only load comment script on comment reply.
-* only load delete saved address script on options page.
-* added option to limit displayed comments by date.
-
 = Earlier versions =
 
 Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.4.2 =
+* Upgrade recommended.
 
 = 3.4.1 =
 * Upgrade recommended.
@@ -244,7 +243,7 @@ Quick Mail is free for personal or commercial use. Encourage future development 
 
 * Includes French, Russian, Spanish translations.
 
-* Visit [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.
+* Visit [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more information.
 
 == Credits ==
 

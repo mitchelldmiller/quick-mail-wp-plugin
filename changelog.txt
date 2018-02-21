@@ -1,5 +1,26 @@
 == Quick Mail Changelog ==
 
+= 3.3.1 =
+* Remove replace_quick_mail_sender filter after sending mail.
+
+= 3.3.0 =
+* Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
+* added requirement for consent to use sender's email address.
+* added option to allow saving email addresses.
+* saved email addresses are deleted if saving option changed.
+* "Please verify your settings" is always displayed on activation.
+* fixed bug on deactivate plugin.
+
+= 3.2.7 =
+* fixed syntax error, unexpected '998' (T_LNUMBER) . See [Github issue 9](https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues/9)
+
+= 3.2.6 =
+* Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
+* fixed bug where user without comments could not send mail after selecting reply to comments.
+* only load comment script on comment reply.
+* only load delete saved address script on options page.
+* added option to limit displayed comments by date.
+
 = 3.2.4 =
 * check for missing multibyte functions.
 * character count checks for multibyte text.

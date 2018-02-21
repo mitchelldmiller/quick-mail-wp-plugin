@@ -56,15 +56,20 @@ __Features__
 
 ### Installation ###
 
-* Download the plugin and unpack in your `/wp-content/plugins` directory.
+#### Automated ####
+1. Select _Plugins -> Add New_ from Dashboard.
+2. Enter **Quick Mail** in _Search Plugins_.
+3. Select _Activate Plugin_ to activate Quick Mail.
 
-* Activate the plugin through the 'Plugins' menu in WordPress.
+#### Manual ####
+1. Download the plugin and unpack in your `/wp-content/plugins` directory.
+2. Activate the plugin through the WordPress _Plugins_ menu.
 
-* Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
-
-* Optional: [Install WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
-
-* Optional: Install [Mailgun](https://wordpress.org/extend/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
+#### Configuration ####
+1. Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
+2. Optional: Install [WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
+3. Optional: Install [Mailgun](https://wordpress.org/extend/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
+4. Optional: Install experimental [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) plugin, to change administrator's credentials.
 
 ### Frequently Asked Questions ###
 
@@ -155,15 +160,15 @@ __Mail Errors__
 
    `wp_mail` rejected an address. Seen when Quick Mail verification is off.
    
-__Translators and Programmers__
+= Incompatible Plugins =
 
-* A .pot file is included for translators.
+* [Stop Emails](https://wordpress.org/plugins/stop-emails/)
 
-* Includes French, Russian, Spanish translations.
+Stop Emails displays _To send emails, disable the plugin._
 
-* See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.
+If you are using an email delivery service, you can ignore this message.
 
-__Modifying Quick Mail__
+__Customizing Quick Mail__
 
 * Add a filter to modify Quick Mail.
 
@@ -193,6 +198,14 @@ __Modifying Quick Mail__
   
   Replace minimum user capability.
   
+__Translators and Programmers__
+
+* A .pot file is included for translators.
+
+* Includes French, Russian, Spanish translations.
+
+* See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more information.
+
 __License__
 
 This plugin is free for personal or commercial use. 

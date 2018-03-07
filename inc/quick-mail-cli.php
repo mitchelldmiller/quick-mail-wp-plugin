@@ -77,7 +77,6 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		foreach ( self::$services as $k ) {
 			$s = strtolower( $k );
 			$func = array('QuickMailUtil', "got_{$s}_info");
-			// if ( $func( true ) ) {
 			$replaced_credentials = call_user_func( $func, true );
 			if ( $replaced_credentials ) {
 				$active = $k;
@@ -263,6 +262,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		$headers = array("From: \"{$this->name}\" <{$this->from}>\r\n");
 		// add reply to
 		if ( 'SparkPost' == $active ) {
+			add_filter( 'wpsp_transactional', '__return_false', 2500 );
 			add_filter( 'wpsp_reply_to', array($this, 'get_sender_value' ), 2500 );
 			WP_CLI::log( 'Filtering SparkPost reply-to' );
 		} else {
@@ -308,6 +308,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 
 		if ( 'SparkPost' == $active ) {
 			remove_filter( 'wpsp_reply_to', array($this, 'get_sender_value' ), 2500 );
+			remove_filter( 'wpsp_transactional', '__return_false', 2500 );
 		} // end if SparkPost
 
 		remove_filter( 'wp_mail_content_type', array($this, 'type_filter'), 2500 );

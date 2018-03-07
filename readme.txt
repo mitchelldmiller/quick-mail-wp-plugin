@@ -32,7 +32,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) is an introduction.
 
-* [Quick Mail Supports SparkPost](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-supports-sparkpost/).
+* [Quick Mail 3.4.2 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-4-2-maintenance-release/).
 
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/).
 
@@ -190,7 +190,7 @@ If you are using an email delivery service, you can ignore this message.
 == Changelog ==
 
 = 3.4.2 =
-* WP-CLI command recognizes SparkPost credentials.
+* WP-CLI command recognizes external mail service settings.
 * fixed reply-to for SparkPost.
 * added reply-to to WP-CLI command.
 
@@ -217,21 +217,6 @@ Please refer to the separate changelog.txt for changes of previous versions.
 
 = 3.4.0 =
 * Upgrade recommended.
-
-= 3.3.0 =
-* Upgrade recommended.
-
-= 3.2.7 =
-* Upgrade recommended.
-
-= 3.2.6 =
-* Upgrade optional.
-
-= 3.2.4 =
-* Upgrade recommended if your language uses multibyte characters.
-
-= 3.2.3 =
-* Upgrade recommended. Added features to send reliable mail and WP-CLI command.
 
 == License ==
 

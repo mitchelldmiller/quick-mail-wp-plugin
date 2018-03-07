@@ -1,7 +1,7 @@
-"Project-Id-Version: Quick Mail v3.4.2 rc1\n"
+"Project-Id-Version: Quick Mail v3.4.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-02-21 18:54:51+0000\n"
+"PO-Revision-Date: 2018-03-06 20:22:03+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -829,12 +829,12 @@ msgstr ""
 msgid "Sent email to"
 msgstr ""
 
-#: inc/quick-mail-cli.php:406
+#: inc/quick-mail-cli.php:407
 #@ quick-mail
 msgid "Not found"
 msgstr ""
 
-#: inc/quick-mail-cli.php:410
+#: inc/quick-mail-cli.php:411
 #@ quick-mail
 msgid "Cannot connect to"
 msgstr ""
@@ -861,29 +861,29 @@ msgstr ""
 msgid "Sending mail with Mailgun API."
 msgstr ""
 
-#: inc/quick-mail-cli.php:127
+#: inc/quick-mail-cli.php:126
 #@ quick-mail
 msgid "Invalid URL"
 msgstr ""
 
-#: inc/quick-mail-cli.php:135
-#: inc/quick-mail-cli.php:341
+#: inc/quick-mail-cli.php:134
+#: inc/quick-mail-cli.php:342
 #@ quick-mail
 msgid "File not found"
 msgstr ""
 
-#: inc/quick-mail-cli.php:155
-#: inc/quick-mail-cli.php:167
+#: inc/quick-mail-cli.php:154
+#: inc/quick-mail-cli.php:166
 #@ quick-mail
 msgid "Invalid user"
 msgstr ""
 
-#: inc/quick-mail-cli.php:140
+#: inc/quick-mail-cli.php:139
 #@ quick-mail
 msgid "Empty file"
 msgstr ""
 
-#: inc/quick-mail-cli.php:246
+#: inc/quick-mail-cli.php:245
 #@ quick-mail
 msgid "For Your Eyes Only"
 msgstr ""
@@ -893,7 +893,7 @@ msgstr ""
 msgid "to"
 msgstr ""
 
-#: inc/quick-mail-cli.php:190
+#: inc/quick-mail-cli.php:189
 #@ quick-mail
 msgid "No content"
 msgstr ""
@@ -903,7 +903,7 @@ msgstr ""
 msgid "Sent"
 msgstr ""
 
-#: inc/quick-mail-cli.php:411
+#: inc/quick-mail-cli.php:412
 #@ quick-mail
 msgid "Error"
 msgstr ""
@@ -919,7 +919,7 @@ msgstr ""
 msgid "Use"
 msgstr ""
 
-#: inc/quick-mail-cli.php:85
+#: inc/quick-mail-cli.php:84
 #: quick-mail.php:1925
 #: quick-mail.php:1928
 #: quick-mail.php:2378
@@ -927,7 +927,7 @@ msgstr ""
 msgid "credentials"
 msgstr ""
 
-#: inc/quick-mail-cli.php:84
+#: inc/quick-mail-cli.php:83
 #: quick-mail.php:1927
 #: quick-mail.php:1934
 #: quick-mail.php:2377
@@ -983,17 +983,17 @@ msgstr ""
 msgid "Mailgun Error sending mail"
 msgstr ""
 
-#: inc/quick-mail-cli.php:115
+#: inc/quick-mail-cli.php:114
 #@ quick-mail
 msgid "Invalid Recipient Address"
 msgstr ""
 
-#: inc/quick-mail-cli.php:106
+#: inc/quick-mail-cli.php:105
 #@ quick-mail
 msgid "Invalid Sender Address"
 msgstr ""
 
-#: inc/quick-mail-cli.php:237
+#: inc/quick-mail-cli.php:236
 #@ quick-mail
 msgid "Please see attachment"
 msgstr ""
@@ -1101,32 +1101,32 @@ msgstr ""
 msgid "WP-CLI"
 msgstr ""
 
-#: inc/quick-mail-cli.php:199
+#: inc/quick-mail-cli.php:198
 #@ quick-mail
 msgid "unknown"
 msgstr ""
 
-#: inc/quick-mail-cli.php:203
+#: inc/quick-mail-cli.php:202
 #@ quick-mail
 msgid "Error saving content"
 msgstr ""
 
-#: inc/quick-mail-cli.php:234
+#: inc/quick-mail-cli.php:233
 #@ quick-mail
 msgid "Replaced attachment message."
 msgstr ""
 
-#: inc/quick-mail-cli.php:347
+#: inc/quick-mail-cli.php:348
 #@ quick-mail
 msgid "You have an attachment."
 msgstr ""
 
-#: inc/quick-mail-cli.php:250
+#: inc/quick-mail-cli.php:249
 #@ quick-mail
 msgid "Not sending file. Attachment message ignored."
 msgstr ""
 
-#: inc/quick-mail-cli.php:336
+#: inc/quick-mail-cli.php:337
 #@ quick-mail
 msgid "Invalid message type"
 msgstr ""
@@ -1332,7 +1332,7 @@ msgstr ""
 msgid "Unknown Mail Service"
 msgstr ""
 
-#: inc/quick-mail-cli.php:104
+#: inc/quick-mail-cli.php:103
 #@ quick-mail
 msgid "Only administrators can send mail with WP-CLI."
 msgstr ""
@@ -1340,12 +1340,12 @@ msgstr ""
 #. translators: plugin header field 'PluginURI'
 #: quick-mail.php:0
 #@ quick-mail
-msgid "https://wheredidmybraingo.com/quick-mail-wordpress-plugin-supports-sparkpost/"
+msgid "https://wheredidmybraingo.com/quick-mail-3-4-2-maintenance-release/"
 msgstr ""
 
 #. translators: plugin header field 'Version'
 #: quick-mail.php:0
 #@ quick-mail
-msgid "3.4.2 rc1"
+msgid "3.4.2"
 msgstr ""
 

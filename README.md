@@ -52,7 +52,7 @@ __Features__
 ### Learn More
 * Read [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* Read [Quick Mail Supports SparkPost](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-supports-sparkpost/) for update info.
+* Update info: [Quick Mail 3.4.2 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-4-2-maintenance-release/).
 
 ### Installation ###
 

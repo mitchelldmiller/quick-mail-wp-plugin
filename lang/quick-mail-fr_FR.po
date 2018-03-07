@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Quick Mail v3.4.2 rc1\n"
+"Project-Id-Version: Quick Mail v3.4.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-02-21 18:55:18+0000\n"
+"PO-Revision-Date: 2018-03-06 20:22:14+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -831,12 +831,12 @@ msgstr "Quick mail nécessite WordPress 4,6 ou plus."
 msgid "Sent email to"
 msgstr "Envoyer un courriel à"
 
-#: inc/quick-mail-cli.php:406
+#: inc/quick-mail-cli.php:407
 #@ quick-mail
 msgid "Not found"
 msgstr "Pas trouvé"
 
-#: inc/quick-mail-cli.php:410
+#: inc/quick-mail-cli.php:411
 #@ quick-mail
 msgid "Cannot connect to"
 msgstr "Impossible de se connecter à"
@@ -863,29 +863,29 @@ msgstr "Mailgun est actif"
 msgid "Sending mail with Mailgun API."
 msgstr "Envoi de courrier avec Mailgun API."
 
-#: inc/quick-mail-cli.php:127
+#: inc/quick-mail-cli.php:126
 #@ quick-mail
 msgid "Invalid URL"
 msgstr "URL non valide"
 
-#: inc/quick-mail-cli.php:135
-#: inc/quick-mail-cli.php:341
+#: inc/quick-mail-cli.php:134
+#: inc/quick-mail-cli.php:342
 #@ quick-mail
 msgid "File not found"
 msgstr "Fichier introuvable"
 
-#: inc/quick-mail-cli.php:155
-#: inc/quick-mail-cli.php:167
+#: inc/quick-mail-cli.php:154
+#: inc/quick-mail-cli.php:166
 #@ quick-mail
 msgid "Invalid user"
 msgstr "Utilisateur non valide"
 
-#: inc/quick-mail-cli.php:140
+#: inc/quick-mail-cli.php:139
 #@ quick-mail
 msgid "Empty file"
 msgstr "Fichier vide"
 
-#: inc/quick-mail-cli.php:246
+#: inc/quick-mail-cli.php:245
 #@ quick-mail
 msgid "For Your Eyes Only"
 msgstr "Pour vos yeux seulement"
@@ -895,7 +895,7 @@ msgstr "Pour vos yeux seulement"
 msgid "to"
 msgstr "À"
 
-#: inc/quick-mail-cli.php:190
+#: inc/quick-mail-cli.php:189
 #@ quick-mail
 msgid "No content"
 msgstr "Aucun contenu"
@@ -905,7 +905,7 @@ msgstr "Aucun contenu"
 msgid "Sent"
 msgstr "Envoyé"
 
-#: inc/quick-mail-cli.php:411
+#: inc/quick-mail-cli.php:412
 #@ quick-mail
 msgid "Error"
 msgstr "Erreur"
@@ -921,7 +921,7 @@ msgstr "L'administrateur utilise Mailgun pour envoyer du courrier."
 msgid "Use"
 msgstr "Utiliser"
 
-#: inc/quick-mail-cli.php:85
+#: inc/quick-mail-cli.php:84
 #: quick-mail.php:1925
 #: quick-mail.php:1928
 #: quick-mail.php:2378
@@ -929,7 +929,7 @@ msgstr "Utiliser"
 msgid "credentials"
 msgstr "identifiants"
 
-#: inc/quick-mail-cli.php:84
+#: inc/quick-mail-cli.php:83
 #: quick-mail.php:1927
 #: quick-mail.php:1934
 #: quick-mail.php:2377
@@ -985,17 +985,17 @@ msgstr "plugin"
 msgid "Mailgun Error sending mail"
 msgstr "Erreur Mailgun envoi de courrier"
 
-#: inc/quick-mail-cli.php:115
+#: inc/quick-mail-cli.php:114
 #@ quick-mail
 msgid "Invalid Recipient Address"
 msgstr "Adresse de destinataire non valide"
 
-#: inc/quick-mail-cli.php:106
+#: inc/quick-mail-cli.php:105
 #@ quick-mail
 msgid "Invalid Sender Address"
 msgstr "Adresse de l'expéditeur invalide"
 
-#: inc/quick-mail-cli.php:237
+#: inc/quick-mail-cli.php:236
 #@ quick-mail
 msgid "Please see attachment"
 msgstr "S'il vous plaît voir pièce jointe"
@@ -1103,32 +1103,32 @@ msgstr "pour commencer"
 msgid "WP-CLI"
 msgstr "WP-CLI"
 
-#: inc/quick-mail-cli.php:199
+#: inc/quick-mail-cli.php:198
 #@ quick-mail
 msgid "unknown"
 msgstr "inconnu"
 
-#: inc/quick-mail-cli.php:203
+#: inc/quick-mail-cli.php:202
 #@ quick-mail
 msgid "Error saving content"
 msgstr "Erreur d'enregistrement de contenu"
 
-#: inc/quick-mail-cli.php:234
+#: inc/quick-mail-cli.php:233
 #@ quick-mail
 msgid "Replaced attachment message."
 msgstr "Message d'attachement remplacé."
 
-#: inc/quick-mail-cli.php:347
+#: inc/quick-mail-cli.php:348
 #@ quick-mail
 msgid "You have an attachment."
 msgstr "Vous avez une pièce jointe."
 
-#: inc/quick-mail-cli.php:250
+#: inc/quick-mail-cli.php:249
 #@ quick-mail
 msgid "Not sending file. Attachment message ignored."
 msgstr "Ne pas envoyer de fichier. Message d'attachement ignoré."
 
-#: inc/quick-mail-cli.php:336
+#: inc/quick-mail-cli.php:337
 #@ quick-mail
 msgid "Invalid message type"
 msgstr "Type de message non valide"
@@ -1334,7 +1334,7 @@ msgstr "Mailgun et SparkPost sont gratuits"
 msgid "Unknown Mail Service"
 msgstr "Service de courrier inconnu"
 
-#: inc/quick-mail-cli.php:104
+#: inc/quick-mail-cli.php:103
 #@ quick-mail
 msgid "Only administrators can send mail with WP-CLI."
 msgstr "Seuls les administrateurs peuvent envoyer du courrier avec WP-CLI."
@@ -1342,12 +1342,12 @@ msgstr "Seuls les administrateurs peuvent envoyer du courrier avec WP-CLI."
 #. translators: plugin header field 'PluginURI'
 #: quick-mail.php:0
 #@ quick-mail
-msgid "https://wheredidmybraingo.com/quick-mail-wordpress-plugin-supports-sparkpost/"
-msgstr "https://wheredidmybraingo.com/quick-mail-wordpress-plugin-supports-sparkpost/"
+msgid "https://wheredidmybraingo.com/quick-mail-3-4-2-maintenance-release/"
+msgstr "https://wheredidmybraingo.com/quick-mail-3-4-2-maintenance-release/"
 
 #. translators: plugin header field 'Version'
 #: quick-mail.php:0
 #@ quick-mail
-msgid "3.4.2 rc1"
-msgstr "3.4.2 rc1"
+msgid "3.4.2"
+msgstr "3.4.2"
 

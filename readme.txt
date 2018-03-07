@@ -49,7 +49,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 = Configuration =
 1. Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
 2. Optional: Install [WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
-3. Optional: Install [Mailgun](https://wordpress.org/extend/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
+3. Optional: Install [Mailgun](https://wordpress.org/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
 4. Optional: Install experimental [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) plugin, to change administrator's credentials.
 
 == Frequently Asked Questions ==
@@ -80,7 +80,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 = Sending Mail from Other Addresses =
 
-* Uses [Mailgun plugin](https://wordpress.org/extend/plugins/mailgun/) settings for Administrators, if the plugin is activated, using `Override "From" Details` and [Mailgun API](https://documentation.mailgun.com/en/latest/api_reference.html).
+* Uses [Mailgun plugin](https://wordpress.org/plugins/mailgun/) settings for Administrators, if the plugin is activated, using `Override "From" Details` and [Mailgun API](https://documentation.mailgun.com/en/latest/api_reference.html).
 
 * Uses [SparkPost plugin](https://wordpress.org/plugins/sparkpost/) settings for Administrator name and email address, if plugin is activated and `Overrides` for name and email are set.
 

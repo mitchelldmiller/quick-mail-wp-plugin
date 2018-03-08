@@ -52,19 +52,24 @@ __Features__
 ### Learn More
 * Read [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* Read [Quick Mail Supports SparkPost](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-supports-sparkpost/) for update info.
+* Update info: [Quick Mail 3.4.2 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-4-2-maintenance-release/).
 
 ### Installation ###
 
-* Download the plugin and unpack in your `/wp-content/plugins` directory.
+#### Automated ####
+1. Select _Plugins -> Add New_ from Dashboard.
+2. Enter **Quick Mail** in _Search Plugins_.
+3. Select _Activate Plugin_ to activate Quick Mail.
 
-* Activate the plugin through the 'Plugins' menu in WordPress.
+#### Manual ####
+1. Download the plugin and unpack in your `/wp-content/plugins` directory.
+2. Activate the plugin through the WordPress _Plugins_ menu.
 
-* Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
-
-* Optional: [Install WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
-
-* Optional: Install [Mailgun](https://wordpress.org/extend/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
+#### Configuration ####
+1. Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
+2. Optional: Install [WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
+3. Optional: Install [Mailgun](https://wordpress.org/extend/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
+4. Optional: Install experimental [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) plugin, to change administrator's credentials.
 
 ### Frequently Asked Questions ###
 
@@ -109,32 +114,6 @@ __Privacy__
 * Requires permission to use your email address.
 
 * Requires permission to save email addresses. Saved addresses are cleared if permission option is changed.
-
-__Modifying Quick Mail__
-
-* Add a filter to modify Quick Mail.
-
-* Programmers can replace their credentials by adding a filter to `replace_quick_mail_sender`.
-
-- What filters are available to modify Quick Mail?
-
-`quick_mail_cli_attachment_message`
-  Replace default CLI attachment message.
-  
-`quick_mail_cli_attachment_subject`
-  Replace default CLI attachment subject.
-
-`quick_mail_comment_style`
-  Replace quick mail comment style.
-  
-`quick_mail_reply_title`	
-  Replace title for private comment reply on comments list.
-
-`quick_mail_user_capability`	
-  Replace minimum user capability.
-  
-`replace_quick_mail_sender`
-  Replace quick mail sender. Expects an associative array with values for `name` and `email`.
 
 __Limitations__
 
@@ -181,13 +160,51 @@ __Mail Errors__
 
    `wp_mail` rejected an address. Seen when Quick Mail verification is off.
    
+= Incompatible Plugins =
+
+* [Stop Emails](https://wordpress.org/plugins/stop-emails/)
+
+Stop Emails displays _To send emails, disable the plugin._
+
+If you are using an email delivery service, you can ignore this message.
+
+__Customizing Quick Mail__
+
+* Add a filter to modify Quick Mail.
+
+- What filters are available to modify Quick Mail?
+
+`replace_quick_mail_sender`
+
+  Replace sender credentials. Expects an associative array with values for `name` and `email`. See [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender) plugin for examples.
+
+`quick_mail_cli_attachment_message`
+
+  Replace default CLI attachment message.
+  
+`quick_mail_cli_attachment_subject`
+
+  Replace default CLI attachment subject.
+
+`quick_mail_comment_style`
+
+  Replace quick mail comment style.
+  
+`quick_mail_reply_title`
+  
+  Replace title for private comment reply on comments list.
+
+`quick_mail_user_capability`
+  
+  Replace minimum user capability.
+  
 __Translators and Programmers__
 
 * A .pot file is included for translators.
 
 * Includes French, Russian, Spanish translations.
 
-* See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.
+* See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more information.
 
 __License__
 

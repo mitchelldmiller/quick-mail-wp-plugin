@@ -1,6 +1,10 @@
 <?php
-// quick-mail-sender.php 1.1.1 February 9, 2018
+// quick-mail-sender.php
 
+/**
+ * Manage sending filters.
+ * @version 3.4.2
+ */
 class QuickMailSender {
 
 	/**
@@ -43,7 +47,8 @@ class QuickMailSender {
 		if ( !class_exists( 'QuickMail' ) ) {
 			exit;
 		} // exit if not called from QuickMail
-
+		
+		$invalid = false;
 		self::$priority = date('Y');
 		$this->reply_to = '';
 		if ( empty( $service ) && $field == 'reply_to' ) {

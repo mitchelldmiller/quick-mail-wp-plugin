@@ -2,7 +2,7 @@
 /**
  * Quick Mail utility functions for Javascript and quick-mail-cli.php
  * @package QuickMail
- * @version 3.4.1
+ * @version 3.4.3
  */
 class QuickMailUtil {
 
@@ -185,27 +185,22 @@ class QuickMailUtil {
 			return false;
 		} // end if PHP rejects address
 
-		$is_ip = is_string( filter_var( $a_split[1], FILTER_VALIDATE_IP ) ); // IP address
+		if ( filter_var( $a_split[1], FILTER_VALIDATE_IP ) ) {
+			return ( 'N' == $validate_option ) ? true : checkdnsrr( $a_split[1], 'MX' );
+		} // end if IP address
 
 		if ( ! strpos( $a_split[1], '.' ) ) {
 			return false;
 		} // end if no dots - localhost?
 
-		if ( false == filter_var( $a_split[1], FILTER_VALIDATE_IP )  ) {
-			if ( function_exists( 'idn_to_ascii' ) ) {
-				$intl = idn_to_ascii( $a_split[1] );
-				if ( !empty( $intl ) ) {
-					$a_split[1] = $intl;
-					$qm_address = "{$a_split[0]}@{$a_split[1]}";
-				}
-			} // end if we have idn_to_ascii
+		if ( function_exists( 'idn_to_ascii' ) ) {
+			$intl = idn_to_ascii( $a_split[1] );
+			if ( !empty( $intl ) ) {
+				$a_split[1] = $intl;
+			} // end if we have punycode address
+		} // end if we have idn_to_ascii
 
-			$dots = explode( '.', $a_split[1] );
-			$j = count( $dots );
-			$domain = ( $j > 2 ) ?  "{$dots[$j - 2]}.{$dots[$j - 1]}" : $a_split[1];
-		} // end if not IP address
-
-       return ( 'N' == $validate_option ) ? true : checkdnsrr( $domain, 'MX' );
+       return ( 'N' == $validate_option ) ? true : checkdnsrr( $a_split[1], 'MX' );
    } // end qm_valid_email_domain
 
 	/**

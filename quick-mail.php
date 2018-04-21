@@ -2,10 +2,10 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.4.2
+Version: 3.4.3
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
-Plugin URI: https://wheredidmybraingo.com/quick-mail-3-4-2-maintenance-release/
+Plugin URI: https://wheredidmybraingo.com/quick-mail-3-4-3-for-wordpress/
 Text Domain: quick-mail
 Domain Path: /lang
 License: GPL-2.0+
@@ -1946,23 +1946,12 @@ value="<?php _e( 'Send Mail', 'quick-mail' ); ?>"></p>
 <p><input autofocus tabindex="8" aria-describedby="qm_privacy_desc" aria-labelledby="qm_privacy_label" class="qm-input" name="want_quick_mail_privacy" type="checkbox" <?php echo $check_privacy; ?>>
 <label id="qm_privacy_label" class="qm-label"><?php _e( 'Grant Quick Mail permission to use your email address.', 'quick-mail' ); ?></label>
 <span id="qm_privacy_desc" class="qm-label"><?php _e( 'Permission is required to send mail.', 'quick-mail' ); ?></span></p>
-
 <p><input tabindex="9" aria-describedby="qm_save_desc" aria-labelledby="qm_save_label" class="qm-input" name="save_quick_mail_addresses" type="checkbox" <?php echo $check_save; ?>>
 <label id="qm_save_label" class="qm-label"><?php _e( 'Grant Quick Mail permission to save recipient addresses.', 'quick-mail' ); ?></label>
 <span id="qm_save_desc" class="qm-label"><?php _e( 'Permission is required to save addresses. Addresses will not be shared.', 'quick-mail' ); ?></span></p>
-
 <div id="qm_saved"></div>
 <input id="save_addresses" name="save_addresses" type="hidden" value="<?php echo $save_addresses; ?>">
 </fieldset>
-
-<?php if ( defined('NOT_NOW') && !$you_are_admin && QuickMailUtil::got_mailgun_info( false ) ) : ?>
-<fieldset>
-<legend class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></legend>
-<p><input readonly aria-readonly="true" aria-describedby="qm_mailgun_desc" aria-labelledby="qm_mailgun_label" class="qm-input" name="using_Mailgun" type="checkbox" checked="checked" tabindex="18" onclick='return false;'>
-<label id="qm_mailgun_label" class="qm-label"><?php echo $mg_label; ?>.</label>
-<span id="qm_mailgun_desc" class="qm-label"><?php echo $mg_message; ?></span></p>
-</fieldset>
-<?php endif; ?>
 <?php if ( $you_are_admin ) : ?>
 <fieldset>
 <legend class="recipients"><?php _e( 'Administration', 'quick-mail' ); ?></legend>

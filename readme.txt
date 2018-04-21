@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Requires at least: 4.6
 Tested up to: 5.0
 Requires PHP: 5.3
-Stable tag: 3.4.2
+Stable tag: 3.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,7 +22,7 @@ Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images,
 
 User options for sending email to site users or others.
 
-Privacy options to comply with [General Data Protection Regulation](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation).
+Privacy options to help comply with [General Data Protection Regulation](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation).
 
 Uses sender's name, sets reply to sender's address. Recognizes settings from [Mailgun](https://wordpress.org/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugins.
 
@@ -189,6 +189,9 @@ If you are using an email delivery service, you can ignore this message.
 
 == Changelog ==
 
+= 3.4.3 =
+* Fixed email address validation error. 
+
 = 3.4.2 =
 * WP-CLI command recognizes external mail service settings.
 * fixed reply-to for SparkPost.
@@ -208,6 +211,9 @@ If you are using an email delivery service, you can ignore this message.
 Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.4.3 =
+* Upgrade recommended.
 
 = 3.4.2 =
 * Upgrade recommended.

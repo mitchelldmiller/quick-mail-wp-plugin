@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.4.3
+Version: 3.4.4 Beta
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/quick-mail-3-4-3-for-wordpress/
@@ -132,7 +132,7 @@ class QuickMail {
 	   	add_action( 'admin_footer', array($this, 'qm_get_title_script') );
 	   	add_action( 'admin_enqueue_scripts', array($this, 'add_email_scripts'), 10, 0 );
 	   	add_action( 'admin_menu', array($this, 'init_quick_mail_menu') );
-	   	add_action( 'deactivated_plugin', array($this, 'unload_quick_mail_plugin'), 10, 2 );
+	   	add_action( 'deactivated_plugin', array($this, 'deactivate_quick_mail_plugin'), 10, 2 );
 	   	add_action( 'load-tools_page_quick_mail_form', array( $this, 'add_qm_help' ), 20, 0 );
 	   	add_action( 'plugins_loaded', array($this, 'init_quick_mail_translation') );
 	   	add_action( 'plugins_loaded', array($this, 'show_qm_pointer' ), 10, 0 );
@@ -491,38 +491,13 @@ jQuery(document).ready( function() {
     * @param boolean $network are we on a network?
     * @since 1.1.1
     */
-	public function unload_quick_mail_plugin($plugin, $network) {
+	public function deactivate_quick_mail_plugin($plugin, $network) {
 		if ( !strstr($plugin, 'quick-mail.php') ) {
 			return;
 		} // end if not Quick Mail
-
 		self::remove_qm_pointer();
-		delete_metadata( 'user', 1, 'show_quick_mail_users', '', true );
-		delete_metadata( 'user', 1, 'show_quick_mail_commenters', '', true );
-		delete_metadata( 'user', 1, 'limit_quick_mail_commenters', '', true );
-		delete_metadata( 'user', 1, 'want_quick_mail_privacy', '', true );
-		delete_metadata( 'user', 1, 'save_quick_mail_addresses', '', true );
-		if ( is_multisite() ) {
-			$sites = get_sites();
-			foreach ( $sites as $site ) {
-				delete_blog_option( $site->blog_id, 'show_quick_mail_users' );
-				delete_blog_option( $site->blog_id, 'hide_quick_mail_admin' );
-				delete_blog_option( $site->blog_id, 'editors_quick_mail_privilege' );
-				delete_blog_option( $site->blog_id, 'authors_quick_mail_privilege' );
-				delete_blog_option( $site->blog_id, 'quick_mail_cannot_reply' );
-				delete_blog_option( $site->blog_id, 'verify_quick_mail_addresses' );
-				delete_blog_option( $site->blog_id, 'replace_quick_mail_sender' );
-			} // end foreach
-		} else {
-			delete_option( 'show_quick_mail_users' );
-			delete_option( 'hide_quick_mail_admin' );
-			delete_option( 'editors_quick_mail_privilege' );
-			delete_option( 'authors_quick_mail_privilege' );
-			delete_option( 'quick_mail_cannot_reply' );
-			delete_option( 'verify_quick_mail_addresses' );
-			delete_option( 'replace_quick_mail_sender' );
-		} // end if multisite
-	} // end unload_quick_mail_plugin
+		// self::quick_mail_notice();
+	} // end deactivate_quick_mail_plugin
 
 	/**
 	 * load quick-mail.js for email select and quick-mail-addresses.js to count saved addresses.

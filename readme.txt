@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Requires at least: 4.6
 Tested up to: 5.0
 Requires PHP: 5.3
-Stable tag: 3.4.3
+Stable tag: 3.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,7 +32,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) is an introduction.
 
-* [Quick Mail 3.4.2 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-4-2-maintenance-release/).
+* [Quick Mail 3.4.4 Improves Deactivation](https://wheredidmybraingo.com/quick-mail-3-4-4-improves-deactivation/).
 
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/).
 
@@ -189,28 +189,21 @@ If you are using an email delivery service, you can ignore this message.
 
 == Changelog ==
 
+= 3.4.4 =
+* Options are saved if plugin is deactivated.
+* Options are deleted if plugin in uninstalled. 
+
 = 3.4.3 =
 * Fixed email address validation error. 
-
-= 3.4.2 =
-* WP-CLI command recognizes external mail service settings.
-* fixed reply-to for SparkPost.
-* added reply-to to WP-CLI command.
-
-= 3.4.1 =
-* Fixed Unknown Service error.
-
-= 3.4.0 =
-* Next public release. See [development releases](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases) for more info.
-* Added support for [SparkPost](https://sparkpost.com/) email delivery service and plugin.
-* Better support for mail delivery service settings.
-* Sets reply-to address to sender's address.
 
 = Earlier versions =
 
 Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.4.4 =
+* Upgrade recommended.
 
 = 3.4.3 =
 * Upgrade recommended.

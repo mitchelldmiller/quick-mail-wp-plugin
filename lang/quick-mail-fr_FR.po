@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Quick Mail v3.4.4\n"
+"Project-Id-Version: Quick Mail v3.4.5 Alpha\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-05-12 19:50:59+0000\n"
+"PO-Revision-Date: 2018-09-17 16:41:04+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -22,45 +22,45 @@ msgstr ""
 
 #: inc/qm_util.php:257
 #: inc/qm_util.php:277
-#: quick-mail.php:1148
+#: quick-mail.php:1146
 #@ quick-mail
 msgid "Error: Incomplete User Profile"
 msgstr "Erreur : Profil d’utilisateur incomplet"
 
-#: quick-mail.php:1153
+#: quick-mail.php:1151
 #: quick-mail.php:1591
 #@ quick-mail
 msgid "Login Expired. Refresh Page."
 msgstr "Session expirée. Actualisez la Page."
 
-#: quick-mail.php:1277
+#: quick-mail.php:1275
 #@ quick-mail
 msgid "Error moving file to"
 msgstr "Erreur lors du déplacement du fichier dans"
 
-#: quick-mail.php:1284
+#: quick-mail.php:1282
 #@ quick-mail
 msgid "File Upload Error"
 msgstr "Erreur de téléversement du fichier"
 
-#: quick-mail.php:1270
+#: quick-mail.php:1268
 #@ quick-mail
 msgid "Missing temporary directory"
 msgstr "Répertoire temporaire manquant"
 
 #: inc/quick-mail-cli.php:274
+#: quick-mail.php:1334
 #: quick-mail.php:1336
-#: quick-mail.php:1338
 #@ quick-mail
 msgid "Error sending mail"
 msgstr "Erreur lors de l'envoi"
 
-#: quick-mail.php:1322
+#: quick-mail.php:1320
 #@ quick-mail
 msgid "Message Sent"
 msgstr "Message envoyé"
 
-#: quick-mail.php:1362
+#: quick-mail.php:1360
 #@ quick-mail
 msgid "Error Deleting Upload"
 msgstr "Erreur de suppression de Upload"
@@ -68,24 +68,24 @@ msgstr "Erreur de suppression de Upload"
 #. translators: plugin header field 'Name'
 #: quick-mail.php:0
 #: quick-mail.php:178
-#: quick-mail.php:1414
+#: quick-mail.php:1412
 #: quick-mail.php:2240
 #@ quick-mail
 msgid "Quick Mail"
 msgstr "Courrier Rapide"
 
+#: quick-mail.php:1323
 #: quick-mail.php:1325
-#: quick-mail.php:1327
 #: quick-mail.php:1456
 #: quick-mail.php:1482
 #@ quick-mail
 msgid "To"
 msgstr "À l'attention de"
 
-#: quick-mail.php:551
-#: quick-mail.php:587
-#: quick-mail.php:661
-#: quick-mail.php:697
+#: quick-mail.php:550
+#: quick-mail.php:586
+#: quick-mail.php:660
+#: quick-mail.php:696
 #@ quick-mail
 msgid "Enter mail address"
 msgstr "Saisissez l'adresse email"
@@ -174,11 +174,11 @@ msgstr "Ne pas afficher les utilisateurs."
 msgid "Save Options"
 msgstr "Sauvegarder les options"
 
-#: quick-mail.php:1158
-#: quick-mail.php:1182
-#: quick-mail.php:1191
-#: quick-mail.php:1216
-#: quick-mail.php:1411
+#: quick-mail.php:1156
+#: quick-mail.php:1180
+#: quick-mail.php:1189
+#: quick-mail.php:1214
+#: quick-mail.php:1409
 #@ quick-mail
 msgid "Invalid mail address"
 msgstr "Adresse e-mail invalide"
@@ -206,7 +206,7 @@ msgstr "Configuration"
 msgid "Grant Editors access to user list"
 msgstr "Accorder l&rsquo;accès aux Editeurs"
 
-#: quick-mail.php:1282
+#: quick-mail.php:1280
 #@ quick-mail
 msgid "Uploaded file was too large"
 msgstr "Le fichier téléchargé est trop volumineux"
@@ -237,13 +237,13 @@ msgstr "Support"
 #: inc/qm_util.php:276
 #: inc/quick-mail-sender.php:71
 #: quick-mail.php:352
-#: quick-mail.php:1008
-#: quick-mail.php:1158
+#: quick-mail.php:1006
+#: quick-mail.php:1156
 #@ quick-mail
 msgid "Mail Error"
 msgstr "Erreur sur l'email"
 
-#: quick-mail.php:1227
+#: quick-mail.php:1225
 #@ quick-mail
 msgid "No subject"
 msgstr "Pas d&apos;objet"
@@ -305,7 +305,7 @@ msgstr "https://fr.wordpress.org/plugins/quick-mail/faq/"
 msgid "http://php.net/manual/en/function.idn-to-ascii.php"
 msgstr "http://fr.php.net/manual/fr/function.idn-to-ascii.php"
 
-#: quick-mail.php:1233
+#: quick-mail.php:1231
 #@ quick-mail
 msgid "Please enter your message"
 msgstr "Merci de saisir votre message."
@@ -340,34 +340,34 @@ msgstr "Ressources"
 msgid "has more information"
 msgstr "has more information"
 
-#: quick-mail.php:1386
+#: quick-mail.php:1384
 #: quick-mail.php:2581
 #@ quick-mail
 msgid "File uploads are not available on your device"
 msgstr "Téléchargements de fichiers ne sont pas disponibles sur votre appareil"
 
-#: quick-mail.php:1388
+#: quick-mail.php:1386
 #: quick-mail.php:2579
 #@ quick-mail
 msgid "File uploads were disabled by system administrator"
 msgstr "Téléchargements de fichiers ont été désactivés par l’administrateur système"
 
-#: quick-mail.php:1167
-#: quick-mail.php:1218
-#: quick-mail.php:1436
+#: quick-mail.php:1165
+#: quick-mail.php:1216
+#: quick-mail.php:1434
 #@ quick-mail
 msgid "Duplicate mail address"
 msgstr "Adresse de messagerie en double"
 
-#: quick-mail.php:1323
+#: quick-mail.php:1321
+#: quick-mail.php:1442
 #: quick-mail.php:1488
-#: quick-mail.php:1490
 #: quick-mail.php:1497
 #@ quick-mail
 msgid "CC"
 msgstr "CC"
 
-#: quick-mail.php:1438
+#: quick-mail.php:1436
 #@ quick-mail
 msgid "Quick Mail requires Javascript"
 msgstr "Courrier Rapide nécessite Javascript"
@@ -493,7 +493,7 @@ msgstr "Vous pouvez joindre plusieurs fichiers à votre message"
 msgid "from up to six directories"
 msgstr "de répertoires jusqu'à six"
 
-#: quick-mail.php:1261
+#: quick-mail.php:1259
 #@ quick-mail
 msgid "Duplicate attachments"
 msgstr "Accessoires en double"
@@ -503,12 +503,12 @@ msgstr "Accessoires en double"
 msgid "Help Others"
 msgstr "Aider les autres"
 
-#: quick-mail.php:515
+#: quick-mail.php:514
 #@ quick-mail
 msgid "Clear 1 saved address"
 msgstr "Effacer 1 adresse enregistrée"
 
-#: quick-mail.php:516
+#: quick-mail.php:515
 #, php-format
 #@ quick-mail
 msgid "Clear %s saved addresses"
@@ -535,9 +535,9 @@ msgstr "Enregistre les 12 adresses."
 msgid "https://wheredidmybraingo.com/"
 msgstr "https://wheredidmybraingo.com/"
 
-#: quick-mail.php:1323
+#: quick-mail.php:1321
+#: quick-mail.php:1443
 #: quick-mail.php:1489
-#: quick-mail.php:1490
 #@ quick-mail
 msgid "BCC"
 msgstr "BCC"
@@ -623,22 +623,22 @@ msgstr "Appliquer"
 msgid "to HTML messages"
 msgstr "aux messages HTML"
 
-#: quick-mail.php:1013
+#: quick-mail.php:1011
 #@ quick-mail
 msgid "You"
 msgstr "Vous"
 
-#: quick-mail.php:1015
+#: quick-mail.php:1013
 #@ quick-mail
 msgid "said"
 msgstr "dit"
 
-#: quick-mail.php:1036
+#: quick-mail.php:1034
 #@ quick-mail
 msgid "Cannot reply. Invalid mail address."
 msgstr "Ne peut pas répondre. Adresse mail non valide."
 
-#: quick-mail.php:748
+#: quick-mail.php:747
 #@ quick-mail
 msgid "No comments for you."
 msgstr "Pas de commentaires pour vous."
@@ -774,7 +774,7 @@ msgstr "Afficher tous les utilisateurs triés par Pseudo"
 msgid "Show users with names, sorted by last name"
 msgstr "Afficher les utilisateurs avec les noms, triés par nom"
 
-#: quick-mail.php:1008
+#: quick-mail.php:1006
 #@ quick-mail
 msgid "Comments disabled by system administrator."
 msgstr "Commentaires désactivés par l'administrateur système."
@@ -979,7 +979,7 @@ msgstr "Envoi de courrier avec"
 msgid "plugin"
 msgstr "plugin"
 
-#: quick-mail.php:1331
+#: quick-mail.php:1329
 #@ quick-mail
 msgid "Mailgun Error sending mail"
 msgstr "Erreur Mailgun envoi de courrier"
@@ -1137,7 +1137,7 @@ msgstr "Type de message non valide"
 msgid "Duplicate"
 msgstr "Double"
 
-#: quick-mail.php:748
+#: quick-mail.php:747
 #@ quick-mail
 msgid "No recent comments for you."
 msgstr "Pas de commentaires récents pour vous."
@@ -1183,7 +1183,7 @@ msgstr "Limiter les commentaires affichés au nombre passé de jours."
 msgid "Hide comments to posts modified over selected days ago."
 msgstr "Masquer les commentaires aux messages modifiés il y a quelques jours."
 
-#: quick-mail.php:981
+#: quick-mail.php:980
 #@ quick-mail
 msgid "Privacy Error"
 msgstr "Erreur de confidentialité"
@@ -1208,7 +1208,7 @@ msgstr "Accordez l'autorisation Quick mail pour enregistrer les adresses de dest
 msgid "Permission is required to send mail."
 msgstr "L'autorisation est requise pour envoyer du courrier."
 
-#: quick-mail.php:981
+#: quick-mail.php:980
 #@ quick-mail
 msgid "Please grant permission to use your email address."
 msgstr "S'il vous plaît accorder la permission d'utiliser votre adresse e-mail."
@@ -1218,7 +1218,7 @@ msgstr "S'il vous plaît accorder la permission d'utiliser votre adresse e-mail.
 msgid "Permission is required to save addresses. Addresses will not be shared."
 msgstr "L'autorisation est requise pour enregistrer les adresses. Les adresses ne seront pas partagées."
 
-#: quick-mail.php:1333
+#: quick-mail.php:1331
 #@ quick-mail
 msgid "SparkPost Error sending mail"
 msgstr "Erreur SparkPost envoi de courrier"
@@ -1253,7 +1253,7 @@ msgstr "Envoi de courrier avec SparkPost"
 msgid "Sending mail with Mailgun"
 msgstr "Envoi de courrier avec Mailgun"
 
-#: quick-mail.php:1335
+#: quick-mail.php:1333
 #: quick-mail.php:1898
 #: quick-mail.php:2337
 #: quick-mail.php:2456
@@ -1297,7 +1297,7 @@ msgstr "pour livrer le courrier."
 msgid "Please grant permission to use your mail address."
 msgstr "Veuillez accorder l'autorisation d'utiliser votre adresse mail."
 
-#: quick-mail.php:1411
+#: quick-mail.php:1409
 #@ quick-mail
 msgid "Cannot verify address"
 msgstr "Impossible de vérifier l'adresse"
@@ -1341,12 +1341,12 @@ msgstr "Seuls les administrateurs peuvent envoyer du courrier avec WP-CLI."
 #. translators: plugin header field 'PluginURI'
 #: quick-mail.php:0
 #@ quick-mail
-msgid "https://wheredidmybraingo.com/quick-mail-3-4-4-improves-deactivation/"
-msgstr "https://wheredidmybraingo.com/quick-mail-3-4-4-improves-deactivation/"
+msgid "https://wheredidmybraingo.com/tag/quick-mail/"
+msgstr "https://wheredidmybraingo.com/tag/quick-mail/"
 
 #. translators: plugin header field 'Version'
 #: quick-mail.php:0
 #@ quick-mail
-msgid "3.4.4"
-msgstr "3.4.4"
+msgid "3.4.5 Alpha"
+msgstr "3.4.5 Alpha"
 

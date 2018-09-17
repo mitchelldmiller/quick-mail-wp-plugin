@@ -2,10 +2,10 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.4.4
+Version: 3.4.5 Alpha
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
-Plugin URI: https://wheredidmybraingo.com/quick-mail-3-4-4-improves-deactivation/
+Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
 Text Domain: quick-mail
 Domain Path: /lang
 License: GPL-2.0+
@@ -383,7 +383,7 @@ class QuickMail {
     * @since 1.2.0
     */
 	public function install_quick_mail($plugin, $network) {
-		if ( !strstr($plugin, 'quick-mail.php') ) {
+		if ( !strstr($plugin, basename( __FILE__ ) ) ) {
 			return;
 		} // end if not Quick Mail
 
@@ -492,11 +492,10 @@ jQuery(document).ready( function() {
     * @since 1.1.1
     */
 	public function deactivate_quick_mail_plugin($plugin, $network) {
-		if ( !strstr($plugin, 'quick-mail.php') ) {
+		if ( !strstr($plugin, basename( __FILE__ ) ) ) {
 			return;
 		} // end if not Quick Mail
 		self::remove_qm_pointer();
-		// self::quick_mail_notice();
 	} // end deactivate_quick_mail_plugin
 
 	/**
@@ -971,7 +970,7 @@ jQuery(document).ready( function() {
 		$raw_msg = '';
 
 		$want_privacy = get_user_option( 'want_quick_mail_privacy', get_current_user_id() );
-		if ( $want_privacy != 'N') {
+		if ( 'N' != $want_privacy ) {
 			$want_privacy = 'Y';
 		} // end if not set
 		if ( 'Y' == $want_privacy ) {
@@ -987,7 +986,6 @@ jQuery(document).ready( function() {
 		}
 
 		// get sender name, email, reply to
-
 		$blog = is_multisite() ? get_current_blog_id() : 0;
 		$you = wp_get_current_user();
 		$you_are_admin = $this->qm_is_admin( $you->ID, $blog );
@@ -1441,6 +1439,8 @@ $ecss = $your_str ? 'error notice': 'error notice is-dismissible';
 		<div class="indented">
 <?php wp_nonce_field( 'qm205', 'qm205', false, true ); ?>
 <input type="hidden" name="qm-invalid" id="qm-invalid" value="0">
+<input type="hidden" name="qm_say_cc" id="qm_say_cc" value="<?php  _e( 'CC', 'quick-mail' ); ?>">
+<input type="hidden" name="qm_say_bcc" id="qm_say_bcc" value="<?php _e( 'BCC', 'quick-mail' ); ?>">
 <input id="save_addresses" name="save_addresses" type="hidden" value="<?php echo $save_addresses; ?>">
 <?php if ( ! empty( $no_uploads ) || ! empty( $_POST['quick-mail-uploads'] ) ) : ?>
 	<input type="hidden" name="quick-mail-uploads" value="No">
@@ -1487,7 +1487,7 @@ if ( empty( $commenter ) && 'X' == $this->qm_get_display_option( $blog ) ) : ?>
 <fieldset>
 <label id="qmcc_label" for="qm-cc" class="recipients"><?php _e( 'CC', 'quick-mail' ); ?></label>
 <label id="qmbcc_label" for="qm_bcc" class="qm-label"><?php _e( 'BCC', 'quick-mail' ); ?></label>
-<input tabindex="2" type="checkbox" id="qm_bcc" name="qm_bcc" onchange="if (jQuery('#qm_bcc').is(':checked')) { jQuery('#qmcc_label').text('<?php _e( 'BCC', 'quick-mail' ); ?>'); } else { jQuery('#qmcc_label').text('<?php _e( 'CC', 'quick-mail' ); ?>') }">
+<input tabindex="2" type="checkbox" id="qm_bcc" name="qm_bcc">
 <p><?php echo $this->quick_mail_cc_input( $to, $mcc, $you->ID ); ?></p>
 </fieldset>
 <?php endif; ?>
@@ -2139,7 +2139,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 	 * @since 2.0.0
 	 */
 	protected function qm_admin_count( $blog ) {
-		if ($blog == 0) {
+		if ( 0 == $blog ) {
 			$user_query = new WP_User_Query( array( 'role' => 'Administrator',
 					'count_total' => true ) );
 		} else {
@@ -2196,7 +2196,7 @@ if ( !$this->multiple_matching_users( 'A', $blog ) ) {
 		$retval = array();
 		foreach ( $actions as $k => $v ) {
 			$retval[$k] = $v;
-			if ('reply' == $k) {
+			if ( 'reply' == $k ) {
 				$retval['quickmail'] = "<a {$css} href='{$qm_url}' aria-label='{$ereply}'>{$reply}</a>";
 			}
 		} // end foreach

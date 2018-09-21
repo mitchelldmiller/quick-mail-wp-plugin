@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.4.5 Alpha
+Version: 3.4.5 Beta
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
@@ -590,7 +590,7 @@ jQuery(document).ready( function() {
       sort( $users );
       $letter = '';
       ob_start();
-      echo '<select aria-labelledby="qme_label" name="qm-email" id="qm-primary" required aria-required="true" size="1" tabindex="0" autofocus onchange="return is_qm_email_dup()"><option class="qmopt" value="" selected>Select</option>';
+      echo '<select aria-labelledby="qme_label" name="qm-email" id="qm-primary" required aria-required="true" size="1" tabindex="0" autofocus><option class="qmopt" value="" selected>Select</option>';
       for ( $i = 0; $i < $j; $i++ ) {
          $row = explode( "\t", $users[$i] );
          if ($option == 'A') {
@@ -700,7 +700,7 @@ jQuery(document).ready( function() {
 	   	sort( $users );
 	   	$letter = '';
 	   	ob_start();
-	   	echo '<select aria-labelledby="qmcc_label" name="qm-cc[]" id="qm-secondary" multiple size="6" tabindex="3" onchange="return is_qm_email_dup()"><option class="qmopt" value="" selected>Select</option>';
+	   	echo '<select aria-labelledby="qmcc_label" name="qm-cc[]" id="qm-secondary" multiple size="6" tabindex="3"><option class="qmopt" value="" selected>Select</option>';
 	   	for ( $i = 0; $i < $j; $i++ ) {
 	   		$row = explode( "\t", $users[$i] );
 	   		if ($option == 'A') 	{

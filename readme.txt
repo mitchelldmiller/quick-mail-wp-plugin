@@ -189,6 +189,10 @@ If you are using an email delivery service, you can ignore this message.
 
 == Changelog ==
 
+= 3.5.0 =
+* Fixed error where empty message was displayed.
+* Edited PHP to use WordPress Coding Standards.
+
 = 3.4.4 =
 * Options are saved if plugin is deactivated.
 * Options are deleted if plugin in uninstalled. 
@@ -201,6 +205,9 @@ If you are using an email delivery service, you can ignore this message.
 Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.5.0 =
+* Upgrade recommended.
 
 = 3.4.4 =
 * Upgrade recommended.

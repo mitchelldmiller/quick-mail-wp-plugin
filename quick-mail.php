@@ -2090,7 +2090,7 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 <span id="qm_grant_desc" class="qm-label"><?php esc_html_e( 'Let editors see user list.', 'quick-mail' ); ?></span></p>
 <p><input tabindex="80" aria-describedby="qm_verify_desc" aria-labelledby="qm_verify_label" class="qm-input" name="verify_quick_mail_addresses" type="checkbox" <?php echo $check_verify; ?>>
 <label id="qm_verify_label" class="qm-label"><?php esc_html_e( 'Verify recipient email domains', 'quick-mail' ); ?>.</label>
-<span id="qm_verify_desc" class="qm-label"><?php echo esc_html( $verify_note ); ?></span></p>
+<span id="qm_verify_desc" class="qm-label"><?php echo $verify_note; ?></span></p>
 </fieldset>
 <?php endif; ?>
 		<?php

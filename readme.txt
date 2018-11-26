@@ -190,7 +190,7 @@ If you are using an email delivery service, you can ignore this message.
 == Changelog ==
 
 = 3.5.0 =
-* Fixed error where empty message was displayed.
+* Fixed empty error message.
 * Edited PHP to use WordPress Coding Standards.
 
 = 3.4.4 =

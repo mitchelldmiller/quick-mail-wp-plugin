@@ -2073,7 +2073,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 				<?php
 				$admins  = $this->qm_admin_count( $blog );
 				$profile = sprintf( _n( '%s administrator profile', '%s administrator profiles', $admins, 'quick-mail' ), $admins );
-				echo sprintf( '<span id="qm_hide_desc" class="qm-label">%s %s</span>', esc_html_e( 'User list will not include', 'quick-mail' ), " {$profile}." );
+				echo sprintf( '<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User list will not include', 'quick-mail' ), " {$profile}." );
 				?>
 			<?php endif; ?>
 <input name="showing_quick_mail_admin" type="hidden" value="Y"></p>

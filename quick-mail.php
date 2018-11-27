@@ -1,5 +1,5 @@
 <?php
-/*
+/**
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
 Version: 3.5.0 Beta
@@ -10,7 +10,9 @@ Text Domain: quick-mail
 Domain Path: /lang
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
-*/
+
+@package QuickMail
+ */
 
 /*
  * Quick Mail WordPress Plugin - Send mail from WordPress using Quick Mail
@@ -39,6 +41,10 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	require_once dirname( __FILE__ ) . '/inc/class-quick-mail-command.php';
 }
 
+/**
+ *
+ * Send mail, reply to comments from WP Dashboard.
+ */
 class QuickMail {
 
 	/**
@@ -675,10 +681,10 @@ jQuery(document).ready( function() {
 			} // end if first letter changed
 
 			$role = '';
-			if ( 'B' == $option || 'O' == $option ) {
-				$user_meta = get_userdata($row[2]);
-				if ( !empty($user_meta->roles) ) {
-					$role = ' (' . ucfirst($user_meta->roles[0]) . ')';
+			if ( 'B' === $option || 'O' === $option ) {
+				$user_meta = get_userdata( $row[2] );
+				if ( ! empty( $user_meta->roles ) ) {
+					$role = ' (' . ucfirst( $user_meta->roles[0] ) . ')';
 				} // end if found role.
 			} // end if want role.
 
@@ -775,12 +781,12 @@ jQuery(document).ready( function() {
 		ob_start();
 		echo '<select aria-labelledby="qmcc_label" name="qm-cc[]" id="qm-secondary" multiple size="6" tabindex="3"><option class="qmopt" value="" selected>Select</option>';
 		for ( $i = 0; $i < $j; $i++ ) {
-			$row = explode( "\t", $users[ $i ] );
+			$row  = explode( "\t", $users[ $i ] );
 			$role = '';
-			if ( 'B' == $option || 'O' == $option ) {
-				$user_meta = get_userdata($row[2]);
-				if ( !empty($user_meta->roles) ) {
-					$role = ' (' . ucfirst($user_meta->roles[0]) . ')';
+			if ( 'B' === $option || 'O' === $option ) {
+				$user_meta = get_userdata( $row[2] );
+				if ( ! empty( $user_meta->roles ) ) {
+					$role = ' (' . ucfirst( $user_meta->roles[0] ) . ')';
 				} // end if found role.
 			} // end if want role.
 
@@ -798,7 +804,7 @@ jQuery(document).ready( function() {
 				echo "<optgroup class='qmog' label='{$letter}'>";
 			} // end if first letter changed
 
-			if ( 'A' === $option || 'B' == $option ) {
+			if ( 'A' === $option || 'B' === $option ) {
 				$selected = ( $row[1] !== $cc ) ? ' ' : ' selected ';
 				echo "<option{$selected}value='{$address}' class='qmopt'>{$row[0]}{$role}</option>";
 			} else {
@@ -1696,11 +1702,11 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 		} // end if new value was not set 3.2.6
 
 		// Check new roles.
-		$previous = $this->qm_get_display_option( $blog );
+		$previous       = $this->qm_get_display_option( $blog );
 		$cur_want_roles = ! empty( $_POST['show_quick_mail_roles'] );
 		if ( ! empty( $_POST['show_quick_mail_users'] ) && 1 === strlen( $_POST['show_quick_mail_users'] ) ) {
 			$current = $_POST['show_quick_mail_users'];
-			if ($cur_want_roles) {
+			if ( $cur_want_roles ) {
 				$current++;
 			} // end if user wants to see roles.
 
@@ -1892,11 +1898,11 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			} // end if
 		} // end for
 
-		$display = $this->qm_get_display_option( $blog ); // TODO add role here
-		$check_roles = ($display === 'B' || $display === 'O') ? 'checked="checked"' : '';
-		$check_all = ($display === 'A' || $display === 'B') ? 'checked="checked"' : '';
-		$check_names = ($display === 'N' || $display === 'O') ? 'checked="checked"' : '';
-		$check_none = ($display === 'X') ? 'checked="checked"' : '';
+		$display          = $this->qm_get_display_option( $blog );
+		$check_roles      = ( $display === 'B' || $display === 'O' ) ? 'checked="checked"' : '';
+		$check_all        = ( $display === 'A' || $display === 'B' ) ? 'checked="checked"' : '';
+		$check_names      = ( $display === 'N' || $display === 'O' ) ? 'checked="checked"' : '';
+		$check_none       = ( $display === 'X' ) ? 'checked="checked"' : '';
 		$check_save       = ( 'Y' === $save_addresses ) ? 'checked="checked"' : '';
 		$check_privacy    = ( 'N' === $want_privacy ) ? 'checked="checked"' : '';
 		$check_wpautop    = ( '1' === get_user_meta( $you->ID, 'qm_wpautop', true ) ) ? 'checked="checked"' : '';
@@ -1966,12 +1972,14 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 		);
 		$space          = '';
 		$comment_label  = '';
-		if ( ! $this->multiple_matching_users( 'A', $blog ) ) {
-			$space         = ' style="margin-top:2em;" ';
-			$comment_label = __( 'Select recipient from commenters', 'quick-mail' );
-		} else {
-			$comment_label = __( 'Display Commenters instead of users', 'quick-mail' );
-		} // end if no users
+		if ( QuickMailUtil::user_has_comments( $you->ID ) ) {
+			if ( ! $this->multiple_matching_users( 'A', $blog ) ) {
+				$space         = ' style="margin-top:2em;" ';
+				$comment_label = __( 'Select recipient from commenters', 'quick-mail' );
+			} else {
+				$comment_label = __( 'Display Commenters instead of users', 'quick-mail' );
+			} // end if no users
+		} // end if user has any comments
 
 		if ( ! $you_are_admin ) {
 			$cannot_reply = '';
@@ -2024,7 +2032,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 		$sendgridlabel = '';
 		$sendgrid_desc = '';
 		if ( QuickMailUtil::got_sendgrid_info() ) {
-			$rname        = __( 'SendGrid', 'quick-mail' );
+			$rname          = __( 'SendGrid', 'quick-mail' );
 			$sendgrid_label = sprintf(
 				'%s %s %s',
 				__( 'Use', 'quick-mail' ),

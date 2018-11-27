@@ -669,4 +669,22 @@ class QuickMailUtil {
 		return is_string( $result );
 	} // end matches_email_domain
 
+	/**
+	 * Does this user have comments?
+	 *
+	 * @param integer $id User ID.
+	 * @return boolean if user has any comments.
+	 * @since 3.5.0
+	 */
+	public static function user_has_comments( $id ) {
+		$args   = array(
+			'post_author' => $id,
+			'post_status' => 'publish',
+			'status'      => 'approve',
+			'count'       => true,
+		);
+		$cquery = get_comments( $args );
+		return ( 0 < $cquery );
+	} // end user_has_comments
+
 } // end class

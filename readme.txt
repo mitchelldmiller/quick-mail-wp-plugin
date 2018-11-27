@@ -190,6 +190,7 @@ If you are using an email delivery service, you can ignore this message.
 == Changelog ==
 
 = 3.5.0 =
+* Only show "Select recipient from commenters" if user has comments.
 * Added option for administrators to see WP roles on user list.
 * Fixed empty error message.
 * Edited PHP to use WordPress Coding Standards.

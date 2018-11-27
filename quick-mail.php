@@ -2,7 +2,7 @@
 /*
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.5.0 Alpha
+Version: 3.5.0 Beta
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
@@ -277,7 +277,7 @@ class QuickMail {
 			$hide_admin = get_option( 'hide_quick_mail_admin', 'N' );
 		} // end if
 
-		if ( 'A' === $code ) {
+		if ( 'A' === $code || 'B' === $code ) {
 			if ( $blog > 1 ) {
 				if ( 'Y' === $hide_admin ) {
 					$args = array(
@@ -300,8 +300,8 @@ class QuickMail {
 			} // end if multisite
 
 			$info = get_users( $args );
-			return 1 < count( $info ); // 2.0.4
-		} // end if ALL
+			return 1 < count( $info );
+		} // end if ALL or ALL + roles.
 
 		// Check for first and last names.
 		$meta_query = array(
@@ -610,10 +610,11 @@ jQuery(document).ready( function() {
 			} // end if editors not allowed to see list
 		} // end if wants user list
 
-		if ( 'A' !== $option && 'N' !== $option ) {
+		if ( 'A' !== $option && 'B' !== $option && 'N' !== $option && 'O' !== $option ) {
 			echo sprintf( $template, $to, esc_html( __( 'Enter mail address', 'quick-mail' ) ) );
 			return;
-		}
+		} // end if invalid option.
+
 		$hide_admin = '';
 		if ( is_multisite() ) {
 			$hide_admin = get_blog_option( $blog, 'hide_quick_mail_admin', 'N' );
@@ -635,7 +636,7 @@ jQuery(document).ready( function() {
 				continue;
 			} // end duplicate email test
 
-			if ( 'A' === $option ) {
+			if ( 'A' === $option || 'B' === $option ) {
 				$nickname = ucfirst( get_user_meta( $user->ID, 'nickname', true ) );
 				$users[]  = "{$nickname}\t{$user->user_email}";
 			} else {
@@ -673,12 +674,20 @@ jQuery(document).ready( function() {
 				echo "<optgroup class='qmog' label='{$letter}'>";
 			} // end if first letter changed
 
-			if ( 'A' === $option ) {
+			$role = '';
+			if ( 'B' == $option || 'O' == $option ) {
+				$user_meta = get_userdata($row[2]);
+				if ( !empty($user_meta->roles) ) {
+					$role = ' (' . ucfirst($user_meta->roles[0]) . ')';
+				} // end if found role.
+			} // end if want role.
+
+			if ( 'A' === $option || 'B' === $option ) {
 				$selected = ( $row[1] !== $to ) ? ' ' : ' selected ';
-				echo "<option{$selected}value='{$address}' class='qmopt'>{$row[0]}</option>";
+				echo "<option{$selected}value='{$address}' class='qmopt'>{$row[0]}{$role}</option>";
 			} else {
 				$selected = ( $row[3] !== $to ) ? ' ' : ' selected ';
-				echo "<option{$selected}value='{$address}' class='qmopt'>{$row[1]} {$row[0]}</option>";
+				echo "<option{$selected}value='{$address}' class='qmopt'>{$row[1]} {$row[0]}{$role}</option>";
 			}
 		} // end for
 		echo '</optgroup></select>';
@@ -721,7 +730,7 @@ jQuery(document).ready( function() {
 			} // end if editors not allowed to see list
 		} // end if wants user list
 
-		if ( 'A' !== $option && 'N' !== $option ) {
+		if ( 'A' !== $option && 'B' !== $option && 'N' !== $option && 'O' !== $option ) {
 			echo sprintf( $template, $cc, __( 'Enter mail address', 'quick-mail' ) );
 			return;
 		}
@@ -767,7 +776,15 @@ jQuery(document).ready( function() {
 		echo '<select aria-labelledby="qmcc_label" name="qm-cc[]" id="qm-secondary" multiple size="6" tabindex="3"><option class="qmopt" value="" selected>Select</option>';
 		for ( $i = 0; $i < $j; $i++ ) {
 			$row = explode( "\t", $users[ $i ] );
-			if ( 'A' === $option ) {
+			$role = '';
+			if ( 'B' == $option || 'O' == $option ) {
+				$user_meta = get_userdata($row[2]);
+				if ( !empty($user_meta->roles) ) {
+					$role = ' (' . ucfirst($user_meta->roles[0]) . ')';
+				} // end if found role.
+			} // end if want role.
+
+			if ( 'A' === $option || 'B' == $option ) {
 				$address = rawurlencode( "\"{$row[0]}\" <{$row[1]}>" );
 			} else {
 				$address = rawurlencode( "\"{$row[1]} {$row[0]}\" <{$row[3]}>" );
@@ -781,18 +798,18 @@ jQuery(document).ready( function() {
 				echo "<optgroup class='qmog' label='{$letter}'>";
 			} // end if first letter changed
 
-			if ( 'A' === $option ) {
+			if ( 'A' === $option || 'B' == $option ) {
 				$selected = ( $row[1] !== $cc ) ? ' ' : ' selected ';
-				echo "<option{$selected}value='{$address}' class='qmopt'>{$row[0]}</option>";
+				echo "<option{$selected}value='{$address}' class='qmopt'>{$row[0]}{$role}</option>";
 			} else {
 				$selected = ( $row[3] !== $cc ) ? ' ' : ' selected ';
-				echo "<option{$selected}value='{$address}' class='qmopt'>{$row[1]} {$row[0]}</option>";
+				echo "<option{$selected}value='{$address}' class='qmopt'>{$row[1]} {$row[0]}{$role}</option>";
 			}
 		} // end for
 
 		echo '</optgroup></select>';
 		return ob_get_clean();
-	} // end quick_mail_cc_input
+	} // end quick_mail_cc_input.
 
 	/**
 	 * Get list of commenters from posts / pages with comments open.
@@ -1678,11 +1695,18 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			update_user_meta( $you->ID, 'limit_quick_mail_commenters', 7, $previous );
 		} // end if new value was not set 3.2.6
 
+		// Check new roles.
+		$previous = $this->qm_get_display_option( $blog );
+		$cur_want_roles = ! empty( $_POST['show_quick_mail_roles'] );
 		if ( ! empty( $_POST['show_quick_mail_users'] ) && 1 === strlen( $_POST['show_quick_mail_users'] ) ) {
-			$previous = $this->qm_get_display_option( $blog );
-			if ( $previous !== $_POST['show_quick_mail_users'] ) {
+			$current = $_POST['show_quick_mail_users'];
+			if ($cur_want_roles) {
+				$current++;
+			} // end if user wants to see roles.
+
+			if ( $previous !== $current ) {
 				if ( $this->multiple_matching_users( $_POST['show_quick_mail_users'], $blog ) ) {
-					$this->qm_update_option( 'show_quick_mail_users', $_POST['show_quick_mail_users'] );
+					$this->qm_update_option( 'show_quick_mail_users', $current );
 					$updated = true;
 				} // end if valid option, but invalid options should not be displayed
 			} // end if display option changed
@@ -1763,7 +1787,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 					} // end if multisite
 
 					$updated = true;
-				} // end if replace_quick_mail_sender value changed
+				} // end if replace_quick_mail_sender value changed.
 
 				$previous = '';
 				if ( is_multisite() ) {
@@ -1781,8 +1805,8 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 					} // end if multisite
 					if ( ! $updated ) {
 						$updated = true;
-					} // end if updated not displayed
-				} // end if value changed
+					} // end if updated not displayed.
+				} // end if value changed.
 
 				$previous = '';
 				if ( is_multisite() ) {
@@ -1868,14 +1892,16 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			} // end if
 		} // end for
 
+		$display = $this->qm_get_display_option( $blog ); // TODO add role here
+		$check_roles = ($display === 'B' || $display === 'O') ? 'checked="checked"' : '';
+		$check_all = ($display === 'A' || $display === 'B') ? 'checked="checked"' : '';
+		$check_names = ($display === 'N' || $display === 'O') ? 'checked="checked"' : '';
+		$check_none = ($display === 'X') ? 'checked="checked"' : '';
 		$check_save       = ( 'Y' === $save_addresses ) ? 'checked="checked"' : '';
 		$check_privacy    = ( 'N' === $want_privacy ) ? 'checked="checked"' : '';
 		$check_wpautop    = ( '1' === get_user_meta( $you->ID, 'qm_wpautop', true ) ) ? 'checked="checked"' : '';
 		$check_commenters = $this->user_can_reply_to_comments( false ) ? 'checked="checked"' : '';
 		$limit_commenters = get_user_option( 'limit_quick_mail_commenters', $you->ID );
-		$check_all        = ( 'A' === $this->qm_get_display_option( $blog ) ) ? 'checked="checked"' : '';
-		$check_names      = ( 'N' === $this->qm_get_display_option( $blog ) ) ? 'checked="checked"' : '';
-		$check_none       = ( 'X' === $this->qm_get_display_option( $blog ) ) ? 'checked="checked"' : '';
 		$list_warning     = '';
 		if ( 3 > $total && 'X' !== $this->qm_get_display_option( $blog ) ) {
 			$note         = ' <strong>' . __( 'NOTE', 'quick-mail' ) . ' : </strong> ';
@@ -1888,7 +1914,6 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 		$author_option   = '';
 		$verify_option   = '';
 		$sendgrid_option = '';
-		$logging_option  = 'Y';
 		if ( is_multisite() ) {
 			$admin_option        = get_blog_option( $blog, 'hide_quick_mail_admin', 'N' );
 			$editor_option       = get_blog_option( $blog, 'editors_quick_mail_privilege', 'N' );
@@ -1896,7 +1921,6 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			$cannot_reply_option = get_blog_option( $blog, 'quick_mail_cannot_reply', 'N' );
 			$verify_option       = get_blog_option( $blog, 'verify_quick_mail_addresses', 'N' );
 			$sendgrid_option     = get_blog_option( $blog, 'replace_quick_mail_sender', 'N' );
-			$logging_option      = get_blog_option( $blog, 'quick_mail_logging', 'N' );
 		} else {
 			$admin_option        = get_option( 'hide_quick_mail_admin', 'N' );
 			$editor_option       = get_option( 'editors_quick_mail_privilege', 'N' );
@@ -1904,7 +1928,6 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			$cannot_reply_option = get_option( 'quick_mail_cannot_reply', 'N' );
 			$verify_option       = get_option( 'verify_quick_mail_addresses', 'N' );
 			$sendgrid_option     = get_option( 'replace_quick_mail_sender', 'N' );
-			$logging_option      = get_option( 'quick_mail_logging', 'N' );
 		} // end if multisite
 
 		$check_admin        = ( 'Y' === $admin_option ) ? 'checked="checked"' : '';
@@ -1915,7 +1938,6 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 		$check_cannot_reply = ( 'Y' === $cannot_reply_option ) ? 'checked="checked"' : '';
 		$check_privacy      = ( 'N' === $want_privacy ) ? 'checked="checked"' : '';
 		$check_save         = ( 'Y' === $save_addresses ) ? 'checked="checked"' : '';
-		$check_logging      = ( 'Y' === $logging_option ) ? 'checked="checked"' : '';
 
 		$english_dns    = __( 'http://php.net/manual/en/function.checkdnsrr.php', 'quick-mail' );
 		$dnserr_link    = "<a target='_blank' href='{$english_dns}'>checkdnsrr</a>";
@@ -2121,6 +2143,17 @@ type="checkbox" value="Y" <?php echo $check_commenters; ?>>
 		<?php endif; ?>
 		<?php if ( ! empty( $list_warning ) ) : ?>
 <p role="alert" id="qm-warning"><?php echo $list_warning; ?></p>
+		<?php endif; ?>
+
+		<?php if ( $this->multiple_matching_users( 'A', $blog ) && $you_are_admin ) : ?>
+		<p id="show_roles_row"><input tabindex="115"
+		aria-describedby="qm_roles_desc"
+		aria-labelledby="qm_role_label" id="show_quick_mail_roles"
+		class="qm-input" name="show_quick_mail_roles" <?php echo $check_roles; ?>
+type="checkbox" value="Y">
+<label id="qm_commenter_label" for="show_quick_mail_roles"
+class="qm-label"><?php _e( 'Show user roles', 'quick-mail' ); ?></label>
+<span id="qm_roles_desc" class="qm-label"><?php _e( 'Let administrators see role on user list.', 'quick-mail' ); ?></span></p>
 		<?php endif; ?>
 		<?php if ( $this->multiple_matching_users( 'A', $blog ) ) : ?>
 <p><input tabindex="120" aria-describedby="qm_all_desc" aria-labelledby="qm_all_label" id="qm_all_users" class="qm-input" name="show_quick_mail_users" type="radio" value="A" <?php echo $check_all; ?>>

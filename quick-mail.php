@@ -2,7 +2,7 @@
 /**
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.5.0 Beta
+Version: 3.5.0 RC1
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
@@ -200,19 +200,25 @@ class QuickMail {
 	 * @return array args for WP_Screen::add_help_tab(array $args)
 	 */
 	public static function get_qm_comment_help_tab() {
-		$qm_desc     = __( 'Send private replies to comments.', 'quick-mail' );
-		$qm_how      = __( 'Select a commenter to send a message.', 'quick-mail' );
-		$qm_info     = __( 'Subject and message are automatically added.', 'quick-mail' );
-		$slink       = '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
-		$to_settings = '<dd><a href="' . admin_url( 'options-general.php?page=quick_mail_options' ) . '">' . __( 'See settings', 'quick-mail' ) . '</a> ' . __( 'to limit displayed comments', 'quick-mail' ) . '.</dd>';
-		$use_str     = __( 'Please use', 'quick-mail' );
-		$to_ask      = __( 'to ask questions and report problems', 'quick-mail' );
-		$rc5         = "<dt class='qm-help'>{$use_str} {$slink} {$to_ask}.</dt>";
-		$qm_content  = "<dl><dt style='font-weight:bold; margin-bottom:1em;'>{$qm_desc}</dt><dd>{$qm_how}</dd><dd>{$qm_info}</dd>{$to_settings}{$rc5}</dl>";
+		$help = sprintf(
+			'<dl><dt class="qm-help">%s</dt>
+				<dd>%s</dd><dd>%s</dd></dl>',
+			__( 'Send private replies to comments.', 'quick-mail' ),
+			__( 'Select a commenter to send a message.', 'quick-mail' ),
+			__( 'Subject and message are added automatically.', 'quick-mail' )
+		);
+
+		$support = sprintf(
+			'<h4><a class="wp-ui-text-highlight" target="_blank"
+		href="%s">%s</a></h4>',
+			'https://wordpress.org/support/plugin/quick-mail',
+			__( 'Please use Support to ask questions and report problems.', 'quick-mail' )
+		);
+
 		return array(
 			'id'      => 'qm_chelp',
 			'title'   => __( 'Reply to Comments', 'quick-mail' ),
-			'content' => $qm_content,
+			'content' => $help . $support,
 		);
 	} // end get_qm_comment_help_tab
 
@@ -1899,10 +1905,10 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 		} // end for
 
 		$display          = $this->qm_get_display_option( $blog );
-		$check_roles      = ( $display === 'B' || $display === 'O' ) ? 'checked="checked"' : '';
-		$check_all        = ( $display === 'A' || $display === 'B' ) ? 'checked="checked"' : '';
-		$check_names      = ( $display === 'N' || $display === 'O' ) ? 'checked="checked"' : '';
-		$check_none       = ( $display === 'X' ) ? 'checked="checked"' : '';
+		$check_roles      = ( 'B' === $display || 'O' === $display ) ? 'checked="checked"' : '';
+		$check_all        = ( 'A' === $display || 'B' === $display ) ? 'checked="checked"' : '';
+		$check_names      = ( 'N' === $display || 'O' === $display ) ? 'checked="checked"' : '';
+		$check_none       = ( 'X' === $display ) ? 'checked="checked"' : '';
 		$check_save       = ( 'Y' === $save_addresses ) ? 'checked="checked"' : '';
 		$check_privacy    = ( 'N' === $want_privacy ) ? 'checked="checked"' : '';
 		$check_wpautop    = ( '1' === get_user_meta( $you->ID, 'qm_wpautop', true ) ) ? 'checked="checked"' : '';
@@ -2247,7 +2253,7 @@ class="qm-label"><?php _e( 'Show user roles', 'quick-mail' ); ?></label>
 			return 'X';
 		} // end if author.
 		$value  = get_user_meta( $current_user->ID, 'show_quick_mail_users', true );
-		$retval = ( ! empty( $value ) ) ? $value : 'A'; // should never be empty
+		$retval = ( ! empty( $value ) ) ? $value : 'A'; // Should never be empty.
 		return $this->multiple_matching_users( $retval, $blog ) ? $retval : 'X';
 	} // end qm_get_display_option.
 
@@ -2367,7 +2373,7 @@ class="qm-label"><?php _e( 'Show user roles', 'quick-mail' ); ?></label>
 		} // end if comments disabled by administrator.
 
 		$qm         = admin_url( "tools.php?page=quick_mail_form&comment_id={$id}\r\n" );
-		$title      = apply_filters( 'quick_mail_reply_title', __( 'Private Reply', 'quick-mail' ) ); // was Reply with Quick Mail
+		$title      = apply_filters( 'quick_mail_reply_title', __( 'Private Reply', 'quick-mail' ) ); // Was Reply with Quick Mail.
 		$left_link  = "{$title}: {$qm}";
 		$right_link = "{$qm} : {$title}";
 		$text      .= is_rtl() ? $right_link : $left_link;
@@ -2395,7 +2401,7 @@ class="qm-label"><?php _e( 'Show user roles', 'quick-mail' ); ?></label>
 		} // end if site allows private replies to comments.
 
 		$qm_url = admin_url( "tools.php?page=quick_mail_form&amp;comment_id={$comment->comment_ID}" );
-		$reply  = apply_filters( 'quick_mail_reply_title', __( 'Private Reply', 'quick-mail' ) );  // was Reply with Quick Mail
+		$reply  = apply_filters( 'quick_mail_reply_title', __( 'Private Reply', 'quick-mail' ) );  // Was Reply with Quick Mail.
 		$ereply = esc_attr( $reply );
 		$css    = 'style="color: #e14d43;"'; // wp-ui-text-highlight.
 		$retval = array();
@@ -2689,14 +2695,6 @@ class="qm-label"><?php _e( 'Show user roles', 'quick-mail' ); ?></label>
 				)
 			);
 
-			$btitle  = __( 'Send Reliable Email from WordPress with Quick Mail', 'quick-mail' );
-			$blink   = sprintf( '<a href="https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/">%s</a>', $btitle );
-			$my_link = sprintf(
-				'%s %s %s.',
-				__( 'See', 'quick-mail' ),
-				$blink,
-				__( 'for additional information', 'quick-mail' )
-			);
 		if ( $you_are_admin && ! QuickMailUtil::got_sendgrid_info( false ) && ! QuickMailUtil::got_mailgun_info( false ) ) {
 			$sp    = sprintf(
 				"%s <a target='_blank' href='%s'>%s</a>",
@@ -2722,44 +2720,66 @@ class="qm-label"><?php _e( 'Show user roles', 'quick-mail' ); ?></label>
 			);
 
 			$svces       = sprintf(
-				'%s, %s %s %s %s.',
+				'%s, %s, %s %s.',
 				$mg,
 				$spark,
-				__( 'and', 'quick-mail' ),
 				$sg,
 				__( 'are recommended', 'quick-mail' )
 			);
 			$btitle      = __( 'Send Reliable Email from WordPress with Quick Mail', 'quick-mail' );
 			$blink       = sprintf( '<a href="https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/">%s</a>', $btitle );
 			$content     = sprintf(
-				'<h4>%s %s</h4>',
-				__( 'How to Fix', 'quick-mail' ),
-				__( 'Delivery Errors', 'quick-mail' )
+				'<h4>%s</h4>',
+				__( 'How to Fix Delivery Errors', 'quick-mail' )
 			);
 			$mailservice = '';
+			$my_link     = '';
 			if ( QuickMailUtil::got_sparkpost_info( false ) ) {
-				$mailservice = __( 'Using SparkPost', 'quick-mail' );
+				$mailservice = __( 'Delivering mail with SparkPost.', 'quick-mail' );
 			} elseif ( QuickMailUtil::got_mailgun_info( true ) ) {
-				$mailservice = __( 'Using Mailgun', 'quick-mail' );
+				$mailservice = __( 'Delivering mail with Mailgun.', 'quick-mail' );
 			} elseif ( QuickMailUtil::got_sendgrid_info( true ) ) {
-				$mailservice = sprintf( '%s %s', __( 'Using', 'quick-mail' ), __( 'SendGrid', 'quick-mail' ) );
-			} // end if
+				$mailservice = __( 'Delivering mail with SendGrid.', 'quick-mail' );
+			} // end if using mail service.
 
 			if ( ! empty( $mailservice ) ) {
-				$mailservice = __( 'Excellent!', 'quick-mail' ) . ' ' . $mailservice . ' ' . __( 'to deliver mail.', 'quick-mail' );
-				$content    .= "<div class='wp-ui-text-notification'>{$mailservice}</div>";
+				$smsg     = sprintf(
+					'%s %s',
+					__( 'Excellent!', 'quick-mail' ),
+					$mailservice
+				);
+				$content .= "<div class='wp-ui-text-notification'>{$smsg}</div>";
 			} // end if using service to send mail
 
 			$content .= sprintf(
 				'<p>%s.</p>',
 				__( 'Use these products and services with Quick Mail to fix delivery errors', 'quick-mail' )
 			);
-			$content .= '<dl><dt><strong>' . __( 'Mail Delivery Service', 'quick-mail' ) . '</strong></dt>';
-			$content .= '<dd>' . __( 'Use a mail delivery service to send reliable email anywhere', 'quick-mail' ) . '.</dd>';
-			$content .= "<dd>{$svces}</dd>";
-			$content .= '<dd>' . __( 'Mailgun and SparkPost are free', 'quick-mail' ) . '.</dd>';
-			$content .= '<dt><strong>' . __( 'SMTP Plugins', 'quick-mail' ) . '</strong></dt>';
-			$content .= "<dd>{$pline}</dd></dl><p>{$my_link}</p>";
+			$content .= '<dl>';
+			$line     = sprintf( '<dl><dt class="qm-help">%s</dt>', __( 'Mail Delivery Service', 'quick-mail' ) );
+			$content .= $line;
+			$line     = sprintf(
+				'<dd>%s</dd>',
+				__( 'Use a mail delivery service to send reliable email anywhere.', 'quick-mail' )
+			);
+			$content .= $line;
+			$line     = sprintf( '<dd>%s</dd>', $svces );
+			$content .= $line;
+			$line     = sprintf( '<dd>%s</dd>', __( 'Mailgun and SparkPost are free', 'quick-mail' ) );
+			$content .= $line;
+			if ( ! empty( $pline ) ) {
+				$line     = sprintf( '<dt class="qm-help">%s</dt>', __( 'SMTP Plugins', 'quick-mail' ) );
+				$content .= $line;
+				$content .= "<dd>{$pline}</dd>";
+			} // end if
+			$content .= '</dl>';
+
+			$my_link = sprintf(
+				'<p><a href="https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/">%s</a></p>',
+				__( 'Send Reliable Email from WordPress with Quick Mail has additional information.', 'quick-mail' )
+			);
+
+			$content .= $my_link;
 			$screen->add_help_tab(
 				array(
 					'id'      => 'qm_delivery_help',
@@ -2793,7 +2813,7 @@ class="qm-label"><?php _e( 'Show user roles', 'quick-mail' ); ?></label>
 					'content' => $content,
 				)
 			);
-		} // end if WP-CLI is active
+		} // end if admin user.
 	} // add_qm_settings_help
 
 	/**

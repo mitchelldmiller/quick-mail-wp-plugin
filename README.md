@@ -1,7 +1,7 @@
 Quick Mail WordPress Plugin
 ====================
 
-Send text or html email with attachments and shortcodes. Send private replies to comments. Select recipient from users or commenters. French, Russian, Spanish translations.
+Send text or html email with attachments and shortcodes. Send private replies to comments. Select recipient from users or commenters.
 
 ### WordPress Rating
 [![WordPress rating](https://img.shields.io/wordpress/plugin/r/quick-mail.svg?maxAge=2592000)]()
@@ -70,6 +70,14 @@ __Features__
 2. Optional: Install [WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
 3. Optional: Install [Mailgun](https://wordpress.org/extend/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
 4. Optional: Install experimental [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) plugin, to change administrator's credentials.
+
+### Translators / Translations ###
+
+* Quick Mail is no longer distributed with translations.
+
+* Visit [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for translations and more information.
+
+* Please help translate Quick Mail. A .pot file is included for new translators.
 
 ### Frequently Asked Questions ###
 

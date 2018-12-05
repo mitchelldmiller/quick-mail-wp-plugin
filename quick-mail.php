@@ -585,6 +585,7 @@ jQuery(document).ready( function() {
 
 		if ( strstr( $_SERVER['REQUEST_URI'], 'quick_mail_options' ) ) {
 			wp_enqueue_script( 'qmCount', plugins_url( '/lib/js/quick-mail-addresses.js', __FILE__ ), array( 'jquery' ), '3.5.0', false );
+			/* translators: %s: settings message */
 			$data = array(
 				'one'  => __( 'Clear 1 saved address', 'quick-mail' ),
 				'many' => sprintf( __( 'Clear %s saved addresses', 'quick-mail' ), '{number}' ),

@@ -2,7 +2,7 @@
 /**
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.5.0 RC1
+Version: 3.5.0 RC2
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
@@ -2483,6 +2483,10 @@ class="qm-label"><?php _e( 'Show user roles', 'quick-mail' ); ?></label>
 	 */
 	public function add_qm_settings_help() {
 		$blog       = is_multisite() ? get_current_blog_id() : 0;
+		$my_link = sprintf(
+				'<p><a href="https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/">%s</a></p>',
+				__( 'Send Reliable Email from WordPress with Quick Mail has additional information.', 'quick-mail' )
+				);
 		$screen     = get_current_screen();
 		$hide_admin = '';
 		if ( is_multisite() ) {
@@ -2734,7 +2738,6 @@ class="qm-label"><?php _e( 'Show user roles', 'quick-mail' ); ?></label>
 				__( 'How to Fix Delivery Errors', 'quick-mail' )
 			);
 			$mailservice = '';
-			$my_link     = '';
 			if ( QuickMailUtil::got_sparkpost_info( false ) ) {
 				$mailservice = __( 'Delivering mail with SparkPost.', 'quick-mail' );
 			} elseif ( QuickMailUtil::got_mailgun_info( true ) ) {
@@ -2774,12 +2777,6 @@ class="qm-label"><?php _e( 'Show user roles', 'quick-mail' ); ?></label>
 				$content .= "<dd>{$pline}</dd>";
 			} // end if
 			$content .= '</dl>';
-
-			$my_link = sprintf(
-				'<p><a href="https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/">%s</a></p>',
-				__( 'Send Reliable Email from WordPress with Quick Mail has additional information.', 'quick-mail' )
-			);
-
 			$content .= $my_link;
 			$screen->add_help_tab(
 				array(

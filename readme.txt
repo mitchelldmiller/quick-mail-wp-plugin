@@ -2,7 +2,7 @@
 Contributors: brainiac
 Tags: mail, email, comments, wp-cli, mailgun, sparkpost, attachment, sendgrid, accessibility, idn, multisite
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
-Requires at least: 4.6
+Requires at least: 5.0
 Tested up to: 5.1
 Requires PHP: 5.3
 Stable tag: 3.5.0
@@ -198,6 +198,7 @@ If you are using an email delivery service, you can ignore this message.
 == Changelog ==
 
 = 3.5.0 =
+* Javascript internationalization.
 * Combined strings for easier translation.
 * Only show "Select recipient from commenters" if user has comments.
 * Added option for administrators to see WP roles on user list.

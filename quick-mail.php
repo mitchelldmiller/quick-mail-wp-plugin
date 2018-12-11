@@ -2,7 +2,7 @@
 /**
 Plugin Name: Quick Mail
 Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.5.0 RC2
+Version: 3.5.0 RC3
 Author: Mitchell D. Miller
 Author URI: https://wheredidmybraingo.com/
 Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
@@ -584,13 +584,8 @@ jQuery(document).ready( function() {
 		} // end if on quick mail form
 
 		if ( strstr( $_SERVER['REQUEST_URI'], 'quick_mail_options' ) ) {
-			wp_enqueue_script( 'qmCount', plugins_url( '/lib/js/quick-mail-addresses.js', __FILE__ ), array( 'jquery' ), '3.5.0', false );
-			/* translators: %s: settings message */
-			$data = array(
-				'one'  => __( 'Clear 1 saved address', 'quick-mail' ),
-				'many' => sprintf( __( 'Clear %s saved addresses', 'quick-mail' ), '{number}' ),
-			);
-			wp_localize_script( 'qmCount', 'quick_mail_saved', $data );
+			wp_register_script( 'qmCount', plugins_url( '/lib/js/quick-mail-addresses.js', __FILE__ ), array( 'jquery', 'wp-i18n' ), '3.5.0', false );
+			wp_enqueue_script( 'qmCount' );
 		} // end if on options page
 	} // end add_email_scripts
 
@@ -2109,6 +2104,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 <label id="qm_hide_label" class="qm-label"><?php esc_html_e( 'Hide Administrator Profiles', 'quick-mail' ); ?>.</label>
 				<?php
 				$admins  = $this->qm_admin_count( $blog );
+				/* translators: %s: number of administrator profiles */
 				$profile = sprintf( _n( '%s administrator profile', '%s administrator profiles', $admins, 'quick-mail' ), $admins );
 				echo sprintf( '<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User list will not include', 'quick-mail' ), " {$profile}." );
 				?>

@@ -1,17 +1,18 @@
 <?php
 /**
-Plugin Name: Quick Mail
-Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
-Version: 3.5.0 RC3
-Author: Mitchell D. Miller
-Author URI: https://wheredidmybraingo.com/
-Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
-Text Domain: quick-mail
-Domain Path: /lang
-License: GPL-2.0+
-License URI: http://www.gnu.org/licenses/gpl-2.0.txt
-
-@package QuickMail
+ *
+ * Plugin Name: Quick Mail
+ * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
+ * Version: 3.5.0 RC3
+ * Author: Mitchell D. Miller
+ * Author URI: https://wheredidmybraingo.com/
+ * Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
+ * Text Domain: quick-mail
+ * Domain Path: /lang
+ * License: GPL-2.0+
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
+ *
+ * @package QuickMail
  */
 
 /*
@@ -425,9 +426,9 @@ class QuickMail {
 	 */
 	public function check_wp_version() {
 		global $wp_version;
-		if ( version_compare( $wp_version, '4.6', 'lt' ) ) {
+		if ( version_compare( $wp_version, '5.0', 'lt' ) ) {
 			deactivate_plugins( basename( __FILE__ ) );
-			echo sprintf( "<div class='notice notice-error' role='alert'>%s</div>", __( 'Quick Mail requires WordPress 4.6 or greater.', 'quick-mail' ) );
+			echo sprintf( "<div class='notice notice-error' role='alert'>%s</div>", __( 'Quick Mail requires WordPress 5.0 or greater.', 'quick-mail' ) );
 			exit;
 		} // end if
 	} // end check_wp_version
@@ -792,7 +793,7 @@ jQuery(document).ready( function() {
 				} // end if found role.
 			} // end if want role.
 
-			if ( 'A' === $option || 'B' == $option ) {
+			if ( 'A' === $option || 'B' === $option ) {
 				$address = rawurlencode( "\"{$row[0]}\" <{$row[1]}>" );
 			} else {
 				$address = rawurlencode( "\"{$row[1]} {$row[0]}\" <{$row[3]}>" );
@@ -2103,7 +2104,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 <p><input tabindex="40" aria-describedby="qm_hide_desc" aria-labelledby="qm_hide_label" class="qm-input" name="hide_quick_mail_admin" type="checkbox" <?php echo $check_admin; ?>>
 <label id="qm_hide_label" class="qm-label"><?php esc_html_e( 'Hide Administrator Profiles', 'quick-mail' ); ?>.</label>
 				<?php
-				$admins  = $this->qm_admin_count( $blog );
+				$admins = $this->qm_admin_count( $blog );
 				/* translators: %s: number of administrator profiles */
 				$profile = sprintf( _n( '%s administrator profile', '%s administrator profiles', $admins, 'quick-mail' ), $admins );
 				echo sprintf( '<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User list will not include', 'quick-mail' ), " {$profile}." );
@@ -2479,10 +2480,10 @@ class="qm-label"><?php _e( 'Show user roles', 'quick-mail' ); ?></label>
 	 */
 	public function add_qm_settings_help() {
 		$blog       = is_multisite() ? get_current_blog_id() : 0;
-		$my_link = sprintf(
-				'<p><a href="https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/">%s</a></p>',
-				__( 'Send Reliable Email from WordPress with Quick Mail has additional information.', 'quick-mail' )
-				);
+		$my_link    = sprintf(
+			'<p><a href="https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/">%s</a></p>',
+			__( 'Send Reliable Email from WordPress with Quick Mail has additional information.', 'quick-mail' )
+		);
 		$screen     = get_current_screen();
 		$hide_admin = '';
 		if ( is_multisite() ) {

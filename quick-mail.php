@@ -3,7 +3,7 @@
  *
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.0 RC3
+ * Version: 3.5.0 RC4
  * Author: Mitchell D. Miller
  * Author URI: https://wheredidmybraingo.com/
  * Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
@@ -761,9 +761,9 @@ jQuery(document).ready( function() {
 				continue;
 			} // end if duplicate email
 
-			if ( 'A' === $option ) {
+			if ( 'A' === $option || 'B' === $option ) {
 				$nickname = ucfirst( get_user_meta( $user->ID, 'nickname', true ) );
-				$users[]  = "{$nickname}\t{$user->user_email}";
+				$users[]  = "{$nickname}\t{$user->user_email}\t{$user->ID}";
 			} else {
 				$last  = ucfirst( get_user_meta( $user->ID, 'last_name', true ) );
 				$first = ucfirst( get_user_meta( $user->ID, 'first_name', true ) );

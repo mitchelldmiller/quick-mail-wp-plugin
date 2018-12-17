@@ -195,13 +195,15 @@ If you are using an email delivery service, you can ignore this message.
 
 6. Reply to comment.
 
+7. User list with roles.
+
 == Changelog ==
 
 = 3.5.0 =
 * Javascript internationalization.
 * Combined strings for easier translation.
 * Only show "Select recipient from commenters" if user has comments.
-* Added option for administrators to see WP roles on user list.
+* Added option for administrators to add WP roles to user list.
 * Fixed empty error message.
 * Edited PHP to use WordPress Coding Standards.
 

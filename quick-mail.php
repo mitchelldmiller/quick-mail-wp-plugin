@@ -3,7 +3,7 @@
  *
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.0 RC4
+ * Version: 3.5.0 RC5
  * Author: Mitchell D. Miller
  * Author URI: https://wheredidmybraingo.com/
  * Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
@@ -2189,7 +2189,7 @@ class="qm-label"><?php _e( 'Show user roles', 'quick-mail' ); ?></label>
 .</span></p>
 		<?php endif; ?>
 		<?php if ( $this->multiple_matching_users( 'N', $blog ) ) : ?>
-<p><input tabindex="130" aria-describedby="qm_names_desc" aria-labelledby="qm_names_label" class="qm-input" name="show_quick_mail_users" type="radio" value="N" <?php echo $check_names; ?>>
+<p><input tabindex="130" aria-describedby="qm_names_desc" aria-labelledby="qm_names_label" class="qm-input" id="show_quick_mail_names" name="show_quick_mail_users" type="radio" value="N" <?php echo $check_names; ?>>
 <label id="qm_names_label" class="qm-label">
 			<?php
 			$css  = ( 'Y' === $hide_admin ) ? 'qm-admin' : 'qm-total';
@@ -2211,7 +2211,7 @@ class="qm-label"><?php _e( 'Show user roles', 'quick-mail' ); ?></label>
 			?>
 .</span></p>
 		<?php endif; ?>
-<p<?php echo $space; ?>><input tabindex="140" aria-describedby="qm_none_desc" aria-labelledby="qm_none_label" class="qm-input" name="show_quick_mail_users" type="radio" value="X"
+<p<?php echo $space; ?>><input tabindex="140" aria-describedby="qm_none_desc" aria-labelledby="qm_none_label" class="qm-input" id="do_not_show_quick_mail_users"  name="show_quick_mail_users" type="radio" value="X"
 		<?php
 		echo $check_none;
 		if ( ! $this->multiple_matching_users( 'A', $blog ) ) {

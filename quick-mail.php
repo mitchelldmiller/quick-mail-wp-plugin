@@ -3,7 +3,7 @@
  *
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.0 RC5
+ * Version: 3.5.0 RC6
  * Author: Mitchell D. Miller
  * Author URI: https://wheredidmybraingo.com/
  * Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
@@ -136,21 +136,20 @@ class QuickMail {
 		$this->directory = plugin_dir_path( __FILE__ );
 		$this->charset   = is_multisite() ? get_blog_option( get_current_blog_id(), 'blog_charset', 'UTF-8' ) : get_option( 'blog_charset', 'UTF-8' );
 		register_activation_hook( __FILE__, array( $this, 'check_wp_version' ) );
-			add_action( 'activated_plugin', array( $this, 'install_quick_mail' ), 10, 2 );
-			add_action( 'admin_footer', array( $this, 'qm_get_comment_script' ) );
-			add_action( 'admin_footer', array( $this, 'qm_get_title_script' ) );
-			add_action( 'admin_enqueue_scripts', array( $this, 'add_email_scripts' ), 10, 0 );
-			add_action( 'admin_menu', array( $this, 'init_quick_mail_menu' ) );
-			add_action( 'deactivated_plugin', array( $this, 'deactivate_quick_mail_plugin' ), 10, 2 );
-			add_action( 'load-tools_page_quick_mail_form', array( $this, 'add_qm_help' ), 20, 0 );
-			add_action( 'plugins_loaded', array( $this, 'init_quick_mail_translation' ) );
+		add_action( 'activated_plugin', array( $this, 'install_quick_mail' ), 10, 2 );
+		add_action( 'admin_footer', array( $this, 'qm_get_comment_script' ) );
+		add_action( 'admin_footer', array( $this, 'qm_get_title_script' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'add_email_scripts' ), 10, 0 );
+		add_action( 'admin_menu', array( $this, 'init_quick_mail_menu' ) );
+		add_action( 'deactivated_plugin', array( $this, 'deactivate_quick_mail_plugin' ), 10, 2 );
+		add_action( 'load-tools_page_quick_mail_form', array( $this, 'add_qm_help' ), 20, 0 );
+		add_action( 'plugins_loaded', array( $this, 'init_quick_mail_translation' ) );
 		add_action( 'plugins_loaded', array( $this, 'show_qm_pointer' ), 10, 0 );
-			add_action( 'wp_ajax_qm_get_comment', array( $this, 'qm_get_comment' ) );
-			add_action( 'wp_ajax_qm_get_title', array( $this, 'qm_get_title' ) );
-
-			add_filter( 'comment_row_actions', array( $this, 'qm_filter_comment_link' ), 10, 2 );
-			add_filter( 'comment_notification_text', array( $this, 'qm_comment_reply' ), 10, 2 );
-			add_filter( 'plugin_action_links', array( $this, 'qm_action_links' ), 10, 2 );
+		add_action( 'wp_ajax_qm_get_comment', array( $this, 'qm_get_comment' ) );
+		add_action( 'wp_ajax_qm_get_title', array( $this, 'qm_get_title' ) );
+		add_filter( 'comment_row_actions', array( $this, 'qm_filter_comment_link' ), 10, 2 );
+		add_filter( 'comment_notification_text', array( $this, 'qm_comment_reply' ), 10, 2 );
+		add_filter( 'plugin_action_links', array( $this, 'qm_action_links' ), 10, 2 );
 		add_filter( 'plugin_row_meta', array( $this, 'qm_plugin_links' ), 10, 2 );
 		add_filter( 'quick_mail_setup_capability', array( $this, 'let_editor_set_quick_mail_option' ) );
 	} // end constructor
@@ -706,12 +705,11 @@ jQuery(document).ready( function() {
 	/**
 	 * Get input control for cc input.
 	 *
-	 * @param string  $to recipient.
 	 * @param string  $cc cc.
 	 * @param integer $id user ID.
 	 * @return void|string
 	 */
-	public function quick_mail_cc_input( $to, $cc, $id ) {
+	public function quick_mail_cc_input( $cc, $id ) {
 		$template = '<input aria-labelledby="qmcc_label" value="%s" id="qm-cc" name="qm-cc" type="text" size="35" tabindex="3" placeholder="%s">';
 		$blog     = is_multisite() ? get_current_blog_id() : 0;
 		$option   = $this->qm_get_display_option( $blog );
@@ -1436,7 +1434,7 @@ jQuery(document).ready( function() {
 				} // end if do not replace sender name on non-admin user
 				$sp_toggle = false;
 				if ( ! empty( $attachments ) && QuickMailUtil::got_sparkpost_info( true ) ) {
-					 $sp_toggle = QuickMailUtil::toggle_sparkpost_transactional( $attachments );
+					$sp_toggle = QuickMailUtil::toggle_sparkpost_transactional( $attachments );
 				} // end if toggle SparkPost transactional
 
 				if ( wp_mail( $to, $subject, $message, $headers, $attachments ) ) {
@@ -1611,7 +1609,7 @@ jQuery(document).ready( function() {
 <label id="qmcc_label" for="qm-cc" class="recipients"><?php esc_html_e( 'CC', 'quick-mail' ); ?></label>
 <label id="qmbcc_label" for="qm_bcc" class="qm-label"><?php esc_html_e( 'BCC', 'quick-mail' ); ?></label>
 <input tabindex="2" type="checkbox" id="qm_bcc" name="qm_bcc">
-<p><?php echo $this->quick_mail_cc_input( $to, $mcc, $you->ID ); ?></p>
+<p><?php echo $this->quick_mail_cc_input( $mcc, $you->ID ); ?></p>
 </fieldset>
 	<?php endif; ?>
 			<?php
@@ -2221,7 +2219,7 @@ class="qm-label"><?php _e( 'Show user roles', 'quick-mail' ); ?></label>
 <label id="qm_none_label" class="qm-label"><?php _e( 'Do Not Show Users', 'quick-mail' ); ?></label>
 		<?php
 		if ( ! $this->multiple_matching_users( 'A', $blog ) ) {
-				   echo '<br><br><span class="qm-label" role="alert">';
+			echo '<br><br><span class="qm-label" role="alert">';
 			if ( $you_are_admin ) {
 				esc_html_e( 'Need three users to display User List for sender, recipient, CC.', 'quick-mail' );
 			} else {

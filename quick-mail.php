@@ -3,7 +3,7 @@
  *
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.0 RC6
+ * Version: 3.5.0 RC7
  * Author: Mitchell D. Miller
  * Author URI: https://wheredidmybraingo.com/
  * Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
@@ -1900,6 +1900,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 		} // end for
 
 		$display          = $this->qm_get_display_option( $blog );
+		$disable_roles    = ( 'X' === $display ) ? 'disabled' : '';
 		$check_roles      = ( 'B' === $display || 'O' === $display ) ? 'checked="checked"' : '';
 		$check_all        = ( 'A' === $display || 'B' === $display ) ? 'checked="checked"' : '';
 		$check_names      = ( 'N' === $display || 'O' === $display ) ? 'checked="checked"' : '';
@@ -2157,7 +2158,7 @@ type="checkbox" value="Y" <?php echo $check_commenters; ?>>
 
 		<?php if ( $this->multiple_matching_users( 'A', $blog ) && $you_are_admin ) : ?>
 		<p id="show_roles_row"><input tabindex="115"
-		aria-describedby="qm_roles_desc"
+		aria-describedby="qm_roles_desc" <?php echo $disable_roles; ?>
 		aria-labelledby="qm_role_label" id="show_quick_mail_roles"
 		class="qm-input" name="show_quick_mail_roles" <?php echo $check_roles; ?>
 type="checkbox" value="Y">

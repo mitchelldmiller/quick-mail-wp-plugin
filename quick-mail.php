@@ -3,7 +3,7 @@
  *
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.0 RC7
+ * Version: 3.5.0
  * Author: Mitchell D. Miller
  * Author URI: https://wheredidmybraingo.com/
  * Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
@@ -411,7 +411,7 @@ class QuickMail {
 				'back_link'      => true,
 				'text_direction' => $direction,
 			);
-			wp_die( sprintf( '<h1 role="alert">%s</h1>', esc_html( $e->get_error_message() ), __( 'Mail Error', 'quick-mail' ), $args ) );
+			wp_die( sprintf( '<h1 role="alert">%s</h1>', esc_html( $e->get_error_message() ), esc_html( __( 'Mail Error', 'quick-mail' ) ), $args ) );
 		} // end if error
 	} // end show_mail_failure
 
@@ -427,7 +427,7 @@ class QuickMail {
 		global $wp_version;
 		if ( version_compare( $wp_version, '5.0', 'lt' ) ) {
 			deactivate_plugins( basename( __FILE__ ) );
-			echo sprintf( "<div class='notice notice-error' role='alert'>%s</div>", __( 'Quick Mail requires WordPress 5.0 or greater.', 'quick-mail' ) );
+			echo sprintf( "<div class='notice notice-error' role='alert'>%s</div>", esc_html( __( 'Quick Mail requires WordPress 5.0 or greater.', 'quick-mail' ) ) );
 			exit;
 		} // end if
 	} // end check_wp_version
@@ -738,7 +738,7 @@ jQuery(document).ready( function() {
 		} // end if wants user list
 
 		if ( 'A' !== $option && 'B' !== $option && 'N' !== $option && 'O' !== $option ) {
-			echo sprintf( $template, $cc, __( 'Enter mail address', 'quick-mail' ) );
+			echo sprintf( $template, $cc, esc_html( __( 'Enter mail address', 'quick-mail' ) ) );
 			return;
 		}
 		$hide_admin = '';
@@ -1261,7 +1261,7 @@ jQuery(document).ready( function() {
 
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] && ! empty( $_POST['qm205'] ) ) {
 			if ( ! wp_verify_nonce( $_POST['qm205'], 'qm205' ) ) {
-				wp_die( '<h1 role="alert">' . __( 'Login Expired. Refresh Page.', 'quick-mail' ) . '</h1>' );
+				wp_die( '<h1 role="alert">' . esc_html( __( 'Login Expired. Refresh Page.', 'quick-mail' ) ) . '</h1>' );
 			}
 			if ( empty( $commenter ) && empty( $_POST['qm-email'] ) ) {
 				$direction = is_rtl() ? 'rtl' : 'ltr';
@@ -1270,7 +1270,7 @@ jQuery(document).ready( function() {
 					'back_link'      => true,
 					'text_direction' => $direction,
 				);
-				wp_die( sprintf( '<h1 role="alert">%s</h1>', __( 'Invalid mail address', 'quick-mail' ) ), __( 'Mail Error', 'quick-mail' ), $args );
+				wp_die( sprintf( '<h1 role="alert">%s</h1>', esc_html( __( 'Invalid mail address', 'quick-mail' ) ), esc_html( __( 'Mail Error', 'quick-mail' ) ), $args ) );
 			} // end if user circumvented Javascript
 
 			$rec_type = empty( $_POST['qm_bcc'] ) ? 'Cc' : 'Bcc';
@@ -1327,9 +1327,9 @@ jQuery(document).ready( function() {
 					$j   = count( $all_cc );
 					for ( $i = 0; $i < $j && empty( $error ); $i++ ) {
 						if ( ! QuickMailUtil::qm_valid_email_domain( $all_cc[ $i ], $verify ) ) {
-							$error = 'CC ' . __( 'Invalid mail address', 'quick-mail' ) . '<br>' . $all_cc[ $i ];
+							$error = 'CC ' . esc_html( __( 'Invalid mail address', 'quick-mail' ) ) . '<br>' . $all_cc[ $i ];
 						} elseif ( $to === $all_cc[ $i ] ) {
-							$error = 'CC ' . __( 'Duplicate mail address', 'quick-mail' ) . '<br>' . $all_cc[ $i ];
+							$error = 'CC ' . esc_html( __( 'Duplicate mail address', 'quick-mail' ) ) . '<br>' . $all_cc[ $i ];
 						} // end if
 					} // end for
 				} // end if not empty
@@ -1505,9 +1505,6 @@ jQuery(document).ready( function() {
 			} elseif ( '1' !== $can_upload && 'true' !== $can_upload && 'on' !== $can_upload ) {
 				$no_uploads = __( 'File uploads were disabled by system administrator', 'quick-mail' );
 			}
-			if ( ! empty( $no_uploads ) ) {
-				$no_uploads .= '.';
-			} // add a period
 		} // end if uploads not allowed
 
 		$orig_link = plugins_url( '/inc/qm-validate.php', __FILE__ );
@@ -1532,23 +1529,23 @@ jQuery(document).ready( function() {
 <h1 id="quick-mail-title" class="quick-mail-title"><?php esc_html_e( 'Quick Mail', 'quick-mail' ); ?></h1>
 		<?php if ( ! empty( $no_uploads ) ) : ?>
 <div class="update-nag notice is-dismissible">
-	<p role="alert"><?php echo $no_uploads; ?></p>
+	<p role="alert"><?php esc_html_e( $no_uploads ); ?></p>
 </div>
 <?php elseif ( ! empty( $success ) ) : ?>
 <div id="qm-success" class="updated notice is-dismissible">
-	<p role="alert"><?php echo $success; ?></p>
+	<p role="alert"><?php esc_html_e( $success ); ?></p>
 </div>
 <?php elseif ( ! empty( $error ) ) : ?>
 	<?php
 	$your_str = function_exists( 'mb_strstr' ) ? mb_strstr( $error, 'profile.php', false, $this->charset ) : strstr( $error, 'profile.php' );
 	$ecss     = $your_str ? 'error notice' : 'error notice is-dismissible';
 	?>
-<div id="qm_error" class="<?php echo $ecss; ?>">
-	<p role="alert"><?php echo $error; ?></p>
+<div id="qm_error" class="<?php echo esc_attr( $ecss ); ?>">
+	<p role="alert"><?php esc_html_e( $error ); ?></p>
 </div>
 <?php endif; ?>
 <div id="qm-validate" role="alert" class="error notice is-dismissible">
-	<p role="alert"><span id="qmv-message"><?php echo $invalid_msg; ?></span> <span id="qm-ima"> </span></p>
+	<p role="alert"><span id="qmv-message"><?php esc_html_e( $invalid_msg ); ?></span> <span id="qm-ima"> </span></p>
 </div>
 <div id="qm-duplicate" role="alert" class="error notice is-dismissible">
 	<p role="alert"><?php esc_html_e( 'Duplicate mail address', 'quick-mail' ); ?> <span id="qm-dma"> </span></p>
@@ -1581,7 +1578,7 @@ jQuery(document).ready( function() {
 <p><input aria-labelledby="tf_label" <?php echo $tsize; ?> value="<?php echo $the_from; ?>" readonly aria-readonly="true" id="the_from" tabindex="5000"></p>
 </fieldset>
 <fieldset>
-<label id="qme_label" for="qm-email" class="recipients"><?php echo $to_label; ?></label>
+<label id="qme_label" for="qm-email" class="recipients"><?php esc_html_e( $to_label ); ?></label>
 			<?php if ( empty( $commenter ) ) : ?>
 <p><?php echo $this->quick_mail_recipient_input( $to, $you->ID ); ?></p>
 <?php else : ?>
@@ -1653,7 +1650,7 @@ placeholder="<?php esc_html_e( 'Subject', 'quick-mail' ); ?>" tabindex="22"></p>
 </fieldset>
 	<?php endif; ?>
 <fieldset>
-<label id="qm_msg_label" for="quickmailmessage" class="recipients"><?php echo esc_html( $msg_label ); ?></label>
+<label id="qm_msg_label" for="quickmailmessage" class="recipients"><?php esc_html_e( $msg_label ); ?></label>
 			<?php
 			if ( ! user_can_richedit() ) {
 				?>
@@ -1874,7 +1871,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			} // end if admin
 		} // end if POST
 		if ( $updated ) {
-			echo '<div class="updated"><p>', _e( 'Option Updated', 'quick-mail' ), '</p></div>';
+			echo '<div class="updated"><p>', esc_html_e( 'Option Updated', 'quick-mail' ), '</p></div>';
 		} // end if updated
 
 		$user_query = new \WP_User_Query( array( 'count_total' => true ) );
@@ -2088,16 +2085,16 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 <legend class="recipients"><?php esc_html_e( 'Administration', 'quick-mail' ); ?></legend>
 			<?php if ( QuickMailUtil::got_mailgun_info( true ) ) : ?>
 <p><input tabindex="20" readonly aria-readonly="true" aria-describedby="qm_mailgun_desc" aria-labelledby="qm_mailgun_label" class="qm-input" name="using_Mailgun" type="checkbox" checked="checked" onclick='return false;'>
-<label id="qm_mailgun_label" class="qm-label"><?php echo esc_html( $mg_label ); ?>.</label>
-<span id="qm_mailgun_desc" class="qm-label"><?php echo esc_html( $mg_message ); ?></span></p>
+<label id="qm_mailgun_label" class="qm-label"><?php esc_html_e( $mg_label ); ?>.</label>
+<span id="qm_mailgun_desc" class="qm-label"><?php esc_html_e( $mg_message ); ?></span></p>
 <?php elseif ( QuickMailUtil::got_sparkpost_info( true ) ) : ?>
 <p><input tabindex="20" readonly aria-readonly="true" aria-describedby="qm_sparkpost_desc" aria-labelledby="qm_sparkpost_label" class="qm-input" name="using_sparkpost" type="checkbox" checked="checked" onclick='return false;'>
-<label id="qm_sparkpost_label" class="qm-label"><?php echo esc_html( $sp_label ); ?>.</label>
-<span id="qm_sparkpost_desc" class="qm-label"><?php echo esc_html( $sp_message ); ?></span></p>
+<label id="qm_sparkpost_label" class="qm-label"><?php esc_html_e( $sp_label ); ?>.</label>
+<span id="qm_sparkpost_desc" class="qm-label"><?php esc_html_e( $sp_message ); ?></span></p>
 <?php elseif ( QuickMailUtil::got_sendgrid_info() ) : ?>
 <p><input tabindex="30" aria-describedby="qm_sendgrid_desc" aria-labelledby="qm_sendgrid_label" class="qm-input" name="replace_quick_mail_sender" type="checkbox" <?php echo $check_sendgrid; ?>>
-<label id="qm_sendgrid_label" class="qm-label"><?php echo esc_html( $sendgrid_label ); ?>.</label>
-<span id="qm_sendgrid_desc" class="qm-label"><?php echo esc_html( $sendgrid_desc ); ?></span></p>
+<label id="qm_sendgrid_label" class="qm-label"><?php esc_html_e( $sendgrid_label ); ?>.</label>
+<span id="qm_sendgrid_desc" class="qm-label"><?php esc_html_e( $sendgrid_desc ); ?></span></p>
 <?php endif; ?>
 			<?php if ( $this->multiple_matching_users( 'A', $blog ) ) : ?>
 <p><input tabindex="40" aria-describedby="qm_hide_desc" aria-labelledby="qm_hide_label" class="qm-input" name="hide_quick_mail_admin" type="checkbox" <?php echo $check_admin; ?>>
@@ -2116,8 +2113,8 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 <label id="quick_mail_cannot_reply_label" class="qm-label"><?php esc_html_e( 'Disable Replies to Comments', 'quick-mail' ); ?>.</label>
 <span id="quick_mail_cannot_reply_desc" class="qm-label"><?php esc_html_e( 'Users will not see commenter list.', 'quick-mail' ); ?></span></p>
 <p id="qm-authors"><input tabindex="60" aria-describedby="qm_author_desc" aria-labelledby="qm_author_label" class="qm-input" name="authors_quick_mail_privilege" type="checkbox" <?php echo $check_author; ?>>
-<label id="qm_author_label" class="qm-label"><?php _e( 'Grant Authors permission to reply to comments', 'quick-mail' ); ?>.</label>
-<span id="qm_author_desc" class="qm-label"><?php _e( 'Authors will not have access to user list.', 'quick-mail' ); ?></span></p>
+<label id="qm_author_label" class="qm-label"><?php esc_html_e( 'Grant Authors permission to reply to comments', 'quick-mail' ); ?>.</label>
+<span id="qm_author_desc" class="qm-label"><?php esc_html_e( 'Authors can see commenter list or user list.', 'quick-mail' ); ?></span></p>
 <p><input tabindex="70" aria-describedby="qm_grant_desc" aria-labelledby="qm_grant_label" class="qm-input" name="editors_quick_mail_privilege" type="checkbox" <?php echo $check_editor; ?>>
 <label id="qm_grant_label" class="qm-label"><?php esc_html_e( 'Grant Editors access to user list.', 'quick-mail' ); ?></label>
 <span id="qm_grant_desc" class="qm-label"><?php esc_html_e( 'Let editors see user list.', 'quick-mail' ); ?></span></p>
@@ -2144,16 +2141,16 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 		<?php else : ?>
 <p id="show_commenters_row"><input tabindex="100" aria-describedby="qm_commenter_desc" aria-labelledby="qm_commenter_label" id="show_quick_mail_commenters" class="qm-input" name="show_quick_mail_commenters"
 type="checkbox" value="Y" <?php echo $check_commenters; ?>>
-<label id="qm_commenter_label" for="show_quick_mail_commenters" class="qm-label"><?php echo $comment_label; ?></label>
-<span id="qm_commenter_desc" class="qm-label"><?php _e( 'Send private replies to comments.', 'quick-mail' ); ?></span></p>
+<label id="qm_commenter_label" for="show_quick_mail_commenters" class="qm-label"><?php esc_html_e( $comment_label ); ?></label>
+<span id="qm_commenter_desc" class="qm-label"><?php esc_html_e( 'Send private replies to comments.', 'quick-mail' ); ?></span></p>
 <div id="limit_commenters_row">
-<p><label id="qm_limit_label" for="limit_quick_mail_commenters" class="qm-label"><?php _e( 'Limit comments', 'quick-mail' ); ?></label>
-<input tabindex="110" type="number" min="0" max="100000" aria-labelledby="te_label" value="<?php echo $limit_commenters; ?>" name="limit_quick_mail_commenters" id="limit_quick_mail_commenters">&nbsp;<span class="mock-qm-label"><?php _e( 'days', 'quick-mail' ); ?></span><br>
+<p><label id="qm_limit_label" for="limit_quick_mail_commenters" class="qm-label"><?php esc_html_e( 'Limit comments', 'quick-mail' ); ?></label>
+<input tabindex="110" type="number" min="0" max="100000" aria-labelledby="te_label" value="<?php echo $limit_commenters; ?>" name="limit_quick_mail_commenters" id="limit_quick_mail_commenters">&nbsp;<span class="mock-qm-label"><?php esc_html_e( 'days', 'quick-mail' ); ?></span><br>
 <span id="qm_limit_desc" class="qm-label"><?php esc_html_e( 'Limit displayed comments to a number of days.', 'quick-mail' ); ?></span></p>
 </div>
 		<?php endif; ?>
 		<?php if ( ! empty( $list_warning ) ) : ?>
-<p role="alert" id="qm-warning"><?php echo $list_warning; ?></p>
+<p role="alert" id="qm-warning"><?php esc_html_e( $list_warning ); ?></p>
 		<?php endif; ?>
 
 		<?php if ( $this->multiple_matching_users( 'A', $blog ) && $you_are_admin ) : ?>
@@ -2163,8 +2160,8 @@ type="checkbox" value="Y" <?php echo $check_commenters; ?>>
 		class="qm-input" name="show_quick_mail_roles" <?php echo $check_roles; ?>
 type="checkbox" value="Y">
 <label id="qm_commenter_label" for="show_quick_mail_roles"
-class="qm-label"><?php _e( 'Show user roles', 'quick-mail' ); ?></label>
-<span id="qm_roles_desc" class="qm-label"><?php _e( 'Let administrators see role on user list.', 'quick-mail' ); ?></span></p>
+class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
+<span id="qm_roles_desc" class="qm-label"><?php esc_html_e( 'Let administrators see role on user list.', 'quick-mail' ); ?></span></p>
 		<?php endif; ?>
 		<?php if ( $this->multiple_matching_users( 'A', $blog ) ) : ?>
 <p><input tabindex="120" aria-describedby="qm_all_desc" aria-labelledby="qm_all_label" id="qm_all_users" class="qm-input" name="show_quick_mail_users" type="radio" value="A" <?php echo $check_all; ?>>
@@ -2217,7 +2214,7 @@ class="qm-label"><?php _e( 'Show user roles', 'quick-mail' ); ?></label>
 			echo ' readonly'; }
 		?>
 		>
-<label id="qm_none_label" class="qm-label"><?php _e( 'Do Not Show Users', 'quick-mail' ); ?></label>
+<label id="qm_none_label" class="qm-label"><?php esc_html_e( 'Do Not Show Users', 'quick-mail' ); ?></label>
 		<?php
 		if ( ! $this->multiple_matching_users( 'A', $blog ) ) {
 			echo '<br><br><span class="qm-label" role="alert">';
@@ -2229,7 +2226,7 @@ class="qm-label"><?php _e( 'Show user roles', 'quick-mail' ); ?></label>
 			echo '</span><br>';
 		} // end if one user
 		?>
-<span id="qm_none_desc" class="qm-label"><?php esc_html_e( 'Enter address to send mail.', 'quick-mail' ); ?> <?php _e( 'Saves 12 addresses.', 'quick-mail' ); ?></span></p>
+<span id="qm_none_desc" class="qm-label"><?php esc_html_e( 'Enter address to send mail.', 'quick-mail' ); ?> <?php esc_html_e( 'Saves 12 addresses.', 'quick-mail' ); ?></span></p>
 </fieldset>
 <p class="submit"><input tabindex="150" type="submit" name="qm-submit" class="button button-primary qm-input" value="<?php esc_html_e( 'Save Options', 'quick-mail' ); ?>"></p>
 </div>

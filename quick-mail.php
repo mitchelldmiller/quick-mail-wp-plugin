@@ -5,8 +5,8 @@
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
  * Version: 3.5.0
  * Author: Mitchell D. Miller
- * Author URI: https://wheredidmybraingo.com/
- * Plugin URI: https://wheredidmybraingo.com/tag/quick-mail/
+ * Author URI: https://badmarriages.net/author/mitchell-d-miller/
+ * Plugin URI: https://wheredidmybraingo.com/quick-mail-improves-translations-adds-roles/
  * Text Domain: quick-mail
  * Domain Path: /lang
  * License: GPL-2.0+

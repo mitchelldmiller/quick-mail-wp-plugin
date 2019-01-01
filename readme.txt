@@ -2,10 +2,10 @@
 Contributors: brainiac
 Tags: mail, email, comments, wp-cli, mailgun, sparkpost, attachment, sendgrid, accessibility, idn, multisite
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
-Requires at least: 4.6
-Tested up to: 5.0
+Requires at least: 5.0
+Tested up to: 5.1
 Requires PHP: 5.3
-Stable tag: 3.4.4
+Stable tag: 3.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,6 +51,14 @@ Multiple files from up to six directories (folders) can be attached to a message
 2. Optional: Install [WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
 3. Optional: Install [Mailgun](https://wordpress.org/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
 4. Optional: Install experimental [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) plugin, to change administrator's credentials.
+
+== Translators / Translations ==
+
+* Quick Mail is no longer distributed with translations.
+
+* Visit [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for translations and more information.
+
+* Please help translate Quick Mail. A .pot file is included for new translators.
 
 == Frequently Asked Questions ==
 
@@ -187,7 +195,17 @@ If you are using an email delivery service, you can ignore this message.
 
 6. Reply to comment.
 
+7. User list with roles.
+
 == Changelog ==
+
+= 3.5.0 =
+* Javascript internationalization.
+* Combined strings for easier translation.
+* Only show "Select recipient from commenters" if user has comments.
+* Added option for administrators to add WP roles to user list.
+* Fixed empty error message.
+* Edited PHP to use WordPress Coding Standards.
 
 = 3.4.4 =
 * Options are saved if plugin is deactivated.
@@ -201,6 +219,9 @@ If you are using an email delivery service, you can ignore this message.
 Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.5.0 =
+* Upgrade recommended.
 
 = 3.4.4 =
 * Upgrade recommended.
@@ -220,14 +241,6 @@ Please refer to the separate changelog.txt for changes of previous versions.
 == License ==
 
 Quick Mail is free for personal or commercial use. Encourage future development with a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY "Donate with PayPal").
-
-== Translators and Programmers ==
-
-* A .pot file is included for translators.
-
-* Includes French, Russian, Spanish translations.
-
-* Visit [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more information.
 
 == Credits ==
 

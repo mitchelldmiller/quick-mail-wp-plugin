@@ -1,27 +1,54 @@
 <?php
 /**
  * Mail a Web page or file with quick-mail.
- * @version 3.4.2
+ *
+ * @package QuickMail
  */
 class Quick_Mail_Command extends WP_CLI_Command {
 
-	public $from = '', $name = '', $content_type = 'text/html';
+	/**
+	 * Sender email address.
+	 *
+	 * @var string
+	 */
+	public $from = '';
 
+	/**
+	 * Sender name.
+	 *
+	 * @var string
+	 */
+	public $name = '';
+
+	/**
+	 * Message content type.
+	 *
+	 * @var string default: text/html
+	 */
+	public $content_type = 'text/html';
+
+	/**
+	 * Sender's character set.
+	 *
+	 * @var string
+	 */
 	public static $charset = '';
 
 	/**
-	 * supported mail services.
+	 * Supported mail services.
+	 *
 	 * @var string
 	 * @since 3.4.1
 	 * @todo needs translation
 	 */
-	public static $services = array(	'Mailgun', 'SendGrid', 'SparkPost');
+	public static $services = array( 'Mailgun', 'SendGrid', 'SparkPost' );
 
 	/**
-	 * valid MIME types for messages.
+	 * Valid MIME types for messages.
+	 *
 	 * @var array
 	 */
-	public static $VALID_MIME = array('text/plain', 'text/html'); // 'text/x-php'
+	public static $valid_mime = array( 'text/plain', 'text/html' ); // 'text/x-php'
 
 	/**
 	 * Mail the contents of a URL or file.
@@ -70,23 +97,27 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 * @synopsis <from> <to> <url|filename> [<subject>] [<message_attachment_file>]
 	 */
 	public function __invoke( $args, $assoc_args ) {
-		require_once plugin_dir_path( __FILE__ ) . 'qm_util.php';
+		require_once plugin_dir_path( __FILE__ ) . 'class-quickmailutil.php';
 		self::$charset = get_bloginfo( 'charset' );
-		$temp_msg = '';
-		$active = '';
+		$temp_msg      = '';
+		$active        = '';
 		foreach ( self::$services as $k ) {
-			$s = strtolower( $k );
-			$func = array('QuickMailUtil', "got_{$s}_info");
+			$s                    = strtolower( $k );
+			$func                 = array( 'QuickMailUtil', "got_{$s}_info" );
 			$replaced_credentials = call_user_func( $func, true );
 			if ( $replaced_credentials ) {
-				$active = $k;
-				$temp_msg = sprintf( "%s %s %s", 	__( 'Using', 'quick-mail' ),
-						$k, 	__( 'credentials', 'quick-mail' ) );
+				$active   = $k;
+				$temp_msg = sprintf(
+					'%s %s %s',
+					__( 'Using', 'quick-mail' ),
+					$k,
+					__( 'credentials', 'quick-mail' )
+				);
 				break;
 			} // end if
 		} // end foreach
 
-		if ( !empty( $temp_msg) ) {
+		if ( ! empty( $temp_msg ) ) {
 			WP_CLI::warning( $temp_msg );
 		} // end if using service
 
@@ -97,75 +128,79 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			$verify_domain = get_option( 'verify_quick_mail_addresses', 'N' );
 		} // end if multisite
 
-		$this->from = $this->verify_email_or_id( $args[0], true ); // admin only
-		$temp_msg = '';
+		$this->from = $this->verify_email_or_id( $args[0], true ); // Admin only.
+		$temp_msg   = '';
 		if ( empty( $this->from ) ) {
 			$temp_msg = __( 'Only administrators can send mail with WP-CLI.', 'quick-mail' );
-		} else if ( !QuickMailUtil::qm_valid_email_domain( $this->from, $verify_domain ) ) {
+		} elseif ( ! QuickMailUtil::qm_valid_email_domain( $this->from, $verify_domain ) ) {
 			$temp_msg = __( 'Invalid Sender Address', 'quick-mail' );
-		} // end if invalid user or address
+		} // end if invalid user or address.
 
-		if ( !empty( $temp_msg ) ) {
-			WP_CLI::error( $temp_msg ); // exit
-		} // end if we have an error message
+		if ( ! empty( $temp_msg ) ) {
+			WP_CLI::error( $temp_msg ); // Exit.
+		} // end if we have an error message.
 
 		$to = $this->verify_email_or_id( $args[1], false );
-		if ( empty( $to ) || !QuickMailUtil::qm_valid_email_domain( $to, $verify_domain ) ) {
+		if ( empty( $to ) || ! QuickMailUtil::qm_valid_email_domain( $to, $verify_domain ) ) {
 			$temp_msg = __( 'Invalid Recipient Address', 'quick-mail' );
-			WP_CLI::error( $temp_msg ); // exit
-		} // end if invalid recipient
+			WP_CLI::error( $temp_msg ); // Exit.
+		} // end if invalid recipient.
 
-		$url = '';
-		$subject = '';
-		$domain = '';
+		$url          = '';
+		$subject      = '';
+		$domain       = '';
 		$sending_file = false;
-		$file = '';
-		if ( 'http' == substr( $args[2], 0, 4) ) {
+		$file         = '';
+		if ( 'http' === substr( $args[2], 0, 4 ) ) {
 			$url = str_replace( '&#038;', '&', esc_url( $args[2] ) );
-			if ( !filter_var( $url, FILTER_VALIDATE_URL ) ) {
+			if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
 				$temp_msg = __( 'Invalid URL', 'quick-mail' );
-				$hurl = htmlspecialchars( $url, ENT_QUOTES, self::$charset, false );
-				WP_CLI::error( "$temp_msg: {$hurl}" ); // exit
-			} // end if invalid URL
+				$hurl     = htmlspecialchars( $url, ENT_QUOTES, self::$charset, false );
+				WP_CLI::error( "$temp_msg: {$hurl}" ); // Exit.
+			} // end if invalid URL.
 
-			$domain = parse_url( $url, PHP_URL_HOST );
+			$domain = wp_parse_url( $url, PHP_URL_HOST );
 		} else {
-			if ( !file_exists( $args[2] ) ) {
+			if ( ! file_exists( $args[2] ) ) {
 				$temp_msg = __( 'File not found', 'quick-mail' );
-				WP_CLI::error( $temp_msg ); // exit
+				WP_CLI::error( $temp_msg ); // Exit.
 			} // end if file not found
 
-			if ( empty( filesize ( $args[2] ) ) ) {
+			if ( empty( filesize( $args[2] ) ) ) {
 				$temp_msg = __( 'Empty file', 'quick-mail' );
-				$html = htmlspecialchars( $args[2], ENT_QUOTES, self::$charset, false );
-				WP_CLI::error( "$temp_msg: {$html}" ); // exit
-			} // end if empty file
+				$html     = htmlspecialchars( $args[2], ENT_QUOTES, self::$charset, false );
+				WP_CLI::error( "$temp_msg: {$html}" ); // Exit.
+			} // end if empty file.
 
-			$url = $args[2];
+			$url          = $args[2];
 			$sending_file = true;
-		} // end if URL
+		} // end if URL.
 
 		$subject = isset( $args[3] ) ? html_entity_decode( $args[3], ENT_QUOTES, self::$charset ) : '';
 
-		// get sender info
-		$query_args = array('search' => $this->from, 'search_columns' => array('user_email'), 'role' => 'Administrator');
+		// Get sender info.
+		$query_args = array(
+			'search'         => $this->from,
+			'search_columns' => array( 'user_email' ),
+			'role'           => 'Administrator',
+		);
 		$user_query = new WP_User_Query( $query_args );
 		if ( 1 > count( $user_query->results ) ) {
 			$temp_msg = __( 'Invalid user', 'quick-mail' );
-			WP_CLI::error( $temp_msg ); // exit
-		} // end if email not found
+			WP_CLI::error( $temp_msg ); // Exit.
+		} // end if email not found.
 
 		$user = null;
 		foreach ( $user_query->results as $u ) {
-			if ( $u->user_email == $this->from ) {
+			if ( $u->user_email === $this->from ) {
 				$user = $u;
 				break;
 			} // end if user
 		} // end foreach
-		if ( empty( $user ) || $user->user_email != $this->from ) {
+		if ( empty( $user ) || $user->user_email !== $this->from ) {
 			$temp_msg = __( 'Invalid user', 'quick-mail' );
-			WP_CLI::error( $temp_msg ); // exit
-		} // end if unknown email
+			WP_CLI::error( $temp_msg ); // Exit.
+		} // end if unknown email.
 
 		if ( empty( $user->user_firstname ) || empty( $user->user_lastname ) ) {
 			$this->name = $user->display_name;
@@ -173,14 +208,14 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			$this->name = "\"{$user->user_firstname} {$user->user_lastname}\"";
 		} // end if missing first or last name
 
-		$message = '';
+		$message   = '';
 		$mime_type = '';
 
 		$attachments = array();
-		if ( !$sending_file ) {
+		if ( ! $sending_file ) {
 			$data = $this->get_wp_site_data( $url );
 			if ( is_wp_error( $data ) ) {
-				$temp_msg = preg_replace( '/curl error .+: /i', '',  WP_CLI::error_to_string( $data ) );
+				$temp_msg = preg_replace( '/curl error .+: /i', '', WP_CLI::error_to_string( $data ) );
 				WP_CLI::error( $temp_msg );
 			} // end if error
 
@@ -193,23 +228,23 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			$finfo = new finfo( FILEINFO_MIME );
 			$fdata = explode( ';', $finfo->buffer( $message ) );
 			$fmime = is_array( $fdata ) ? $fdata[0] : '';
-			if ( !in_array( $fmime, self::$VALID_MIME) ) {
-				$ext = str_replace( '+', '_', explode( '/', $fmime ) ); // no + in file name
-				$fext = ( !is_array( $ext ) || empty( $ext[1] ) ) ? __( 'unknown', 'quick-mail' ) : $ext[1];
-				$temp = QuickMailUtil::qm_get_temp_path();
-				$fname = $temp . 'qm' . strval( time() ) . ".{$fext}"; // temp file name
+			if ( ! in_array( $fmime, self::$valid_mime, true ) ) {
+				$ext   = str_replace( '+', '_', explode( '/', $fmime ) ); // No + allowed in file name.
+				$fext  = ( ! is_array( $ext ) || empty( $ext[1] ) ) ? __( 'unknown', 'quick-mail' ) : $ext[1];
+				$temp  = QuickMailUtil::qm_get_temp_path();
+				$fname = $temp . 'qm' . strval( time() ) . ".{$fext}"; // Temp file name.
 				if ( empty( file_put_contents( $fname, $message ) ) ) {
 					$temp_msg = __( 'Error saving content', 'quick-mail' ) . ' : ' . $fmime;
 					WP_CLI::error( $temp_msg );
 				} // end if cannot save temp file
 				$sending_file = true;
-				$url = $fname;
+				$url          = $fname;
 			} // end if remote link cannot be sent as a mail message
 
-			if ( !$sending_file && empty( $subject ) ) {
-				$pattern = "/title>(.+)<\/title>/";
+			if ( ! $sending_file && empty( $subject ) ) {
+				$pattern = '/title>(.+)<\/title>/';
 				preg_match( $pattern, $message, $found );
-				if ( !empty( $found ) && !empty( $found[1] ) ) {
+				if ( ! empty( $found ) && ! empty( $found[1] ) ) {
 					$subject = html_entity_decode( $found[1], ENT_QUOTES, self::$charset );
 				} else {
 					$subject = $domain;
@@ -219,51 +254,50 @@ class Quick_Mail_Command extends WP_CLI_Command {
 
 		if ( $sending_file ) {
 			$mime_type = mime_content_type( $url );
-			// TODO only checking for replaced attachment title, if sending file.
-			if ( !in_array( $mime_type, self::$VALID_MIME) ) {
-				$attachments = array($url);
-				$file = isset( $args[4] ) ? $args[4] : ''; // removed sanitize_file_name()
-				if ( !empty( $file ) && !$this->valid_attachment_message( $file ) 	) {
+			// Note: only checking for replaced attachment title, if sending file.
+			if ( ! in_array( $mime_type, self::$valid_mime, true ) ) {
+				$attachments = array( $url );
+				$file        = isset( $args[4] ) ? $args[4] : ''; // Removed sanitize_file_name().
+				if ( ! empty( $file ) && ! $this->valid_attachment_message( $file ) ) {
 					$file = '';
-				} // end if file OK
+				} // end if file OK.
 
-				if ( !empty( $file ) ) {
-					add_filter( 'quick_mail_cli_attachment_message', array($this, 'quick_mail_cli_attachment_message'), 1, 1 );
-					$message = apply_filters( 'quick_mail_cli_attachment_message', $file );
+				if ( ! empty( $file ) ) {
+					add_filter( 'quick_mail_cli_attachment_message', array( $this, 'quick_mail_cli_attachment_message' ), 1, 1 );
+					$message  = apply_filters( 'quick_mail_cli_attachment_message', $file );
 					$temp_msg = __( 'Replaced attachment message.', 'quick-mail' );
 					WP_CLI::log( $temp_msg );
 				} else {
-					$amsg = sprintf( '%s : %s', __( 'Please see attachment', 'quick-mail' ), basename( $url ) );
+					$amsg    = sprintf( '%s : %s', __( 'Please see attachment', 'quick-mail' ), basename( $url ) );
 					$message = apply_filters( 'quick_mail_cli_attachment_message', $amsg );
 				} // end if got separate attachment for message
 			} else {
-				$message = file_get_contents( $url );
-				$this->content_type = ( 'text/html' == $mime_type ) ? $mime_type : 'text/plain';
+				$message            = file_get_contents( $url );
+				$this->content_type = ( 'text/html' === $mime_type ) ? $mime_type : 'text/plain';
 			} // end if not text file
 
 			if ( empty( $subject ) ) {
-				$smsg = __( 'For Your Eyes Only', 'quick-mail' );
+				$smsg    = __( 'For Your Eyes Only', 'quick-mail' );
 				$subject = apply_filters( 'quick_mail_cli_attachment_subject', $smsg );
-			} // end if no subject
-		} elseif ( isset( $args[4] ) && !empty( $args[4])) {
+			} // end if no subject.
+		} elseif ( isset( $args[4] ) && ! empty( $args[4] ) ) {
 			$temp_msg = __( 'Not sending file. Attachment message ignored.', 'quick-mail' );
-			WP_CLI::warning( $temp_msg ); // extra arg
-		} // end if sending file
+			WP_CLI::warning( $temp_msg ); // Extra arg.
+		} // end if sending file.
 
-		// set filters and send
-		add_filter( 'wp_mail_content_type', array($this, 'type_filter'), 2500, 2500 );
-		// if not replaced, set name and from
+		// Set filters and send.
+		add_filter( 'wp_mail_content_type', array( $this, 'type_filter' ), 2500, 2500 );
+
+		// If not replaced, set name and from.
 		if ( empty( $active ) ) {
-			add_filter( 'wp_mail_from', array($this, 'from_filter'), 2500, 2500 );
-			add_filter( 'wp_mail_from_name', array($this, 'name_filter'), 2500, 2500 );
+			add_filter( 'wp_mail_from', array( $this, 'from_filter' ), 2500, 2500 );
+			add_filter( 'wp_mail_from_name', array( $this, 'name_filter' ), 2500, 2500 );
 		} // end if
 
-		// need from to avoid missing SERVER_NAME in wp_mail
-		$headers = array("From: \"{$this->name}\" <{$this->from}>\r\n");
-		// add reply to
-		if ( 'SparkPost' == $active ) {
+		$headers = array( "From: \"{$this->name}\" <{$this->from}>\r\n" );
+		if ( 'SparkPost' === $active ) {
 			add_filter( 'wpsp_transactional', '__return_false', 2500 );
-			add_filter( 'wpsp_reply_to', array($this, 'get_sender_value' ), 2500 );
+			add_filter( 'wpsp_reply_to', array( $this, 'get_sender_value' ), 2500 );
 			WP_CLI::log( 'Filtering SparkPost reply-to' );
 		} else {
 			$headers[] = "Reply-To: {$this->from}\r\n";
@@ -277,8 +311,13 @@ class Quick_Mail_Command extends WP_CLI_Command {
 
 		$this->remove_qm_filters( $file, $active );
 		if ( $sending_file ) {
-			$temp_msg = sprintf( '%s %s %s %s', __( 'Sent', 'quick-mail' ),
-					basename( $url ), __( 'to', 'quick-mail' ), $to );
+			$temp_msg = sprintf(
+				'%s %s %s %s',
+				__( 'Sent', 'quick-mail' ),
+				basename( $url ),
+				__( 'to', 'quick-mail' ),
+				$to
+			);
 		} else {
 			$temp_msg = sprintf( '%s %s', __( 'Sent email to', 'quick-mail' ), $to );
 		} // end if sending file
@@ -287,8 +326,9 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	} // end _invoke
 
 	/**
-	 * get send value for reply-to filters
-	 * @param string $old_value
+	 * Get send value for reply-to filters
+	 *
+	 * @param string $old_value ignored: value to filter.
 	 * @since 3.4.1
 	 */
 	public function get_sender_value( $old_value ) {
@@ -296,44 +336,44 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	} // end get_sender_value
 
 	/**
-	 * convenience function to remove filters.
+	 * Convenience function to remove filters.
 	 *
 	 * @param string $file if not empty, also remove attachment message filter.
-	 * @param string $active name of active service
+	 * @param string $active name of active service.
 	 */
 	public function remove_qm_filters( $file, $active ) {
-		if ( !empty( $file ) ) {
-			remove_filter( 'quick_mail_cli_attachment_message', array($this, 'quick_mail_cli_attachment_message'), 1 );
+		if ( ! empty( $file ) ) {
+			remove_filter( 'quick_mail_cli_attachment_message', array( $this, 'quick_mail_cli_attachment_message' ), 1 );
 		} // end if attached message
 
-		if ( 'SparkPost' == $active ) {
-			remove_filter( 'wpsp_reply_to', array($this, 'get_sender_value' ), 2500 );
+		if ( 'SparkPost' === $active ) {
+			remove_filter( 'wpsp_reply_to', array( $this, 'get_sender_value' ), 2500 );
 			remove_filter( 'wpsp_transactional', '__return_false', 2500 );
 		} // end if SparkPost
 
-		remove_filter( 'wp_mail_content_type', array($this, 'type_filter'), 2500 );
+		remove_filter( 'wp_mail_content_type', array( $this, 'type_filter' ), 2500 );
 		if ( empty( $active ) ) {
-			remove_filter( 'wp_mail_from', array($this, 'from_filter'), 2500 );
-			remove_filter( 'wp_mail_from_name', array($this, 'name_filter'), 2500 );
+			remove_filter( 'wp_mail_from', array( $this, 'from_filter' ), 2500 );
+			remove_filter( 'wp_mail_from_name', array( $this, 'name_filter' ), 2500 );
 		} // end if
 	} // end remove_qm_filters
 
 	/**
-	 * is the attachment message valid? does it exist and is text or HTML?
+	 * Is the attachment message valid? does it exist and is text or HTML?
 	 *
-	 * displays warnings for invalid type and not found.
+	 * Displays warnings for invalid type and not found.
 	 *
-	 * @param string $filename
+	 * @param string $filename file name for attachment message.
 	 * @return boolean if file is valid
 	 */
 	public function valid_attachment_message( $filename ) {
-		if ( file_exists( $filename ) && !empty( filesize ( $filename ) ) ) {
-			$data = file_get_contents( $filename );
+		if ( file_exists( $filename ) && ! empty( filesize( $filename ) ) ) {
+			$data  = file_get_contents( $filename );
 			$finfo = new finfo( FILEINFO_MIME );
 			$fdata = explode( ';', $finfo->buffer( $data ) );
 			$fmime = is_array( $fdata ) ? $fdata[0] : '';
-			$ok = in_array( $fmime, self::$VALID_MIME );
-			if ( !$ok ) {
+			$ok    = in_array( $fmime, self::$valid_mime, true );
+			if ( ! $ok ) {
 				$temp_msg = __( 'Invalid message type', 'quick-mail' ) . ' : ' . $fmime;
 				WP_CLI::warning( $temp_msg );
 			}
@@ -344,14 +384,20 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		return false;
 	} // end valid_attachment_message
 
+	/**
+	 * Try to read attachment description from an external text file.
+	 *
+	 * @param string $orig_msg user text, might be valid file name.
+	 * @return string file contents or default message.
+	 */
 	public function quick_mail_cli_attachment_message( $orig_msg ) {
 		$message = __( 'You have an attachment.', 'quick-mail' );
 		if ( file_exists( $orig_msg ) ) {
-			$data = file_get_contents( $orig_msg );
+			$data  = file_get_contents( $orig_msg );
 			$finfo = new finfo( FILEINFO_MIME );
 			$fdata = explode( ';', $finfo->buffer( $data ) );
 			$fmime = is_array( $fdata ) ? $fdata[0] : '';
-			if ( !in_array( $fmime, self::$VALID_MIME ) ) {
+			if ( ! in_array( $fmime, self::$valid_mime, true ) ) {
 				return $message;
 			} else {
 				return $data;
@@ -361,8 +407,9 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	} // end quick_mail_cli_attachment_message
 
 	/**
-	 * filter for wp_mail_content_type.
-	 * @param string $type MIME type
+	 * Filter for wp_mail_content_type.
+	 *
+	 * @param string $type MIME type.
 	 * @return string text/html
 	 */
 	public function type_filter( $type ) {
@@ -370,7 +417,8 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	} // end type_filter
 
 	/**
-	 * filter for wp_mail_from.
+	 * Filter for wp_mail_from.
+	 *
 	 * @param string $f from address: ignored.
 	 * @return string sender email address
 	 */
@@ -379,7 +427,8 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	} // end from_filter
 
 	/**
-	 * filter for wp_mail_from_name.
+	 * Filter for wp_mail_from_name.
+	 *
 	 * @param string $n name: ignored.
 	 * @return string sender name
 	 */
@@ -390,26 +439,26 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	/**
 	 * Connect to remote site as Chrome browser. Return error string or array with data.
 	 *
-	 * @param string $site
-	 * @return string|array
+	 * @param string $site url of site.
+	 * @return mixed WP_Error or array with site data.
 	 */
 	private function get_wp_site_data( $site ) {
 		$chrome = 'Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3';
-		$args = array('user-agent' => $chrome);
-		$data = wp_remote_get( $site, $args );
+		$args   = array( 'user-agent' => $chrome );
+		$data   = wp_remote_get( $site, $args );
 		if ( is_wp_error( $data ) ) {
 			return $data;
 		} // end if WP Error
 
-		$code = empty( $data['response']['code'] ) ? 500 : $data['response']['code'] ;
-		if ( 200 != $code ) {
-			if ( 404 == $code ) {
-				$title = __( 'Not found', 'quick-mail' );
-				$temp_msg = sprintf( "%s %s", $title, $site );
+		$code = empty( $data['response']['code'] ) ? 500 : $data['response']['code'];
+		if ( 200 !== $code ) {
+			if ( 404 === $code ) {
+				$title    = __( 'Not found', 'quick-mail' );
+				$temp_msg = sprintf( '%s %s', $title, $site );
 				return new WP_Error( '404', $temp_msg );
 			} else {
-				$temp_msg = sprintf( "(%d) %s %s", $code, __( 'Cannot connect to', 'quick-mail' ), $site );
-				$title = __( 'Error', 'quick-mail' );
+				$temp_msg = sprintf( '(%d) %s %s', $code, __( 'Cannot connect to', 'quick-mail' ), $site );
+				$title    = __( 'Error', 'quick-mail' );
 				return new WP_Error( $title, $temp_msg );
 			} // end if 404
 		}
@@ -419,11 +468,12 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	/**
 	 * Return email address from user ID, with optional check for Administrator.
 	 *
-	 * @param mixed $from ID number or email address.
+	 * @param mixed   $from ID number or email address.
 	 * @param boolean $admin_only limit search to Administrators.
+	 * @return string email address
 	 */
 	private function verify_email_or_id( $from, $admin_only ) {
-		if ( !is_numeric( $from ) && !$admin_only ) {
+		if ( ! is_numeric( $from ) && ! $admin_only ) {
 			return sanitize_email( $from );
 		} // end if not numeric or admin only
 
@@ -431,30 +481,54 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		if ( is_numeric( $from ) ) {
 			if ( is_multisite() ) {
 				if ( $admin_only ) {
-					$args = array( 'blog_id' => get_current_blog_id(), 'include' =>  array($from), 'role' => 'Administrator' );
+					$args = array(
+						'blog_id' => get_current_blog_id(),
+						'include' => array( $from ),
+						'role'    => 'Administrator',
+					);
 				} else {
-					$args = array( 'blog_id' => get_current_blog_id(), 'include' =>  array($from) );
+					$args = array(
+						'blog_id' => get_current_blog_id(),
+						'include' => array( $from ),
+					);
 				} // end if admin
 			} else {
 				if ( $admin_only ) {
-					$args = array( 'include' =>  array($from), 'role' => 'Administrator' );
+					$args = array(
+						'include' => array( $from ),
+						'role'    => 'Administrator',
+					);
 				} else {
-					$args = array( 'include' =>  array($from) );
+					$args = array( 'include' => array( $from ) );
 				} // end if admin
 			} // end if
 		} else {
 			$from = sanitize_email( $from );
 			if ( is_multisite() ) {
 				if ( $admin_only ) {
-					$args = array( 'blog_id' => get_current_blog_id(), 'user_email' => $from , 'role' => 'Administrator' );
+					$args = array(
+						'blog_id'    => get_current_blog_id(),
+						'user_email' => $from,
+						'role'       => 'Administrator',
+					);
 				} else {
-					$args = array( 'blog_id' => get_current_blog_id(), 'user_email' => $from  );
+					$args = array(
+						'blog_id'    => get_current_blog_id(),
+						'user_email' => $from,
+					);
 				} // end if admin
 			} else {
 				if ( $admin_only ) {
-					$args = array('search' => $from, 'search_columns' => array('user_email'), 'role' => 'Administrator');
+					$args = array(
+						'search'         => $from,
+						'search_columns' => array( 'user_email' ),
+						'role'           => 'Administrator',
+					);
 				} else {
-					$args = array('search' => $from, 'search_columns' => array('user_email'));
+					$args = array(
+						'search'         => $from,
+						'search_columns' => array( 'user_email' ),
+					);
 				} // end if admin
 			} // end if
 		} // end if numeric

@@ -1533,7 +1533,7 @@ jQuery(document).ready( function() {
 </div>
 <?php elseif ( ! empty( $success ) ) : ?>
 <div id="qm-success" class="updated notice is-dismissible">
-	<p role="alert"><?php esc_html_e( $success ); ?></p>
+	<p role="alert"><?php echo $success; ?></p>
 </div>
 <?php elseif ( ! empty( $error ) ) : ?>
 	<?php
@@ -1541,7 +1541,7 @@ jQuery(document).ready( function() {
 	$ecss     = $your_str ? 'error notice' : 'error notice is-dismissible';
 	?>
 <div id="qm_error" class="<?php echo esc_attr( $ecss ); ?>">
-	<p role="alert"><?php esc_html_e( $error ); ?></p>
+	<p role="alert"><?php echo $error; ?></p>
 </div>
 <?php endif; ?>
 <div id="qm-validate" role="alert" class="error notice is-dismissible">
@@ -2492,8 +2492,8 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 		$is_editor_user = $this->qm_is_editor( get_current_user_id(), $blog );
 		$user_query     = new \WP_User_Query( array( 'count_total' => true ) );
 			$users      = $user_query->get_total();
-			$has_all    = ( 'A' === $this->multiple_matching_users( 'A', $blog ) );
-			$has_names  = ( 'N' === $this->multiple_matching_users( 'N', $blog ) );
+			$has_all    = $this->multiple_matching_users( 'A', $blog );
+			$has_names  = $this->multiple_matching_users( 'N', $blog );
 			$content    = '';
 			$note       = '<strong>' . __( 'NOTE', 'quick-mail' ) . ' :</strong> ';
 			$people     = ' ' . __( 'Sender, recipient, CC.', 'quick-mail' );
@@ -2578,14 +2578,16 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			$content .= '<dd>' . __( 'Prevent users from sending email to administrators', 'quick-mail' ) . '.</dd>';
 			$content .= '<dt><strong>' . __( 'Grant Editors access to user list', 'quick-mail' ) . '</strong></dt>';
 			$content .= '<dd>' . __( 'Otherwise only administrators can view the user list', 'quick-mail' ) . '</dd>';
+			$content .= '<dt><strong>' . __( 'Show user roles', 'quick-mail' ) . '</strong></dt>';
+			$content .= '<dd>' . __( 'Let administrators see role on user list.', 'quick-mail' ) . '</dd>';
 			$content .= '<dt><strong>' . __( 'Verify recipient email domains', 'quick-mail' ) . '</strong></dt>';
-			$content .= '<dd>' . __( 'Check if recipient domain accepts email.', 'quick-mail' ) . '.</dd>';
-
+			$content .= '<dd>' . __( 'Check if recipient domain accepts email.', 'quick-mail' ) . '</dd>';
 			$english_dns = __( 'http://php.net/manual/en/function.checkdnsrr.php', 'quick-mail' );
 			$z           = __( 'Checks domain with', 'quick-mail' );
 			$dnserr_link = "<a target='_blank' href='{$english_dns}'>checkdnsrr</a>";
 			$content    .= "<dd>{$z} {$dnserr_link}</dd>";
-			$content    .= '<dd class="wp-ui-text-highlight">' . __( 'Turn verification off if Quick Mail rejects a valid address.', 'quick-mail' ) . '</dd></dl>';
+			$content    .= '<dd class="wp-ui-text-highlight">' . __( 'Turn verification off if Quick Mail rejects a valid address.', 'quick-mail' ) . '</dd>';
+			$content .= '</dl>';
 			$screen->add_help_tab(
 				array(
 					'id'      => 'qm_admin_display_help',
@@ -2670,18 +2672,18 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			);
 		} // end if need wpauto help
 
-			$content .= '<dl>';
+			$rcontent = '<dl>';
 		if ( $has_all ) {
-			$content .= '<dt><strong>' . __( 'Show All Users', 'quick-mail' ) . '</strong></dt>';
-			$content .= '<dd>' . __( 'Select users by WordPress nickname', 'quick-mail' ) . '.</dd>';
+			$rcontent .= '<dt><strong>' . __( 'Show All Users', 'quick-mail' ) . '</strong></dt>';
+			$rcontent .= '<dd>' . __( 'Select users by WordPress nickname', 'quick-mail' ) . '.</dd>';
 		}
 		if ( $has_names ) {
-			$content .= '<dt><strong>' . __( 'Show Users with Names', 'quick-mail' ) . '</strong></dt>';
-			$content .= '<dd>' . __( 'Select users with first and last names', 'quick-mail' ) . '.</dd>';
+			$rcontent .= '<dt><strong>' . __( 'Show Users with Names', 'quick-mail' ) . '</strong></dt>';
+			$rcontent .= '<dd>' . __( 'Select users with first and last names', 'quick-mail' ) . '.</dd>';
 		}
-			$content .= '<dt><strong>' . __( 'Do Not Show Users', 'quick-mail' ) . '</strong></dt>';
-			$content .= '<dd>' . __( 'Enter user addresses. 12 addresses are saved', 'quick-mail' ) . '.</dd>';
-			$content .= $rc5 . '</dl>';
+			$rcontent .= '<dt><strong>' . __( 'Do Not Show Users', 'quick-mail' ) . '</strong></dt>';
+			$rcontent .= '<dd>' . __( 'Enter user addresses. 12 addresses are saved', 'quick-mail' ) . '.</dd>';
+			$rcontent .= $rc5 . '</dl>';
 			$screen->add_help_tab(
 				array(
 					'id'      => 'qm_display_help',
@@ -2689,7 +2691,7 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 						'User Display',
 						'quick-mail'
 					),
-					'content' => $content,
+					'content' => $rcontent,
 				)
 			);
 

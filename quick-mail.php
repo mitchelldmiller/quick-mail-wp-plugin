@@ -3,7 +3,7 @@
  *
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.0
+ * Version: 3.5.1 Alpha
  * Author: Mitchell D. Miller
  * Author URI: https://badmarriages.net/author/mitchell-d-miller/
  * Plugin URI: https://wheredidmybraingo.com/quick-mail-improves-translations-adds-roles/
@@ -17,7 +17,7 @@
 
 /*
  * Quick Mail WordPress Plugin - Send mail from WordPress using Quick Mail
- * Copyright (C) 2014-2018 Mitchell D. Miller
+ * Copyright (C) 2014-2019 Mitchell D. Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -2866,8 +2866,8 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 		$display_option = $this->qm_get_display_option( $blog );
 		$cc_title       = __( 'Adding CC', 'quick-mail' );
 		$xhelp          = __( 'Enter multiple addresses by separating them with a space or comma.', 'quick-mail' );
-		$mac_names      = __( 'Press &lt;Command&gt; while clicking, to select multiple users.', 'quick-mail' );
-		$win_names      = __( 'Press &lt;Control&gt; while clicking, to select multiple users.', 'quick-mail' );
+		$mac_names      = __( 'Press Command while clicking, to select multiple users.', 'quick-mail' );
+		$win_names      = __( 'Press Control while clicking, to select multiple users.', 'quick-mail' );
 		$mob_names      = __( 'You can select multiple users', 'quick-mail' );
 		$nhelp          = '';
 		if ( wp_is_mobile() ) {

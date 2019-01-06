@@ -32,7 +32,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) is an introduction.
 
-* [Quick Mail 3.4.4 Improves Deactivation](https://wheredidmybraingo.com/quick-mail-3-4-4-improves-deactivation/).
+* [Quick Mail Improves Translations, Adds Roles](https://wheredidmybraingo.com/quick-mail-improves-translations-adds-roles/).
 
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/).
 
@@ -198,6 +198,9 @@ If you are using an email delivery service, you can ignore this message.
 7. User list with roles.
 
 == Changelog ==
+
+= 3.5.0 =
+* Improved translation text.
 
 = 3.5.0 =
 * Javascript internationalization.

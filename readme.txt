@@ -199,8 +199,9 @@ If you are using an email delivery service, you can ignore this message.
 
 == Changelog ==
 
-= 3.5.0 =
+= 3.5.1 =
 * Improved translation text.
+* Fixed: Show user roles is always disabled if Do Not Show Users is checked.
 
 = 3.5.0 =
 * Javascript internationalization.

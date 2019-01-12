@@ -340,8 +340,12 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		} // end if Sparkpost.
 
 		if ( ! empty( $this->roles ) ) {
-			$to        = $this->from;
-			$headers[] = "Bcc: {$this->roles}";
+			if (strstr($this->roles, ',')) {
+				$to        = $this->from;
+				$headers[] = "Bcc: {$this->roles}";
+			} else {
+				$to = $this->roles;
+			}
 		} // end if sending to roles.
 
 		if ( ! wp_mail( $to, $subject, $message, $headers, $attachments ) ) {

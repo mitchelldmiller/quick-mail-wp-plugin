@@ -3,7 +3,7 @@
  *
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.1 Alpha
+ * Version: 3.5.1 Beta
  * Author: Mitchell D. Miller
  * Author URI: https://badmarriages.net/author/mitchell-d-miller/
  * Plugin URI: https://wheredidmybraingo.com/quick-mail-improves-translations-adds-roles/
@@ -2574,20 +2574,20 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 				$content .= "<dd>{$sendgrid_desc}.</dd>";
 			} // end if got replacement API
 
-			$content .= '<dt><strong>' . __( 'Hide Administrator Profiles', 'quick-mail' ) . '</strong></dt>';
-			$content .= '<dd>' . __( 'Prevent users from sending email to administrators', 'quick-mail' ) . '.</dd>';
-			$content .= '<dt><strong>' . __( 'Grant Editors access to user list', 'quick-mail' ) . '</strong></dt>';
-			$content .= '<dd>' . __( 'Otherwise only administrators can view the user list', 'quick-mail' ) . '</dd>';
-			$content .= '<dt><strong>' . __( 'Show user roles', 'quick-mail' ) . '</strong></dt>';
-			$content .= '<dd>' . __( 'Let administrators see role on user list.', 'quick-mail' ) . '</dd>';
-			$content .= '<dt><strong>' . __( 'Verify recipient email domains', 'quick-mail' ) . '</strong></dt>';
-			$content .= '<dd>' . __( 'Check if recipient domain accepts email.', 'quick-mail' ) . '</dd>';
+			$content    .= '<dt><strong>' . __( 'Hide Administrator Profiles', 'quick-mail' ) . '</strong></dt>';
+			$content    .= '<dd>' . __( 'Prevent users from sending email to administrators', 'quick-mail' ) . '.</dd>';
+			$content    .= '<dt><strong>' . __( 'Grant Editors access to user list', 'quick-mail' ) . '</strong></dt>';
+			$content    .= '<dd>' . __( 'Otherwise only administrators can view the user list', 'quick-mail' ) . '</dd>';
+			$content    .= '<dt><strong>' . __( 'Show user roles', 'quick-mail' ) . '</strong></dt>';
+			$content    .= '<dd>' . __( 'Let administrators see role on user list.', 'quick-mail' ) . '</dd>';
+			$content    .= '<dt><strong>' . __( 'Verify recipient email domains', 'quick-mail' ) . '</strong></dt>';
+			$content    .= '<dd>' . __( 'Check if recipient domain accepts email.', 'quick-mail' ) . '</dd>';
 			$english_dns = __( 'http://php.net/manual/en/function.checkdnsrr.php', 'quick-mail' );
 			$z           = __( 'Checks domain with', 'quick-mail' );
 			$dnserr_link = "<a target='_blank' href='{$english_dns}'>checkdnsrr</a>";
 			$content    .= "<dd>{$z} {$dnserr_link}</dd>";
 			$content    .= '<dd class="wp-ui-text-highlight">' . __( 'Turn verification off if Quick Mail rejects a valid address.', 'quick-mail' ) . '</dd>';
-			$content .= '</dl>';
+			$content    .= '</dl>';
 			$screen->add_help_tab(
 				array(
 					'id'      => 'qm_admin_display_help',

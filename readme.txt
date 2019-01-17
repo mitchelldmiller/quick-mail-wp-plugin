@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Requires at least: 5.0
 Tested up to: 5.1
 Requires PHP: 5.3
-Stable tag: 3.5.1
+Stable tag: 3.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -201,6 +201,11 @@ If you are using an email delivery service, you can ignore this message.
 
 == Changelog ==
 
+= 3.5.2 =
+* Added QUICK_MAIL_TESTING constant to check recipient list, without sending email.
+* Allow sending PHP files with WP-CLI command.
+* Exit if WP-CLI attachment is not plain text or HTML.
+
 = 3.5.1 =
 * Improved translation text.
 * Fixed: Show user roles is always disabled if Do Not Show Users is checked.
@@ -225,6 +230,9 @@ If you are using an email delivery service, you can ignore this message.
 Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.5.2 =
+* Upgrade recommended.
 
 = 3.5.0 =
 * Upgrade recommended.

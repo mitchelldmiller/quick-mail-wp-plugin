@@ -3,7 +3,7 @@
  *
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.1 Beta
+ * Version: 3.5.2 Alpha
  * Author: Mitchell D. Miller
  * Author URI: https://badmarriages.net/author/mitchell-d-miller/
  * Plugin URI: https://wheredidmybraingo.com/quick-mail-improves-translations-adds-roles/
@@ -1437,7 +1437,13 @@ jQuery(document).ready( function() {
 					$sp_toggle = QuickMailUtil::toggle_sparkpost_transactional( $attachments );
 				} // end if toggle SparkPost transactional
 
-				if ( wp_mail( $to, $subject, $message, $headers, $attachments ) ) {
+				if ( defined( 'QUICK_MAIL_TESTING' ) && QUICK_MAIL_TESTING ) {
+					$message = '';
+					foreach ( $headers as $one ) {
+						$message .= esc_html( $one ) . '<br>';
+					} // end foreach.
+					$success = sprintf( '%s : %s<br>%s', __( 'To', 'quick-mail' ), $to, $message );
+				} elseif ( wp_mail( $to, $subject, $message, $headers, $attachments ) ) {
 					$success   = __( 'Message Sent', 'quick-mail' );
 					$rec_label = ( 'Cc' === $rec_type ) ? __( 'CC', 'quick-mail' ) : __( 'BCC', 'quick-mail' );
 					if ( empty( $mcc ) ) {
@@ -1526,7 +1532,12 @@ jQuery(document).ready( function() {
 		$invalid_msg = ( 'Y' === $verify ) ? __( 'Cannot verify address', 'quick-mail' ) : __( 'Invalid mail address', 'quick-mail' );
 		// Inform user that Quick Mail is verifying addresses.
 		?>
+
+		<?php if ( defined( 'QUICK_MAIL_TESTING' ) && QUICK_MAIL_TESTING ) : ?>
+<h1 id="quick-mail-title" class="quick-mail-title"><?php esc_html_e( 'Quick Mail', 'quick-mail' ); ?> <span class="wp-ui-text-highlight"><?php esc_html_e( 'TEST MODE', 'quick-mail' ); ?></span></h1>
+		<?php else : ?>
 <h1 id="quick-mail-title" class="quick-mail-title"><?php esc_html_e( 'Quick Mail', 'quick-mail' ); ?></h1>
+		<?php endif; ?>
 		<?php if ( ! empty( $no_uploads ) ) : ?>
 <div class="update-nag notice is-dismissible">
 	<p role="alert"><?php esc_html_e( $no_uploads ); ?></p>

@@ -256,7 +256,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		if ( empty( $user->user_firstname ) || empty( $user->user_lastname ) ) {
 			$this->name = $user->display_name;
 		} else {
-			$this->name = "\"{$user->user_firstname} {$user->user_lastname}\"";
+			$this->name = "{$user->user_firstname} {$user->user_lastname}";
 		} // end if missing first or last name
 
 		$message   = '';

@@ -363,6 +363,12 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			}
 		} // end if sending to roles.
 
+		$recipients = QuickMailUtil::count_recipients( $headers );
+		if ( 100 < $recipients ) {
+			$temp_msg = __( 'Cannot send mail to over 100 recipients.', 'quick-mail' );
+			WP_CLI::error( $temp_msg );
+		} // end if too many recipients.
+
 		if ( defined( 'QUICK_MAIL_TESTING' ) && QUICK_MAIL_TESTING ) {
 			$bottom = '';
 			foreach ( $headers as $one ) {

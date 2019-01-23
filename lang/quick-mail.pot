@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Quick Mail plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Quick Mail 3.5.2 Beta\n"
+"Project-Id-Version: Quick Mail 3.5.2 RC1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/quick-mail\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-01-22T14:59:21-05:00\n"
+"POT-Creation-Date: 2019-01-23T15:43:15-05:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: quick-mail\n"
@@ -81,7 +81,7 @@ msgid "Invalid URL"
 msgstr ""
 
 #: inc/class-quick-mail-command.php:216
-#: inc/class-quick-mail-command.php:460
+#: inc/class-quick-mail-command.php:466
 msgid "File not found"
 msgstr ""
 
@@ -122,12 +122,17 @@ msgstr ""
 msgid "Not sending file. Attachment message ignored."
 msgstr ""
 
-#: inc/class-quick-mail-command.php:372
+#: inc/class-quick-mail-command.php:368
+#: quick-mail.php:1430
+msgid "Cannot send mail to over 100 recipients."
+msgstr ""
+
+#: inc/class-quick-mail-command.php:378
 #: quick-mail.php:1555
 msgid "TEST MODE"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:372
+#: inc/class-quick-mail-command.php:378
 #: quick-mail.php:1463
 #: quick-mail.php:1468
 #: quick-mail.php:1470
@@ -136,41 +141,41 @@ msgstr ""
 msgid "To"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:378
+#: inc/class-quick-mail-command.php:384
 #: quick-mail.php:1479
 #: quick-mail.php:1481
 msgid "Error sending mail"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:394
+#: inc/class-quick-mail-command.php:400
 msgid "Sent"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:396
+#: inc/class-quick-mail-command.php:402
 msgid "to"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:400
+#: inc/class-quick-mail-command.php:406
 msgid "Sent email to"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:455
+#: inc/class-quick-mail-command.php:461
 msgid "Invalid message type"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:472
+#: inc/class-quick-mail-command.php:478
 msgid "You have an attachment."
 msgstr ""
 
-#: inc/class-quick-mail-command.php:577
+#: inc/class-quick-mail-command.php:583
 msgid "Not found"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:581
+#: inc/class-quick-mail-command.php:587
 msgid "Cannot connect to"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:582
+#: inc/class-quick-mail-command.php:588
 msgid "Error"
 msgstr ""
 
@@ -371,10 +376,6 @@ msgstr ""
 
 #: quick-mail.php:1403
 msgid "File Upload Error"
-msgstr ""
-
-#: quick-mail.php:1430
-msgid "Cannot send mail to over 100 recipients."
 msgstr ""
 
 #: quick-mail.php:1432

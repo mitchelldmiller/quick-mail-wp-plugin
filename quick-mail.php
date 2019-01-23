@@ -3,7 +3,7 @@
  *
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.2 Alpha
+ * Version: 3.5.2 Beta
  * Author: Mitchell D. Miller
  * Author URI: https://badmarriages.net/author/mitchell-d-miller/
  * Plugin URI: https://wheredidmybraingo.com/quick-mail-improves-translations-adds-roles/
@@ -1420,6 +1420,24 @@ jQuery(document).ready( function() {
 						break;
 					} // end if
 				} // end if
+
+				$recipients = QuickMailUtil::count_recipients( $headers );
+				if ( 100 < $recipients ) {
+					$direction = is_rtl() ? 'rtl' : 'ltr';
+					$padding   = is_rtl() ? 'padding-right: 2em;' : 'padding-left: 2em;';
+					$error     = sprintf(
+						'%s <a class="wp-ui-text-highlight" style="%s" href="javascript:history.back()">%s</a>',
+						esc_html( __( 'Cannot send mail to over 100 recipients.', 'quick-mail' ) ),
+						esc_attr( $padding ),
+						esc_html( __( 'Edit mail.', 'quick-mail' ) )
+					);
+					$args      = array(
+						'response'       => 200,
+						'back_link'      => false,
+						'text_direction' => esc_attr( $direction ),
+					);
+					wp_die( sprintf( '<span style="font-size: 1.5em;" role="alert">%s</span>', $error, esc_html( __( 'Mail Error', 'quick-mail' ) ), $args ) );
+				} // end if over 100 recipients.
 
 				if ( user_can_richedit() && 'text/html' === $this->content_type && '1' === get_user_meta( get_current_user_id(), 'qm_wpautop', true ) ) {
 					$message = wpautop( $message );

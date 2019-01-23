@@ -123,7 +123,7 @@ class QuickMailUtil {
 				continue;
 			} // end if empty
 
-			$hname = htmlspecialchars( html_entity_decode( strip_tags( $name ) ), ENT_QUOTES );
+			$hname = htmlspecialchars( html_entity_decode( wp_strip_all_tags( $name ) ), ENT_QUOTES );
 			if ( ! self::qm_valid_email_domain( $name, $validate_option ) ) {
 				$invalid .= "{$hname}<br>";
 				$name     = '';
@@ -686,5 +686,23 @@ class QuickMailUtil {
 		$cquery = get_comments( $args );
 		return ( 0 < $cquery );
 	} // end user_has_comments
+
+	/**
+	 * Count recipients in email headers.
+	 *
+	 * @param array $headers Email headers.
+	 * @return integer count of recipients
+	 * @since 3.5.2
+	 */
+	public static function count_recipients( $headers ) {
+		$recipients = 2; // To and From.
+		foreach ( $headers as $one ) {
+			$got = count_chars( $one, 1 );
+			if ( ! empty( $got ) && ! empty( $got[64] ) ) {
+				$recipients += $got[64];
+			} // Add amphora count.
+		} // end foreach.
+		return $recipients;
+	} // end count_recipients
 
 } // end class

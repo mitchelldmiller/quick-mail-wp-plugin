@@ -18,7 +18,7 @@ Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds 
 
 Send a Web page, file, or message from the command line with quick-mail command for [WP-CLI](https://wp-cli.org/).
 
-** Does not use or require Gutenberg editor. **
+** Does not use or require the Gutenberg editor. **
 
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
@@ -30,11 +30,37 @@ Uses sender's name, sets reply to sender's address. Recognizes settings from [Ma
 
 Multiple files from up to six directories (folders) can be attached to a message.
 
+=Features=
+
+* Includes a [WP-CLI](https://wp-cli.org/) command to send a file or the the contents of a Web page. Send email to a single recipient or select site users by [WordPress role](https://codex.wordpress.org/Roles_and_Capabilities).
+
+* Sends text or html mails to multiple recipients. Content type is determined from message.
+
+* Send private replies with attachments to comments.
+
+* Multiple recipients can be selected from users or entered manually.
+
+* Saves message and subject on form to send repeat messages.
+
+* Saves last 12 email addresses entered on form.
+
+* Share a WordPress draft by copying / pasting its code into a message.
+
+* Option to validate recipient domains with [checkdnserr](http://php.net/manual/en/function.checkdnsrr.php) before mail is sent.
+
+* Validates international domains if [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php) is available to convert domain to [Punycode](https://tools.ietf.org/html/rfc3492).
+
+* Site options for administrators to hide their profile, and limit access to user list.
+
+* Option to add paragraphs and line breaks to HTML messages with [wpauto](https:/codex.wordpress.org/Function_Reference/wpautop).
+
+* Select recipient from users or commenters.
+
 = Learn More =
 
-* [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) is an introduction.
+* Introduction: [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/).
 
-* [Quick Mail Improves Translations, Adds Roles](https://wheredidmybraingo.com/quick-mail-improves-translations-adds-roles/).
+* Latest version: [Quick Mail Improves Translations, Adds Roles](https://wheredidmybraingo.com/quick-mail-improves-translations-adds-roles/).
 
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/).
 
@@ -112,6 +138,8 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * Additional recipients can be either `CC` or `BCC` but not both.
 
+* 99 recipients for [Gmail](https://support.google.com/a/answer/166852), others.
+
 * Multiple files can be uploaded from up to 6 folders (directories).
 
 * "Uploads are disabled" on some mobile devices.
@@ -123,7 +151,7 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 = Address Validation =
 
-* Address validation is an option to check recipient domain on manually entered addresses.
+* Check recipient domain on manually entered addresses.
 
 * International (non-ASCII) domains must be converted to [punycode](https://tools.ietf.org/html/rfc3492) with [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php).
 
@@ -203,7 +231,7 @@ If you are using an email delivery service, you can ignore this message.
 
 = 3.5.2 =
 * Added QUICK_MAIL_TESTING constant to check recipient list, without sending email.
-* Allow sending PHP files with WP-CLI command.
+* Do not send email to over 99 recipients.
 * Exit if WP-CLI attachment is not plain text or HTML.
 
 = 3.5.1 =

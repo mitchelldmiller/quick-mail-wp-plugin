@@ -15,6 +15,8 @@ Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds 
 
 Send a Web page, file, or message from the command line with quick-mail command for [WP-CLI](https://wp-cli.org/).
 
+** Does not use or require the Gutenberg editor. **
+
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
 Uses sender's name, sets reply to sender's address. Recognizes settings from [Mailgun](https://wordpress.org/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugins.
@@ -25,7 +27,7 @@ Privacy options to help comply with [General Data Protection Regulation](https:/
 
 __Features__
 
-* Includes a [WP-CLI](https://wp-cli.org/) command to send a file, or the the contents of a Web page.
+* Includes a [WP-CLI](https://wp-cli.org/) command to send a file or the the contents of a Web page. Send email to a single recipient or select site users by [WordPress role](https://codex.wordpress.org/Roles_and_Capabilities).
 
 * Sends text or html mails to multiple recipients. Content type is determined from message.
 
@@ -49,10 +51,14 @@ __Features__
 
 * Select recipient from users or commenters.
 
-### Learn More
-* Read [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* Update info: [Quick Mail 3.4.2 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-4-2-maintenance-release/).
+
+
+### Learn More
+* Introduction: [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/).
+
+* Latest version: [Quick Mail Improves Translations, Adds Roles](https://wheredidmybraingo.com/quick-mail-improves-translations-adds-roles/).
+
 
 ### Installation ###
 
@@ -129,6 +135,8 @@ __Limitations__
 
 * Additional recipients can be either `CC` or `BCC` but not both.
 
+* 99 recipients for [Gmail](https://support.google.com/a/answer/166852), others.
+
 * Multiple files can be uploaded from up to 6 folders (directories).
 
 * "Uploads are disabled" on mobile devices.
@@ -140,7 +148,7 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 __Address Validation__
 
-* Address validation is an option to check recipient domain on manually entered addresses.
+* Check recipient domain on manually entered addresses.
 
 * International (non-ASCII) domains must be converted to [punycode](https://tools.ietf.org/html/rfc3492) with [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php).
 
@@ -168,7 +176,7 @@ __Mail Errors__
 
    `wp_mail` rejected an address. Seen when Quick Mail verification is off.
    
-= Incompatible Plugins =
+__Incompatible Plugins__
 
 * [Stop Emails](https://wordpress.org/plugins/stop-emails/)
 
@@ -210,9 +218,7 @@ __Translators and Programmers__
 
 * A .pot file is included for translators.
 
-* Includes French, Russian, Spanish translations.
-
-* See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more information.
+* Please help translate Quick Mail. See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more information.
 
 __License__
 

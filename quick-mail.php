@@ -6,7 +6,7 @@
  * Version: 3.5.2 RC2
  * Author: Mitchell D. Miller
  * Author URI: https://badmarriages.net/author/mitchell-d-miller/
- * Plugin URI: https://wheredidmybraingo.com/quick-mail-improves-translations-adds-roles/
+ * Plugin URI: https://wheredidmybraingo.com/quick-mail-3-5-2-email-everyone-wordpress-site/
  * Text Domain: quick-mail
  * Domain Path: /lang
  * License: GPL-2.0+

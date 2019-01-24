@@ -68,6 +68,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 *
 	 * <to>
 	 * : Mail recipient. Enter WordPress user ID, WP role or email address.
+	 * "all" sends mail to all users.
 	 *
 	 * <url or filename>
 	 * : Url or file to send.
@@ -105,7 +106,12 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 *     * wp quick-mail 5 editor notice.pdf Notice
 	 *
 	 *     Send notice.pdf with Notice subject from user 5 to all users with `editor` role.
-	 *     Mail recipient is user 5. Editor addresses are hidden with `Bcc`.
+	 *     Editor addresses are hidden with `Bcc`.
+	 *
+ 	 *     * wp quick-mail 5 all notice.pdf Notice
+	 *
+	 *     Send notice.pdf with Notice subject from user 5 to all users.
+	 *     Recipient addresses are hidden with `Bcc`.
 	 *
 	 * @synopsis <from> <to> <url|filename> [<subject>] [<message_attachment_file>]
 	 */

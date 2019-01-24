@@ -161,7 +161,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		$to = '';
 		if ( ! is_numeric( $args[1] ) && ! strstr( $args[1], '@' ) ) {
 			$all_roles = $this->qm_get_roles();
-			if ( ! in_array( $args[1], $all_roles ) ) {
+			if ( ! in_array( $args[1], $all_roles ) && 'all' != $args[1] ) {
 				$temp_msg = sprintf(
 					'%s: %s',
 					__( 'Invalid Role', 'quick-mail' ),
@@ -545,11 +545,19 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 * @since 3.5.1
 	 */
 	private function qm_get_role_email( $input, $sender_id ) {
-		$args       = array(
-			'exclude' => $sender_id,
-			'role'    => $input,
-			'fields'  => array( 'user_email' ),
-		);
+		$args = array();
+		if ( 'all' == $input ) {
+			$args = array(
+				'exclude' => $sender_id,
+				'fields'  => array( 'user_email' ),
+			);
+		} else {
+			$args = array(
+				'exclude' => $sender_id,
+				'role'    => $input,
+				'fields'  => array( 'user_email' ),
+			);
+		} // end if want all users or role.
 		$user_query = new WP_User_Query( $args );
 		$j          = count( $user_query->results );
 		if ( empty( $j ) ) {

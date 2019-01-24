@@ -32,7 +32,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 =Features=
 
-* Includes a [WP-CLI](https://wp-cli.org/) command to send a file or the the contents of a Web page. Send email to a single recipient or select site users by [WordPress role](https://codex.wordpress.org/Roles_and_Capabilities).
+* Includes a [WP-CLI](https://wp-cli.org/) command to send a file or the contents of a Web page. Send email to a single recipient, select site users by [WordPress role](https://codex.wordpress.org/Roles_and_Capabilities) or send to all users.
 
 * Sends text or html mails to multiple recipients. Content type is determined from message.
 

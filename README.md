@@ -27,7 +27,7 @@ Privacy options to help comply with [General Data Protection Regulation](https:/
 
 __Features__
 
-* Includes a [WP-CLI](https://wp-cli.org/) command to send a file or the the contents of a Web page. Send email to a single recipient or select site users by [WordPress role](https://codex.wordpress.org/Roles_and_Capabilities).
+* Includes a [WP-CLI](https://wp-cli.org/) command to send a file or the contents of a Web page. Send email to a single recipient, select site users by [WordPress role](https://codex.wordpress.org/Roles_and_Capabilities) or send to all users.
 
 * Sends text or html mails to multiple recipients. Content type is determined from message.
 
@@ -50,8 +50,6 @@ __Features__
 * Option to add paragraphs and line breaks to HTML messages with [wpauto](https:/codex.wordpress.org/Function_Reference/wpautop).
 
 * Select recipient from users or commenters.
-
-
 
 
 ### Learn More

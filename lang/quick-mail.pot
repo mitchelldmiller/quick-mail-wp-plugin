@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Quick Mail plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Quick Mail 3.5.2 RC1\n"
+"Project-Id-Version: Quick Mail 3.5.2 RC2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/quick-mail\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-01-23T15:43:15-05:00\n"
+"POT-Creation-Date: 2019-01-24T12:26:37-05:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: quick-mail\n"
@@ -167,15 +167,15 @@ msgstr ""
 msgid "You have an attachment."
 msgstr ""
 
-#: inc/class-quick-mail-command.php:583
+#: inc/class-quick-mail-command.php:591
 msgid "Not found"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:587
+#: inc/class-quick-mail-command.php:595
 msgid "Cannot connect to"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:588
+#: inc/class-quick-mail-command.php:596
 msgid "Error"
 msgstr ""
 

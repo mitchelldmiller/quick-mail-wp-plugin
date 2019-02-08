@@ -183,11 +183,15 @@ class Quick_Mail_Command extends WP_CLI_Command {
 					$temp_msg = __( 'You are the only administrator.', 'quick-mail' );
 					WP_CLI::warning( $temp_msg ); // Warning.
 				} else {
-					$temp_msg = sprintf(
-						'%s: %s',
-						__( 'No users for role', 'quick-mail' ),
-						$args[1]
-					);
+					if ( 'all' === $args[1] ) {
+						$temp_msg = __( 'Cannot send to all. You are the only user.', 'quick-mail' );
+					} else {
+						$temp_msg = sprintf(
+							'%s: %s',
+							__( 'No users for role', 'quick-mail' ),
+							$args[1]
+						);
+					} // Else not all.
 					WP_CLI::error( $temp_msg ); // Exit.
 				}
 			}

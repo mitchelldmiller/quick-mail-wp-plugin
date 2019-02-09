@@ -3,7 +3,7 @@
  *
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.2 RC3
+ * Version: 3.5.2 RC5
  * Author: Mitchell D. Miller
  * Author URI: https://badmarriages.net/author/mitchell-d-miller/
  * Plugin URI: https://wheredidmybraingo.com/quick-mail-3-5-2-email-everyone-wordpress-site/
@@ -646,7 +646,7 @@ jQuery(document).ready( function() {
 
 			if ( 'A' === $option || 'B' === $option ) {
 				$nickname = ucfirst( get_user_meta( $user->ID, 'nickname', true ) );
-				$users[]  = "{$nickname}\t{$user->user_email}";
+				$users[]  = "{$nickname}\t{$user->user_email}\t{$user->ID}";
 			} else {
 				$last  = ucfirst( get_user_meta( $user->ID, 'last_name', true ) );
 				$first = ucfirst( get_user_meta( $user->ID, 'first_name', true ) );
@@ -668,7 +668,7 @@ jQuery(document).ready( function() {
 		echo '<select aria-labelledby="qme_label" name="qm-email" id="qm-primary" required aria-required="true" size="1" tabindex="0" autofocus><option class="qmopt" value="" selected>Select</option>';
 		for ( $i = 0; $i < $j; $i++ ) {
 			$row = explode( "\t", $users[ $i ] );
-			if ( 'A' === $option ) {
+			if ( 'A' === $option || 'B' === $option ) {
 				$address = rawurlencode( "\"{$row[0]}\" <{$row[1]}>" );
 			} else {
 				$address = rawurlencode( "\"{$row[1]} {$row[0]}\" <{$row[3]}>" );

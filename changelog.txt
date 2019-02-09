@@ -1,5 +1,12 @@
 == Quick Mail Changelog ==
 
+= 3.4.4 =
+* Options are saved if plugin is deactivated.
+* Options are deleted if plugin in uninstalled.
+
+= 3.4.3 =
+* Fixed email address validation error.
+
 = 3.4.2 =
 * WP-CLI command recognizes external mail service settings.
 * fixed reply-to for SparkPost.

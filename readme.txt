@@ -18,7 +18,7 @@ Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds 
 
 Send a Web page, file, or message from the command line with quick-mail command for [WP-CLI](https://wp-cli.org/).
 
-** Does not use or require the Gutenberg editor. **
+** Does not require the Gutenberg editor. **
 
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
@@ -32,7 +32,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 =Features=
 
-* Includes a [WP-CLI](https://wp-cli.org/) command to send a file or the contents of a Web page. Send email to a single recipient, select site users by [WordPress role](https://codex.wordpress.org/Roles_and_Capabilities) or send to all users.
+* [WP-CLI](https://wp-cli.org/) command to send a file or the contents of a Web page. Send email to a single recipient, select site users by [WordPress role](https://codex.wordpress.org/Roles_and_Capabilities) or send to all users.
 
 * Sends text or html mails to multiple recipients. Content type is determined from message.
 
@@ -177,6 +177,11 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
    `wp_mail` rejected an address. Seen when Quick Mail verification is off.
    
+* Error: Invalid Role (WP-CLI error)
+
+	You tried sending mail to an unknown WordPress role. Use `wp list roles` to get role names.
+
+
 = Incompatible Plugins =
 
 * [Stop Emails](https://wordpress.org/plugins/stop-emails/)
@@ -230,6 +235,7 @@ If you are using an email delivery service, you can ignore this message.
 == Changelog ==
 
 = 3.5.2 =
+* Fixed error on recipient address, when all users and show roles were selected.
 * Added QUICK_MAIL_TESTING constant to check recipient list, without sending email.
 * Do not send email to over 99 recipients.
 * Exit if WP-CLI attachment is not plain text or HTML.
@@ -245,13 +251,6 @@ If you are using an email delivery service, you can ignore this message.
 * Added option for administrators to add WP roles to user list.
 * Fixed empty error message.
 * Edited PHP to use WordPress Coding Standards.
-
-= 3.4.4 =
-* Options are saved if plugin is deactivated.
-* Options are deleted if plugin in uninstalled. 
-
-= 3.4.3 =
-* Fixed email address validation error. 
 
 = Earlier versions =
 

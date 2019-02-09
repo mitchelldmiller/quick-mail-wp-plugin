@@ -15,7 +15,7 @@ Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds 
 
 Send a Web page, file, or message from the command line with quick-mail command for [WP-CLI](https://wp-cli.org/).
 
-** Does not use or require the Gutenberg editor. **
+** Does not require the Gutenberg editor. **
 
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
@@ -27,7 +27,7 @@ Privacy options to help comply with [General Data Protection Regulation](https:/
 
 __Features__
 
-* Includes a [WP-CLI](https://wp-cli.org/) command to send a file or the contents of a Web page. Send email to a single recipient, select site users by [WordPress role](https://codex.wordpress.org/Roles_and_Capabilities) or send to all users.
+* [WP-CLI](https://wp-cli.org/) command to send a file or the contents of a Web page. Send email to a single recipient, select site users by [WordPress role](https://codex.wordpress.org/Roles_and_Capabilities) or send to all users.
 
 * Sends text or html mails to multiple recipients. Content type is determined from message.
 
@@ -168,11 +168,15 @@ __Mail Errors__
 
 * Quick Mail sends email with [wp_mail](https://developer.wordpress.org/reference/functions/wp_mail/).
 
-  `wp_mail` error messages are displayed, if there is a problem.
+	`wp_mail` error messages are displayed, if there is a problem.
 
 * "You must provide at least one recipient email address."
 
-   `wp_mail` rejected an address. Seen when Quick Mail verification is off.
+	`wp_mail` rejected an address. Seen when Quick Mail verification is off.
+
+* Error: Invalid Role (WP-CLI error)
+
+	You tried sending mail to an unknown WordPress role. Use `wp list roles` to get role names.
    
 __Incompatible Plugins__
 

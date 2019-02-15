@@ -619,7 +619,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 */
 	private function verify_email_or_id( $from, $admin_only ) {
 		if ( ! is_numeric( $from ) && ! $admin_only ) {
-			return array( sanitize_email( $from ), 1 );
+			return array( $from, 1 );
 		} // end if not numeric or admin only
 
 		$args = array();

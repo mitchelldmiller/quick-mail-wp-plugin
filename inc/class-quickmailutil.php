@@ -123,7 +123,7 @@ class QuickMailUtil {
 				continue;
 			} // end if empty
 
-			$hname = htmlspecialchars( html_entity_decode( wp_strip_all_tags( $name ) ), ENT_QUOTES );
+			$hname = htmlspecialchars( html_entity_decode( strip_tags( $name ) ), ENT_QUOTES );
 			if ( ! self::qm_valid_email_domain( $name, $validate_option ) ) {
 				$invalid .= "{$hname}<br>";
 				$name     = '';

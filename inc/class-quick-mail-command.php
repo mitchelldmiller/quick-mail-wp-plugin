@@ -3,6 +3,7 @@
  * Mail a Web page or file with quick-mail.
  *
  * @package QuickMail
+ * @version 3.5.2
  */
 class Quick_Mail_Command extends WP_CLI_Command {
 
@@ -28,6 +29,14 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	public $content_type = 'text/html';
 
 	/**
+	 * Users selected for role emails.
+	 *
+	 * @var string
+	 * @since 3.5.1
+	 */
+	public $roles = '';
+
+	/**
 	 * Sender's character set.
 	 *
 	 * @var string
@@ -39,7 +48,6 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 *
 	 * @var string
 	 * @since 3.4.1
-	 * @todo needs translation
 	 */
 	public static $services = array( 'Mailgun', 'SendGrid', 'SparkPost' );
 
@@ -59,7 +67,8 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 * : Sender. Must be Administrator. Enter WordPress user ID or email address.
 	 *
 	 * <to>
-	 * : Mail recipient. Enter WordPress user ID or email address.
+	 * : Mail recipient. Enter WordPress user ID, WP role or email address.
+	 * "all" sends mail to all users.
 	 *
 	 * <url or filename>
 	 * : Url or file to send.
@@ -93,6 +102,16 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 *
 	 *     Send resume.doc to mary@example.com with "Application" subject.
 	 *     Message will be the contents of cover.txt.
+	 *
+	 *     * wp quick-mail 5 editor notice.pdf Notice
+	 *
+	 *     Send notice.pdf with Notice subject from user 5 to all users with `editor` role.
+	 *     Editor addresses are hidden with `Bcc`.
+	 *
+ 	 *     * wp quick-mail 5 all notice.pdf Notice
+	 *
+	 *     Send notice.pdf with Notice subject from user 5 to all users.
+	 *     Recipient addresses are hidden with `Bcc`.
 	 *
 	 * @synopsis <from> <to> <url|filename> [<subject>] [<message_attachment_file>]
 	 */
@@ -128,23 +147,65 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			$verify_domain = get_option( 'verify_quick_mail_addresses', 'N' );
 		} // end if multisite
 
-		$this->from = $this->verify_email_or_id( $args[0], true ); // Admin only.
-		$temp_msg   = '';
+		$data = $this->verify_email_or_id( $args[0], true ); // Admin only.
+		if ( is_array( $data ) && ! empty( $data[0] ) && ! empty( $data[1] ) ) {
+			$this->from = $data[0];
+			$sender_id  = $data[1];
+		} // end if got results
+
+		$temp_msg = '';
 		if ( empty( $this->from ) ) {
 			$temp_msg = __( 'Only administrators can send mail with WP-CLI.', 'quick-mail' );
 		} elseif ( ! QuickMailUtil::qm_valid_email_domain( $this->from, $verify_domain ) ) {
-			$temp_msg = __( 'Invalid Sender Address', 'quick-mail' );
+			$temp_msg = __( 'Invalid Sender Address.', 'quick-mail' );
 		} // end if invalid user or address.
 
 		if ( ! empty( $temp_msg ) ) {
 			WP_CLI::error( $temp_msg ); // Exit.
 		} // end if we have an error message.
 
-		$to = $this->verify_email_or_id( $args[1], false );
-		if ( empty( $to ) || ! QuickMailUtil::qm_valid_email_domain( $to, $verify_domain ) ) {
-			$temp_msg = __( 'Invalid Recipient Address', 'quick-mail' );
-			WP_CLI::error( $temp_msg ); // Exit.
-		} // end if invalid recipient.
+		$to = '';
+		if ( ! is_numeric( $args[1] ) && ! strstr( $args[1], '@' ) ) {
+			$all_roles = $this->qm_get_roles();
+			if ( ! in_array( $args[1], $all_roles ) && 'all' != $args[1] ) {
+				$temp_msg = sprintf(
+					'%s: %s',
+					__( 'Invalid Role', 'quick-mail' ),
+					$args[1]
+				);
+				WP_CLI::error( $temp_msg ); // Exit.
+			} // end if invalid role.
+
+			$this->roles = $this->qm_get_role_email( $args[1], $sender_id );
+			if ( empty( $this->roles ) ) {
+				if ( 'administrator' === $args[1] ) {
+					$to       = $this->from;
+					$temp_msg = __( 'You are the only administrator.', 'quick-mail' );
+					WP_CLI::warning( $temp_msg ); // Warning.
+				} else {
+					if ( 'all' === $args[1] ) {
+						$temp_msg = __( 'Cannot send to all. You are the only user.', 'quick-mail' );
+					} else {
+						$temp_msg = sprintf(
+							'%s: %s',
+							__( 'No users for role', 'quick-mail' ),
+							$args[1]
+						);
+					} // Else not all.
+					WP_CLI::error( $temp_msg ); // Exit.
+				}
+			}
+		} else {
+			$data = $this->verify_email_or_id( $args[1], false ); // Not Admin only.
+			if ( is_array( $data ) && ! empty( $data[0] ) && ! empty( $data[1] ) ) {
+				$to = $data[0];
+			} // end if got results
+
+			if ( empty( $to ) || ! QuickMailUtil::qm_valid_email_domain( $to, $verify_domain ) ) {
+				$temp_msg = sprintf( '%s : %s', __( 'Invalid Recipient Address', 'quick-mail' ), $args[1] );
+				WP_CLI::error( $temp_msg ); // Exit.
+			} // end if invalid recipient.
+		} // end if recipient is a role.
 
 		$url          = '';
 		$subject      = '';
@@ -205,7 +266,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		if ( empty( $user->user_firstname ) || empty( $user->user_lastname ) ) {
 			$this->name = $user->display_name;
 		} else {
-			$this->name = "\"{$user->user_firstname} {$user->user_lastname}\"";
+			$this->name = "{$user->user_firstname} {$user->user_lastname}";
 		} // end if missing first or last name
 
 		$message   = '';
@@ -301,15 +362,48 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			WP_CLI::log( 'Filtering SparkPost reply-to' );
 		} else {
 			$headers[] = "Reply-To: {$this->from}\r\n";
-		}
+		} // end if Sparkpost.
 
-		if ( ! wp_mail( $to, $subject, $message, $headers, $attachments ) ) {
+		if ( ! empty( $this->roles ) ) {
+			if ( strstr( $this->roles, ',' ) ) {
+				$to        = $this->from;
+				$headers[] = "Bcc: {$this->roles}";
+			} else {
+				$to = $this->roles;
+			}
+		} // end if sending to roles.
+
+		$recipients = QuickMailUtil::count_recipients( $headers );
+		if ( 100 < $recipients ) {
+			$temp_msg = __( 'Cannot send mail to over 100 recipients.', 'quick-mail' );
+			WP_CLI::error( $temp_msg );
+		} // end if too many recipients.
+
+		if ( defined( 'QUICK_MAIL_TESTING' ) && QUICK_MAIL_TESTING ) {
+			$bottom = '';
+			foreach ( $headers as $one ) {
+				$bottom .= "{$one}\r\n";
+			} // end foreach.
+
+			$top      = sprintf( "%s\r\n%s : %s", __( 'TEST MODE', 'quick-mail' ), __( 'To', 'quick-mail' ), $to );
+			$temp_msg = "{$top}\r\n{$bottom}";
+			WP_CLI::log( $temp_msg );
+			exit;
+		} elseif ( ! wp_mail( $to, $subject, $message, $headers, $attachments ) ) {
 			$this->remove_qm_filters( $file, $active );
 			$temp_msg = __( 'Error sending mail', 'quick-mail' );
 			WP_CLI::error( $temp_msg );
 		} // end if error sending mail
 
 		$this->remove_qm_filters( $file, $active );
+		if ( ! empty( $this->roles ) ) {
+			if ( strstr( $this->roles, ',' ) ) {
+				$this->roles = str_replace( ',', ', ', $this->roles );
+				$this->roles = wordwrap( $this->roles, 65 );
+			}
+			$to = "{$args[1]} : {$this->roles}";
+		} // end if using roles.
+
 		if ( $sending_file ) {
 			$temp_msg = sprintf(
 				'%s %s %s %s',
@@ -375,7 +469,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			$ok    = in_array( $fmime, self::$valid_mime, true );
 			if ( ! $ok ) {
 				$temp_msg = __( 'Invalid message type', 'quick-mail' ) . ' : ' . $fmime;
-				WP_CLI::warning( $temp_msg );
+				WP_CLI::error( $temp_msg );
 			}
 			return $ok;
 		} // end if file exists
@@ -437,6 +531,57 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	} // end from_filter
 
 	/**
+	 * Get an array of site's roles, to validate input.
+	 *
+	 * @return array role keys
+	 * @since 3.5.1
+	 */
+	private function qm_get_roles() {
+		global $wp_roles;
+		$data = array();
+		foreach ( $wp_roles->roles as $key => $value ) {
+			$data[] = $key;
+		} // end foreach
+		sort( $data );
+		return $data;
+	} // end qm_get_roles
+
+	/**
+	 * Get string of role email addresses, separated by commas.
+	 *
+	 * @param string  $input user input.
+	 * @param integer $sender_id user ID of sender, for exclude.
+	 * @return string role email addresses, separated by commas
+	 * @since 3.5.1
+	 */
+	private function qm_get_role_email( $input, $sender_id ) {
+		$args = array();
+		if ( 'all' == $input ) {
+			$args = array(
+				'exclude' => $sender_id,
+				'fields'  => array( 'user_email' ),
+			);
+		} else {
+			$args = array(
+				'exclude' => $sender_id,
+				'role'    => $input,
+				'fields'  => array( 'user_email' ),
+			);
+		} // end if want all users or role.
+		$user_query = new WP_User_Query( $args );
+		$j          = count( $user_query->results );
+		if ( empty( $j ) ) {
+			return '';
+		} // end if no match.
+
+		$got = '';
+		for ( $i = 0; $i < $j; $i++ ) {
+			$got .= $user_query->results[ $i ]->user_email . ',';
+		} // end for
+		return substr( $got, 0, -1 );
+	} // end qm_get_role_email.
+
+	/**
 	 * Connect to remote site as Chrome browser. Return error string or array with data.
 	 *
 	 * @param string $site url of site.
@@ -470,11 +615,11 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 *
 	 * @param mixed   $from ID number or email address.
 	 * @param boolean $admin_only limit search to Administrators.
-	 * @return string email address
+	 * @return array email address, user ID
 	 */
 	private function verify_email_or_id( $from, $admin_only ) {
 		if ( ! is_numeric( $from ) && ! $admin_only ) {
-			return sanitize_email( $from );
+			return array( $from, 1 );
 		} // end if not numeric or admin only
 
 		$args = array();
@@ -534,7 +679,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		} // end if numeric
 
 		$user_query = new WP_User_Query( $args );
-		return empty( $user_query->results ) ? '' : $user_query->results[0]->data->user_email;
+		return empty( $user_query->results ) ? '' : array( $user_query->results[0]->data->user_email, $user_query->results[0]->data->ID );
 	} // end verify_email_or_id
 } // end Quick_Mail_Command
 

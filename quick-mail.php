@@ -3,10 +3,10 @@
  *
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.0
+ * Version: 3.5.2
  * Author: Mitchell D. Miller
  * Author URI: https://badmarriages.net/author/mitchell-d-miller/
- * Plugin URI: https://wheredidmybraingo.com/quick-mail-improves-translations-adds-roles/
+ * Plugin URI: https://wheredidmybraingo.com/quick-mail-3-5-2-email-everyone-wordpress-site/
  * Text Domain: quick-mail
  * Domain Path: /lang
  * License: GPL-2.0+
@@ -17,7 +17,7 @@
 
 /*
  * Quick Mail WordPress Plugin - Send mail from WordPress using Quick Mail
- * Copyright (C) 2014-2018 Mitchell D. Miller
+ * Copyright (C) 2014-2019 Mitchell D. Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -646,7 +646,7 @@ jQuery(document).ready( function() {
 
 			if ( 'A' === $option || 'B' === $option ) {
 				$nickname = ucfirst( get_user_meta( $user->ID, 'nickname', true ) );
-				$users[]  = "{$nickname}\t{$user->user_email}";
+				$users[]  = "{$nickname}\t{$user->user_email}\t{$user->ID}";
 			} else {
 				$last  = ucfirst( get_user_meta( $user->ID, 'last_name', true ) );
 				$first = ucfirst( get_user_meta( $user->ID, 'first_name', true ) );
@@ -668,7 +668,7 @@ jQuery(document).ready( function() {
 		echo '<select aria-labelledby="qme_label" name="qm-email" id="qm-primary" required aria-required="true" size="1" tabindex="0" autofocus><option class="qmopt" value="" selected>Select</option>';
 		for ( $i = 0; $i < $j; $i++ ) {
 			$row = explode( "\t", $users[ $i ] );
-			if ( 'A' === $option ) {
+			if ( 'A' === $option || 'B' === $option ) {
 				$address = rawurlencode( "\"{$row[0]}\" <{$row[1]}>" );
 			} else {
 				$address = rawurlencode( "\"{$row[1]} {$row[0]}\" <{$row[3]}>" );
@@ -1421,6 +1421,24 @@ jQuery(document).ready( function() {
 					} // end if
 				} // end if
 
+				$recipients = QuickMailUtil::count_recipients( $headers );
+				if ( 100 < $recipients ) {
+					$direction = is_rtl() ? 'rtl' : 'ltr';
+					$padding   = is_rtl() ? 'padding-right: 2em;' : 'padding-left: 2em;';
+					$error     = sprintf(
+						'%s <a class="wp-ui-text-highlight" style="%s" href="javascript:history.back()">%s</a>',
+						esc_html( __( 'Cannot send mail to over 100 recipients.', 'quick-mail' ) ),
+						esc_attr( $padding ),
+						esc_html( __( 'Edit mail.', 'quick-mail' ) )
+					);
+					$args      = array(
+						'response'       => 200,
+						'back_link'      => false,
+						'text_direction' => $direction,
+					);
+					wp_die( sprintf( '<span style="font-size: 1.5em;" role="alert">%s</span>', $error, esc_html( __( 'Mail Error', 'quick-mail' ) ), $args ) );
+				} // end if over 100 recipients.
+
 				if ( user_can_richedit() && 'text/html' === $this->content_type && '1' === get_user_meta( get_current_user_id(), 'qm_wpautop', true ) ) {
 					$message = wpautop( $message );
 				} // end if
@@ -1437,7 +1455,13 @@ jQuery(document).ready( function() {
 					$sp_toggle = QuickMailUtil::toggle_sparkpost_transactional( $attachments );
 				} // end if toggle SparkPost transactional
 
-				if ( wp_mail( $to, $subject, $message, $headers, $attachments ) ) {
+				if ( defined( 'QUICK_MAIL_TESTING' ) && QUICK_MAIL_TESTING ) {
+					$message = '';
+					foreach ( $headers as $one ) {
+						$message .= esc_html( $one ) . '<br>';
+					} // end foreach.
+					$success = sprintf( '%s : %s<br>%s', __( 'To', 'quick-mail' ), $to, $message );
+				} elseif ( wp_mail( $to, $subject, $message, $headers, $attachments ) ) {
 					$success   = __( 'Message Sent', 'quick-mail' );
 					$rec_label = ( 'Cc' === $rec_type ) ? __( 'CC', 'quick-mail' ) : __( 'BCC', 'quick-mail' );
 					if ( empty( $mcc ) ) {
@@ -1526,7 +1550,12 @@ jQuery(document).ready( function() {
 		$invalid_msg = ( 'Y' === $verify ) ? __( 'Cannot verify address', 'quick-mail' ) : __( 'Invalid mail address', 'quick-mail' );
 		// Inform user that Quick Mail is verifying addresses.
 		?>
+
+		<?php if ( defined( 'QUICK_MAIL_TESTING' ) && QUICK_MAIL_TESTING ) : ?>
+<h1 id="quick-mail-title" class="quick-mail-title"><?php esc_html_e( 'Quick Mail', 'quick-mail' ); ?> <span class="wp-ui-text-highlight"><?php esc_html_e( 'TEST MODE', 'quick-mail' ); ?></span></h1>
+		<?php else : ?>
 <h1 id="quick-mail-title" class="quick-mail-title"><?php esc_html_e( 'Quick Mail', 'quick-mail' ); ?></h1>
+		<?php endif; ?>
 		<?php if ( ! empty( $no_uploads ) ) : ?>
 <div class="update-nag notice is-dismissible">
 	<p role="alert"><?php esc_html_e( $no_uploads ); ?></p>
@@ -2574,20 +2603,20 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 				$content .= "<dd>{$sendgrid_desc}.</dd>";
 			} // end if got replacement API
 
-			$content .= '<dt><strong>' . __( 'Hide Administrator Profiles', 'quick-mail' ) . '</strong></dt>';
-			$content .= '<dd>' . __( 'Prevent users from sending email to administrators', 'quick-mail' ) . '.</dd>';
-			$content .= '<dt><strong>' . __( 'Grant Editors access to user list', 'quick-mail' ) . '</strong></dt>';
-			$content .= '<dd>' . __( 'Otherwise only administrators can view the user list', 'quick-mail' ) . '</dd>';
-			$content .= '<dt><strong>' . __( 'Show user roles', 'quick-mail' ) . '</strong></dt>';
-			$content .= '<dd>' . __( 'Let administrators see role on user list.', 'quick-mail' ) . '</dd>';
-			$content .= '<dt><strong>' . __( 'Verify recipient email domains', 'quick-mail' ) . '</strong></dt>';
-			$content .= '<dd>' . __( 'Check if recipient domain accepts email.', 'quick-mail' ) . '</dd>';
+			$content    .= '<dt><strong>' . __( 'Hide Administrator Profiles', 'quick-mail' ) . '</strong></dt>';
+			$content    .= '<dd>' . __( 'Prevent users from sending email to administrators', 'quick-mail' ) . '.</dd>';
+			$content    .= '<dt><strong>' . __( 'Grant Editors access to user list', 'quick-mail' ) . '</strong></dt>';
+			$content    .= '<dd>' . __( 'Otherwise only administrators can view the user list', 'quick-mail' ) . '</dd>';
+			$content    .= '<dt><strong>' . __( 'Show user roles', 'quick-mail' ) . '</strong></dt>';
+			$content    .= '<dd>' . __( 'Let administrators see role on user list.', 'quick-mail' ) . '</dd>';
+			$content    .= '<dt><strong>' . __( 'Verify recipient email domains', 'quick-mail' ) . '</strong></dt>';
+			$content    .= '<dd>' . __( 'Check if recipient domain accepts email.', 'quick-mail' ) . '</dd>';
 			$english_dns = __( 'http://php.net/manual/en/function.checkdnsrr.php', 'quick-mail' );
 			$z           = __( 'Checks domain with', 'quick-mail' );
 			$dnserr_link = "<a target='_blank' href='{$english_dns}'>checkdnsrr</a>";
 			$content    .= "<dd>{$z} {$dnserr_link}</dd>";
 			$content    .= '<dd class="wp-ui-text-highlight">' . __( 'Turn verification off if Quick Mail rejects a valid address.', 'quick-mail' ) . '</dd>';
-			$content .= '</dl>';
+			$content    .= '</dl>';
 			$screen->add_help_tab(
 				array(
 					'id'      => 'qm_admin_display_help',
@@ -2866,8 +2895,8 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 		$display_option = $this->qm_get_display_option( $blog );
 		$cc_title       = __( 'Adding CC', 'quick-mail' );
 		$xhelp          = __( 'Enter multiple addresses by separating them with a space or comma.', 'quick-mail' );
-		$mac_names      = __( 'Press &lt;Command&gt; while clicking, to select multiple users.', 'quick-mail' );
-		$win_names      = __( 'Press &lt;Control&gt; while clicking, to select multiple users.', 'quick-mail' );
+		$mac_names      = __( 'Press Command while clicking, to select multiple users.', 'quick-mail' );
+		$win_names      = __( 'Press Control while clicking, to select multiple users.', 'quick-mail' );
 		$mob_names      = __( 'You can select multiple users', 'quick-mail' );
 		$nhelp          = '';
 		if ( wp_is_mobile() ) {

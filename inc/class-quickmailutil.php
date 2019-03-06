@@ -687,4 +687,22 @@ class QuickMailUtil {
 		return ( 0 < $cquery );
 	} // end user_has_comments
 
+	/**
+	 * Count recipients in email headers.
+	 *
+	 * @param array $headers Email headers.
+	 * @return integer count of recipients
+	 * @since 3.5.2
+	 */
+	public static function count_recipients( $headers ) {
+		$recipients = 2; // To and From.
+		foreach ( $headers as $one ) {
+			$got = count_chars( $one, 1 );
+			if ( ! empty( $got ) && ! empty( $got[64] ) ) {
+				$recipients += $got[64];
+			} // Add amphora count.
+		} // end foreach.
+		return $recipients;
+	} // end count_recipients
+
 } // end class

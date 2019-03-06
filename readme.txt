@@ -3,9 +3,9 @@ Contributors: brainiac
 Tags: mail, email, comments, wp-cli, mailgun, sparkpost, attachment, sendgrid, accessibility, idn, multisite
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Requires at least: 5.0
-Tested up to: 5.1
+Tested up to: 5.2
 Requires PHP: 5.3
-Stable tag: 3.5.0
+Stable tag: 3.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,6 +18,8 @@ Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds 
 
 Send a Web page, file, or message from the command line with quick-mail command for [WP-CLI](https://wp-cli.org/).
 
+** Does not need the Gutenberg editor. **
+
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
 User options for sending email to site users or others.
@@ -28,11 +30,37 @@ Uses sender's name, sets reply to sender's address. Recognizes settings from [Ma
 
 Multiple files from up to six directories (folders) can be attached to a message.
 
+=Features=
+
+* [WP-CLI](https://wp-cli.org/) command to send a file or the contents of a Web page. Send email to a single recipient, select site users by [WordPress role](https://codex.wordpress.org/Roles_and_Capabilities) or send to all users.
+
+* Sends text or html mails to multiple recipients. Content type is determined from message.
+
+* Send private replies with attachments to comments.
+
+* Multiple recipients can be selected from users or entered manually.
+
+* Saves message and subject on form to send repeat messages.
+
+* Saves last 12 email addresses entered on form.
+
+* Share a WordPress draft by copying / pasting its code into a message.
+
+* Option to validate recipient domains with [checkdnserr](http://php.net/manual/en/function.checkdnsrr.php) before mail is sent.
+
+* Validates international domains if [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php) is available to convert domain to [Punycode](https://tools.ietf.org/html/rfc3492).
+
+* Site options for administrators to hide their profile, and limit access to user list.
+
+* Option to add paragraphs and line breaks to HTML messages with [wpauto](https:/codex.wordpress.org/Function_Reference/wpautop).
+
+* Select recipient from users or commenters.
+
 = Learn More =
 
-* [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) is an introduction.
+* Introduction: [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/).
 
-* [Quick Mail 3.4.4 Improves Deactivation](https://wheredidmybraingo.com/quick-mail-3-4-4-improves-deactivation/).
+* Latest version: [Quick Mail 3.5.2 Sends Email to Everyone on WordPress Site](https://wheredidmybraingo.com/quick-mail-3-5-2-email-everyone-wordpress-site/).
 
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/).
 
@@ -86,7 +114,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * Users need permission to [list users](https://codex.wordpress.org/Roles_and_Capabilities#list_users), to view user list or change options. Minimum permission can be changed with an option or filter.
 
-= Sending Mail from Other Addresses =
+= Mail Delivery Services =
 
 * Uses [Mailgun plugin](https://wordpress.org/plugins/mailgun/) settings for Administrators, if the plugin is activated, using `Override "From" Details` and [Mailgun API](https://documentation.mailgun.com/en/latest/api_reference.html).
 
@@ -94,9 +122,11 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * Option for administrators to use [Sendgrid API](https://sendgrid.com/solutions/sendgrid-api/).
 
-* [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) is an experimental plugin that changes the Quick Mail sender's name and email address.
+= Sending Mail from Other Addresses =
 
-* Programmers can replace their credentials by adding a filter to `replace_quick_mail_sender`. This only works if you are not using another mail plugin's credentials.
+* Install the [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) plugin, to change the Quick Mail sender's name and email address.
+
+* NOTE: Other email plugins can change these settings.
 
 = Privacy =
 
@@ -110,6 +140,8 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * Additional recipients can be either `CC` or `BCC` but not both.
 
+* 99 recipients for [Gmail](https://support.google.com/a/answer/166852), others.
+
 * Multiple files can be uploaded from up to 6 folders (directories).
 
 * "Uploads are disabled" on some mobile devices.
@@ -121,9 +153,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 = Address Validation =
 
-* Address validation is an option to check recipient domain on manually entered addresses.
+* Check recipient domain on manually entered addresses.
 
-* International (non-ASCII) domains must be converted to [punycode](https://tools.ietf.org/html/rfc3492) with [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php).
+* International (non-ASCII) domains must be converted to [Punycode](https://tools.ietf.org/html/rfc3492) with [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php).
 
   Unfortunately, `idn_to_ascii` is not available on all systems.
 
@@ -147,6 +179,11 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
    `wp_mail` rejected an address. Seen when Quick Mail verification is off.
    
+* Error: Invalid Role (WP-CLI error)
+
+	You tried sending mail to an unknown WordPress role. Use `wp list roles` to get role names.
+
+
 = Incompatible Plugins =
 
 * [Stop Emails](https://wordpress.org/plugins/stop-emails/)
@@ -199,6 +236,22 @@ If you are using an email delivery service, you can ignore this message.
 
 == Changelog ==
 
+= 3.5.2 =
+* Fixed error on recipient address, when all users and show roles were selected.
+* Added QUICK_MAIL_TESTING constant to check recipient list, without sending email.
+* Added WP-CLI command option for sending email to all users on site.
+* Do not send email to over 99 recipients.
+* Do not hide role recipients, if only one recipient.
+* Do not apply sanitize_email to WP-CLI recipient address.
+* Removed double quotes on some user names from WP-CLI command.
+* Replaced wp_strip_all_tags with strip_tags on AJAX email validation. 
+* Select recipients for WP-CLI command by role.
+* Exit if WP-CLI attachment is not plain text or HTML.
+
+= 3.5.1 =
+* Improved translation text.
+* Fixed: Show user roles is always disabled if Do Not Show Users is checked.
+
 = 3.5.0 =
 * Javascript internationalization.
 * Combined strings for easier translation.
@@ -207,40 +260,18 @@ If you are using an email delivery service, you can ignore this message.
 * Fixed empty error message.
 * Edited PHP to use WordPress Coding Standards.
 
-= 3.4.4 =
-* Options are saved if plugin is deactivated.
-* Options are deleted if plugin in uninstalled. 
-
-= 3.4.3 =
-* Fixed email address validation error. 
-
 = Earlier versions =
 
 Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
 
-= 3.5.0 =
-* Upgrade recommended.
-
-= 3.4.4 =
-* Upgrade recommended.
-
-= 3.4.3 =
-* Upgrade recommended.
-
-= 3.4.2 =
-* Upgrade recommended.
-
-= 3.4.1 =
-* Upgrade recommended.
-
-= 3.4.0 =
+= 3.5.2 =
 * Upgrade recommended.
 
 == License ==
 
-Quick Mail is free for personal or commercial use. Encourage future development with a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY "Donate with PayPal").
+Quick Mail is free for personal or commercial use. Encourage future development with a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY).
 
 == Credits ==
 

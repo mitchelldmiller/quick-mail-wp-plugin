@@ -77,7 +77,7 @@ __Features__
 
 ### Translators / Translations ###
 
-* Quick Mail is no longer distributed with translations.
+* Quick Mail is not distributed with translations.
 
 * Visit [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for translations and more information.
 

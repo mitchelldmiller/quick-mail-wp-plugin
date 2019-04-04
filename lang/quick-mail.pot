@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-04-04T12:58:11-04:00\n"
+"POT-Creation-Date: 2019-04-04T13:14:56-04:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: quick-mail\n"
@@ -1058,11 +1058,11 @@ msgid "Enter multiple addresses by separating them with a space or comma."
 msgstr ""
 
 #: quick-mail.php:2901
-msgid "Press Command while clicking, to select multiple users."
+msgid "Press Command key while clicking, to select multiple users."
 msgstr ""
 
 #: quick-mail.php:2902
-msgid "Press Control while clicking, to select multiple users."
+msgid "Press Control key while clicking, to select multiple users."
 msgstr ""
 
 #: quick-mail.php:2903
@@ -1082,11 +1082,11 @@ msgid "from up to six directories"
 msgstr ""
 
 #: quick-mail.php:2930
-msgid "Press &lt;Command&gt; while clicking, to select multiple files."
+msgid "Press Command key while clicking, to select multiple files."
 msgstr ""
 
 #: quick-mail.php:2931
-msgid "Press &lt;Control&gt; while clicking, to select multiple files."
+msgid "Press Control key while clicking, to select multiple files."
 msgstr ""
 
 #: quick-mail.php:2932

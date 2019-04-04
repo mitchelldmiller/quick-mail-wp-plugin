@@ -2898,8 +2898,8 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 		$display_option = $this->qm_get_display_option( $blog );
 		$cc_title       = __( 'Adding CC', 'quick-mail' );
 		$xhelp          = __( 'Enter multiple addresses by separating them with a space or comma.', 'quick-mail' );
-		$mac_names      = __( 'Press Command while clicking, to select multiple users.', 'quick-mail' );
-		$win_names      = __( 'Press Control while clicking, to select multiple users.', 'quick-mail' );
+		$mac_names      = __( 'Press Command key while clicking, to select multiple users.', 'quick-mail' );
+		$win_names      = __( 'Press Control key while clicking, to select multiple users.', 'quick-mail' );
 		$mob_names      = __( 'You can select multiple users', 'quick-mail' );
 		$nhelp          = '';
 		if ( wp_is_mobile() ) {
@@ -2927,8 +2927,8 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 				$attachment_help .= ' ' . esc_html__( 'from up to six directories', 'quick-mail' );
 			} // end if mobile
 			$attachment_help .= '.</p>';
-			$mac_files        = __( 'Press &lt;Command&gt; while clicking, to select multiple files.', 'quick-mail' );
-			$win_files        = __( 'Press &lt;Control&gt; while clicking, to select multiple files.', 'quick-mail' );
+			$mac_files        = __( 'Press Command key while clicking, to select multiple files.', 'quick-mail' );
+			$win_files        = __( 'Press Control key while clicking, to select multiple files.', 'quick-mail' );
 			$mob_files        = esc_html__( 'You can select multiple files', 'quick-mail' );
 			$nhelp            = '';
 			if ( wp_is_mobile() ) {

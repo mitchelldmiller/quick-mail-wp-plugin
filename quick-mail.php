@@ -3,7 +3,7 @@
  *
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.3 Alpha
+ * Version: 3.5.3 Beta
  * Author: Mitchell D. Miller
  * Author URI: https://badmarriages.net/author/mitchell-d-miller/
  * Plugin URI: https://wheredidmybraingo.com/quick-mail-3-5-2-email-everyone-wordpress-site/
@@ -173,7 +173,7 @@ class QuickMail {
 		} // end if
 
 		$english_faq = __( 'https://wordpress.org/plugins/quick-mail/faq/', 'quick-mail' );
-		$github      = __( 'Follow development on Github' );
+		$github      = __( 'Follow development on Github', 'quick-mail' );
 		$glink       = "<a target='_blank' href='https://github.com/mitchelldmiller/quick-mail-wp-plugin/'>{$github}</a>";
 		$faq         = __( 'FAQ', 'quick-mail' );
 		$flink       = '<a href="https://wordpress.org/plugins/quick-mail/faq/" target="_blank">' . $faq . '</a>';
@@ -687,9 +687,8 @@ jQuery(document).ready( function() {
 			$role = '';
 			if ( 'B' === $option || 'O' === $option ) {
 				$user_meta = get_userdata( $row[2] );
-				if ( ! empty( $user_meta->roles ) ) {
-					$role = ' (' . ucfirst( $user_meta->roles[0] ) . ')';
-				} // end if found role.
+				$urole = empty( $user_meta->roles[0] ) ? __( 'No Role', 'quick-mail' ) : ucfirst( $user_meta->roles[0] );
+				$role = " ({$urole})";
 			} // end if want role.
 
 			if ( 'A' === $option || 'B' === $option ) {
@@ -790,6 +789,8 @@ jQuery(document).ready( function() {
 				$user_meta = get_userdata( $row[2] );
 				if ( ! empty( $user_meta->roles ) ) {
 					$role = ' (' . ucfirst( $user_meta->roles[0] ) . ')';
+				} else {
+					$role = ' (' . __( 'No Role', 'quick-mail' ) . ')';
 				} // end if found role.
 			} // end if want role.
 

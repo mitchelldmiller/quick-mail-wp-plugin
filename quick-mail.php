@@ -687,8 +687,8 @@ jQuery(document).ready( function() {
 			$role = '';
 			if ( 'B' === $option || 'O' === $option ) {
 				$user_meta = get_userdata( $row[2] );
-				$urole = empty( $user_meta->roles[0] ) ? __( 'No Role', 'quick-mail' ) : ucfirst( $user_meta->roles[0] );
-				$role = " ({$urole})";
+				$urole     = empty( $user_meta->roles[0] ) ? __( 'No Role', 'quick-mail' ) : ucfirst( $user_meta->roles[0] );
+				$role      = " ({$urole})";
 			} // end if want role.
 
 			if ( 'A' === $option || 'B' === $option ) {

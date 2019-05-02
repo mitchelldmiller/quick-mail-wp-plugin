@@ -215,10 +215,10 @@ class QuickMailUtil {
 		} // end if no dots - localhost?
 
 		if ( function_exists( 'idn_to_ascii' ) ) {
-			$intl = idn_to_ascii( $a_split[1] );
+			$intl = defined( 'INTL_IDNA_VARIANT_UTS46' ) ? idn_to_ascii( $a_split[1], INTL_IDNA_VARIANT_UTS46 ) : idn_to_ascii( $a_split[1] );
 			if ( ! empty( $intl ) ) {
 				$a_split[1] = $intl;
-			} // end if we have punycode address
+			} // end if we have punycode address. xn--mrens-bsa.club = mérens.club.
 		} // end if we have idn_to_ascii
 
 		return ( 'N' === $validate_option ) ? true : checkdnsrr( $a_split[1], 'MX' );

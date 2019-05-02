@@ -238,6 +238,8 @@ If you are using an email delivery service, you can ignore this message.
 
 = 3.5.3 =
 * Improved help for Quick Mail settings.
+* Display No Role on list selection, if user has no role on site.
+* Fixed idn_to_ascii(): INTL_IDNA_VARIANT_2003 is deprecated.
 
 = 3.5.2 =
 * Fixed error on recipient address, when all users and show roles were selected.

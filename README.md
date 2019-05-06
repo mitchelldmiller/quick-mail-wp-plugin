@@ -55,8 +55,7 @@ __Features__
 ### Learn More
 * Introduction: [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/).
 
-* Latest version: [Quick Mail 3.5.2 Sends Email to Everyone on WordPress Site](https://wheredidmybraingo.com/quick-mail-3-5-2-email-everyone-wordpress-site).
-
+* Latest version: [Quick Mail Sends Messages from WordPress](https://wheredidmybraingo.com/quick-mail-sends-messages-from-wordpress/).
 
 ### Installation ###
 

@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Requires at least: 5.0
 Tested up to: 5.2
 Requires PHP: 5.3
-Stable tag: 3.5.2
+Stable tag: 3.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,7 +60,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * Introduction: [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/).
 
-* Latest version: [Quick Mail 3.5.2 Sends Email to Everyone on WordPress Site](https://wheredidmybraingo.com/quick-mail-3-5-2-email-everyone-wordpress-site/).
+* Latest version: [Quick Mail Sends Messages from WordPress](https://wheredidmybraingo.com/quick-mail-sends-messages-from-wordpress/).
 
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/).
 
@@ -82,7 +82,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 == Translators / Translations ==
 
-* Quick Mail is no longer distributed with translations.
+* Quick Mail is not distributed with translations.
 
 * Visit [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for translations and more information.
 
@@ -236,6 +236,11 @@ If you are using an email delivery service, you can ignore this message.
 
 == Changelog ==
 
+= 3.5.3 =
+* Improved help for Quick Mail settings.
+* Display No Role on list selection, if user has no role on site.
+* Fixed idn_to_ascii(): INTL_IDNA_VARIANT_2003 is deprecated.
+
 = 3.5.2 =
 * Fixed error on recipient address, when all users and show roles were selected.
 * Added QUICK_MAIL_TESTING constant to check recipient list, without sending email.
@@ -265,6 +270,9 @@ If you are using an email delivery service, you can ignore this message.
 Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.5.3 =
+* Upgrade recommended.
 
 = 3.5.2 =
 * Upgrade recommended.

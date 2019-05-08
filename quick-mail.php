@@ -3,10 +3,10 @@
  *
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.2
+ * Version: 3.5.3
  * Author: Mitchell D. Miller
  * Author URI: https://badmarriages.net/author/mitchell-d-miller/
- * Plugin URI: https://wheredidmybraingo.com/quick-mail-3-5-2-email-everyone-wordpress-site/
+ * Plugin URI: https://wheredidmybraingo.com/quick-mail-sends-messages-from-wordpress/
  * Text Domain: quick-mail
  * Domain Path: /lang
  * License: GPL-2.0+
@@ -173,17 +173,19 @@ class QuickMail {
 		} // end if
 
 		$english_faq = __( 'https://wordpress.org/plugins/quick-mail/faq/', 'quick-mail' );
+		$github      = __( 'Follow development on Github', 'quick-mail' );
+		$glink       = "<a target='_blank' href='https://github.com/mitchelldmiller/quick-mail-wp-plugin/'>{$github}</a>";
 		$faq         = __( 'FAQ', 'quick-mail' );
-		$flink       = '<a href="https://wordpress.org/plugins/quick-mail/faq/" target="_blank">' . __( 'FAQ', 'quick-mail' ) . '</a>';
+		$flink       = '<a href="https://wordpress.org/plugins/quick-mail/faq/" target="_blank">' . $faq . '</a>';
 		$slink       = '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
-		$rlink       = '<a href="https://wordpress.org/support/plugin/quick-mail/reviews/" target="_blank">' . __( 'Please leave a review', 'quick-mail' ) . '</a>';
+		$rlink       = '<a href="https://wordpress.org/support/plugin/quick-mail/reviews/" target="_blank">' . __( 'Leave a review', 'quick-mail' ) . '</a>';
 		$others      = __( 'to help others find Quick Mail', 'quick-mail' );
 		$resources   = __( 'Resources', 'quick-mail' );
 		$more_info   = __( 'has more information', 'quick-mail' );
 		$use_str     = __( 'Please use', 'quick-mail' );
 		$to_ask      = __( 'to ask questions and report problems', 'quick-mail' );
 		$help_others = __( 'Help Others', 'quick-mail' );
-		$qm_top      = "<p>{$qm_desc}</p><h4>{$resources}</h4><ul><li>{$flink} {$more_info}</li><li>{$use_str} {$slink} {$to_ask}</li></ul>";
+		$qm_top      = "<p>{$qm_desc}</p><h4>{$resources}</h4><ul><li>{$flink} {$more_info}</li><li>{$glink}</li><li>{$use_str} {$slink} {$to_ask}</li></ul>";
 		$qm_bot      = "<h4>{$help_others}</h4><ul><li>{$rlink} {$others}</li></ul>";
 		$qm_content  = $qm_top . $qm_bot;
 		return array(
@@ -685,9 +687,8 @@ jQuery(document).ready( function() {
 			$role = '';
 			if ( 'B' === $option || 'O' === $option ) {
 				$user_meta = get_userdata( $row[2] );
-				if ( ! empty( $user_meta->roles ) ) {
-					$role = ' (' . ucfirst( $user_meta->roles[0] ) . ')';
-				} // end if found role.
+				$urole     = empty( $user_meta->roles[0] ) ? __( 'No Role', 'quick-mail' ) : ucfirst( $user_meta->roles[0] );
+				$role      = " ({$urole})";
 			} // end if want role.
 
 			if ( 'A' === $option || 'B' === $option ) {
@@ -788,6 +789,8 @@ jQuery(document).ready( function() {
 				$user_meta = get_userdata( $row[2] );
 				if ( ! empty( $user_meta->roles ) ) {
 					$role = ' (' . ucfirst( $user_meta->roles[0] ) . ')';
+				} else {
+					$role = ' (' . __( 'No Role', 'quick-mail' ) . ')';
 				} // end if found role.
 			} // end if want role.
 
@@ -2520,13 +2523,13 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 		$you_are_admin  = $this->qm_is_admin( get_current_user_id(), $blog );
 		$is_editor_user = $this->qm_is_editor( get_current_user_id(), $blog );
 		$user_query     = new \WP_User_Query( array( 'count_total' => true ) );
-			$users      = $user_query->get_total();
-			$has_all    = $this->multiple_matching_users( 'A', $blog );
-			$has_names  = $this->multiple_matching_users( 'N', $blog );
-			$content    = '';
-			$note       = '<strong>' . __( 'NOTE', 'quick-mail' ) . ' :</strong> ';
-			$people     = ' ' . __( 'Sender, recipient, CC.', 'quick-mail' );
-			$editors    = 'N';
+		$users          = $user_query->get_total();
+		$has_all        = $this->multiple_matching_users( 'A', $blog );
+		$has_names      = $this->multiple_matching_users( 'N', $blog );
+		$content        = '';
+		$note           = '<strong>' . __( 'NOTE', 'quick-mail' ) . ' :</strong> ';
+		$people         = ' ' . __( 'Sender, recipient, CC.', 'quick-mail' );
+		$editors        = 'N';
 		if ( is_multisite() ) {
 			if ( 'Y' === get_blog_option( get_current_blog_id(), 'editors_quick_mail_privilege', 'N' ) ) {
 				$editors = 'Y';
@@ -2607,8 +2610,6 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			$content    .= '<dd>' . __( 'Prevent users from sending email to administrators', 'quick-mail' ) . '.</dd>';
 			$content    .= '<dt><strong>' . __( 'Grant Editors access to user list', 'quick-mail' ) . '</strong></dt>';
 			$content    .= '<dd>' . __( 'Otherwise only administrators can view the user list', 'quick-mail' ) . '</dd>';
-			$content    .= '<dt><strong>' . __( 'Show user roles', 'quick-mail' ) . '</strong></dt>';
-			$content    .= '<dd>' . __( 'Let administrators see role on user list.', 'quick-mail' ) . '</dd>';
 			$content    .= '<dt><strong>' . __( 'Verify recipient email domains', 'quick-mail' ) . '</strong></dt>';
 			$content    .= '<dd>' . __( 'Check if recipient domain accepts email.', 'quick-mail' ) . '</dd>';
 			$english_dns = __( 'http://php.net/manual/en/function.checkdnsrr.php', 'quick-mail' );
@@ -2687,8 +2688,7 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			$rcontent   .= '<dt><strong>' . __( 'Add Paragraphs', 'quick-mail' ) . '</strong></dt>';
 			$rcontent   .= '<dd>' . $rc1 . ' ' . $rc2 . ' ' . $wpauto_link . '.</dd>';
 			$rcontent   .= '<dd>' . $rc3 . '.</dd>';
-			$rcontent   .= '<dd>' . $rc4 . '.</dd>';
-			$rcontent   .= $rc5 . '</dl>';
+			$rcontent   .= '<dd>' . $rc4 . '.</dd></dl>';
 			$screen->add_help_tab(
 				array(
 					'id'      => 'qm_wpautop_help',
@@ -2703,6 +2703,11 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 
 			$rcontent = '<dl>';
 		if ( $has_all ) {
+			if ( $you_are_admin ) {
+				$rcontent .= '<dt><strong>' . __( 'Show user roles', 'quick-mail' ) . '</strong></dt>';
+				$rcontent .= '<dd>' . __( 'Let administrators see role on user list.', 'quick-mail' ) . '</dd>';
+			} // end if admin
+
 			$rcontent .= '<dt><strong>' . __( 'Show All Users', 'quick-mail' ) . '</strong></dt>';
 			$rcontent .= '<dd>' . __( 'Select users by WordPress nickname', 'quick-mail' ) . '.</dd>';
 		}
@@ -2711,8 +2716,7 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			$rcontent .= '<dd>' . __( 'Select users with first and last names', 'quick-mail' ) . '.</dd>';
 		}
 			$rcontent .= '<dt><strong>' . __( 'Do Not Show Users', 'quick-mail' ) . '</strong></dt>';
-			$rcontent .= '<dd>' . __( 'Enter user addresses. 12 addresses are saved', 'quick-mail' ) . '.</dd>';
-			$rcontent .= $rc5 . '</dl>';
+			$rcontent .= '<dd>' . __( 'Enter user addresses. 12 addresses are saved', 'quick-mail' ) . '.</dd></dl>';
 			$screen->add_help_tab(
 				array(
 					'id'      => 'qm_display_help',
@@ -2895,8 +2899,8 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 		$display_option = $this->qm_get_display_option( $blog );
 		$cc_title       = __( 'Adding CC', 'quick-mail' );
 		$xhelp          = __( 'Enter multiple addresses by separating them with a space or comma.', 'quick-mail' );
-		$mac_names      = __( 'Press Command while clicking, to select multiple users.', 'quick-mail' );
-		$win_names      = __( 'Press Control while clicking, to select multiple users.', 'quick-mail' );
+		$mac_names      = __( 'Press Command key while clicking, to select multiple users.', 'quick-mail' );
+		$win_names      = __( 'Press Control key while clicking, to select multiple users.', 'quick-mail' );
 		$mob_names      = __( 'You can select multiple users', 'quick-mail' );
 		$nhelp          = '';
 		if ( wp_is_mobile() ) {
@@ -2924,8 +2928,8 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 				$attachment_help .= ' ' . esc_html__( 'from up to six directories', 'quick-mail' );
 			} // end if mobile
 			$attachment_help .= '.</p>';
-			$mac_files        = __( 'Press &lt;Command&gt; while clicking, to select multiple files.', 'quick-mail' );
-			$win_files        = __( 'Press &lt;Control&gt; while clicking, to select multiple files.', 'quick-mail' );
+			$mac_files        = __( 'Press Command key while clicking, to select multiple files.', 'quick-mail' );
+			$win_files        = __( 'Press Control key while clicking, to select multiple files.', 'quick-mail' );
 			$mob_files        = esc_html__( 'You can select multiple files', 'quick-mail' );
 			$nhelp            = '';
 			if ( wp_is_mobile() ) {

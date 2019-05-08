@@ -1,9 +1,9 @@
 <?php
 /**
- * Mail a Web page or file with quick-mail.
+ * Mail a Web page or file with quick-mail and WP-CLI.
  *
  * @package QuickMail
- * @version 3.5.2
+ * @version 3.5.3
  */
 class Quick_Mail_Command extends WP_CLI_Command {
 
@@ -108,7 +108,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 *     Send notice.pdf with Notice subject from user 5 to all users with `editor` role.
 	 *     Editor addresses are hidden with `Bcc`.
 	 *
- 	 *     * wp quick-mail 5 all notice.pdf Notice
+	 *     * wp quick-mail 5 all notice.pdf Notice
 	 *
 	 *     Send notice.pdf with Notice subject from user 5 to all users.
 	 *     Recipient addresses are hidden with `Bcc`.
@@ -167,7 +167,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		$to = '';
 		if ( ! is_numeric( $args[1] ) && ! strstr( $args[1], '@' ) ) {
 			$all_roles = $this->qm_get_roles();
-			if ( ! in_array( $args[1], $all_roles ) && 'all' != $args[1] ) {
+			if ( ! in_array( $args[1], $all_roles, true ) && 'all' !== $args[1] ) {
 				$temp_msg = sprintf(
 					'%s: %s',
 					__( 'Invalid Role', 'quick-mail' ),
@@ -556,7 +556,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 */
 	private function qm_get_role_email( $input, $sender_id ) {
 		$args = array();
-		if ( 'all' == $input ) {
+		if ( 'all' === $input ) {
 			$args = array(
 				'exclude' => $sender_id,
 				'fields'  => array( 'user_email' ),

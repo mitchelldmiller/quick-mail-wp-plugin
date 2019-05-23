@@ -17,7 +17,7 @@ if ( empty( $verify ) ) {
 } // end if not logged in or missing verify.
 
 header( 'Content-type: text/plain' );
-$to      = isset( $_REQUEST['email'] ) ? strtolower( $_REQUEST['email'] ) : '';
+$to      = isset( $_REQUEST['email'] ) ? strtolower( trim( $_REQUEST['email'] ) ) : '';
 $message = '';
 if ( ! empty( $_REQUEST['one'] ) ) {
 	if ( QuickMailUtil::qm_valid_email_domain( $_REQUEST['one'], $verify ) ) {

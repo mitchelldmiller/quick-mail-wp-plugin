@@ -3,7 +3,7 @@
  *
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.4 Alpha
+ * Version: 3.5.4 Beta
  * Author: Mitchell D. Miller
  * Author URI: https://badmarriages.net/author/mitchell-d-miller/
  * Plugin URI: https://wheredidmybraingo.com/quick-mail-sends-messages-from-wordpress/
@@ -586,8 +586,14 @@ jQuery(document).ready( function() {
 		} // end if on quick mail form
 
 		if ( strstr( $_SERVER['REQUEST_URI'], 'quick_mail_options' ) ) {
-			wp_register_script( 'qmCount', plugins_url( '/lib/js/quick-mail-addresses.js', __FILE__ ), array( 'jquery', 'wp-i18n' ), '3.5.0', false );
-			wp_enqueue_script( 'qmCount' );
+			wp_enqueue_script( 'qmCount', plugins_url( '/lib/js/quick-mail-addresses.js', __FILE__ ), array( 'jquery' ), null, false );
+
+			$data = array(
+				'one'  => __( 'Clear 1 saved address', 'quick-mail' ),
+				/* translators: number of saved email addresses */
+				'many' => sprintf( __( 'Clear %s saved addresses', 'quick-mail' ), '{number}' ),
+			);
+			wp_localize_script( 'qmCount', 'quick_mail_saved', $data );
 		} // end if on options page
 	} // end add_email_scripts
 

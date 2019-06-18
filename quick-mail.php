@@ -1,12 +1,11 @@
 <?php
 /**
- *
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.4 Beta
+ * Version: 3.5.4
  * Author: Mitchell D. Miller
- * Author URI: https://badmarriages.net/author/mitchell-d-miller/
- * Plugin URI: https://wheredidmybraingo.com/quick-mail-sends-messages-from-wordpress/
+ * Author URI: https://wheredidmybraingo.com/about/
+ * Plugin URI: https://wheredidmybraingo.com/quick-mail-3-5-4-sends-email-with-wordpress-4-6/
  * Text Domain: quick-mail
  * Domain Path: /lang
  * License: GPL-2.0+

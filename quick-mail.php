@@ -1,12 +1,11 @@
 <?php
 /**
- *
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.3
+ * Version: 3.5.4
  * Author: Mitchell D. Miller
- * Author URI: https://badmarriages.net/author/mitchell-d-miller/
- * Plugin URI: https://wheredidmybraingo.com/quick-mail-sends-messages-from-wordpress/
+ * Author URI: https://wheredidmybraingo.com/about/
+ * Plugin URI: https://wheredidmybraingo.com/quick-mail-3-5-4-sends-email-with-wordpress-4-6/
  * Text Domain: quick-mail
  * Domain Path: /lang
  * License: GPL-2.0+
@@ -586,8 +585,14 @@ jQuery(document).ready( function() {
 		} // end if on quick mail form
 
 		if ( strstr( $_SERVER['REQUEST_URI'], 'quick_mail_options' ) ) {
-			wp_register_script( 'qmCount', plugins_url( '/lib/js/quick-mail-addresses.js', __FILE__ ), array( 'jquery', 'wp-i18n' ), '3.5.0', false );
-			wp_enqueue_script( 'qmCount' );
+			wp_enqueue_script( 'qmCount', plugins_url( '/lib/js/quick-mail-addresses.js', __FILE__ ), array( 'jquery' ), null, false );
+
+			$data = array(
+				'one'  => __( 'Clear 1 saved address', 'quick-mail' ),
+				/* translators: number of saved email addresses */
+				'many' => sprintf( __( 'Clear %s saved addresses', 'quick-mail' ), '{number}' ),
+			);
+			wp_localize_script( 'qmCount', 'quick_mail_saved', $data );
 		} // end if on options page
 	} // end add_email_scripts
 

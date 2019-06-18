@@ -2,10 +2,10 @@
 Contributors: brainiac
 Tags: mail, email, comments, wp-cli, mailgun, sparkpost, attachment, sendgrid, accessibility, idn, multisite
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
-Requires at least: 5.0
+Requires at least: 4.6
 Tested up to: 5.2
 Requires PHP: 5.3
-Stable tag: 3.5.3
+Stable tag: 3.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,7 +60,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * Introduction: [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/).
 
-* Latest version: [Quick Mail Sends Messages from WordPress](https://wheredidmybraingo.com/quick-mail-sends-messages-from-wordpress/).
+* Latest version: [Quick Mail 3.5.4 Sends Email with WordPress 4.6](https://wheredidmybraingo.com/quick-mail-3-5-4-sends-email-with-wordpress-4-6/).
 
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/).
 
@@ -236,6 +236,12 @@ If you are using an email delivery service, you can ignore this message.
 
 == Changelog ==
 
+= 3.5.4 =
+* Removed wp-i18n script requirement, to work with WP 4.6.
+* Added IDNA_NONTRANSITIONAL_TO_ASCII to idn_to_ascii() for PHP 7.2+ warning.
+* Trim user input before email validation.
+* Removed check for login cookie on AJAX email validation.
+
 = 3.5.3 =
 * Improved help for Quick Mail settings.
 * Display No Role on list selection, if user has no role on site.
@@ -253,23 +259,14 @@ If you are using an email delivery service, you can ignore this message.
 * Select recipients for WP-CLI command by role.
 * Exit if WP-CLI attachment is not plain text or HTML.
 
-= 3.5.1 =
-* Improved translation text.
-* Fixed: Show user roles is always disabled if Do Not Show Users is checked.
-
-= 3.5.0 =
-* Javascript internationalization.
-* Combined strings for easier translation.
-* Only show "Select recipient from commenters" if user has comments.
-* Added option for administrators to add WP roles to user list.
-* Fixed empty error message.
-* Edited PHP to use WordPress Coding Standards.
-
 = Earlier versions =
 
 Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.5.4 =
+* Upgrade recommended.
 
 = 3.5.3 =
 * Upgrade recommended.

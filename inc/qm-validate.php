@@ -3,28 +3,21 @@
  * Validate email addresses. Check for duplicates while user is entering data.
  *
  * @package QuickMail
- * @version 3.5.0
+ * @version 3.5.4
  */
 
 require_once 'class-quickmailutil.php';
 
-// Check for login cookie.
-$logged_in = false;
-foreach ( $_COOKIE as $k => $v ) {
-	if ( preg_match( '/wordpress_logged_in/', $k ) ) {
-		$logged_in = true;
-		break;
-	} // end if matched login cookie
-} // end foreach
+// Removed check for login cookie. 3.5.4
 
 $verify = ! empty( $_REQUEST['quick-mail-verify'] ) ? trim( $_REQUEST['quick-mail-verify'] ) : '';
-if ( ! $logged_in || empty( $verify ) ) {
-	QuickMailUtil::qm_bye(); // Failed cookie or input test.
+if ( empty( $verify ) ) {
+	QuickMailUtil::qm_bye(); // Failed input test.
 	exit();
 } // end if not logged in or missing verify.
 
 header( 'Content-type: text/plain' );
-$to      = isset( $_REQUEST['email'] ) ? strtolower( $_REQUEST['email'] ) : '';
+$to      = isset( $_REQUEST['email'] ) ? strtolower( trim( $_REQUEST['email'] ) ) : '';
 $message = '';
 if ( ! empty( $_REQUEST['one'] ) ) {
 	if ( QuickMailUtil::qm_valid_email_domain( $_REQUEST['one'], $verify ) ) {

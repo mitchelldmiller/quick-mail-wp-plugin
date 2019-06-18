@@ -1,5 +1,17 @@
 == Quick Mail Changelog ==
 
+= 3.5.1 =
+* Improved translation text.
+* Fixed: Show user roles is always disabled if Do Not Show Users is checked.
+
+= 3.5.0 =
+* Javascript internationalization.
+* Combined strings for easier translation.
+* Only show "Select recipient from commenters" if user has comments.
+* Added option for administrators to add WP roles to user list.
+* Fixed empty error message.
+* Edited PHP to use WordPress Coding Standards.
+
 = 3.4.4 =
 * Options are saved if plugin is deactivated.
 * Options are deleted if plugin in uninstalled.

@@ -1,7 +1,7 @@
 Quick Mail WordPress Plugin
 ====================
 
-Send text or html email with attachments and shortcodes. Send private replies to comments. Select recipient from users or commenters.
+Send text or html email with attachments and shortcodes from WP Dashboard or command line. Send private replies to comments. Select recipient from users or commenters.
 
 ### WordPress Rating
 [![WordPress rating](https://img.shields.io/wordpress/plugin/r/quick-mail.svg?maxAge=2592000)]()
@@ -15,7 +15,7 @@ Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds 
 
 Send a Web page, file, or message from the command line with quick-mail command for [WP-CLI](https://wp-cli.org/).
 
-** Does not need the Gutenberg editor. **
+** Does not use the Gutenberg editor. **
 
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 

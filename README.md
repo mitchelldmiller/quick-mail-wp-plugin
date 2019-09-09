@@ -102,6 +102,8 @@ __Where Do I Find Sent Emails?__
 
 * Delivery services like [Mailgun](https://www.mailgun.com/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://sendgrid.com/) also provide this information. 
 
+* [WP Mail Logging](http://wordpress.org/extend/plugins/wp-mail-logging/) plugin saves a list of sent emails, with content of message. Plugin shows number of attachments, but does not save attachments or file names.
+
 __Selecting Recipients__
 
 * Options to send mail to any user, or limit to users with first and last names on their profile.

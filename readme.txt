@@ -30,7 +30,7 @@ Uses sender's name, sets reply to sender's address. Recognizes settings from [Ma
 
 Multiple files from up to six directories (folders) can be attached to a message.
 
-= Features =
+== Features ==
 
 * [WP-CLI](https://wp-cli.org/) command to send a file or the contents of a Web page. Send email to a single recipient, select site users by [WordPress role](https://codex.wordpress.org/Roles_and_Capabilities) or send to all users.
 
@@ -107,6 +107,8 @@ Multiple files from up to six directories (folders) can be attached to a message
 * You should be able to find sent emails in your email account's Sent Mail folder.
 
 * Delivery services like [Mailgun](https://www.mailgun.com/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://sendgrid.com/) also provide this information.
+
+* [WP Mail Logging](http://wordpress.org/extend/plugins/wp-mail-logging/) plugin saves a list of sent emails, with content of message. Plugin shows number of attachments, but does not save attachments or file names.
 
 = Selecting Recipients =
 

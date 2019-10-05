@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.5 Alpha
+ * Version: 3.5.5 Beta
  * Author: Mitchell D. Miller
  * Author URI: https://wheredidmybraingo.com/about/
  * Plugin URI: https://wheredidmybraingo.com/quick-mail-3-5-4-sends-email-with-wordpress-4-6/
@@ -46,6 +46,13 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
  * Send mail, reply to comments from WP Dashboard.
  */
 class QuickMail {
+
+	/**
+	 * Our version. Used by enqueue script / style.
+	 * @var string version
+	 * @since 3.5.5 10-3-19
+	 */
+	const VERSION = '3.5.5';
 
 	/**
 	 * Content type for our instance.
@@ -579,9 +586,15 @@ jQuery(document).ready( function() {
 				'qmScript',
 				plugins_url( '/lib/js/quick-mail.js', __FILE__ ),
 				array( 'jquery' ),
-				'3.5.0',
+				self::VERSION,
 				false
 			);
+
+			$data = array(
+					'duplicate'  => __( 'Duplicate', 'quick-mail' ),
+					/* translators: for duplicate email addresses */
+			);
+			wp_localize_script( 'qmScript', 'quick_mail_words', $data );
 		} // end if on quick mail form
 
 		if ( strstr( $_SERVER['REQUEST_URI'], 'quick_mail_options' ) ) {
@@ -672,7 +685,7 @@ jQuery(document).ready( function() {
 		sort( $users );
 		$letter = '';
 		ob_start();
-		echo '<select aria-labelledby="qme_label" name="qm-email" id="qm-primary" required aria-required="true" size="1" tabindex="0" autofocus><option class="qmopt" value="" selected>Select</option>';
+		echo '<select aria-labelledby="qme_label" name="qm-email" id="qm-primary" required aria-required="true" size="1" tabindex="0" autofocus><option class="qmopt" value="" selected="selected">Select</option>';
 		for ( $i = 0; $i < $j; $i++ ) {
 			$row = explode( "\t", $users[ $i ] );
 			if ( 'A' === $option || 'B' === $option ) {
@@ -697,10 +710,10 @@ jQuery(document).ready( function() {
 			} // end if want role.
 
 			if ( 'A' === $option || 'B' === $option ) {
-				$selected = ( $row[1] !== $to ) ? ' ' : ' selected ';
+				$selected = ( $row[1] !== $to ) ? ' ' : ' selected="selected" ';
 				echo "<option{$selected}value='{$address}' class='qmopt'>{$row[0]}{$role}</option>";
 			} else {
-				$selected = ( $row[3] !== $to ) ? ' ' : ' selected ';
+				$selected = ( $row[3] !== $to ) ? ' ' : ' selected="selected" ';
 				echo "<option{$selected}value='{$address}' class='qmopt'>{$row[1]} {$row[0]}{$role}</option>";
 			}
 		} // end for
@@ -786,7 +799,7 @@ jQuery(document).ready( function() {
 		sort( $users );
 		$letter = '';
 		ob_start();
-		echo '<select aria-labelledby="qmcc_label" name="qm-cc[]" id="qm-secondary" multiple size="6" tabindex="3"><option class="qmopt" value="" selected>Select</option>';
+		echo '<select aria-labelledby="qmcc_label" name="qm-cc[]" id="qm-secondary" multiple size="6" tabindex="3"><option class="qmopt" value="" selected="selected">Select</option>';
 		for ( $i = 0; $i < $j; $i++ ) {
 			$row  = explode( "\t", $users[ $i ] );
 			$role = '';
@@ -814,10 +827,10 @@ jQuery(document).ready( function() {
 			} // end if first letter changed
 
 			if ( 'A' === $option || 'B' === $option ) {
-				$selected = ( $row[1] !== $cc ) ? ' ' : ' selected ';
+				$selected = ( $row[1] !== $cc ) ? ' ' : ' selected="selected" ';
 				echo "<option{$selected}value='{$address}' class='qmopt'>{$row[0]}{$role}</option>";
 			} else {
-				$selected = ( $row[3] !== $cc ) ? ' ' : ' selected ';
+				$selected = ( $row[3] !== $cc ) ? ' ' : ' selected="selected" ';
 				echo "<option{$selected}value='{$address}' class='qmopt'>{$row[1]} {$row[0]}{$role}</option>";
 			}
 		} // end for
@@ -863,7 +876,7 @@ jQuery(document).ready( function() {
 			return $problem;
 		} // end if no recent comments
 
-		$select  = '<select aria-labelledby="qme_label" name="qm-email" id="qm-primary" required aria-required="true" size="1" tabindex="0" autofocus onchange="return qm_get_comment()"><option class="qmopt" value="" selected>Select</option>';
+		$select  = '<select aria-labelledby="qme_label" name="qm-email" id="qm-primary" required aria-required="true" size="1" tabindex="0" autofocus onchange="return qm_get_comment()"><option class="qmopt" value="" selected="selected">Select</option>';
 		$matches = 0;
 		foreach ( $cquery as $comment ) {
 			if ( empty( $comment->comment_author ) || empty( $comment->comment_author_email ) ) {
@@ -2616,11 +2629,12 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			$content    .= '<dt><strong>' . __( 'Grant Editors access to user list', 'quick-mail' ) . '</strong></dt>';
 			$content    .= '<dd>' . __( 'Otherwise only administrators can view the user list', 'quick-mail' ) . '</dd>';
 			$content    .= '<dt><strong>' . __( 'Verify recipient email domains', 'quick-mail' ) . '</strong></dt>';
-			$content    .= '<dd>' . __( 'Check if recipient domain accepts email.', 'quick-mail' ) . '</dd>';
+			$content    .= '<dd>' . __( 'Check if recipient domain accepts email, when user enters the address.', 'quick-mail' ) . '</dd>';
 			$english_dns = __( 'http://php.net/manual/en/function.checkdnsrr.php', 'quick-mail' );
 			$z           = __( 'Checks domain with', 'quick-mail' );
 			$dnserr_link = "<a target='_blank' href='{$english_dns}'>checkdnsrr</a>";
 			$content    .= "<dd>{$z} {$dnserr_link}</dd>";
+			$content    .= '<dd class="wp-ui-text-highlight">' . __( 'Addresses selected from user list are validated by WordPress, when user is added or updated.', 'quick-mail' ) . '</dd>';
 			$content    .= '<dd class="wp-ui-text-highlight">' . __( 'Turn verification off if Quick Mail rejects a valid address.', 'quick-mail' ) . '</dd>';
 			$content    .= '</dl>';
 			$screen->add_help_tab(
@@ -2976,7 +2990,7 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 	 * Use by admin print styles to add css to admin.
 	 */
 	public function init_quick_mail_style() {
-		wp_enqueue_style( 'quick-mail', plugins_url( '/lib/css/quick-mail.css', __FILE__ ), array(), '3.5.0', 'all' );
+		wp_enqueue_style( 'quick-mail', plugins_url( '/lib/css/quick-mail.css', __FILE__ ), array(), self::VERSION, 'all' );
 	} // end init_quick_mail_style
 
 	/**

@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Requires at least: 4.6
 Tested up to: 5.3
 Requires PHP: 5.3
-Stable tag: 3.5.5 Alpha
+Stable tag: 3.5.5 Beta
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -108,7 +108,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * Delivery services like [Mailgun](https://www.mailgun.com/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://sendgrid.com/) also provide this information.
 
-* [WP Mail Logging](http://wordpress.org/extend/plugins/wp-mail-logging/) plugin saves a list of sent emails, with content of message. Plugin shows number of attachments, but does not save attachments or file names.
+* [WP Mail Logging](https://wordpress.org/plugins/wp-mail-logging/) plugin saves a list of sent emails, with content of message. Plugin shows number of attachments, but does not save attachments or file names.
 
 = Selecting Recipients =
 
@@ -238,6 +238,13 @@ If you are using an email delivery service, you can ignore this message.
 
 == Changelog ==
 
+= 3.5.5 =
+* Fixed JavaScript translation of duplicate email error message.
+* Highlight form fields while entering text.
+* Multiple recipients are reformatted after entry.
+* Removed spurious invalid address warnings, when no address was entered.
+* Updated FAQ.
+
 = 3.5.4 =
 * Removed wp-i18n script requirement, to work with WP 4.6.
 * Added IDNA_NONTRANSITIONAL_TO_ASCII to idn_to_ascii() for PHP 7.2+ warning.
@@ -266,6 +273,9 @@ If you are using an email delivery service, you can ignore this message.
 Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.5.5 =
+* Upgrade recommended.
 
 = 3.5.4 =
 * Upgrade recommended.

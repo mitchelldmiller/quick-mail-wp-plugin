@@ -6,7 +6,7 @@
  */
 
 /**
- * Quick Mail utility functions for Javascript and quick-mail-cli.php
+ * Quick Mail utility functions for JavaScript and quick-mail-cli.php
  *
  * @package QuickMail
  */
@@ -126,7 +126,6 @@ class QuickMailUtil {
 			$hname = htmlspecialchars( html_entity_decode( strip_tags( $name ) ), ENT_QUOTES );
 			if ( ! self::qm_valid_email_domain( $name, $validate_option ) ) {
 				$invalid .= "{$hname}<br>";
-				$name     = '';
 				continue;
 			} // end if invalid name
 
@@ -134,7 +133,6 @@ class QuickMailUtil {
 				if ( ! strstr( $duplicate, $name ) ) {
 					$duplicate .= "{$hname}<br>";
 				}
-				$name = '';
 				continue;
 			} // end if sender is a recipient
 
@@ -147,8 +145,7 @@ class QuickMailUtil {
 				return "{$invalid}\t" . $saved;
 			} // end if not duplicate
 
-			$word = __( 'Duplicate', 'quick-mail' );
-			return "{$invalid}<br><br>{$word}:<br>{$duplicate}\t" . $saved;
+			return "{$invalid}<br><br>(duplicate):<br>{$duplicate}\t" . $saved;
 		} // end if invalid
 
 		if ( ! empty( $duplicate ) ) {

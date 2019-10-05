@@ -1,5 +1,5 @@
 @CHARSET "UTF-8";
-/* quick-mail.css 3.5.0 */
+/* quick-mail.css 3.5.5 */
 
 fieldset {
 border: 1px solid #d1d1d1;
@@ -101,6 +101,9 @@ input.qm-input {
 
 input#qm-submit:focus { color: #11169b; }
 
+input#qm-email:focus, input#qm-cc:focus, input#qm-subject:focus, textarea#quickmailmessage:focus {
+	background-color: #ffc;
+}
 legend.recipients {
 	font: bold 24px/36px Georgia,serif;
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);

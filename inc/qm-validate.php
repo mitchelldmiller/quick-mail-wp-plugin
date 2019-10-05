@@ -16,12 +16,12 @@ if ( empty( $verify ) ) {
 
 header( 'Content-type: text/plain' );
 if ( isset( $_REQUEST['filter'] ) && isset( $_REQUEST['to'] ) ) {
-	if (empty($_REQUEST['filter']) && empty($_REQUEST['to'])) {
+	if ( empty( $_REQUEST['filter'] ) && empty( $_REQUEST['to'] ) ) {
 		echo 'OK';
 		exit;
 	} // uhoh. should not be called with empty values.
 
-	if (empty($_REQUEST['filter']) && !strstr($_REQUEST['to'], ' ') && !strstr($_REQUEST['to'], ',')) {
+	if ( empty( $_REQUEST['filter'] ) && ! strstr( $_REQUEST['to'], ' ' ) && ! strstr( $_REQUEST['to'], ',' ) ) {
 		echo QuickMailUtil::qm_valid_email_domain( $_REQUEST['to'], $verify ) ? '' : " {$_REQUEST['to']}"; // space = invalid
 	} else {
 		echo QuickMailUtil::filter_email_input( $_REQUEST['to'], $_REQUEST['filter'], $verify );
@@ -57,7 +57,7 @@ if ( ! empty( $_REQUEST['filter'] ) && empty( $_REQUEST['to'] ) ) {
 	} // end if valid
 	echo $message;
 } else {
-if ( ! empty( $_REQUEST['dup'] ) ) {
+	if ( ! empty( $_REQUEST['dup'] ) ) {
 		echo QuickMailUtil::filter_email_input( $_REQUEST['email'], $_REQUEST['dup'], $_REQUEST['quick-mail-verify'] );
 		exit;
 	} elseif ( empty( $message ) && ! QuickMailUtil::qm_valid_email_domain( $to, $verify ) ) {

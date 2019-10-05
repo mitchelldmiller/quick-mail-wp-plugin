@@ -49,6 +49,7 @@ class QuickMail {
 
 	/**
 	 * Our version. Used by enqueue script / style.
+	 *
 	 * @var string version
 	 * @since 3.5.5 10-3-19
 	 */
@@ -591,7 +592,7 @@ jQuery(document).ready( function() {
 			);
 
 			$data = array(
-					'duplicate'  => __( 'Duplicate', 'quick-mail' ),
+				'duplicate' => __( 'Duplicate', 'quick-mail' ),
 					/* translators: for duplicate email addresses */
 			);
 			wp_localize_script( 'qmScript', 'quick_mail_words', $data );

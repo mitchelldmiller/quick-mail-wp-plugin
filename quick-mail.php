@@ -2,10 +2,10 @@
 /**
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.4
+ * Version: 3.5.5
  * Author: Mitchell D. Miller
  * Author URI: https://wheredidmybraingo.com/about/
- * Plugin URI: https://wheredidmybraingo.com/quick-mail-3-5-4-sends-email-with-wordpress-4-6/
+ * Plugin URI: https://wheredidmybraingo.com/quick-mail-3-5-5-maintenance-release/
  * Text Domain: quick-mail
  * Domain Path: /lang
  * License: GPL-2.0+
@@ -46,6 +46,14 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
  * Send mail, reply to comments from WP Dashboard.
  */
 class QuickMail {
+
+	/**
+	 * Our version. Used by enqueue script / style.
+	 *
+	 * @var string version
+	 * @since 3.5.5 10-3-19
+	 */
+	const VERSION = '3.5.5';
 
 	/**
 	 * Content type for our instance.
@@ -173,16 +181,16 @@ class QuickMail {
 
 		$english_faq = __( 'https://wordpress.org/plugins/quick-mail/faq/', 'quick-mail' );
 		$github      = __( 'Follow development on Github', 'quick-mail' );
-		$glink       = "<a target='_blank' href='https://github.com/mitchelldmiller/quick-mail-wp-plugin/'>{$github}</a>";
+		$glink       = "<a target='_blank' href='https://github.com/mitchelldmiller/quick-mail-wp-plugin/'>{$github}</a>.";
 		$faq         = __( 'FAQ', 'quick-mail' );
 		$flink       = '<a href="https://wordpress.org/plugins/quick-mail/faq/" target="_blank">' . $faq . '</a>';
 		$slink       = '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
 		$rlink       = '<a href="https://wordpress.org/support/plugin/quick-mail/reviews/" target="_blank">' . __( 'Leave a review', 'quick-mail' ) . '</a>';
-		$others      = __( 'to help others find Quick Mail', 'quick-mail' );
+		$others      = __( 'to help others find Quick Mail.', 'quick-mail' );
 		$resources   = __( 'Resources', 'quick-mail' );
-		$more_info   = __( 'has more information', 'quick-mail' );
+		$more_info   = __( 'has more information.', 'quick-mail' );
 		$use_str     = __( 'Please use', 'quick-mail' );
-		$to_ask      = __( 'to ask questions and report problems', 'quick-mail' );
+		$to_ask      = __( 'to ask questions and report problems.', 'quick-mail' );
 		$help_others = __( 'Help Others', 'quick-mail' );
 		$qm_top      = "<p>{$qm_desc}</p><h4>{$resources}</h4><ul><li>{$flink} {$more_info}</li><li>{$glink}</li><li>{$use_str} {$slink} {$to_ask}</li></ul>";
 		$qm_bot      = "<h4>{$help_others}</h4><ul><li>{$rlink} {$others}</li></ul>";
@@ -579,9 +587,15 @@ jQuery(document).ready( function() {
 				'qmScript',
 				plugins_url( '/lib/js/quick-mail.js', __FILE__ ),
 				array( 'jquery' ),
-				'3.5.0',
+				self::VERSION,
 				false
 			);
+
+			$data = array(
+				'duplicate' => __( 'Duplicate', 'quick-mail' ),
+					/* translators: for duplicate email addresses */
+			);
+			wp_localize_script( 'qmScript', 'quick_mail_words', $data );
 		} // end if on quick mail form
 
 		if ( strstr( $_SERVER['REQUEST_URI'], 'quick_mail_options' ) ) {
@@ -672,7 +686,7 @@ jQuery(document).ready( function() {
 		sort( $users );
 		$letter = '';
 		ob_start();
-		echo '<select aria-labelledby="qme_label" name="qm-email" id="qm-primary" required aria-required="true" size="1" tabindex="0" autofocus><option class="qmopt" value="" selected>Select</option>';
+		echo '<select aria-labelledby="qme_label" name="qm-email" id="qm-primary" required aria-required="true" size="1" tabindex="0" autofocus><option class="qmopt" value="" selected="selected">Select</option>';
 		for ( $i = 0; $i < $j; $i++ ) {
 			$row = explode( "\t", $users[ $i ] );
 			if ( 'A' === $option || 'B' === $option ) {
@@ -697,10 +711,10 @@ jQuery(document).ready( function() {
 			} // end if want role.
 
 			if ( 'A' === $option || 'B' === $option ) {
-				$selected = ( $row[1] !== $to ) ? ' ' : ' selected ';
+				$selected = ( $row[1] !== $to ) ? ' ' : ' selected="selected" ';
 				echo "<option{$selected}value='{$address}' class='qmopt'>{$row[0]}{$role}</option>";
 			} else {
-				$selected = ( $row[3] !== $to ) ? ' ' : ' selected ';
+				$selected = ( $row[3] !== $to ) ? ' ' : ' selected="selected" ';
 				echo "<option{$selected}value='{$address}' class='qmopt'>{$row[1]} {$row[0]}{$role}</option>";
 			}
 		} // end for
@@ -786,7 +800,7 @@ jQuery(document).ready( function() {
 		sort( $users );
 		$letter = '';
 		ob_start();
-		echo '<select aria-labelledby="qmcc_label" name="qm-cc[]" id="qm-secondary" multiple size="6" tabindex="3"><option class="qmopt" value="" selected>Select</option>';
+		echo '<select aria-labelledby="qmcc_label" name="qm-cc[]" id="qm-secondary" multiple size="6" tabindex="3"><option class="qmopt" value="" selected="selected">Select</option>';
 		for ( $i = 0; $i < $j; $i++ ) {
 			$row  = explode( "\t", $users[ $i ] );
 			$role = '';
@@ -814,10 +828,10 @@ jQuery(document).ready( function() {
 			} // end if first letter changed
 
 			if ( 'A' === $option || 'B' === $option ) {
-				$selected = ( $row[1] !== $cc ) ? ' ' : ' selected ';
+				$selected = ( $row[1] !== $cc ) ? ' ' : ' selected="selected" ';
 				echo "<option{$selected}value='{$address}' class='qmopt'>{$row[0]}{$role}</option>";
 			} else {
-				$selected = ( $row[3] !== $cc ) ? ' ' : ' selected ';
+				$selected = ( $row[3] !== $cc ) ? ' ' : ' selected="selected" ';
 				echo "<option{$selected}value='{$address}' class='qmopt'>{$row[1]} {$row[0]}{$role}</option>";
 			}
 		} // end for
@@ -863,7 +877,7 @@ jQuery(document).ready( function() {
 			return $problem;
 		} // end if no recent comments
 
-		$select  = '<select aria-labelledby="qme_label" name="qm-email" id="qm-primary" required aria-required="true" size="1" tabindex="0" autofocus onchange="return qm_get_comment()"><option class="qmopt" value="" selected>Select</option>';
+		$select  = '<select aria-labelledby="qme_label" name="qm-email" id="qm-primary" required aria-required="true" size="1" tabindex="0" autofocus onchange="return qm_get_comment()"><option class="qmopt" value="" selected="selected">Select</option>';
 		$matches = 0;
 		foreach ( $cquery as $comment ) {
 			if ( empty( $comment->comment_author ) || empty( $comment->comment_author_email ) ) {
@@ -1658,7 +1672,7 @@ jQuery(document).ready( function() {
 <label id="qmsubject_label" for="qm-subject" class="recipients"><?php esc_html_e( 'Subject', 'quick-mail' ); ?></label>
 <p><input value="<?php echo htmlspecialchars( $subject, ENT_QUOTES ); ?>" type="text"
 aria-labelledby="qmsubject_label" name="qm-subject" id="qm-subject" required size="40" aria-required="true"
-placeholder="<?php esc_html_e( 'Subject', 'quick-mail' ); ?>" tabindex="22"></p>
+autocomplete="on" placeholder="<?php esc_html_e( 'Subject', 'quick-mail' ); ?>" tabindex="22"></p>
 </fieldset>
 			<?php if ( empty( $no_uploads ) && empty( $_POST['quick-mail-uploads'] ) ) : ?>
 <fieldset>
@@ -1691,7 +1705,7 @@ placeholder="<?php esc_html_e( 'Subject', 'quick-mail' ); ?>" tabindex="22"></p>
 			<?php
 			if ( ! user_can_richedit() ) {
 				?>
-<p><textarea id="quickmailmessage" name="quickmailmessage"
+<p><textarea id="quickmailmessage" name="quickmailmessage" autocomplete="on"
 placeholder="<?php esc_html_e( 'Enter your message', 'quick-mail' ); ?>"
 aria-labelledby="qm_msg_label" required aria-required="true" aria-multiline=”true”
 rows="8" cols="60" tabindex="<?php echo $message_tabindex; ?>"><?php echo htmlspecialchars( $raw_msg, ENT_QUOTES ); ?></textarea></p>
@@ -2004,7 +2018,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			'%s %s %s',
 			__( 'Apply', 'quick-mail' ),
 			'<a target="_blank" href="https://codex.wordpress.org/Function_Reference/wpautop">wpautop</a>',
-			__( 'to HTML messages', 'quick-mail' )
+			__( 'to HTML messages.', 'quick-mail' )
 		);
 		$space          = '';
 		$comment_label  = '';
@@ -2614,13 +2628,14 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			$content    .= '<dt><strong>' . __( 'Hide Administrator Profiles', 'quick-mail' ) . '</strong></dt>';
 			$content    .= '<dd>' . __( 'Prevent users from sending email to administrators', 'quick-mail' ) . '.</dd>';
 			$content    .= '<dt><strong>' . __( 'Grant Editors access to user list', 'quick-mail' ) . '</strong></dt>';
-			$content    .= '<dd>' . __( 'Otherwise only administrators can view the user list', 'quick-mail' ) . '</dd>';
+			$content    .= '<dd>' . __( 'Otherwise only administrators can view the user list.', 'quick-mail' ) . '</dd>';
 			$content    .= '<dt><strong>' . __( 'Verify recipient email domains', 'quick-mail' ) . '</strong></dt>';
-			$content    .= '<dd>' . __( 'Check if recipient domain accepts email.', 'quick-mail' ) . '</dd>';
+			$content    .= '<dd>' . __( 'Check if recipient domain accepts email, when user enters the address.', 'quick-mail' ) . '</dd>';
 			$english_dns = __( 'http://php.net/manual/en/function.checkdnsrr.php', 'quick-mail' );
 			$z           = __( 'Checks domain with', 'quick-mail' );
-			$dnserr_link = "<a target='_blank' href='{$english_dns}'>checkdnsrr</a>";
+			$dnserr_link = "<a target='_blank' href='{$english_dns}'>checkdnsrr</a>.";
 			$content    .= "<dd>{$z} {$dnserr_link}</dd>";
+			$content    .= '<dd class="wp-ui-text-highlight">' . __( 'Addresses selected from user list are validated by WordPress, when user is added or updated.', 'quick-mail' ) . '</dd>';
 			$content    .= '<dd class="wp-ui-text-highlight">' . __( 'Turn verification off if Quick Mail rejects a valid address.', 'quick-mail' ) . '</dd>';
 			$content    .= '</dl>';
 			$screen->add_help_tab(
@@ -2734,38 +2749,39 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			);
 
 		if ( $you_are_admin && ! QuickMailUtil::got_sendgrid_info( false ) && ! QuickMailUtil::got_mailgun_info( false ) ) {
-			$sp    = sprintf(
+			$sp       = sprintf(
 				"%s <a target='_blank' href='%s'>%s</a>",
 				__( 'Several', 'quick-mail' ),
 				__( 'https://wordpress.org/plugins/search/smtp/', 'quick-mail' ),
 				__( 'SMTP Plugins', 'quick-mail' )
 			);
-			$pline = sprintf( '%s %s.', $sp, __( 'let you send mail from a public mail account', 'quick-mail' ) );
-			$mg    = sprintf(
+			$pline    = sprintf( '%s %s.', $sp, __( 'let you send mail from a public mail account', 'quick-mail' ) );
+			$supports = __( 'Quick Mail supports', 'quick-mail' );
+			$mg       = sprintf(
 				"<a target='_blank' href='%s'>%s</a>",
 				__( 'https://www.mailgun.com/', 'quick-mail' ),
 				__( 'Mailgun', 'quick-mail' )
 			);
-			$sg    = sprintf(
+			$sg       = sprintf(
 				"<a target='_blank' href='%s'>%s</a>",
 				__( 'https://sendgrid.com/', 'quick-mail' ),
 				__( 'SendGrid', 'quick-mail' )
 			);
-			$spark = sprintf(
+			$spark    = sprintf(
 				"<a target='_blank' href='%s'>%s</a>",
 				__( 'https://sparkpost.com/', 'quick-mail' ),
 				__( 'SparkPost', 'quick-mail' )
 			);
 
 			$svces       = sprintf(
-				'%s, %s, %s %s.',
+				'%s %s, %s, %s.',
+				$supports,
 				$mg,
 				$spark,
-				$sg,
-				__( 'are recommended', 'quick-mail' )
+				$sg
 			);
 			$btitle      = __( 'Send Reliable Email from WordPress with Quick Mail', 'quick-mail' );
-			$blink       = sprintf( '<a href="https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/">%s</a>', $btitle );
+			$blink       = sprintf( '<a target="_blank" href="https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/">%s</a>', $btitle );
 			$content     = sprintf(
 				'<h4>%s</h4>',
 				__( 'How to Fix Delivery Errors', 'quick-mail' )
@@ -2802,8 +2818,11 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			$content .= $line;
 			$line     = sprintf( '<dd>%s</dd>', $svces );
 			$content .= $line;
-			$line     = sprintf( '<dd>%s</dd>', __( 'Mailgun and SparkPost are free', 'quick-mail' ) );
+			$line     = sprintf( '<dd>%s</dd>', __( 'Mailgun, SparkPost and SendGrid offer free plans with limited usage.', 'quick-mail' ) );
 			$content .= $line;
+			$line     = sprintf( '<dd>%s</dd>', __( 'Quick Mail is tested with Mailgun and SparkPost.', 'quick-mail' ) );
+			$content .= $line;
+
 			if ( ! empty( $pline ) ) {
 				$line     = sprintf( '<dt class="qm-help">%s</dt>', __( 'SMTP Plugins', 'quick-mail' ) );
 				$content .= $line;
@@ -2826,7 +2845,7 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 		if ( $you_are_admin ) {
 			$cmd      = __( 'wp help quick-mail', 'quick-mail' );
 			$content  = sprintf( '<dl><dt><strong>%s</strong></dt>', __( 'Use Quick Mail with WP-CLI', 'quick-mail' ) );
-			$content .= sprintf( '<dd>%s.</dd>', __( 'Send files and links from the command line', 'quick-mail' ) );
+			$content .= sprintf( '<dd>%s.</dd>', __( 'Send files, documents, Web pages from the command line', 'quick-mail' ) );
 			$content .= sprintf(
 				'<dd>%s <code>%s</code> %s.</dd>',
 				__( 'Enter', 'quick-mail' ),
@@ -2976,7 +2995,7 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 	 * Use by admin print styles to add css to admin.
 	 */
 	public function init_quick_mail_style() {
-		wp_enqueue_style( 'quick-mail', plugins_url( '/lib/css/quick-mail.css', __FILE__ ), array(), '3.5.0', 'all' );
+		wp_enqueue_style( 'quick-mail', plugins_url( '/lib/css/quick-mail.css', __FILE__ ), array(), self::VERSION, 'all' );
 	} // end init_quick_mail_style
 
 	/**

@@ -1,7 +1,7 @@
 Quick Mail WordPress Plugin
 ====================
 
-Send text or html email with attachments and shortcodes. Send private replies to comments. Select recipient from users or commenters.
+Send text or html email with attachments and shortcodes from WP Dashboard or command line. Send private replies to comments. Select recipient from users or commenters.
 
 ### WordPress Rating
 [![WordPress rating](https://img.shields.io/wordpress/plugin/r/quick-mail.svg?maxAge=2592000)]()
@@ -15,7 +15,7 @@ Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds 
 
 Send a Web page, file, or message from the command line with quick-mail command for [WP-CLI](https://wp-cli.org/).
 
-** Does not need the Gutenberg editor. **
+** Does not use the Gutenberg editor. **
 
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
@@ -55,7 +55,7 @@ __Features__
 ### Learn More
 * Introduction: [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/).
 
-* Latest version: [Quick Mail 3.5.4 Sends Email with WordPress 4.6](https://wheredidmybraingo.com/quick-mail-3-5-4-sends-email-with-wordpress-4-6/).
+* Latest version: [Quick Mail 3.5.5 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-5-5-maintenance-release/).
 
 ### Installation ###
 
@@ -101,6 +101,8 @@ __Where Do I Find Sent Emails?__
 * You should be able to find sent emails in your email account's Sent Mail folder.
 
 * Delivery services like [Mailgun](https://www.mailgun.com/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://sendgrid.com/) also provide this information. 
+
+* [WP Mail Logging](http://wordpress.org/extend/plugins/wp-mail-logging/) plugin saves a list of sent emails, with content of message. Plugin shows number of attachments, but does not save attachments or file names.
 
 __Selecting Recipients__
 

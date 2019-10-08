@@ -3,13 +3,13 @@ Contributors: brainiac
 Tags: mail, email, comments, wp-cli, mailgun, sparkpost, attachment, sendgrid, accessibility, idn, multisite
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Requires at least: 4.6
-Tested up to: 5.2
+Tested up to: 5.3
 Requires PHP: 5.3
-Stable tag: 3.5.4
+Stable tag: 3.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Send reliable text or html email with attachments and shortcodes. Send private replies to comments. Select recipient from users or commenters.
+Send reliable text or html email with attachments and shortcodes from WP Dashboard or command line. Send private replies to comments. Select recipient from users or commenters.
 
 == Description ==
 >Quick Mail is the easiest way to send email with attachments to WordPress users on your site, or send private replies to comments. Compatible with multisite.
@@ -18,7 +18,7 @@ Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds 
 
 Send a Web page, file, or message from the command line with quick-mail command for [WP-CLI](https://wp-cli.org/).
 
-** Does not need the Gutenberg editor. **
+** Does not use the Gutenberg editor. **
 
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
@@ -30,7 +30,7 @@ Uses sender's name, sets reply to sender's address. Recognizes settings from [Ma
 
 Multiple files from up to six directories (folders) can be attached to a message.
 
-=Features=
+== Features ==
 
 * [WP-CLI](https://wp-cli.org/) command to send a file or the contents of a Web page. Send email to a single recipient, select site users by [WordPress role](https://codex.wordpress.org/Roles_and_Capabilities) or send to all users.
 
@@ -60,7 +60,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * Introduction: [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/).
 
-* Latest version: [Quick Mail 3.5.4 Sends Email with WordPress 4.6](https://wheredidmybraingo.com/quick-mail-3-5-4-sends-email-with-wordpress-4-6/).
+* Latest version: [Quick Mail 3.5.5 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-5-5-maintenance-release/).
 
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/).
 
@@ -107,6 +107,8 @@ Multiple files from up to six directories (folders) can be attached to a message
 * You should be able to find sent emails in your email account's Sent Mail folder.
 
 * Delivery services like [Mailgun](https://www.mailgun.com/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://sendgrid.com/) also provide this information.
+
+* [WP Mail Logging](https://wordpress.org/plugins/wp-mail-logging/) plugin saves a list of sent emails, with content of message. Plugin shows number of attachments, but does not save attachments or file names.
 
 = Selecting Recipients =
 
@@ -236,6 +238,14 @@ If you are using an email delivery service, you can ignore this message.
 
 == Changelog ==
 
+= 3.5.5 =
+* Fixed JavaScript translation of duplicate email error message.
+* Highlight form fields while entering text.
+* Multiple recipients are reformatted after entry.
+* Removed spurious invalid address warnings, when no address was entered.
+* Simplified JavaScript email validation.
+* Updated FAQ.
+
 = 3.5.4 =
 * Removed wp-i18n script requirement, to work with WP 4.6.
 * Added IDNA_NONTRANSITIONAL_TO_ASCII to idn_to_ascii() for PHP 7.2+ warning.
@@ -264,6 +274,9 @@ If you are using an email delivery service, you can ignore this message.
 Please refer to the separate changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.5.5 =
+* Upgrade recommended.
 
 = 3.5.4 =
 * Upgrade recommended.

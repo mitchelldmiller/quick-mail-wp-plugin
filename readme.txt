@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Requires at least: 4.6
 Tested up to: 5.3
 Requires PHP: 5.3
-Stable tag: 3.5.5 Beta
+Stable tag: 3.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,7 +60,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * Introduction: [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/).
 
-* Latest version: [Quick Mail 3.5.4 Sends Email with WordPress 4.6](https://wheredidmybraingo.com/quick-mail-3-5-4-sends-email-with-wordpress-4-6/).
+* Latest version: [Quick Mail 3.5.5 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-5-5-maintenance-release/).
 
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/).
 
@@ -243,6 +243,7 @@ If you are using an email delivery service, you can ignore this message.
 * Highlight form fields while entering text.
 * Multiple recipients are reformatted after entry.
 * Removed spurious invalid address warnings, when no address was entered.
+* Simplified JavaScript email validation.
 * Updated FAQ.
 
 = 3.5.4 =

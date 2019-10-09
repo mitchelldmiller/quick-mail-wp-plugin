@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.5
+ * Version: 3.5.6 Alpha
  * Author: Mitchell D. Miller
  * Author URI: https://wheredidmybraingo.com/about/
  * Plugin URI: https://wheredidmybraingo.com/quick-mail-3-5-5-maintenance-release/
@@ -2115,6 +2115,16 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 				} // end if not admin
 			} // end if
 		} // end if got replacement API
+		if ( is_multisite() ) {
+			$verify = get_blog_option( get_current_blog_id(), 'verify_quick_mail_addresses', 'N' );
+		} else {
+			$verify = get_option( 'verify_quick_mail_addresses', 'N' );
+		}
+		if ( 'Y' === $verify && 'X' !== $this->qm_get_display_option( $blog ) ) {
+			$verify = 'N';
+		} // end if verify disabled, because not displaying user list.
+		// Setup uses val_option since 3.5.6
+		echo "<script>val_option = '{$verify}';</script>";
 		?>
 <h1 id="quick-mail-title" class="quick-mail-title"><?php esc_html_e( 'Quick Mail Options', 'quick-mail' ); ?></h1>
 <form id="quick-mail-settings" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
@@ -2169,7 +2179,7 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 <p><input tabindex="70" aria-describedby="qm_grant_desc" aria-labelledby="qm_grant_label" class="qm-input" name="editors_quick_mail_privilege" type="checkbox" <?php echo $check_editor; ?>>
 <label id="qm_grant_label" class="qm-label"><?php esc_html_e( 'Grant Editors access to user list.', 'quick-mail' ); ?></label>
 <span id="qm_grant_desc" class="qm-label"><?php esc_html_e( 'Let editors see user list.', 'quick-mail' ); ?></span></p>
-<p><input tabindex="80" aria-describedby="qm_verify_desc" aria-labelledby="qm_verify_label" class="qm-input" name="verify_quick_mail_addresses" type="checkbox" <?php echo $check_verify; ?>>
+<p><input tabindex="80" aria-describedby="qm_verify_desc" aria-labelledby="qm_verify_label" class="qm-input" name="verify_quick_mail_addresses" id="verify_quick_mail_addresses" type="checkbox" <?php echo $check_verify; ?>>
 <label id="qm_verify_label" class="qm-label"><?php esc_html_e( 'Verify recipient email domains', 'quick-mail' ); ?>.</label>
 <span id="qm_verify_desc" class="qm-label"><?php echo $verify_note; ?></span></p>
 </fieldset>

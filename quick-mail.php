@@ -2,9 +2,9 @@
 /**
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.6 Alpha
+ * Version: 3.5.6 Beta
  * Author: Mitchell D. Miller
- * Author URI: https://wheredidmybraingo.com/about/
+ * Author URI: https://mitchelldmiller.com/resume/
  * Plugin URI: https://wheredidmybraingo.com/quick-mail-3-5-5-maintenance-release/
  * Text Domain: quick-mail
  * Domain Path: /lang
@@ -53,7 +53,7 @@ class QuickMail {
 	 * @var string version
 	 * @since 3.5.5 10-3-19
 	 */
-	const VERSION = '3.5.5';
+	const VERSION = '3.5.6';
 
 	/**
 	 * Content type for our instance.
@@ -617,7 +617,10 @@ jQuery(document).ready( function() {
 	 * @param int    $id user ID.
 	 */
 	public function quick_mail_recipient_input( $to, $id ) {
-		$template = '<input aria-labelledby="qme_label" value="%s" id="qm-email" name="qm-email" type="email" required aria-required="true" tabindex="0" autofocus size="35" placeholder="%s">';
+		$tlen     = wp_is_mobile() ? 28 : 75;
+		$template = "<input aria-labelledby='qme_label' value='%s' id='qm-email'
+			name='qm-email' type='email' required aria-required='true' tabindex='0' autofocus
+			size='{$tlen}' placeholder='%s'>";
 		$blog     = is_multisite() ? get_current_blog_id() : 0;
 		$option   = $this->qm_get_display_option( $blog );
 		$you      = wp_get_current_user(); // From.
@@ -730,7 +733,8 @@ jQuery(document).ready( function() {
 	 * @return void|string
 	 */
 	public function quick_mail_cc_input( $cc, $id ) {
-		$template = '<input aria-labelledby="qmcc_label" value="%s" id="qm-cc" name="qm-cc" type="text" size="35" tabindex="3" placeholder="%s">';
+		$tlen     = wp_is_mobile() ? '28' : '75';
+		$template = "<input aria-labelledby='qmcc_label' value='%s' id='qm-cc' name='qm-cc' type='text' size='{$tlen}' tabindex='3' placeholder='%s'>";
 		$blog     = is_multisite() ? get_current_blog_id() : 0;
 		$option   = $this->qm_get_display_option( $blog );
 		if ( ! $this->multiple_matching_users( $option, $blog ) ) {
@@ -800,7 +804,9 @@ jQuery(document).ready( function() {
 		sort( $users );
 		$letter = '';
 		ob_start();
-		echo '<select aria-labelledby="qmcc_label" name="qm-cc[]" id="qm-secondary" multiple size="6" tabindex="3"><option class="qmopt" value="" selected="selected">Select</option>';
+		echo '<select aria-labelledby="qmcc_label" name="qm-cc[]" id="qm-secondary"
+					multiple="multiple" size="6" tabindex="3"><option class="qmopt" value=""
+					selected="selected">Select</option>';
 		for ( $i = 0; $i < $j; $i++ ) {
 			$row  = explode( "\t", $users[ $i ] );
 			$role = '';
@@ -1620,6 +1626,9 @@ jQuery(document).ready( function() {
 			if ( 75 < $tlen ) {
 				$tlen = 75;
 			}
+			if ( wp_is_mobile() ) {
+				$tlen = 28;
+			}
 			$tsize            = "size='{$tlen}'";
 			$to_label         = ( empty( $commenter ) || empty( $commenter_list ) ) ? __( 'To', 'quick-mail' ) : __( 'Commenters', 'quick-mail' );
 			$msg_label        = ( empty( $commenter ) || empty( $commenter_list ) ) ? __( 'Message', 'quick-mail' ) : __( 'Reply', 'quick-mail' );
@@ -1638,7 +1647,7 @@ jQuery(document).ready( function() {
 	if ( is_string( $commenter_list ) && ! empty( $commenter_list ) ) {
 		$crecipient = $commenter_list;
 	} else {
-		$crecipient = "<input aria-labelledby='qme_label' value='{$to}' id='qm-email' name='qm-email' type='email' required aria-required='true' tabindex='6000' readonly aria-readonly='true' size='35'>";
+		$crecipient = "<input aria-labelledby='qme_label' value='{$to}' id='qm-email' name='qm-email' type='email' required aria-required='true' tabindex='6000' readonly aria-readonly='true' {$tsize}>";
 	} // end if
 	?>
 <p><?php echo $crecipient; ?></p>
@@ -1671,7 +1680,7 @@ jQuery(document).ready( function() {
 <fieldset>
 <label id="qmsubject_label" for="qm-subject" class="recipients"><?php esc_html_e( 'Subject', 'quick-mail' ); ?></label>
 <p><input value="<?php echo htmlspecialchars( $subject, ENT_QUOTES ); ?>" type="text"
-aria-labelledby="qmsubject_label" name="qm-subject" id="qm-subject" required size="40" aria-required="true"
+aria-labelledby="qmsubject_label" name="qm-subject" id="qm-subject" required <?php echo $tsize; ?> aria-required="true"
 autocomplete="on" placeholder="<?php esc_html_e( 'Subject', 'quick-mail' ); ?>" tabindex="22"></p>
 </fieldset>
 			<?php if ( empty( $no_uploads ) && empty( $_POST['quick-mail-uploads'] ) ) : ?>
@@ -1708,7 +1717,7 @@ autocomplete="on" placeholder="<?php esc_html_e( 'Subject', 'quick-mail' ); ?>" 
 <p><textarea id="quickmailmessage" name="quickmailmessage" autocomplete="on"
 placeholder="<?php esc_html_e( 'Enter your message', 'quick-mail' ); ?>"
 aria-labelledby="qm_msg_label" required aria-required="true" aria-multiline=”true”
-rows="8" cols="60" tabindex="<?php echo $message_tabindex; ?>"><?php echo htmlspecialchars( $raw_msg, ENT_QUOTES ); ?></textarea></p>
+rows="8" cols="<?php echo wp_is_mobile() ? '30' : '60'; ?>" tabindex="<?php echo $message_tabindex; ?>"><?php echo htmlspecialchars( $raw_msg, ENT_QUOTES ); ?></textarea></p>
 				<?php
 			} else {
 				$settings = array(

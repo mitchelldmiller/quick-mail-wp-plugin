@@ -240,6 +240,8 @@ If you are using an email delivery service, you can ignore this message.
 
 = 3.5.6 =
 * Disable validate email setting when user list is enabled.
+* Reduced input lengths on mobile devices, to improve display.
+* Added specific CSS to prevent WordPress from changing size of select.
 
 = 3.5.5 =
 * Fixed JavaScript translation of duplicate email error message.

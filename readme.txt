@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Requires at least: 4.6
 Tested up to: 5.3
 Requires PHP: 5.3
-Stable tag: 3.5.5
+Stable tag: 3.5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -243,6 +243,7 @@ If you are using an email delivery service, you can ignore this message.
 * Reduced input lengths on mobile devices, to improve display.
 * Added specific CSS to prevent WordPress from changing size of select.
 * Removed text placeholders from input fields.
+* Selecting Display Commenters disables user selection.
 
 = 3.5.5 =
 * Fixed JavaScript translation of duplicate email error message.

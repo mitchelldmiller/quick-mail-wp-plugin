@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.6 Beta
+ * Version: 3.5.6 RC1
  * Author: Mitchell D. Miller
  * Author URI: https://mitchelldmiller.com/resume/
  * Plugin URI: https://wheredidmybraingo.com/quick-mail-3-5-5-maintenance-release/
@@ -619,8 +619,7 @@ jQuery(document).ready( function() {
 	public function quick_mail_recipient_input( $to, $id ) {
 		$tlen     = wp_is_mobile() ? 28 : 75;
 		$template = "<input aria-labelledby='qme_label' value='%s' id='qm-email'
-			name='qm-email' type='email' required aria-required='true' tabindex='0' autofocus
-			size='{$tlen}' placeholder='%s'>";
+			name='qm-email' type='email' required aria-required='true' tabindex='0' autofocus size='{$tlen}'>";
 		$blog     = is_multisite() ? get_current_blog_id() : 0;
 		$option   = $this->qm_get_display_option( $blog );
 		$you      = wp_get_current_user(); // From.
@@ -643,7 +642,7 @@ jQuery(document).ready( function() {
 		} // end if wants user list
 
 		if ( 'A' !== $option && 'B' !== $option && 'N' !== $option && 'O' !== $option ) {
-			echo sprintf( $template, $to, esc_html( __( 'Enter mail address', 'quick-mail' ) ) );
+			echo sprintf( $template, $to );
 			return;
 		} // end if invalid option.
 
@@ -682,7 +681,7 @@ jQuery(document).ready( function() {
 
 		$j = count( $users );
 		if ( 1 > $j ) {
-			echo sprintf( $template, $to, esc_html( __( 'Enter mail address', 'quick-mail' ) ) );
+			echo sprintf( $template, $to );
 			return;
 		} // end if at least one match
 
@@ -734,7 +733,7 @@ jQuery(document).ready( function() {
 	 */
 	public function quick_mail_cc_input( $cc, $id ) {
 		$tlen     = wp_is_mobile() ? '28' : '75';
-		$template = "<input aria-labelledby='qmcc_label' value='%s' id='qm-cc' name='qm-cc' type='text' size='{$tlen}' tabindex='3' placeholder='%s'>";
+		$template = "<input aria-labelledby='qmcc_label' value='%s' id='qm-cc' name='qm-cc' type='text' size='{$tlen}' tabindex='3'>";
 		$blog     = is_multisite() ? get_current_blog_id() : 0;
 		$option   = $this->qm_get_display_option( $blog );
 		if ( ! $this->multiple_matching_users( $option, $blog ) ) {
@@ -762,7 +761,7 @@ jQuery(document).ready( function() {
 		} // end if wants user list
 
 		if ( 'A' !== $option && 'B' !== $option && 'N' !== $option && 'O' !== $option ) {
-			echo sprintf( $template, $cc, esc_html( __( 'Enter mail address', 'quick-mail' ) ) );
+			echo sprintf( $template, $cc );
 			return;
 		}
 		$hide_admin = '';
@@ -797,7 +796,7 @@ jQuery(document).ready( function() {
 
 		$j = count( $users );
 		if ( 2 > $j ) {
-			echo sprintf( $template, $cc, __( 'Enter mail address', 'quick-mail' ) );
+			echo sprintf( $template, $cc );
 			return;
 		} // end if one match
 
@@ -1681,7 +1680,7 @@ jQuery(document).ready( function() {
 <label id="qmsubject_label" for="qm-subject" class="recipients"><?php esc_html_e( 'Subject', 'quick-mail' ); ?></label>
 <p><input value="<?php echo htmlspecialchars( $subject, ENT_QUOTES ); ?>" type="text"
 aria-labelledby="qmsubject_label" name="qm-subject" id="qm-subject" required <?php echo $tsize; ?> aria-required="true"
-autocomplete="on" placeholder="<?php esc_html_e( 'Subject', 'quick-mail' ); ?>" tabindex="22"></p>
+autocomplete="on" tabindex="22"></p>
 </fieldset>
 			<?php if ( empty( $no_uploads ) && empty( $_POST['quick-mail-uploads'] ) ) : ?>
 <fieldset>
@@ -1715,7 +1714,6 @@ autocomplete="on" placeholder="<?php esc_html_e( 'Subject', 'quick-mail' ); ?>" 
 			if ( ! user_can_richedit() ) {
 				?>
 <p><textarea id="quickmailmessage" name="quickmailmessage" autocomplete="on"
-placeholder="<?php esc_html_e( 'Enter your message', 'quick-mail' ); ?>"
 aria-labelledby="qm_msg_label" required aria-required="true" aria-multiline=”true”
 rows="8" cols="<?php echo wp_is_mobile() ? '30' : '60'; ?>" tabindex="<?php echo $message_tabindex; ?>"><?php echo htmlspecialchars( $raw_msg, ENT_QUOTES ); ?></textarea></p>
 				<?php

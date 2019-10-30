@@ -2,10 +2,10 @@
 /**
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.6 RC1
+ * Version: 3.5.6
  * Author: Mitchell D. Miller
- * Author URI: https://mitchelldmiller.com/resume/
- * Plugin URI: https://wheredidmybraingo.com/quick-mail-3-5-5-maintenance-release/
+ * Author URI: https://mitchelldmiller.com/
+ * Plugin URI: https://wheredidmybraingo.com/quick-mail-3-5-6-update/
  * Text Domain: quick-mail
  * Domain Path: /lang
  * License: GPL-2.0+
@@ -43,7 +43,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 
 /**
  *
- * Send mail, reply to comments from WP Dashboard.
+ * Send email, reply to comments from WP Dashboard.
  */
 class QuickMail {
 

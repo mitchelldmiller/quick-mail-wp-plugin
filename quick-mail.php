@@ -2,10 +2,10 @@
 /**
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.5
+ * Version: 3.5.6
  * Author: Mitchell D. Miller
- * Author URI: https://wheredidmybraingo.com/about/
- * Plugin URI: https://wheredidmybraingo.com/quick-mail-3-5-5-maintenance-release/
+ * Author URI: https://sociopathicsurgeon.com/author/
+ * Plugin URI: https://wheredidmybraingo.com/my-final-quick-mail-update/
  * Text Domain: quick-mail
  * Domain Path: /lang
  * License: GPL-2.0+
@@ -43,7 +43,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 
 /**
  *
- * Send mail, reply to comments from WP Dashboard.
+ * Send email, reply to comments from WP Dashboard.
  */
 class QuickMail {
 
@@ -53,7 +53,7 @@ class QuickMail {
 	 * @var string version
 	 * @since 3.5.5 10-3-19
 	 */
-	const VERSION = '3.5.5';
+	const VERSION = '3.5.6';
 
 	/**
 	 * Content type for our instance.
@@ -184,17 +184,14 @@ class QuickMail {
 		$glink       = "<a target='_blank' href='https://github.com/mitchelldmiller/quick-mail-wp-plugin/'>{$github}</a>.";
 		$faq         = __( 'FAQ', 'quick-mail' );
 		$flink       = '<a href="https://wordpress.org/plugins/quick-mail/faq/" target="_blank">' . $faq . '</a>';
-		$slink       = '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
-		$rlink       = '<a href="https://wordpress.org/support/plugin/quick-mail/reviews/" target="_blank">' . __( 'Leave a review', 'quick-mail' ) . '</a>';
-		$others      = __( 'to help others find Quick Mail.', 'quick-mail' );
+		$slink       = '<a href="https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues" target="_blank">' . __( 'Github Issues', 'quick-mail' ) . '</a>';
 		$resources   = __( 'Resources', 'quick-mail' );
 		$more_info   = __( 'has more information.', 'quick-mail' );
 		$use_str     = __( 'Please use', 'quick-mail' );
 		$to_ask      = __( 'to ask questions and report problems.', 'quick-mail' );
 		$help_others = __( 'Help Others', 'quick-mail' );
 		$qm_top      = "<p>{$qm_desc}</p><h4>{$resources}</h4><ul><li>{$flink} {$more_info}</li><li>{$glink}</li><li>{$use_str} {$slink} {$to_ask}</li></ul>";
-		$qm_bot      = "<h4>{$help_others}</h4><ul><li>{$rlink} {$others}</li></ul>";
-		$qm_content  = $qm_top . $qm_bot;
+		$qm_content  = $qm_top;
 		return array(
 			'id'      => 'qm_intro',
 			'title'   => __( 'Quick Mail', 'quick-mail' ),
@@ -220,8 +217,8 @@ class QuickMail {
 		$support = sprintf(
 			'<h4><a class="wp-ui-text-highlight" target="_blank"
 		href="%s">%s</a></h4>',
-			'https://wordpress.org/support/plugin/quick-mail',
-			__( 'Please use Support to ask questions and report problems.', 'quick-mail' )
+			'https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues',
+			__( 'Please use Github Issues to ask questions and report problems.', 'quick-mail' )
 		);
 
 		return array(
@@ -617,7 +614,9 @@ jQuery(document).ready( function() {
 	 * @param int    $id user ID.
 	 */
 	public function quick_mail_recipient_input( $to, $id ) {
-		$template = '<input aria-labelledby="qme_label" value="%s" id="qm-email" name="qm-email" type="email" required aria-required="true" tabindex="0" autofocus size="35" placeholder="%s">';
+		$tlen     = wp_is_mobile() ? 28 : 75;
+		$template = "<input aria-labelledby='qme_label' value='%s' id='qm-email'
+			name='qm-email' type='email' required aria-required='true' tabindex='0' autofocus size='{$tlen}'>";
 		$blog     = is_multisite() ? get_current_blog_id() : 0;
 		$option   = $this->qm_get_display_option( $blog );
 		$you      = wp_get_current_user(); // From.
@@ -640,7 +639,7 @@ jQuery(document).ready( function() {
 		} // end if wants user list
 
 		if ( 'A' !== $option && 'B' !== $option && 'N' !== $option && 'O' !== $option ) {
-			echo sprintf( $template, $to, esc_html( __( 'Enter mail address', 'quick-mail' ) ) );
+			echo sprintf( $template, $to );
 			return;
 		} // end if invalid option.
 
@@ -679,7 +678,7 @@ jQuery(document).ready( function() {
 
 		$j = count( $users );
 		if ( 1 > $j ) {
-			echo sprintf( $template, $to, esc_html( __( 'Enter mail address', 'quick-mail' ) ) );
+			echo sprintf( $template, $to );
 			return;
 		} // end if at least one match
 
@@ -730,7 +729,8 @@ jQuery(document).ready( function() {
 	 * @return void|string
 	 */
 	public function quick_mail_cc_input( $cc, $id ) {
-		$template = '<input aria-labelledby="qmcc_label" value="%s" id="qm-cc" name="qm-cc" type="text" size="35" tabindex="3" placeholder="%s">';
+		$tlen     = wp_is_mobile() ? '28' : '75';
+		$template = "<input aria-labelledby='qmcc_label' value='%s' id='qm-cc' name='qm-cc' type='text' size='{$tlen}' tabindex='3'>";
 		$blog     = is_multisite() ? get_current_blog_id() : 0;
 		$option   = $this->qm_get_display_option( $blog );
 		if ( ! $this->multiple_matching_users( $option, $blog ) ) {
@@ -758,7 +758,7 @@ jQuery(document).ready( function() {
 		} // end if wants user list
 
 		if ( 'A' !== $option && 'B' !== $option && 'N' !== $option && 'O' !== $option ) {
-			echo sprintf( $template, $cc, esc_html( __( 'Enter mail address', 'quick-mail' ) ) );
+			echo sprintf( $template, $cc );
 			return;
 		}
 		$hide_admin = '';
@@ -793,14 +793,16 @@ jQuery(document).ready( function() {
 
 		$j = count( $users );
 		if ( 2 > $j ) {
-			echo sprintf( $template, $cc, __( 'Enter mail address', 'quick-mail' ) );
+			echo sprintf( $template, $cc );
 			return;
 		} // end if one match
 
 		sort( $users );
 		$letter = '';
 		ob_start();
-		echo '<select aria-labelledby="qmcc_label" name="qm-cc[]" id="qm-secondary" multiple size="6" tabindex="3"><option class="qmopt" value="" selected="selected">Select</option>';
+		echo '<select aria-labelledby="qmcc_label" name="qm-cc[]" id="qm-secondary"
+					multiple="multiple" size="6" tabindex="3"><option class="qmopt" value=""
+					selected="selected">Select</option>';
 		for ( $i = 0; $i < $j; $i++ ) {
 			$row  = explode( "\t", $users[ $i ] );
 			$role = '';
@@ -1620,6 +1622,9 @@ jQuery(document).ready( function() {
 			if ( 75 < $tlen ) {
 				$tlen = 75;
 			}
+			if ( wp_is_mobile() ) {
+				$tlen = 28;
+			}
 			$tsize            = "size='{$tlen}'";
 			$to_label         = ( empty( $commenter ) || empty( $commenter_list ) ) ? __( 'To', 'quick-mail' ) : __( 'Commenters', 'quick-mail' );
 			$msg_label        = ( empty( $commenter ) || empty( $commenter_list ) ) ? __( 'Message', 'quick-mail' ) : __( 'Reply', 'quick-mail' );
@@ -1638,7 +1643,7 @@ jQuery(document).ready( function() {
 	if ( is_string( $commenter_list ) && ! empty( $commenter_list ) ) {
 		$crecipient = $commenter_list;
 	} else {
-		$crecipient = "<input aria-labelledby='qme_label' value='{$to}' id='qm-email' name='qm-email' type='email' required aria-required='true' tabindex='6000' readonly aria-readonly='true' size='35'>";
+		$crecipient = "<input aria-labelledby='qme_label' value='{$to}' id='qm-email' name='qm-email' type='email' required aria-required='true' tabindex='6000' readonly aria-readonly='true' {$tsize}>";
 	} // end if
 	?>
 <p><?php echo $crecipient; ?></p>
@@ -1671,8 +1676,8 @@ jQuery(document).ready( function() {
 <fieldset>
 <label id="qmsubject_label" for="qm-subject" class="recipients"><?php esc_html_e( 'Subject', 'quick-mail' ); ?></label>
 <p><input value="<?php echo htmlspecialchars( $subject, ENT_QUOTES ); ?>" type="text"
-aria-labelledby="qmsubject_label" name="qm-subject" id="qm-subject" required size="40" aria-required="true"
-autocomplete="on" placeholder="<?php esc_html_e( 'Subject', 'quick-mail' ); ?>" tabindex="22"></p>
+aria-labelledby="qmsubject_label" name="qm-subject" id="qm-subject" required <?php echo $tsize; ?> aria-required="true"
+autocomplete="on" tabindex="22"></p>
 </fieldset>
 			<?php if ( empty( $no_uploads ) && empty( $_POST['quick-mail-uploads'] ) ) : ?>
 <fieldset>
@@ -1706,9 +1711,8 @@ autocomplete="on" placeholder="<?php esc_html_e( 'Subject', 'quick-mail' ); ?>" 
 			if ( ! user_can_richedit() ) {
 				?>
 <p><textarea id="quickmailmessage" name="quickmailmessage" autocomplete="on"
-placeholder="<?php esc_html_e( 'Enter your message', 'quick-mail' ); ?>"
 aria-labelledby="qm_msg_label" required aria-required="true" aria-multiline=”true”
-rows="8" cols="60" tabindex="<?php echo $message_tabindex; ?>"><?php echo htmlspecialchars( $raw_msg, ENT_QUOTES ); ?></textarea></p>
+rows="8" cols="<?php echo wp_is_mobile() ? '30' : '60'; ?>" tabindex="<?php echo $message_tabindex; ?>"><?php echo htmlspecialchars( $raw_msg, ENT_QUOTES ); ?></textarea></p>
 				<?php
 			} else {
 				$settings = array(
@@ -2115,6 +2119,16 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 				} // end if not admin
 			} // end if
 		} // end if got replacement API
+		if ( is_multisite() ) {
+			$verify = get_blog_option( get_current_blog_id(), 'verify_quick_mail_addresses', 'N' );
+		} else {
+			$verify = get_option( 'verify_quick_mail_addresses', 'N' );
+		}
+		if ( 'Y' === $verify && 'X' !== $this->qm_get_display_option( $blog ) ) {
+			$verify = 'N';
+		} // end if verify disabled, because not displaying user list.
+		// Setup uses val_option since 3.5.6
+		echo "<script>val_option = '{$verify}';</script>";
 		?>
 <h1 id="quick-mail-title" class="quick-mail-title"><?php esc_html_e( 'Quick Mail Options', 'quick-mail' ); ?></h1>
 <form id="quick-mail-settings" method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
@@ -2169,7 +2183,7 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 <p><input tabindex="70" aria-describedby="qm_grant_desc" aria-labelledby="qm_grant_label" class="qm-input" name="editors_quick_mail_privilege" type="checkbox" <?php echo $check_editor; ?>>
 <label id="qm_grant_label" class="qm-label"><?php esc_html_e( 'Grant Editors access to user list.', 'quick-mail' ); ?></label>
 <span id="qm_grant_desc" class="qm-label"><?php esc_html_e( 'Let editors see user list.', 'quick-mail' ); ?></span></p>
-<p><input tabindex="80" aria-describedby="qm_verify_desc" aria-labelledby="qm_verify_label" class="qm-input" name="verify_quick_mail_addresses" type="checkbox" <?php echo $check_verify; ?>>
+<p><input tabindex="80" aria-describedby="qm_verify_desc" aria-labelledby="qm_verify_label" class="qm-input" name="verify_quick_mail_addresses" id="verify_quick_mail_addresses" type="checkbox" <?php echo $check_verify; ?>>
 <label id="qm_verify_label" class="qm-label"><?php esc_html_e( 'Verify recipient email domains', 'quick-mail' ); ?>.</label>
 <span id="qm_verify_desc" class="qm-label"><?php echo $verify_note; ?></span></p>
 </fieldset>
@@ -2650,7 +2664,7 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			);
 		} // end if
 
-			$slink   = '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
+			$slink = '<a href="https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues" target="_blank">' . __( 'Github Issues', 'quick-mail' ) . '</a>';
 			$use_str = __( 'Please use', 'quick-mail' );
 			$to_ask  = __( 'to ask questions and report problems', 'quick-mail' );
 			$rc5     = "<dt class='qm-help'>{$use_str} {$slink} {$to_ask}.</dt>";

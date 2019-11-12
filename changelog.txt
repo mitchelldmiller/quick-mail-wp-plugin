@@ -1,5 +1,28 @@
 == Quick Mail Changelog ==
 
+= 3.5.4 =
+* Removed wp-i18n script requirement, to work with WP 4.6.
+* Added IDNA_NONTRANSITIONAL_TO_ASCII to idn_to_ascii() for PHP 7.2+ warning.
+* Trim user input before email validation.
+* Removed check for login cookie on AJAX email validation.
+
+= 3.5.3 =
+* Improved help for Quick Mail settings.
+* Display No Role on list selection, if user has no role on site.
+* Fixed idn_to_ascii(): INTL_IDNA_VARIANT_2003 is deprecated.
+
+= 3.5.2 =
+* Fixed error on recipient address, when all users and show roles were selected.
+* Added QUICK_MAIL_TESTING constant to check recipient list, without sending email.
+* Added WP-CLI command option for sending email to all users on site.
+* Do not send email to over 99 recipients.
+* Do not hide role recipients, if only one recipient.
+* Do not apply sanitize_email to WP-CLI recipient address.
+* Removed double quotes on some user names from WP-CLI command.
+* Replaced wp_strip_all_tags with strip_tags on AJAX email validation. 
+* Select recipients for WP-CLI command by role.
+* Exit if WP-CLI attachment is not plain text or HTML.
+
 = 3.5.1 =
 * Improved translation text.
 * Fixed: Show user roles is always disabled if Do Not Show Users is checked.

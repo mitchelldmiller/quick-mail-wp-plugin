@@ -1,5 +1,5 @@
 @CHARSET "UTF-8";
-/* quick-mail.css 3.5.5 */
+/* quick-mail.css 3.5.6 */
 
 fieldset {
 border: 1px solid #d1d1d1;
@@ -125,6 +125,7 @@ input[type="submit"] {
 
 select#qm-primary, select#qm-secondary {
 	background-color: #fff;
+	height: auto !important;
 }
 
 select#qm-primary optgroup.qmog, select#qm-secondary optgroup.qmog {

@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Requires at least: 4.6
 Tested up to: 5.3
 Requires PHP: 5.3
-Stable tag: 3.5.5
+Stable tag: 3.5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,7 +60,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * Introduction: [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/).
 
-* Latest version: [Quick Mail 3.5.5 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-5-5-maintenance-release/).
+* Latest version: [My Final Quick Mail Update](https://wheredidmybraingo.com/my-final-quick-mail-update/).
 
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/).
 
@@ -238,58 +238,36 @@ If you are using an email delivery service, you can ignore this message.
 
 == Changelog ==
 
+= 3.5.6 =
+* Disable validate email setting when user list is enabled.
+* Reduced input lengths on mobile devices, to improve display.
+* Added specific CSS to prevent WordPress from changing size of select.
+* Removed text placeholders from input fields.
+* Selecting Display Commenters disables user selection.
+
 = 3.5.5 =
 * Fixed JavaScript translation of duplicate email error message.
 * Highlight form fields while entering text.
 * Multiple recipients are reformatted after entry.
 * Removed spurious invalid address warnings, when no address was entered.
 * Simplified JavaScript email validation.
-* Updated FAQ.
-
-= 3.5.4 =
-* Removed wp-i18n script requirement, to work with WP 4.6.
-* Added IDNA_NONTRANSITIONAL_TO_ASCII to idn_to_ascii() for PHP 7.2+ warning.
-* Trim user input before email validation.
-* Removed check for login cookie on AJAX email validation.
-
-= 3.5.3 =
-* Improved help for Quick Mail settings.
-* Display No Role on list selection, if user has no role on site.
-* Fixed idn_to_ascii(): INTL_IDNA_VARIANT_2003 is deprecated.
-
-= 3.5.2 =
-* Fixed error on recipient address, when all users and show roles were selected.
-* Added QUICK_MAIL_TESTING constant to check recipient list, without sending email.
-* Added WP-CLI command option for sending email to all users on site.
-* Do not send email to over 99 recipients.
-* Do not hide role recipients, if only one recipient.
-* Do not apply sanitize_email to WP-CLI recipient address.
-* Removed double quotes on some user names from WP-CLI command.
-* Replaced wp_strip_all_tags with strip_tags on AJAX email validation. 
-* Select recipients for WP-CLI command by role.
-* Exit if WP-CLI attachment is not plain text or HTML.
+* Updated FAQ, help.
 
 = Earlier versions =
 
-Please refer to the separate changelog.txt for changes of previous versions.
+Please refer to changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 3.5.6 =
+* Upgrade recommended.
 
 = 3.5.5 =
 * Upgrade recommended.
 
-= 3.5.4 =
-* Upgrade recommended.
-
-= 3.5.3 =
-* Upgrade recommended.
-
-= 3.5.2 =
-* Upgrade recommended.
-
 == License ==
 
-Quick Mail is free for personal or commercial use. Encourage future development with a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY).
+Quick Mail is free for personal or commercial use. Please support future development with a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY).
 
 == Credits ==
 

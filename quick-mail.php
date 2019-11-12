@@ -4,8 +4,8 @@
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
  * Version: 3.5.6
  * Author: Mitchell D. Miller
- * Author URI: https://mitchelldmiller.com/
- * Plugin URI: https://wheredidmybraingo.com/quick-mail-3-5-6-update/
+ * Author URI: https://sociopathicsurgeon.com/author/
+ * Plugin URI: https://wheredidmybraingo.com/my-final-quick-mail-update/
  * Text Domain: quick-mail
  * Domain Path: /lang
  * License: GPL-2.0+
@@ -184,17 +184,14 @@ class QuickMail {
 		$glink       = "<a target='_blank' href='https://github.com/mitchelldmiller/quick-mail-wp-plugin/'>{$github}</a>.";
 		$faq         = __( 'FAQ', 'quick-mail' );
 		$flink       = '<a href="https://wordpress.org/plugins/quick-mail/faq/" target="_blank">' . $faq . '</a>';
-		$slink       = '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
-		$rlink       = '<a href="https://wordpress.org/support/plugin/quick-mail/reviews/" target="_blank">' . __( 'Leave a review', 'quick-mail' ) . '</a>';
-		$others      = __( 'to help others find Quick Mail.', 'quick-mail' );
+		$slink       = '<a href="https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues" target="_blank">' . __( 'Github Issues', 'quick-mail' ) . '</a>';
 		$resources   = __( 'Resources', 'quick-mail' );
 		$more_info   = __( 'has more information.', 'quick-mail' );
 		$use_str     = __( 'Please use', 'quick-mail' );
 		$to_ask      = __( 'to ask questions and report problems.', 'quick-mail' );
 		$help_others = __( 'Help Others', 'quick-mail' );
 		$qm_top      = "<p>{$qm_desc}</p><h4>{$resources}</h4><ul><li>{$flink} {$more_info}</li><li>{$glink}</li><li>{$use_str} {$slink} {$to_ask}</li></ul>";
-		$qm_bot      = "<h4>{$help_others}</h4><ul><li>{$rlink} {$others}</li></ul>";
-		$qm_content  = $qm_top . $qm_bot;
+		$qm_content  = $qm_top;
 		return array(
 			'id'      => 'qm_intro',
 			'title'   => __( 'Quick Mail', 'quick-mail' ),
@@ -220,8 +217,8 @@ class QuickMail {
 		$support = sprintf(
 			'<h4><a class="wp-ui-text-highlight" target="_blank"
 		href="%s">%s</a></h4>',
-			'https://wordpress.org/support/plugin/quick-mail',
-			__( 'Please use Support to ask questions and report problems.', 'quick-mail' )
+			'https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues',
+			__( 'Please use Github Issues to ask questions and report problems.', 'quick-mail' )
 		);
 
 		return array(
@@ -2667,7 +2664,7 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			);
 		} // end if
 
-			$slink   = '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
+			$slink = '<a href="https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues" target="_blank">' . __( 'Github Issues', 'quick-mail' ) . '</a>';
 			$use_str = __( 'Please use', 'quick-mail' );
 			$to_ask  = __( 'to ask questions and report problems', 'quick-mail' );
 			$rc5     = "<dt class='qm-help'>{$use_str} {$slink} {$to_ask}.</dt>";

@@ -60,7 +60,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * Introduction: [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/).
 
-* Latest version: [Quick Mail 3.5.5 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-5-5-maintenance-release/).
+* Latest version: [My Final Quick Mail Update](https://wheredidmybraingo.com/my-final-quick-mail-update/).
 
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/).
 

@@ -3,9 +3,6 @@ Quick Mail WordPress Plugin
 
 Send text or html email with attachments and shortcodes from WP Dashboard or command line. Send private replies to comments. Select recipient from users or commenters.
 
-### WordPress Rating
-[![WordPress rating](https://img.shields.io/wordpress/plugin/r/quick-mail.svg?maxAge=2592000)]()
-
 Description
 -----------
 
@@ -55,7 +52,7 @@ __Features__
 ### Learn More
 * Introduction: [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/).
 
-* Latest version: [Quick Mail 3.5.5 Maintenance Release](https://wheredidmybraingo.com/quick-mail-3-5-5-maintenance-release/).
+* Latest version: [My Final Quick Mail Update](https://wheredidmybraingo.com/my-final-quick-mail-update/).
 
 ### Installation ###
 

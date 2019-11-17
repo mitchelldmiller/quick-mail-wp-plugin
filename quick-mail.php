@@ -2,10 +2,11 @@
 /**
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.6
+ * Version: 3.5.8
  * Author: Mitchell D. Miller
  * Author URI: https://sociopathicsurgeon.com/author/
  * Plugin URI: https://wheredidmybraingo.com/my-final-quick-mail-update/
+ * GitHub Plugin URI: https://github.com/mitchelldmiller/quick-mail-wp-plugin
  * Text Domain: quick-mail
  * Domain Path: /lang
  * License: GPL-2.0+
@@ -179,11 +180,11 @@ class QuickMail {
 			);
 		} // end if
 
-		$english_faq = __( 'https://wordpress.org/plugins/quick-mail/faq/', 'quick-mail' );
+		$english_faq = __( 'https://mitchelldmiller.github.io/quick-mail-wp-plugin/#frequently-asked-questions', 'quick-mail' );
 		$github      = __( 'Follow development on Github', 'quick-mail' );
 		$glink       = "<a target='_blank' href='https://github.com/mitchelldmiller/quick-mail-wp-plugin/'>{$github}</a>.";
 		$faq         = __( 'FAQ', 'quick-mail' );
-		$flink       = '<a href="https://wordpress.org/plugins/quick-mail/faq/" target="_blank">' . $faq . '</a>';
+		$flink       = '<a href="https://mitchelldmiller.github.io/quick-mail-wp-plugin/#frequently-asked-questions" target="_blank">' . $faq . '</a>';
 		$slink       = '<a href="https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues" target="_blank">' . __( 'Github Issues', 'quick-mail' ) . '</a>';
 		$resources   = __( 'Resources', 'quick-mail' );
 		$more_info   = __( 'has more information.', 'quick-mail' );
@@ -2006,7 +2007,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 		$verify_message = __( 'Verifies domain with', 'quick-mail' ) . ' ' . $dnserr_link . ' ' . $when;
 		$verify_problem = '';
 		if ( ! function_exists( 'idn_to_ascii' ) ) {
-			$english_faq    = __( 'https://wordpress.org/plugins/quick-mail/faq/', 'quick-mail' );
+			$english_faq    = __( 'https://mitchelldmiller.github.io/quick-mail-wp-plugin/#frequently-asked-questions', 'quick-mail' );
 			$faq_link       = "<a target='_blank' href='{$english_faq}'>" . __( 'FAQ', 'quick-mail' ) . '</a>';
 			$english_idn    = __( 'http://php.net/manual/en/function.idn-to-ascii.php', 'quick-mail' );
 			$idn_link       = "<a target='_blank' href='{$english_idn}'>idn_to_ascii</a>";
@@ -3030,8 +3031,8 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 	 */
 	public function qm_plugin_links( $links, $file ) {
 		if ( $file === plugin_basename( __FILE__ ) ) {
-			$links[] = '<a href="https://wordpress.org/plugins/quick-mail/faq/" target="_blank">' . __( 'FAQ', 'quick-mail' ) . '</a>';
-			$links[] = '<a href="https://wordpress.org/support/plugin/quick-mail" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
+			$links[] = '<a href="https://mitchelldmiller.github.io/quick-mail-wp-plugin/#frequently-asked-questions" target="_blank">' . __( 'FAQ', 'quick-mail' ) . '</a>';
+			$links[] = '<a href="https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues" target="_blank">' . __( 'Support', 'quick-mail' ) . '</a>';
 		} // end if adding links
 		return $links;
 	} // end qm_plugin_links

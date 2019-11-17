@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Requires at least: 4.6
 Tested up to: 5.3
 Requires PHP: 5.3
-Stable tag: 3.5.6
+Stable tag: 3.5.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,9 +66,8 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 == Installation ==
 = Automated =
-1. Select _Plugins -> Add New_ from Dashboard.
-2. Enter **Quick Mail** in _Search Plugins_.
-3. Select _Activate Plugin_ to activate Quick Mail.
+* Install [GitHub Updater](https://github.com/afragen/github-updater/releases/latest) plugin to install Quick Mail from Github.
+* See [GitHub Updater Wiki](https://github.com/afragen/github-updater/wiki) for additional information.
 
 = Manual =
 1. Download the plugin and unpack in your `/wp-content/plugins` directory.
@@ -84,9 +83,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 
 * Quick Mail is not distributed with translations.
 
-* Visit [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for translations and more information.
-
-* Please help translate Quick Mail. A .pot file is included for new translators.
+* A .pot file is included for new translators.
 
 == Frequently Asked Questions ==
 
@@ -237,6 +234,10 @@ If you are using an email delivery service, you can ignore this message.
 7. User list with roles.
 
 == Changelog ==
+
+= 3.5.8 =
+* Replaced dead links to WP.org on help, READMEs.
+* Update from Github using Github Updater plugin.
 
 = 3.5.6 =
 * Disable validate email setting when user list is enabled.

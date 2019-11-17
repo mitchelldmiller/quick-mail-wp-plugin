@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Quick-Mail-WP-Plugin by mitchelldmiller</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Quick-Mail-WP-Plugin</h1>
+      <h2 class="project-tagline">Quick Mail WordPress plugin is the easiest way to send email with attachment from WordPress admin</h2>
+      <a href="https://github.com/mitchelldmiller/quick-mail-wp-plugin" class="btn">View on GitHub</a>
+      <a href="https://github.com/mitchelldmiller/quick-mail-wp-plugin/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/mitchelldmiller/quick-mail-wp-plugin/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="quick-mail-wp-plugin" class="anchor" href="#quick-mail-wp-plugin" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>quick-mail-wp-plugin</h1>
+
+<p>Adds "Quick Mail" to Tools. Send text or html email with file attachments from user's credentials. French and Spanish translations.</p>
+
+<h3>
+<a id="build-status" class="anchor" href="#build-status" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Build Status</h3>
+
+<p><a href="https://travis-ci.org/mitchelldmiller/quick-mail-wp-plugin"><img src="https://api.travis-ci.org/mitchelldmiller/quick-mail-wp-plugin.svg?branch=master" alt="Build Status"></a></p>
+
+<h2>
+<a id="description" class="anchor" href="#description" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Description</h2>
+
+<blockquote>
+<p>Quick Mail is the easiest way to send an email with attachments to a WordPress user on your site.</p>
+</blockquote>
+
+<p>Send a quick email from WordPress Dashboard to a WordPress user, or anyone. Adds Quick Mail to Tools menu.</p>
+
+<p>Mail is sent with user's name and email. Multiple files from up to six directories (folders) can be attached to a message.</p>
+
+<p>Sends text or html mails. Content type is determined from message.</p>
+
+<p>Option to validate recipient domain before mail is sent.</p>
+
+<p>Validates international domains if <a href="http://php.net/manual/en/function.idn-to-ascii.php">idn_to_ascii</a> is available to convert domain to <a href="https://tools.ietf.org/html/rfc3492">Punycode</a>.</p>
+
+<p>Saves message and subject on form to send repeat messages.</p>
+
+<p>Saves last five email addresses entered on form.</p>
+
+<p>User options for sending email to site users or others.</p>
+
+<p>Site options for administrators to hide their profile, and limit access to user list.</p>
+
+<ul>
+<li><p>See <a href="http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/">How to Send Email from WordPress Admin</a> for an introduction.</p></li>
+<li><p>See <a href="http://wheredidmybraingo.com/quick-mail-1-3-3-for-wordpress-4-6/">Quick Mail 1.3.3 for WordPress 4.6</a> for update info.</p></li>
+</ul>
+
+<h3>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h3>
+
+<ol>
+<li><p>Download the plugin and unpack in your <code>/wp-content/plugins/</code> directory.</p></li>
+<li><p>Activate the plugin through the 'Plugins' menu in WordPress.</p></li>
+</ol>
+
+<h3>
+<a id="frequently-asked-questions" class="anchor" href="#frequently-asked-questions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Frequently Asked Questions</h3>
+
+<p><strong>Who can send mail?</strong></p>
+
+<ul>
+<li><p>Users must be able to <a href="http://codex.wordpress.org/Roles_and_Capabilities#publish_posts">publish a post</a> to send an email.</p></li>
+<li><p>User profile must include first name, last name, email address.</p></li>
+</ul>
+
+<p><strong>Selecting Recipients</strong></p>
+
+<ul>
+<li><p>Options to send mail to any user, or limit to users with first and last names on their profile.</p></li>
+<li><p>Users need permission to <a href="http://codex.wordpress.org/Roles_and_Capabilities#list_users">list users</a>, to view user list or change options. Minimum permission can be changed with an option or filter.</p></li>
+</ul>
+
+<p><strong>Limitations</strong></p>
+
+<ul>
+<li><p>One recipient per email.</p></li>
+<li><p>Up to 5 manually entered recipients are saved in HTML Storage.</p></li>
+<li><p>Multiple files can be uploaded from up to 6 folders (directories).</p></li>
+</ul>
+
+<p><strong>Address Validation</strong></p>
+
+<ul>
+<li><p>Address validation is an option to check recipient domain on manually entered addresses.</p></li>
+<li>
+<p>International (non-ASCII) domains must be converted to <a href="https://tools.ietf.org/html/rfc3492">punycode</a> with <a href="http://php.net/manual/en/function.idn-to-ascii.php">idn_to_ascii</a>.</p>
+
+<p>Unfortunately, <code>idn_to_ascii</code> is not available on all systems.</p>
+</li>
+<li>
+<p>"Cannot verify international domains because idn_to_ascii function not found"</p>
+
+<p>This is displayed when Quick Mail cannot verify domains containing non-ASCII characters.</p>
+</li>
+<li>
+<p><a href="http://php.net/manual/en/function.checkdnsrr.php">checkdnsrr</a> is used to check a domain for an <a href="http://www.google.com/support/enterprise/static/postini/docs/admin/en/activate/mx_faq.html">MX record</a>.</p>
+
+<p>An MX record tells senders how to send mail to the domain.</p>
+</li>
+</ul>
+
+<p><strong>Mail Errors</strong></p>
+
+<ul>
+<li>
+<p>Quick Mail sends email with <a href="https://developer.wordpress.org/reference/functions/wp_mail/">wp_mail</a>.</p>
+
+<p><code>wp_mail</code> error messages are displayed, if there is a problem.</p>
+</li>
+<li>
+<p>"You must provide at least one recipient email address."</p>
+
+<p><code>wp_mail</code> rejected an address. Seen when Quick Mail verification is off.</p>
+</li>
+</ul>
+
+<p><strong>Translators and Programmers</strong></p>
+
+<ul>
+<li><p>A .pot file is included for translators.</p></li>
+<li><p>Includes French and Spanish translations.</p></li>
+<li><p>See <a href="https://translate.wordpress.org/projects/wp-plugins/quick-mail">Quick Mail Translations</a> for more info.</p></li>
+</ul>
+
+<p><strong>License</strong></p>
+
+<p>This plugin is free for personal or commercial use. </p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/mitchelldmiller/quick-mail-wp-plugin">Quick-Mail-WP-Plugin</a> is maintained by <a href="https://github.com/mitchelldmiller">mitchelldmiller</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>

@@ -1,7 +1,12 @@
 Quick Mail WordPress Plugin
 ====================
 
-Send text or html email with attachments and shortcodes from WP Dashboard or command line. Send private replies to comments. Select recipient from users or commenters.
+Send text or html email with attachments and shortcodes from WP Dashboard or command line. Send private replies to comments. Select recipient from users or commenters. Includes WP-CLI command.
+
+* __NEWS:__ Quick Mail was [removed voluntarily](https://wheredidmybraingo.com/my-final-quick-mail-update/) from the WordPress Plugin Repository on November 14, 2019.
+
+* Please use [Github Issues](https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues) for support. If you do not have a Github account, leave a comment on the [latest Quick Mail article](https://wheredidmybraingo.com/quick-mail-latest/).
+
 
 Description
 -----------
@@ -56,13 +61,7 @@ __Features__
 
 ### Installation ###
 
-#### Automated ####
-1. Select _Plugins -> Add New_ from Dashboard.
-2. Enter **Quick Mail** in _Search Plugins_.
-3. Select _Activate Plugin_ to activate Quick Mail.
-
-#### Manual ####
-1. Download the plugin and unpack in your `/wp-content/plugins` directory.
+1. Download the [latest release](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases/latest) and unpack in your `/wp-content/plugins` directory.
 2. Activate the plugin through the WordPress _Plugins_ menu.
 
 #### Configuration ####
@@ -71,13 +70,16 @@ __Features__
 3. Optional: Install [Mailgun](https://wordpress.org/extend/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
 4. Optional: Install experimental [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) plugin, to change administrator's credentials.
 
+#### Updates ####
+* Install [GitHub Updater](https://github.com/afragen/github-updater/releases/latest) plugin to update Quick Mail from Github.
+
+* See [GitHub Updater Wiki](https://github.com/afragen/github-updater/wiki) for additional information.
+
 ### Translators / Translations ###
 
 * Quick Mail is not distributed with translations.
 
-* Visit [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for translations and more information.
-
-* Please help translate Quick Mail. A .pot file is included for new translators.
+* A .pot file is included for new translators.
 
 ### Frequently Asked Questions ###
 
@@ -149,7 +151,7 @@ __Limitations__
 Some devices cannot upload files. According to [Modernizr](https://modernizr.com/download#fileinput-inputtypes-setclasses) :
 > iOS < 6 and some android version don't support this
 
-File uploads are disabled for ancient IOS 5 devices. Please [add a support message](https://wordpress.org/support/plugin/quick-mail) if uploads are disabled on your phone or tablet, so I can remove the upload button if your device is detected.
+* File uploads are disabled for ancient IOS 5 devices. Please [add a support message](https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues) if uploads are disabled on your phone or tablet.
 
 __Address Validation__
 
@@ -201,7 +203,9 @@ __Customizing Quick Mail__
 
 `replace_quick_mail_sender`
 
-  Replace sender credentials. Expects an associative array with values for `name` and `email`. See [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender) plugin for examples.
+  Replace sender credentials. Expects an associative array with values for `name` and `email`.
+
+  See [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender) plugin for examples.
 
 `quick_mail_cli_attachment_message`
 
@@ -226,8 +230,6 @@ __Customizing Quick Mail__
 __Translators and Programmers__
 
 * A .pot file is included for translators.
-
-* Please help translate Quick Mail. See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more information.
 
 __License__
 

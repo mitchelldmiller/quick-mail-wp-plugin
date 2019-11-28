@@ -1,10 +1,7 @@
 Quick Mail WordPress Plugin
 ====================
 
-Send text or html email with attachments and shortcodes. Send private replies to comments. Select recipient from users or commenters. French, Russian, Spanish translations.
-
-### WordPress Rating
-[![WordPress rating](https://img.shields.io/wordpress/plugin/r/quick-mail.svg?maxAge=2592000)]()
+Send text or html email with attachments and shortcodes from WP Dashboard or command line. Send private replies to comments. Select recipient from users or commenters.
 
 Description
 -----------
@@ -15,9 +12,11 @@ Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds 
 
 Send a Web page, file, or message from the command line with quick-mail command for [WP-CLI](https://wp-cli.org/).
 
+** Does not use the Gutenberg editor. **
+
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
-Mail is sent with user's name and email. Recognizes credentials from [Mailgun](https://wordpress.org/plugins/mailgun/) and [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugins.
+Uses sender's name, sets reply to sender's address. Recognizes settings from [Mailgun](https://wordpress.org/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugins.
 
 Multiple files from up to six directories (folders) can be attached to a message.
 
@@ -25,7 +24,7 @@ Privacy options to help comply with [General Data Protection Regulation](https:/
 
 __Features__
 
-* Includes a [WP-CLI](https://wp-cli.org/) command to send a file, or the the contents of a Web page.
+* [WP-CLI](https://wp-cli.org/) command to send a file or the contents of a Web page. Send email to a single recipient, select site users by [WordPress role](https://codex.wordpress.org/Roles_and_Capabilities) or send to all users.
 
 * Sends text or html mails to multiple recipients. Content type is determined from message.
 
@@ -49,22 +48,36 @@ __Features__
 
 * Select recipient from users or commenters.
 
-### Learn More
-* See [How to Send Email from WordPress Admin](http://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/) for an introduction.
 
-* See [Quick Mail Respects Your Privacy](https://wheredidmybraingo.com/quick-mail-respects-privacy/) for update info.
+### Learn More
+* Introduction: [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/).
+
+* Latest version: [My Final Quick Mail Update](https://wheredidmybraingo.com/my-final-quick-mail-update/).
 
 ### Installation ###
 
-* Download the plugin and unpack in your `/wp-content/plugins` directory.
+#### Automated ####
+1. Select _Plugins -> Add New_ from Dashboard.
+2. Enter **Quick Mail** in _Search Plugins_.
+3. Select _Activate Plugin_ to activate Quick Mail.
 
-* Activate the plugin through the 'Plugins' menu in WordPress.
+#### Manual ####
+1. Download the plugin and unpack in your `/wp-content/plugins` directory.
+2. Activate the plugin through the WordPress _Plugins_ menu.
 
-* Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
+#### Configuration ####
+1. Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
+2. Optional: Install [WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
+3. Optional: Install [Mailgun](https://wordpress.org/extend/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
+4. Optional: Install experimental [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) plugin, to change administrator's credentials.
 
-* Optional: [Install WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
+### Translators / Translations ###
 
-* Optional: Install [Mailgun](http://wordpress.org/extend/plugins/mailgun/) or [Sendgrid](http://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
+* Quick Mail is not distributed with translations.
+
+* Visit [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for translations and more information.
+
+* Please help translate Quick Mail. A .pot file is included for new translators.
 
 ### Frequently Asked Questions ###
 
@@ -80,15 +93,25 @@ __Who can send rich text messages?__
 
 * Anyone can send HTML by pasting it into a message.
 
+__Where Do I Find Sent Emails?__
+
+* You should be able to find sent emails in your email account's Sent Mail folder.
+
+* Delivery services like [Mailgun](https://www.mailgun.com/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://sendgrid.com/) also provide this information. 
+
+* [WP Mail Logging](http://wordpress.org/extend/plugins/wp-mail-logging/) plugin saves a list of sent emails, with content of message. Plugin shows number of attachments, but does not save attachments or file names.
+
 __Selecting Recipients__
 
 * Options to send mail to any user, or limit to users with first and last names on their profile.
 
 * Users need permission to [list users](http://codex.wordpress.org/Roles_and_Capabilities#list_users), to view user list or change options. Minimum permission can be changed with an option or filter.
 
-__Sending Mail from Other Addresses__
+__Mail Delivery Services__
 
-* Uses Mailgun plugin settings for Administrators, if the plugin is activated, using `Override "From" Details` and [Mailgun API](https://documentation.mailgun.com/en/latest/api_reference.html).
+* Uses [Mailgun plugin](http://wordpress.org/extend/plugins/mailgun/) settings for Administrators, if the plugin is activated, using `Override "From" Details` and [Mailgun API](https://documentation.mailgun.com/en/latest/api_reference.html).
+
+* Uses [SparkPost plugin](https://wordpress.org/plugins/sparkpost/) settings for Administrator name and email address, if plugin is activated and `Overrides` for name and email are set.
 
 * Option for administrators to use [Sendgrid API](https://sendgrid.com/solutions/sendgrid-api/). 
 
@@ -96,43 +119,28 @@ __Sending Mail from Other Addresses__
 
 * Programmers can replace their credentials by adding a filter to `replace_quick_mail_sender`. This only works if you are not using another mail plugin's credentials.
 
+__Sending Mail from Other Addresses__
+
+* Install the [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) plugin, to change the Quick Mail sender's name and email address.
+
+* Programmers can replace their credentials by adding a filter to `replace_quick_mail_sender`.
+
+* NOTE: Other email plugins can change these settings.
+
+
 __Privacy__
 
 * Requires permission to use your email address.
 
 * Requires permission to save email addresses. Saved addresses are cleared if permission option is changed.
 
-__Modifying Quick Mail__
-
-* Add a filter to modify Quick Mail.
-
-* Programmers can replace their credentials by adding a filter to `replace_quick_mail_sender`.
-
-- What filters are available to modify Quick Mail?
-
-`quick_mail_cli_attachment_message`
-  Replace default CLI attachment message.
-  
-`quick_mail_cli_attachment_subject`
-  Replace default CLI attachment subject.
-
-`quick_mail_comment_style`
-  Replace quick mail comment style.
-  
-`quick_mail_reply_title`	
-  Replace title for private comment reply on comments list.
-
-`quick_mail_user_capability`	
-  Replace minimum user capability.
-  
-`replace_quick_mail_sender`
-  Replace quick mail sender. Expects an associative array with values for `name` and `email`.
-
 __Limitations__
 
 * Up to 12 manually entered recipients are saved in HTML Storage.
 
 * Additional recipients can be either `CC` or `BCC` but not both.
+
+* 99 recipients for [Gmail](https://support.google.com/a/answer/166852), others.
 
 * Multiple files can be uploaded from up to 6 folders (directories).
 
@@ -145,9 +153,9 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
 __Address Validation__
 
-* Address validation is an option to check recipient domain on manually entered addresses.
+* Check recipient domain on manually entered addresses.
 
-* International (non-ASCII) domains must be converted to [punycode](https://tools.ietf.org/html/rfc3492) with [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php).
+* International (non-ASCII) domains must be converted to [Punycode](https://tools.ietf.org/html/rfc3492) with [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php).
 
 
   Unfortunately, `idn_to_ascii` is not available on all systems.
@@ -156,29 +164,76 @@ __Address Validation__
 
   This is displayed when Quick Mail cannot verify domains containing non-ASCII characters.
 
-* [checkdnsrr](http://php.net/manual/en/function.checkdnsrr.php) is used to check a domain for an [MX record](http://www.google.com/support/enterprise/static/postini/docs/admin/en/activate/mx_faq.html).
+* [checkdnsrr](http://php.net/manual/en/function.checkdnsrr.php) is used to check a domain for an [MX record](https://en.wikipedia.org/wiki/MX_record).
 
 
   An MX record tells senders how to send mail to the domain.
+  
+  *This is not always accurate. Turn verification off if Quick Mail rejects a valid address.*
 
 __Mail Errors__
 
 * Quick Mail sends email with [wp_mail](https://developer.wordpress.org/reference/functions/wp_mail/).
 
-  `wp_mail` error messages are displayed, if there is a problem.
+	`wp_mail` error messages are displayed, if there is a problem.
 
 * "You must provide at least one recipient email address."
 
-   `wp_mail` rejected an address. Seen when Quick Mail verification is off.
+	`wp_mail` rejected an address. Seen when Quick Mail verification is off.
+
+* Error: Invalid Role (WP-CLI error)
+
+	You tried sending mail to an unknown WordPress role. Use `wp list roles` to get role names.
    
+__Incompatible Plugins__
+
+* [Stop Emails](https://wordpress.org/plugins/stop-emails/)
+
+Stop Emails displays _To send emails, disable the plugin._
+
+If you are using an email delivery service, you can ignore this message.
+
+__Customizing Quick Mail__
+
+* Add a filter to modify Quick Mail.
+
+- What filters are available to modify Quick Mail?
+
+`replace_quick_mail_sender`
+
+  Replace sender credentials. Expects an associative array with values for `name` and `email`. See [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender) plugin for examples.
+
+`quick_mail_cli_attachment_message`
+
+  Replace default CLI attachment message.
+  
+`quick_mail_cli_attachment_subject`
+
+  Replace default CLI attachment subject.
+
+`quick_mail_comment_style`
+
+  Replace quick mail comment style.
+  
+`quick_mail_reply_title`
+  
+  Replace title for private comment reply on comments list.
+
+`quick_mail_user_capability`
+  
+  Replace minimum user capability.
+  
 __Translators and Programmers__
 
 * A .pot file is included for translators.
 
-* Includes French, Russian, Spanish translations.
-
-* See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more info.
+* Please help translate Quick Mail. See [Quick Mail Translations](https://translate.wordpress.org/projects/wp-plugins/quick-mail) for more information.
 
 __License__
 
-This plugin is free for personal or commercial use. 
+Quick Mail is free for personal or commercial use. Encourage future development with a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY).
+
+__Credits__
+
+Banner image by [Tumisu](https://pixabay.com/en/users/Tumisu-148124/).
+

@@ -2,10 +2,10 @@
 /**
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.8
+ * Version: 4.0.0
  * Author: Mitchell D. Miller
  * Author URI: https://sociopathicsurgeon.com/author/
- * Plugin URI: https://wheredidmybraingo.com/my-final-quick-mail-update/
+ * Plugin URI: https://mitchelldmiller.github.io/quick-mail-wp-plugin/
  * GitHub Plugin URI: https://github.com/mitchelldmiller/quick-mail-wp-plugin
  * Text Domain: quick-mail
  * Domain Path: /lang
@@ -54,7 +54,7 @@ class QuickMail {
 	 * @var string version
 	 * @since 3.5.5 10-3-19
 	 */
-	const VERSION = '3.5.6';
+	const VERSION = '4.0.0';
 
 	/**
 	 * Content type for our instance.

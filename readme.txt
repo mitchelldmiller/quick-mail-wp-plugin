@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Requires at least: 4.6
 Tested up to: 5.3
 Requires PHP: 5.3
-Stable tag: 3.5.8
+Stable tag: 4.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,10 +57,6 @@ Multiple files from up to six directories (folders) can be attached to a message
 * Select recipient from users or commenters.
 
 = Learn More =
-
-* Introduction: [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/).
-
-* Latest version: [My Final Quick Mail Update](https://wheredidmybraingo.com/my-final-quick-mail-update/).
 
 * [Follow development on Github](https://github.com/mitchelldmiller/quick-mail-wp-plugin/).
 
@@ -234,6 +230,8 @@ If you are using an email delivery service, you can ignore this message.
 7. User list with roles.
 
 == Changelog ==
+= 4.0.0 =
+* Replaced wheredidmybraingo.com links on plugin, READMEs.
 
 = 3.5.8 =
 * Replaced dead links to WP.org on help, READMEs.
@@ -260,10 +258,7 @@ Please refer to changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
 
-= 3.5.6 =
-* Upgrade recommended.
-
-= 3.5.5 =
+= 4.0.0 =
 * Upgrade recommended.
 
 == License ==

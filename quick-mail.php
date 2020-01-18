@@ -4,8 +4,8 @@
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
  * Version: 4.0.0
  * Author: Mitchell D. Miller
- * Author URI: https://sociopathicsurgeon.com/author/
- * Plugin URI: https://mitchelldmiller.github.io/quick-mail-wp-plugin/
+ * Author URI: https://badmarriages.net/author/mitchell-d-miller/
+ * Plugin URI: https://wheredidmybraingo.com/quick-mail-latest/
  * GitHub Plugin URI: https://github.com/mitchelldmiller/quick-mail-wp-plugin
  * Text Domain: quick-mail
  * Domain Path: /lang
@@ -17,7 +17,7 @@
 
 /*
  * Quick Mail WordPress Plugin - Send mail from WordPress using Quick Mail
- * Copyright (C) 2014-2019 Mitchell D. Miller
+ * Copyright (C) 2014-2020 Mitchell D. Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

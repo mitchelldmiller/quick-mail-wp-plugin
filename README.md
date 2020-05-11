@@ -3,9 +3,9 @@ Quick Mail WordPress Plugin
 
 Send text or html email with attachments and shortcodes from WP Dashboard or command line. Send private replies to comments. Select recipient from users or commenters. Includes WP-CLI command.
 
-* __NEWS:__ Quick Mail was [removed voluntarily](https://wheredidmybraingo.com/my-final-quick-mail-update/) from the WordPress Plugin Repository on November 14, 2019.
+* __NEWS:__ [I removed Quick Mail](http://web.archive.org/web/20191214214738/https://wheredidmybraingo.com/my-final-quick-mail-update/) from the WordPress Plugin Repository on November 14, 2019.
 
-* Please use [Github Issues](https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues) for support. If you do not have a Github account, leave a comment on the [latest Quick Mail article](https://wheredidmybraingo.com/quick-mail-latest/).
+* Please use [Github Issues](https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues) for support.
 
 
 Description
@@ -52,12 +52,6 @@ __Features__
 * Option to add paragraphs and line breaks to HTML messages with [wpauto](https:/codex.wordpress.org/Function_Reference/wpautop).
 
 * Select recipient from users or commenters.
-
-
-### Learn More
-* Introduction: [How to Send Email from WordPress Admin](https://wheredidmybraingo.com/quick-mail-wordpress-plugin-update-send-email-to-site-users/).
-
-* Latest version: [My Final Quick Mail Update](https://wheredidmybraingo.com/my-final-quick-mail-update/).
 
 ### Installation ###
 
@@ -226,6 +220,10 @@ __Customizing Quick Mail__
 `quick_mail_user_capability`
   
   Replace minimum user capability.
+  
+__Additional Information__
+
+* [39 articles about Quick Mail](https://wheredidmybraingo.com/tag/quick-mail/)
   
 __Translators and Programmers__
 

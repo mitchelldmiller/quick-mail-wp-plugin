@@ -221,6 +221,10 @@ __Customizing Quick Mail__
   
   Replace minimum user capability.
   
+__Additional Information__
+
+* [39 articles about Quick Mail](https://wheredidmybraingo.com/tag/quick-mail/)
+  
 __Translators and Programmers__
 
 * A .pot file is included for translators.

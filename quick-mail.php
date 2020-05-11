@@ -2,10 +2,10 @@
 /**
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 3.5.8
+ * Version: 4.0.0
  * Author: Mitchell D. Miller
- * Author URI: https://sociopathicsurgeon.com/author/
- * Plugin URI: https://wheredidmybraingo.com/my-final-quick-mail-update/
+ * Author URI: https://badmarriages.net/author/mitchell-d-miller/
+ * Plugin URI: https://mitchelldmiller.github.io/quick-mail-wp-plugin/
  * GitHub Plugin URI: https://github.com/mitchelldmiller/quick-mail-wp-plugin
  * Text Domain: quick-mail
  * Domain Path: /lang
@@ -17,7 +17,7 @@
 
 /*
  * Quick Mail WordPress Plugin - Send mail from WordPress using Quick Mail
- * Copyright (C) 2014-2019 Mitchell D. Miller
+ * Copyright (C) 2014-2020 Mitchell D. Miller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ class QuickMail {
 	 * @var string version
 	 * @since 3.5.5 10-3-19
 	 */
-	const VERSION = '3.5.6';
+	const VERSION = '4.0.0';
 
 	/**
 	 * Content type for our instance.
@@ -180,7 +180,6 @@ class QuickMail {
 			);
 		} // end if
 
-		$english_faq = __( 'https://mitchelldmiller.github.io/quick-mail-wp-plugin/#frequently-asked-questions', 'quick-mail' );
 		$github      = __( 'Follow development on Github', 'quick-mail' );
 		$glink       = "<a target='_blank' href='https://github.com/mitchelldmiller/quick-mail-wp-plugin/'>{$github}</a>.";
 		$faq         = __( 'FAQ', 'quick-mail' );
@@ -190,7 +189,6 @@ class QuickMail {
 		$more_info   = __( 'has more information.', 'quick-mail' );
 		$use_str     = __( 'Please use', 'quick-mail' );
 		$to_ask      = __( 'to ask questions and report problems.', 'quick-mail' );
-		$help_others = __( 'Help Others', 'quick-mail' );
 		$qm_top      = "<p>{$qm_desc}</p><h4>{$resources}</h4><ul><li>{$flink} {$more_info}</li><li>{$glink}</li><li>{$use_str} {$slink} {$to_ask}</li></ul>";
 		$qm_content  = $qm_top;
 		return array(
@@ -379,7 +377,6 @@ class QuickMail {
 	 *
 	 * Filters wp_mail_content_type.
 	 *
-	 * @see wp_mail
 	 * @param string $type previous content type.
 	 * @return string our content type
 	 */
@@ -854,7 +851,7 @@ jQuery(document).ready( function() {
 		$days = intval( get_user_option( 'limit_quick_mail_commenters', $you->ID ) );
 		if ( is_bool( $days ) && false === $days ) {
 			$days = 7;
-			update_user_meta( $you->ID, 'limit_quick_mail_commenters', $days, $previous );
+			update_user_meta( $you->ID, 'limit_quick_mail_commenters', $days );
 		} // end if new value was not set 3.2.6
 
 		$msg     = ( 998 < $days ) ? __( 'No comments for you.', 'quick-mail' ) : __( 'No recent comments for you.', 'quick-mail' );
@@ -982,7 +979,6 @@ jQuery(document).ready( function() {
 	 */
 	public function get_formatted_comment( $text ) {
 		if ( user_can_richedit() ) {
-			$direction = is_rtl() ? 'right' : 'left';
 			$css       = $this->get_comment_style();
 			return "<div {$css}>{$text}</div><br>";
 		} // end if rich editor
@@ -1174,7 +1170,6 @@ jQuery(document).ready( function() {
 
 		$all_cc                = array();
 		$data                  = array();
-		$domain                = '';
 		$file                  = '';
 		$mcc                   = '';
 		$success               = '';
@@ -2016,8 +2011,6 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			$faq            = __( 'Please read', 'quick-mail' ) . ' ' . $faq_link . '.';
 			$verify_problem = '<br><br><span role="alert">' . $cannot . $nf . '<br>' . $faq . '</span>';
 		} // end if idn_to_ascii is available
-		$vtemplate      = "<br><br><span role='alert' class='wp-ui-text-highlight'>%s<br>%s</span>";
-		$verify_warning = sprintf( $vtemplate, __( 'This is not guaranteed to be accurate.', 'quick-mail' ), __( 'Turn verification off if Quick Mail rejects a valid address.', 'quick-mail' ) );
 		$verify_note    = $verify_message . $verify_problem;
 		$wam            = sprintf(
 			'%s %s %s',
@@ -2084,7 +2077,6 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 		} // end if got SparkPost info
 
 		$rname         = '';
-		$sendgridlabel = '';
 		$sendgrid_desc = '';
 		if ( QuickMailUtil::got_sendgrid_info() ) {
 			$rname          = __( 'SendGrid', 'quick-mail' );
@@ -2556,8 +2548,6 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 
 		$you_are_admin  = $this->qm_is_admin( get_current_user_id(), $blog );
 		$is_editor_user = $this->qm_is_editor( get_current_user_id(), $blog );
-		$user_query     = new \WP_User_Query( array( 'count_total' => true ) );
-		$users          = $user_query->get_total();
 		$has_all        = $this->multiple_matching_users( 'A', $blog );
 		$has_names      = $this->multiple_matching_users( 'N', $blog );
 		$content        = '';
@@ -2575,7 +2565,6 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 		} // end if multisite
 
 			$content             = '';
-			$not_editor_or_admin = ! $you_are_admin && ! $is_editor_user;
 		if ( ( ! $you_are_admin && ! $is_editor_user ) || ( 'N' === $editors && ! $you_are_admin ) ) {
 			if ( is_multisite() ) {
 				$content .= '<p>' . $note . __( 'You do not have sufficient privileges to access user lists on this site.' ) . '.</p>';
@@ -2594,7 +2583,7 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			} // end if less than 3
 		} // end if 'A' not possible
 
-			$screen->add_help_tab( self::get_qm_help_tab() );
+		$screen->add_help_tab( self::get_qm_help_tab() );
 		if ( $you_are_admin ) {
 			$content = '<dl>';
 			// Check for SparkPost, Mailgun, SendGrid.

@@ -1,9 +1,8 @@
 Quick Mail WordPress Plugin
 ====================
-
 Send text or html email with attachments and shortcodes from WP Dashboard or command line. Send private replies to comments. Select recipient from users or commenters. Includes WP-CLI command.
 
-* __NEWS:__ [I removed Quick Mail](http://web.archive.org/web/20191214214738/https://wheredidmybraingo.com/my-final-quick-mail-update/) from the WordPress Plugin Repository on November 14, 2019.
+* __NOTE:__  Quick Mail was [removed](http://web.archive.org/web/20191214214738/https://wheredidmybraingo.com/my-final-quick-mail-update/) from the WordPress Plugin Repository on November 14, 2019.
 
 * Please use [Github Issues](https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues) for support.
 
@@ -81,7 +80,8 @@ __Who can send mail?__
 
 * Users must be able to [publish a post](http://codex.wordpress.org/Roles_and_Capabilities#publish_posts) to send an email.
 
-* WP-CLI: Only administrators can send mail with the `quick-mail` WP-CLI command.
+* WP-CLI: By default, only administrators can send mail with the `quick-mail` WP-CLI command. Use the
+the [quick_mail_cli_admin_only](https://wheredidmybraingo.com/whats-new-in-quick-mail-4-0-1) filter to change this.
 
 __Who can send rich text messages?__
 
@@ -218,12 +218,16 @@ __Customizing Quick Mail__
   Replace title for private comment reply on comments list.
 
 `quick_mail_user_capability`
-  
+
   Replace minimum user capability.
-  
+
+`quick_mail_cli_admin_only`
+
+  Allow non-admin users to send mail with WP-CLI.
+
 __Additional Information__
 
-* [39 articles about Quick Mail](https://wheredidmybraingo.com/tag/quick-mail/)
+* [40 articles about Quick Mail](https://wheredidmybraingo.com/tag/quick-mail/)
   
 __Translators and Programmers__
 

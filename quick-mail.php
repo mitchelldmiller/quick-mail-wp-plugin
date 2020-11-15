@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 4.0.0
+ * Version: 4.0.1
  * Author: Mitchell D. Miller
  * Author URI: https://badmarriages.net/author/mitchell-d-miller/
  * Plugin URI: https://mitchelldmiller.github.io/quick-mail-wp-plugin/
@@ -54,7 +54,7 @@ class QuickMail {
 	 * @var string version
 	 * @since 3.5.5 10-3-19
 	 */
-	const VERSION = '4.0.0';
+	const VERSION = '4.0.1';
 
 	/**
 	 * Content type for our instance.
@@ -132,10 +132,10 @@ class QuickMail {
 	 * @since 1.2.0
 	 */
 	public function __construct() {
-			/**
+	   /**
 		 * If not called by WordPress, exit without error message.
-			 *
-			 * @since 1.2.5
+		 *
+		 * @since 1.2.5
 		 */
 		if ( ! function_exists( 'register_activation_hook' ) ) {
 			exit;
@@ -655,7 +655,7 @@ jQuery(document).ready( function() {
 		)
 		: array( 'exclude' => array( $you->ID ) );
 
-		$user_query = new \WP_User_Query( $args );
+		$user_query = new WP_User_Query( $args );
 		$users      = array();
 		foreach ( $user_query->results as $user ) {
 			if ( $user->user_email === $you->user_email ) {
@@ -770,7 +770,7 @@ jQuery(document).ready( function() {
 			'role__not_in' => 'Administrator',
 			'exclude'      => array( $you->ID ),
 		) : array( 'exclude' => array( $you->ID ) );
-		$user_query = new \WP_User_Query( $args );
+		$user_query = new WP_User_Query( $args );
 		$users      = array();
 		foreach ( $user_query->results as $user ) {
 			if ( $user->user_email === $you->user_email ) {
@@ -1138,11 +1138,8 @@ jQuery(document).ready( function() {
 
 			$id       = intval( $_REQUEST['comment_id'] );
 			$info     = get_comment( $id, ARRAY_A );
-			$name     = empty( $info['comment_author'] ) ? __( 'You', 'quick-mail' ) : $info['comment_author'];
 			$text     = $info['comment_content'];
-			$said     = __( 'said', 'quick-mail' );
 			$raw_msg  = $this->get_formatted_comment( $text );
-			$tmessage = "{$name} {$said}: {$text}\r\n\r\n";
 			if ( ! empty( $info['comment_author'] ) && ! empty( $info['comment_author_email'] ) ) {
 				$commenter = "\"{$info['comment_author']}\" <{$info['comment_author_email']}>";
 				$to        = $info['comment_author_email'];
@@ -1306,6 +1303,7 @@ jQuery(document).ready( function() {
 			} // end if multiple selection
 
 			if ( empty( $to ) ) {
+			    $raw_email = array();
 				if ( preg_match( '/<(.+@.+[.].+)>/', urldecode( $_POST['qm-email'] ), $raw_email ) ) {
 					$to = trim( $raw_email[1] );
 				} else {
@@ -1925,7 +1923,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			echo '<div class="updated"><p>', esc_html_e( 'Option Updated', 'quick-mail' ), '</p></div>';
 		} // end if updated
 
-		$user_query = new \WP_User_Query( array( 'count_total' => true ) );
+		$user_query = new WP_User_Query( array( 'count_total' => true ) );
 		$hide_admin = '';
 		if ( is_multisite() ) {
 			$hide_admin = get_blog_option( $blog, 'hide_quick_mail_admin', 'N' );
@@ -2784,8 +2782,6 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 				$spark,
 				$sg
 			);
-			$btitle      = __( 'Send Reliable Email from WordPress with Quick Mail', 'quick-mail' );
-			$blink       = sprintf( '<a target="_blank" href="https://wheredidmybraingo.com/send-reliable-email-wordpress-quick-mail/">%s</a>', $btitle );
 			$content     = sprintf(
 				'<h4>%s</h4>',
 				__( 'How to Fix Delivery Errors', 'quick-mail' )
@@ -2824,7 +2820,7 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			$content .= $line;
 			$line     = sprintf( '<dd>%s</dd>', __( 'Mailgun, SparkPost and SendGrid offer free plans with limited usage.', 'quick-mail' ) );
 			$content .= $line;
-			$line     = sprintf( '<dd>%s</dd>', __( 'Quick Mail is tested with Mailgun and SparkPost.', 'quick-mail' ) );
+			$line     = sprintf( '<dd>%s</dd>', __( 'Quick Mail is tested with Mailgun and SendGrid.', 'quick-mail' ) );
 			$content .= $line;
 
 			if ( ! empty( $pline ) ) {
@@ -2917,12 +2913,6 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 	public function add_qm_help() {
 		$blog       = is_multisite() ? get_current_blog_id() : 0;
 		$screen     = get_current_screen();
-		$hide_admin = '';
-		if ( is_multisite() ) {
-			$hide_admin = get_blog_option( $blog, 'hide_quick_mail_admin', 'N' );
-		} else {
-			$hide_admin = get_option( 'hide_quick_mail_admin', 'N' );
-		} // end if
 		$blog           = is_multisite() ? get_current_blog_id() : 0;
 		$display_option = $this->qm_get_display_option( $blog );
 		$cc_title       = __( 'Adding CC', 'quick-mail' );

@@ -54,7 +54,7 @@ class QuickMail {
 	 * @var string version
 	 * @since 3.5.5 10-3-19
 	 */
-	const VERSION = '4.0.0';
+	const VERSION = '4.0.1';
 
 	/**
 	 * Content type for our instance.
@@ -132,10 +132,10 @@ class QuickMail {
 	 * @since 1.2.0
 	 */
 	public function __construct() {
-			/**
+	   /**
 		 * If not called by WordPress, exit without error message.
-			 *
-			 * @since 1.2.5
+		 *
+		 * @since 1.2.5
 		 */
 		if ( ! function_exists( 'register_activation_hook' ) ) {
 			exit;

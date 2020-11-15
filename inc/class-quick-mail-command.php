@@ -3,7 +3,6 @@
  * Mail a Web page or file with quick-mail and WP-CLI.
  *
  * @package QuickMail
- * @version 3.5.3
  */
 class Quick_Mail_Command extends WP_CLI_Command {
 
@@ -65,6 +64,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 *
 	 * <from>
 	 * : Sender. Must be Administrator. Enter WordPress user ID or email address.
+	 * Filter `quick_mail_cli_admin_only` to allow non-admin to send mail.
 	 *
 	 * <to>
 	 * : Mail recipient. Enter WordPress user ID, WP role or email address.
@@ -147,7 +147,8 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			$verify_domain = get_option( 'verify_quick_mail_addresses', 'N' );
 		} // end if multisite
 
-		$data = $this->verify_email_or_id( $args[0], true ); // Admin only.
+		$only_admin = apply_filters( 'quick_mail_cli_admin_only', true );
+		$data       = $this->verify_email_or_id( $args[0], $only_admin ); // Admin only.
 		if ( is_array( $data ) && ! empty( $data[0] ) && ! empty( $data[1] ) ) {
 			$this->from = $data[0];
 			$sender_id  = $data[1];
@@ -240,11 +241,19 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		$subject = isset( $args[3] ) ? html_entity_decode( $args[3], ENT_QUOTES, self::$charset ) : '';
 
 		// Get sender info.
-		$query_args = array(
-			'search'         => $this->from,
-			'search_columns' => array( 'user_email' ),
-			'role'           => 'Administrator',
-		);
+		$query_args = array();
+		if ( $only_admin ) {
+			$query_args = array(
+				'search'         => $this->from,
+				'search_columns' => array( 'user_email' ),
+				'role'           => 'Administrator',
+			);
+		} else {
+			$query_args = array(
+				'search'         => $this->from,
+				'search_columns' => array( 'user_email' ),
+			);
+		}
 		$user_query = new WP_User_Query( $query_args );
 		if ( 1 > count( $user_query->results ) ) {
 			$temp_msg = __( 'Invalid user', 'quick-mail' );
@@ -304,6 +313,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 
 			if ( ! $sending_file && empty( $subject ) ) {
 				$pattern = '/title>(.+)<\/title>/';
+				$found = array();
 				preg_match( $pattern, $message, $found );
 				if ( ! empty( $found ) && ! empty( $found[1] ) ) {
 					$subject = html_entity_decode( $found[1], ENT_QUOTES, self::$charset );

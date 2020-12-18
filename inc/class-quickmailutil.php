@@ -18,16 +18,6 @@ class QuickMailUtil {
 	public function __construct() { }
 
 	/**
-	 * Quit without message. used for invalid validate requests.
-	 */
-	public static function qm_bye() {
-		header( 'HTTP/1.0 204 No Content' );
-		header( 'Content-Length: 0', true );
-		header( 'Content-Type: text/html', true );
-		flush();
-	} // end qm_bye
-
-	/**
 	 * Find system temp path.
 	 * test upload_tmp_dir, sys_get_temp_dir().
 	 *
@@ -113,7 +103,6 @@ class QuickMailUtil {
 		$raw_dup        = strtolower( str_ireplace( $search, $replace, trim( $to ) ) );
 		$exploded_names = explode( ',', $commas );
 		$all_names      = array_unique( $exploded_names );
-		$j              = count( $all_names );
 		// Check for duplicate recipients.
 		$duplicate = self::qm_find_dups( $exploded_names );
 		$invalid   = '';
@@ -274,8 +263,8 @@ class QuickMailUtil {
 
 		if ( empty( $name ) ) {
 			$title     = __( 'Mail Error', 'quick-mail' );
-			$message   = __( 'Error: Incomplete User Profile', 'quick-mail' );
-			$link      = "<a href='/wp-admin/profile.php'>{$title}</a>";
+			$desc      = __( 'Error: Incomplete User Profile', 'quick-mail' );
+			$message   = "<a href='/wp-admin/profile.php'>{$desc}</a>";
 			$direction = is_rtl() ? 'rtl' : 'ltr';
 			$args      = array(
 				'response'       => 200,
@@ -299,8 +288,8 @@ class QuickMailUtil {
 		$you = wp_get_current_user();
 		if ( empty( $you->user_email ) ) {
 			$title     = __( 'Mail Error', 'quick-mail' );
-			$message   = __( 'Error: Incomplete User Profile', 'quick-mail' );
-			$link      = "<a href='/wp-admin/profile.php'>{$title}</a>";
+			$desc      = __( 'Error: Incomplete User Profile', 'quick-mail' );
+			$message   = "<a href='/wp-admin/profile.php'>{$desc}</a>";
 			$direction = is_rtl() ? 'rtl' : 'ltr';
 			$args      = array(
 				'response'       => 200,

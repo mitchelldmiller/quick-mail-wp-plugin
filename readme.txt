@@ -3,9 +3,9 @@ Contributors: brainiac
 Tags: mail, email, comments, wp-cli, mailgun, sparkpost, attachment, sendgrid, accessibility, idn, multisite
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Requires at least: 4.6
-Tested up to: 5.4.1
+Tested up to: 5.6
 Requires PHP: 5.3
-Stable tag: 4.0.0
+Stable tag: 4.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -230,6 +230,10 @@ If you are using an email delivery service, you can ignore this message.
 7. User list with roles.
 
 == Changelog ==
+
+= 4.0.2 =
+* Fixed jQuery Migrate 3.0 warnings.
+
 = 4.0.0 =
 * Removed unused variables from help.
 * Updated copyright year, links on plugin, READMEs, URI.

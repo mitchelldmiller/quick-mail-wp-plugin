@@ -3,14 +3,13 @@
  * Validate email addresses. Check for duplicates while user is entering data.
  *
  * @package QuickMail
- * @version 3.5.5
  */
 
 require_once 'class-quickmailutil.php';
 
 $verify = ! empty( $_REQUEST['quick-mail-verify'] ) ? trim( $_REQUEST['quick-mail-verify'] ) : '';
 if ( empty( $verify ) ) {
-	QuickMailUtil::qm_bye(); // Failed input test.
+    http_response_code(204); // Failed input test.
 	exit();
 } // end if not logged in or missing verify.
 

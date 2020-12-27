@@ -2,7 +2,7 @@ title: Quick-mail-wp-plugin
 description: Quick Mail WordPress plugin is the easiest way to send email with attachment from WordPress admin
 google_analytics: 
 show_downloads: true
-theme: jekyll-theme-leap-day
+theme: jekyll-theme-slate
 
 gems:
   - jekyll-mentions

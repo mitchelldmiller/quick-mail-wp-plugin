@@ -1,5 +1,28 @@
 == Quick Mail Changelog ==
 
+= 4.0.0 =
+* Removed unused variables from help.
+* Updated copyright year, links on plugin, READMEs, URI.
+
+= 3.5.8 =
+* Replaced dead links to WP.org on help, READMEs.
+* Update from Github using Github Updater plugin.
+
+= 3.5.6 =
+* Disable validate email setting when user list is enabled.
+* Reduced input lengths on mobile devices, to improve display.
+* Added specific CSS to prevent WordPress from changing size of select.
+* Removed text placeholders from input fields.
+* Selecting Display Commenters disables user selection.
+
+= 3.5.5 =
+* Fixed JavaScript translation of duplicate email error message.
+* Highlight form fields while entering text.
+* Multiple recipients are reformatted after entry.
+* Removed spurious invalid address warnings, when no address was entered.
+* Simplified JavaScript email validation.
+* Updated FAQ, help.
+
 = 3.5.4 =
 * Removed wp-i18n script requirement, to work with WP 4.6.
 * Added IDNA_NONTRANSITIONAL_TO_ASCII to idn_to_ascii() for PHP 7.2+ warning.

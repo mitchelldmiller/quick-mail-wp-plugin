@@ -5,9 +5,9 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Requires at least: 4.6
 Tested up to: 5.6
 Requires PHP: 5.3
-Stable tag: 4.0.2
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Stable tag: 4.0.4
+License: MIT
+License URI: https://github.com/mitchelldmiller/quick-mail-wp-plugin/blob/master/LICENSE
 
 Send reliable text or html email with attachments and shortcodes from WP Dashboard or command line. Send private replies to comments. Select recipient from users or commenters.
 
@@ -231,31 +231,12 @@ If you are using an email delivery service, you can ignore this message.
 
 == Changelog ==
 
+= 4.0.4 =
+* Fixed jQuery TypeError on cc address validation.
+* Updated readmes, license.
+
 = 4.0.2 =
 * Fixed jQuery Migrate 3.0 warnings.
-
-= 4.0.0 =
-* Removed unused variables from help.
-* Updated copyright year, links on plugin, READMEs, URI.
-
-= 3.5.8 =
-* Replaced dead links to WP.org on help, READMEs.
-* Update from Github using Github Updater plugin.
-
-= 3.5.6 =
-* Disable validate email setting when user list is enabled.
-* Reduced input lengths on mobile devices, to improve display.
-* Added specific CSS to prevent WordPress from changing size of select.
-* Removed text placeholders from input fields.
-* Selecting Display Commenters disables user selection.
-
-= 3.5.5 =
-* Fixed JavaScript translation of duplicate email error message.
-* Highlight form fields while entering text.
-* Multiple recipients are reformatted after entry.
-* Removed spurious invalid address warnings, when no address was entered.
-* Simplified JavaScript email validation.
-* Updated FAQ, help.
 
 = Earlier versions =
 
@@ -263,7 +244,7 @@ Please refer to changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
 
-= 4.0.0 =
+= 4.0.4 =
 * Upgrade recommended.
 
 == License ==

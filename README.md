@@ -224,6 +224,10 @@ __Customizing Quick Mail__
 
   Allow non-admin users to send mail with WP-CLI.
 
+`qm_rejected_domains`
+
+  Reject arbitrary recipient domain(s).
+
 __Additional Information__
 
 * [42 articles about Quick Mail](https://wheredidmybraingo.com/tag/quick-mail/)

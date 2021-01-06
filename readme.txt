@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Requires at least: 4.6
 Tested up to: 5.6
 Requires PHP: 5.3
-Stable tag: 4.0.4
+Stable tag: 4.0.5
 License: MIT
 License URI: https://github.com/mitchelldmiller/quick-mail-wp-plugin/blob/master/LICENSE
 
@@ -142,7 +142,7 @@ Multiple files from up to six directories (folders) can be attached to a message
 * "Uploads are disabled" on some mobile devices.
 
 Some devices cannot upload files. According to [Modernizr](https://modernizr.com/download#fileinput-inputtypes-setclasses) :
-> iOS < 6 and some android version don't support uploads.
+> iOS < 6 and some Android version don't support uploads.
 
 File uploads are disabled for ancient IOS 5 devices. Please [add a support message](https://wordpress.org/support/plugin/quick-mail) if uploads are disabled on your phone or tablet, so I can remove the upload button if your device is detected.
 
@@ -153,23 +153,23 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 * International (non-ASCII) domains must be converted to [Punycode](https://tools.ietf.org/html/rfc3492) with [idn_to_ascii](http://php.net/manual/en/function.idn-to-ascii.php).
 
   Unfortunately, `idn_to_ascii` is not available on all systems.
-
+  
 * "Cannot verify international domains because idn_to_ascii function not found"
 
   This is displayed when Quick Mail cannot verify domains containing non-ASCII characters.
-
+  
 * [checkdnsrr](http://php.net/manual/en/function.checkdnsrr.php) is used to check a domain for an [MX record](https://en.wikipedia.org/wiki/MX_record).
 
   An MX record tells senders how to send mail to the domain.
   
   *This is not always accurate. Turn verification off if Quick Mail rejects a valid address.*
-
+  
 = Mail Errors =
 
 * Quick Mail sends email with [wp_mail](https://developer.wordpress.org/reference/functions/wp_mail/).
 
   `wp_mail` error messages are displayed, if there is a problem.
-
+  
 * You must provide at least one recipient email address.
 
    `wp_mail` rejected an address. Seen when Quick Mail verification is off.
@@ -177,8 +177,7 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 * Error: Invalid Role (WP-CLI error)
 
 	You tried sending mail to an unknown WordPress role. Use `wp list roles` to get role names.
-
-
+	
 = Incompatible Plugins =
 
 * [Stop Emails](https://wordpress.org/plugins/stop-emails/)
@@ -204,15 +203,19 @@ If you are using an email delivery service, you can ignore this message.
 `quick_mail_comment_style`
   Replace quick mail comment style.
   
-`quick_mail_reply_title`    
+`quick_mail_reply_title`
   Replace title for private comment reply on comments list.
-
-`quick_mail_user_capability`    
-  Replace minimum user capability.
   
+`quick_mail_user_capability`
+  Replace minimum user capability.
+
 `replace_quick_mail_sender`
   Replace sender credentials. Expects an associative array with values for `name` and `email`. See [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender) plugin for examples.
   
+`qm_rejected_domains`
+
+  Reject arbitrary recipient domain(s). Return false or empty string from filter to reject domain(s).
+
 == Screenshots ==
 
 1. Selecting users on Quick Mail data entry form.
@@ -231,6 +234,9 @@ If you are using an email delivery service, you can ignore this message.
 
 == Changelog ==
 
+= 4.0.5 =
+* Added `qm_rejected_domains` filter to reject arbitrary domains.
+
 = 4.0.4 =
 * Fixed jQuery TypeError on cc address validation.
 * Updated readmes, license.
@@ -243,6 +249,9 @@ If you are using an email delivery service, you can ignore this message.
 Please refer to changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 4.0.5 =
+* Upgrade recommended.
 
 = 4.0.4 =
 * Upgrade recommended.

@@ -167,6 +167,21 @@ class QuickMailUtil {
 	} // end filter_user_emails
 
 	/**
+	 * Reject arbitrary recipient domains. Uses qm_rejected_domains filter.
+	 *
+	 * @param string $domain recipient domain.
+	 * @return boolean|string empty value is rejected.
+	 * @since 4.0.5
+	 */
+	public static function acceptable_domain( $domain ) {
+		if ( ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ||
+			( defined( 'QUICK_MAIL_TESTING' ) && QUICK_MAIL_TESTING ) ) {
+			return $domain;
+		}
+		return apply_filters( 'qm_rejected_domains', $domain );
+	}
+
+	/**
 	 * Validate email domain with DNS record.
 	 * Translate domain if validation on and idn_to_ascii is available.
 	 * Rejects length greater than 255 or less than 5.
@@ -191,6 +206,10 @@ class QuickMailUtil {
 		if ( ! filter_var( $qm_address, FILTER_VALIDATE_EMAIL ) ) {
 			return false;
 		} // end if PHP rejects address
+
+		if ( ! self::acceptable_domain( $a_split[1] ) ) {
+			return false;
+		}
 
 		if ( filter_var( $a_split[1], FILTER_VALIDATE_IP ) ) {
 			return ( 'N' === $validate_option ) ? true : checkdnsrr( $a_split[1], 'MX' );

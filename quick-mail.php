@@ -59,7 +59,7 @@ class QuickMail {
 	 * @var string version
 	 * @since 3.5.5 10-3-19
 	 */
-	const VERSION = '4.0.4';
+	const VERSION = '4.0.5';
 
 	/**
 	 * Content type for our instance.
@@ -137,11 +137,11 @@ class QuickMail {
 	 * @since 1.2.0
 	 */
 	public function __construct() {
-	   /**
-		 * If not called by WordPress, exit without error message.
-		 *
-		 * @since 1.2.5
-		 */
+		/**
+		  * If not called by WordPress, exit without error message.
+		  *
+		  * @since 1.2.5
+		  */
 		if ( ! function_exists( 'register_activation_hook' ) ) {
 			exit;
 		}
@@ -160,6 +160,9 @@ class QuickMail {
 		add_action( 'plugins_loaded', array( $this, 'show_qm_pointer' ), 10, 0 );
 		add_action( 'wp_ajax_qm_get_comment', array( $this, 'qm_get_comment' ) );
 		add_action( 'wp_ajax_qm_get_title', array( $this, 'qm_get_title' ) );
+		add_action( 'wp_ajax_nopriv_quick_mail_banned', array( $this, 'quick_mail_banned' ) );
+		add_action( 'wp_ajax_quick_mail_banned', array( $this, 'quick_mail_banned' ) );
+
 		add_filter( 'comment_row_actions', array( $this, 'qm_filter_comment_link' ), 10, 2 );
 		add_filter( 'comment_notification_text', array( $this, 'qm_comment_reply' ), 10, 2 );
 		add_filter( 'plugin_action_links', array( $this, 'qm_action_links' ), 10, 2 );
@@ -185,17 +188,17 @@ class QuickMail {
 			);
 		} // end if
 
-		$github      = __( 'Follow development on Github', 'quick-mail' );
-		$glink       = "<a target='_blank' href='https://github.com/mitchelldmiller/quick-mail-wp-plugin/'>{$github}</a>.";
-		$faq         = __( 'FAQ', 'quick-mail' );
-		$flink       = '<a href="https://mitchelldmiller.github.io/quick-mail-wp-plugin/#frequently-asked-questions" target="_blank">' . $faq . '</a>';
-		$slink       = '<a href="https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues" target="_blank">' . __( 'Github Issues', 'quick-mail' ) . '</a>';
-		$resources   = __( 'Resources', 'quick-mail' );
-		$more_info   = __( 'has more information.', 'quick-mail' );
-		$use_str     = __( 'Please use', 'quick-mail' );
-		$to_ask      = __( 'to ask questions and report problems.', 'quick-mail' );
-		$qm_top      = "<p>{$qm_desc}</p><h4>{$resources}</h4><ul><li>{$flink} {$more_info}</li><li>{$glink}</li><li>{$use_str} {$slink} {$to_ask}</li></ul>";
-		$qm_content  = $qm_top;
+		$github     = __( 'Follow development on Github', 'quick-mail' );
+		$glink      = "<a target='_blank' href='https://github.com/mitchelldmiller/quick-mail-wp-plugin/'>{$github}</a>.";
+		$faq        = __( 'FAQ', 'quick-mail' );
+		$flink      = '<a href="https://mitchelldmiller.github.io/quick-mail-wp-plugin/#frequently-asked-questions" target="_blank">' . $faq . '</a>';
+		$slink      = '<a href="https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues" target="_blank">' . __( 'Github Issues', 'quick-mail' ) . '</a>';
+		$resources  = __( 'Resources', 'quick-mail' );
+		$more_info  = __( 'has more information.', 'quick-mail' );
+		$use_str    = __( 'Please use', 'quick-mail' );
+		$to_ask     = __( 'to ask questions and report problems.', 'quick-mail' );
+		$qm_top     = "<p>{$qm_desc}</p><h4>{$resources}</h4><ul><li>{$flink} {$more_info}</li><li>{$glink}</li><li>{$use_str} {$slink} {$to_ask}</li></ul>";
+		$qm_content = $qm_top;
 		return array(
 			'id'      => 'qm_intro',
 			'title'   => __( 'Quick Mail', 'quick-mail' ),
@@ -231,6 +234,30 @@ class QuickMail {
 			'content' => $help . $support,
 		);
 	} // end get_qm_comment_help_tab
+
+	/**
+	 * Processes quick_mail_banned action to reject banned domains.
+	 *
+	 * @since 4.1.0
+	 */
+	public function quick_mail_banned() {
+		$option = '';
+		if ( is_multisite() ) {
+			$option = get_blog_option( null, 'quick_mail_banned', '' );
+		} else {
+			$option = get_option( 'quick_mail_banned', '' );
+		} // end if multisite
+
+		$domain = $_POST['domain'];
+		$banned = explode( ' ', $option );
+		foreach ( $banned as $one ) {
+			if ( ! empty( $one ) && stristr( $domain, $one ) ) {
+				$domain = '';
+				break;
+			}
+		}
+		wp_die( $domain );
+	}
 
 	/**
 	 * Get user role.
@@ -458,20 +485,21 @@ class QuickMail {
 
 		$blog       = is_multisite() ? get_current_blog_id() : 0;
 		$qm_options = array(
-			'authors_quick_mail_privilege',
-			'editors_quick_mail_privilege' .
-			'hide_quick_mail_admin',
-			'quick_mail_cannot_reply',
-			'quick_mail_logging',
-			'replace_quick_mail_sender',
-			'verify_quick_mail_addresses',
+			'authors_quick_mail_privilege' => 'N',
+			'editors_quick_mail_privilege' => 'N',
+			'hide_quick_mail_admin'        => 'N',
+			'quick_mail_cannot_reply'      => 'N',
+			'quick_mail_logging'           => 'N',
+			'replace_quick_mail_sender'    => 'N',
+			'verify_quick_mail_addresses'  => 'N',
+			'quick_mail_banned'            => '',
 		);
 
-		foreach ( $qm_options as $option ) {
+		foreach ( $qm_options as $option => $value ) {
 			if ( is_multisite() ) {
-				add_blog_option( $blog, $option, 'N' );
+				add_blog_option( $blog, $option, $value );
 			} else {
-				add_option( $option, 'N', '', 'no' );
+				add_option( $option, $value, '', 'no' );
 			} // end if multisite
 		} // end foreach
 
@@ -984,7 +1012,7 @@ jQuery(document).ready( function() {
 	 */
 	public function get_formatted_comment( $text ) {
 		if ( user_can_richedit() ) {
-			$css       = $this->get_comment_style();
+			$css = $this->get_comment_style();
 			return "<div {$css}>{$text}</div><br>";
 		} // end if rich editor
 		if ( is_rtl() ) {
@@ -1141,10 +1169,10 @@ jQuery(document).ready( function() {
 				wp_die( sprintf( '<h1 role="alert">%s</h1>', __( 'Comments disabled by system administrator.', 'quick-mail' ) ), __( 'Mail Error', 'quick-mail' ), $args );
 			} // end if check site has permission to reply
 
-			$id       = intval( $_REQUEST['comment_id'] );
-			$info     = get_comment( $id, ARRAY_A );
-			$text     = $info['comment_content'];
-			$raw_msg  = $this->get_formatted_comment( $text );
+			$id      = intval( $_REQUEST['comment_id'] );
+			$info    = get_comment( $id, ARRAY_A );
+			$text    = $info['comment_content'];
+			$raw_msg = $this->get_formatted_comment( $text );
 			if ( ! empty( $info['comment_author'] ) && ! empty( $info['comment_author_email'] ) ) {
 				$commenter = "\"{$info['comment_author']}\" <{$info['comment_author_email']}>";
 				$to        = $info['comment_author_email'];
@@ -1308,7 +1336,7 @@ jQuery(document).ready( function() {
 			} // end if multiple selection
 
 			if ( empty( $to ) ) {
-			    $raw_email = array();
+				$raw_email = array();
 				if ( preg_match( '/<(.+@.+[.].+)>/', urldecode( $_POST['qm-email'] ), $raw_email ) ) {
 					$to = trim( $raw_email[1] );
 				} else {
@@ -1753,7 +1781,6 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			update_user_meta( $you->ID, 'limit_quick_mail_commenters', 7, $previous );
 		} // end if new value was not set 3.2.6
 
-		// Check new roles.
 		$previous       = $this->qm_get_display_option( $blog );
 		$cur_want_roles = ! empty( $_POST['show_quick_mail_roles'] );
 		if ( ! empty( $_POST['show_quick_mail_users'] ) && 1 === strlen( $_POST['show_quick_mail_users'] ) ) {
@@ -1811,6 +1838,24 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			} // end if wpauto changed
 
 			if ( ! empty( $_POST['showing_quick_mail_admin'] ) ) {
+				$previous = '';
+				if ( is_multisite() ) {
+					$previous = get_blog_option( $blog, 'quick_mail_banned', '' );
+				} else {
+					$previous = get_option( 'quick_mail_banned', '' );
+				} // end if multisite
+
+				$current = sanitize_text_field( $_POST['quick_mail_banned'] );
+				if ( $current !== $previous ) {
+					if ( is_multisite() ) {
+						update_blog_option( $blog, 'quick_mail_banned', $current );
+					} else {
+						update_option( 'quick_mail_banned', $current );
+					} // end if multisite
+
+					$updated = true;
+				} // end if value changed
+
 				$previous = '';
 				if ( is_multisite() ) {
 					$previous = get_blog_option( $blog, 'hide_quick_mail_admin', 'N' );
@@ -1973,6 +2018,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 		$author_option   = '';
 		$verify_option   = '';
 		$sendgrid_option = '';
+		$banned_option   = '';
 		if ( is_multisite() ) {
 			$admin_option        = get_blog_option( $blog, 'hide_quick_mail_admin', 'N' );
 			$editor_option       = get_blog_option( $blog, 'editors_quick_mail_privilege', 'N' );
@@ -1980,6 +2026,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			$cannot_reply_option = get_blog_option( $blog, 'quick_mail_cannot_reply', 'N' );
 			$verify_option       = get_blog_option( $blog, 'verify_quick_mail_addresses', 'N' );
 			$sendgrid_option     = get_blog_option( $blog, 'replace_quick_mail_sender', 'N' );
+			$banned_option       = get_blog_option( $blog, 'quick_mail_banned', '' );
 		} else {
 			$admin_option        = get_option( 'hide_quick_mail_admin', 'N' );
 			$editor_option       = get_option( 'editors_quick_mail_privilege', 'N' );
@@ -1987,6 +2034,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			$cannot_reply_option = get_option( 'quick_mail_cannot_reply', 'N' );
 			$verify_option       = get_option( 'verify_quick_mail_addresses', 'N' );
 			$sendgrid_option     = get_option( 'replace_quick_mail_sender', 'N' );
+			$banned_option       = get_option( 'quick_mail_banned', '' );
 		} // end if multisite
 
 		$check_admin        = ( 'Y' === $admin_option ) ? 'checked="checked"' : '';
@@ -2014,15 +2062,15 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			$faq            = __( 'Please read', 'quick-mail' ) . ' ' . $faq_link . '.';
 			$verify_problem = '<br><br><span role="alert">' . $cannot . $nf . '<br>' . $faq . '</span>';
 		} // end if idn_to_ascii is available
-		$verify_note    = $verify_message . $verify_problem;
-		$wam            = sprintf(
+		$verify_note   = $verify_message . $verify_problem;
+		$wam           = sprintf(
 			'%s %s %s',
 			__( 'Apply', 'quick-mail' ),
 			'<a target="_blank" href="https://codex.wordpress.org/Function_Reference/wpautop">wpautop</a>',
 			__( 'to HTML messages.', 'quick-mail' )
 		);
-		$space          = '';
-		$comment_label  = '';
+		$space         = '';
+		$comment_label = '';
 		if ( QuickMailUtil::user_has_comments( $you->ID ) ) {
 			if ( ! $this->multiple_matching_users( 'A', $blog ) ) {
 				$space         = ' style="margin-top:2em;" ';
@@ -2182,6 +2230,8 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 <p><input tabindex="80" aria-describedby="qm_verify_desc" aria-labelledby="qm_verify_label" class="qm-input" name="verify_quick_mail_addresses" id="verify_quick_mail_addresses" type="checkbox" <?php echo $check_verify; ?>>
 <label id="qm_verify_label" class="qm-label"><?php esc_html_e( 'Verify recipient email domains', 'quick-mail' ); ?>.</label>
 <span id="qm_verify_desc" class="qm-label"><?php echo $verify_note; ?></span></p>
+<p><label id="qm_banned_label" for="quick_mail_banned" class="qm-label" style="font-weight:bold"><?php esc_html_e( 'Banned domains', 'quick-mail' ); ?></label></p>
+<p><textarea name="quick_mail_banned" id="quick_mail_banned" cols="60" rows="3" tabindex="82" aria-describedby="qm_banned_label"><?php echo $banned_option; ?></textarea></p>
 </fieldset>
 <?php endif; ?>
 		<?php
@@ -2567,7 +2617,7 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			}
 		} // end if multisite
 
-			$content             = '';
+			$content = '';
 		if ( ( ! $you_are_admin && ! $is_editor_user ) || ( 'N' === $editors && ! $you_are_admin ) ) {
 			if ( is_multisite() ) {
 				$content .= '<p>' . $note . __( 'You do not have sufficient privileges to access user lists on this site.' ) . '.</p>';
@@ -2657,7 +2707,7 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			);
 		} // end if
 
-			$slink = '<a href="https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues" target="_blank">' . __( 'Github Issues', 'quick-mail' ) . '</a>';
+			$slink   = '<a href="https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues" target="_blank">' . __( 'Github Issues', 'quick-mail' ) . '</a>';
 			$use_str = __( 'Please use', 'quick-mail' );
 			$to_ask  = __( 'to ask questions and report problems', 'quick-mail' );
 			$rc5     = "<dt class='qm-help'>{$use_str} {$slink} {$to_ask}.</dt>";
@@ -2916,8 +2966,8 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 	 * @since 2.0.0
 	 */
 	public function add_qm_help() {
-		$blog       = is_multisite() ? get_current_blog_id() : 0;
-		$screen     = get_current_screen();
+		$blog           = is_multisite() ? get_current_blog_id() : 0;
+		$screen         = get_current_screen();
 		$blog           = is_multisite() ? get_current_blog_id() : 0;
 		$display_option = $this->qm_get_display_option( $blog );
 		$cc_title       = __( 'Adding CC', 'quick-mail' );

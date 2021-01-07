@@ -3,7 +3,6 @@
  * Uninstall Quick Mail. Remove options.
  *
  * @package QuickMail
- * @version 3.5.0
  */
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
@@ -25,6 +24,7 @@ if ( is_multisite() ) {
 		delete_blog_option( $site->blog_id, 'verify_quick_mail_addresses' );
 		delete_blog_option( $site->blog_id, 'replace_quick_mail_sender' );
 		delete_blog_option( $site->blog_id, 'quick_mail_logging' );
+		delete_blog_option( $site->blog_id, 'quick_mail_banned' );
 	} // end foreach
 } else {
 	delete_option( 'show_quick_mail_users' );
@@ -35,5 +35,6 @@ if ( is_multisite() ) {
 	delete_option( 'verify_quick_mail_addresses' );
 	delete_option( 'replace_quick_mail_sender' );
 	delete_option( 'quick_mail_logging' );
+	delete_option( 'quick_mail_banned' );
 } // end if multisite
 

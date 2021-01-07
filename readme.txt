@@ -210,12 +210,8 @@ If you are using an email delivery service, you can ignore this message.
   Replace minimum user capability.
 
 `replace_quick_mail_sender`
-  Replace sender credentials. Expects an associative array with values for `name` and `email`. See [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender) plugin for examples.
+  Replace sender credentials. Expects associative array with values for `name` and `email`. See [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender) plugin for examples.
   
-`qm_rejected_domains`
-
-  Reject arbitrary recipient domain(s). Return false or empty string from filter to reject domain(s).
-
 == Screenshots ==
 
 1. Selecting users on Quick Mail data entry form.
@@ -235,7 +231,7 @@ If you are using an email delivery service, you can ignore this message.
 == Changelog ==
 
 = 4.0.5 =
-* Added `qm_rejected_domains` filter to reject arbitrary domains.
+* Added option to reject arbitrary domains.
 
 = 4.0.4 =
 * Fixed jQuery TypeError on cc address validation.

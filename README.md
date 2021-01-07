@@ -196,7 +196,7 @@ __Customizing Quick Mail__
 
 `replace_quick_mail_sender`
 
-  Replace sender credentials. Expects an associative array with values for `name` and `email`.
+  Replace sender credentials. Expects associative array with values for `name` and `email`.
 
   See [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender) plugin for examples.
 
@@ -223,10 +223,6 @@ __Customizing Quick Mail__
 `quick_mail_cli_admin_only`
 
   Allow non-admin users to send mail with WP-CLI.
-
-`qm_rejected_domains`
-
-  Reject arbitrary recipient domain(s).
 
 __Additional Information__
 

@@ -174,11 +174,28 @@ class QuickMailUtil {
 	 * @since 4.0.5
 	 */
 	public static function acceptable_domain( $domain ) {
-		if ( ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ||
-			( defined( 'QUICK_MAIL_TESTING' ) && QUICK_MAIL_TESTING ) ) {
-			return $domain;
+		$url     = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['SERVER_NAME']}/wp-admin/admin-ajax.php";
+		$args    = array(
+			'action' => 'quick_mail_banned',
+			'domain' => $domain,
+		);
+		$post_str = http_build_query( $args );
+		$options = array(
+			'http' =>
+				array(
+					'method'  => 'POST',
+					'header'  => 'Content-type: application/x-www-form-urlencoded',
+					'content' => $post_str,
+				),
+		);
+
+		$stream_context = stream_context_create( $options );
+		$result        = file_get_contents( $url, false, $stream_context );
+		if ( $result !== false ) {
+			$domain = $result;
 		}
-		return apply_filters( 'qm_rejected_domains', $domain );
+
+		return $domain;
 	}
 
 	/**

@@ -137,11 +137,6 @@ class QuickMail {
 	 * @since 1.2.0
 	 */
 	public function __construct() {
-		/**
-		  * If not called by WordPress, exit without error message.
-		  *
-		  * @since 1.2.5
-		  */
 		if ( ! function_exists( 'register_activation_hook' ) ) {
 			exit;
 		}
@@ -236,19 +231,35 @@ class QuickMail {
 	} // end get_qm_comment_help_tab
 
 	/**
-	 * Processes quick_mail_banned action to reject banned domains.
+	 * Got Banned Domains? Used for invalid message.
 	 *
-	 * @since 4.1.0
+	 * @return boolean
+	 * @since 4.0.5
 	 */
-	public function quick_mail_banned() {
+	public static function got_banned_domains() {
+		$banning = '';
+		if ( is_multisite() ) {
+			$banning = get_blog_option( null, 'quick_mail_banned', '' );
+		} else {
+			$banning = get_option( 'quick_mail_banned', '' );
+		}
+		return ( ! empty( $banning ) );
+	}
+
+	/**
+	 * Is this domain banned? Static for WP-CLI.
+	 *
+	 * @param string $domain domain name.
+	 * @return boolean
+	 * @since 4.0.5
+	 */
+	public static function is_banned_domain( $domain ) {
 		$option = '';
 		if ( is_multisite() ) {
 			$option = get_blog_option( null, 'quick_mail_banned', '' );
 		} else {
 			$option = get_option( 'quick_mail_banned', '' );
 		} // end if multisite
-
-		$domain = $_POST['domain'];
 		$banned = explode( ' ', $option );
 		foreach ( $banned as $one ) {
 			if ( ! empty( $one ) && stristr( $domain, $one ) ) {
@@ -256,7 +267,20 @@ class QuickMail {
 				break;
 			}
 		}
-		wp_die( $domain );
+		if ( empty( $domain ) ) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Processes quick_mail_banned action to reject banned domains.
+	 *
+	 * @since 4.0.5
+	 */
+	public function quick_mail_banned() {
+		$retval = self::is_banned_domain( $_POST['domain'] ) ? '' : $_POST['domain'];
+		wp_die( $retval );
 	}
 
 	/**
@@ -1597,11 +1621,18 @@ jQuery(document).ready( function() {
 			} // end if adjusted display
 		} // end if might adjust display
 		echo "<script>var qm_validate = '{$link}', val_option = '{$verify}';</script>";
-		$qm_link     = admin_url( 'tools.php?page=quick_mail_form' );
-		$invalid_msg = ( 'Y' === $verify ) ? __( 'Cannot verify address', 'quick-mail' ) : __( 'Invalid mail address', 'quick-mail' );
-		// Inform user that Quick Mail is verifying addresses.
-		?>
+		$qm_link = admin_url( 'tools.php?page=quick_mail_form' );
 
+		// Tell user if Quick Mail is verifying or blocking addresses.
+		$invalid_msg = '';
+		if ( 'Y' === $verify ) {
+			$invalid_msg = __( 'Cannot verify address', 'quick-mail' );
+		} elseif ( self::got_banned_domains() ) {
+			$invalid_msg = __( 'Invalid or blocked mail address', 'quick-mail' );
+		} else {
+			$invalid_msg = __( 'Invalid mail address', 'quick-mail' );
+		}
+		?>
 		<?php if ( defined( 'QUICK_MAIL_TESTING' ) && QUICK_MAIL_TESTING ) : ?>
 <h1 id="quick-mail-title" class="quick-mail-title"><?php esc_html_e( 'Quick Mail', 'quick-mail' ); ?> <span class="wp-ui-text-highlight"><?php esc_html_e( 'TEST MODE', 'quick-mail' ); ?></span></h1>
 		<?php else : ?>
@@ -2171,7 +2202,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 		if ( 'Y' === $verify && 'X' !== $this->qm_get_display_option( $blog ) ) {
 			$verify = 'N';
 		} // end if verify disabled, because not displaying user list.
-		// Setup uses val_option since 3.5.6
+		// Setup uses val_option since 3.5.6.
 		echo "<script>val_option = '{$verify}';</script>";
 		?>
 <h1 id="quick-mail-title" class="quick-mail-title"><?php esc_html_e( 'Quick Mail Options', 'quick-mail' ); ?></h1>

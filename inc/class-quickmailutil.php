@@ -180,12 +180,14 @@ class QuickMailUtil {
 			'domain' => $domain,
 		);
 		$post_str = http_build_query( $args );
+		$protocol = floatval( substr( $_SERVER['SERVER_PROTOCOL'], -3 ) );
 		$options  = array(
 			'http' =>
 				array(
-					'method'  => 'POST',
-					'header'  => 'Content-type: application/x-www-form-urlencoded',
-					'content' => $post_str,
+					'method'   => 'POST',
+					'header'   => 'Content-type: application/x-www-form-urlencoded',
+					'protocol' => $protocol,
+					'content'  => $post_str,
 				),
 		);
 

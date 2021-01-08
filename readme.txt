@@ -232,6 +232,7 @@ If you are using an email delivery service, you can ignore this message.
 
 = 4.0.5 =
 * Added option to reject arbitrary domains.
+* New error message: Invalid or blocked mail address.
 
 = 4.0.4 =
 * Fixed jQuery TypeError on cc address validation.

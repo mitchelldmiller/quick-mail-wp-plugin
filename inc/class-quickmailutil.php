@@ -181,13 +181,18 @@ class QuickMailUtil {
 		);
 		$post_str = http_build_query( $args );
 		$protocol = floatval( substr( $_SERVER['SERVER_PROTOCOL'], -3 ) );
+		$h1       = "Content-type: application/x-www-form-urlencoded\r\n";
+		$dlen     = strlen( $post_str );
+		$h2       = "Content-Length: {$dlen}\r\n";
+		$header   = $h1 . $h2;
 		$options  = array(
 			'http' =>
 				array(
-					'method'   => 'POST',
-					'header'   => 'Content-type: application/x-www-form-urlencoded',
-					'protocol' => $protocol,
-					'content'  => $post_str,
+					'method'     => 'POST',
+					'header'     => $header,
+					'user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0',
+					'protocol'   => $protocol,
+					'content'    => $post_str,
 				),
 		);
 

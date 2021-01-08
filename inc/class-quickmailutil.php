@@ -174,13 +174,13 @@ class QuickMailUtil {
 	 * @since 4.0.5
 	 */
 	public static function acceptable_domain( $domain ) {
-		$url     = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['SERVER_NAME']}/wp-admin/admin-ajax.php";
-		$args    = array(
+		$url      = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['SERVER_NAME']}/wp-admin/admin-ajax.php";
+		$args     = array(
 			'action' => 'quick_mail_banned',
 			'domain' => $domain,
 		);
 		$post_str = http_build_query( $args );
-		$options = array(
+		$options  = array(
 			'http' =>
 				array(
 					'method'  => 'POST',
@@ -190,11 +190,10 @@ class QuickMailUtil {
 		);
 
 		$stream_context = stream_context_create( $options );
-		$result        = file_get_contents( $url, false, $stream_context );
-		if ( $result !== false ) {
+		$result         = file_get_contents( $url, false, $stream_context );
+		if ( false !== $result ) {
 			$domain = $result;
 		}
-
 		return $domain;
 	}
 
@@ -224,9 +223,11 @@ class QuickMailUtil {
 			return false;
 		} // end if PHP rejects address
 
-		if ( ! self::acceptable_domain( $a_split[1] ) ) {
-			return false;
-		}
+		if ( ! empty( $_SERVER['SERVER_ADDR'] ) ) {
+			if ( ! self::acceptable_domain( $a_split[1] ) ) {
+				return false;
+			}
+		} // does not work with WP-CLI
 
 		if ( filter_var( $a_split[1], FILTER_VALIDATE_IP ) ) {
 			return ( 'N' === $validate_option ) ? true : checkdnsrr( $a_split[1], 'MX' );

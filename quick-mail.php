@@ -62,6 +62,15 @@ class QuickMail {
 	const VERSION = '4.0.5';
 
 	/**
+	 * Current directory for Quick Mail helper plugins.
+	 *
+	 * Replaces QuickMail::$directory
+	 * @var string current directory.
+	 * @since 4.0.5 1-8-21
+	 */
+	const DIRECTORY  = __DIR__ . '/';
+
+	/**
 	 * Content type for our instance.
 	 *
 	 * @since 1.2.0
@@ -73,6 +82,8 @@ class QuickMail {
 	 * Our directory for Quick Mail helper plugins.
 	 *
 	 * @var string directory name
+	 * @deprecated 4.0.5
+	 * @see QuickMail::DIRECTORY for replacement.
 	 */
 	public $directory = '';
 

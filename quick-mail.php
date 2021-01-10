@@ -65,10 +65,11 @@ class QuickMail {
 	 * Current directory for Quick Mail helper plugins.
 	 *
 	 * Replaces QuickMail::$directory
+	 *
 	 * @var string current directory.
 	 * @since 4.0.5 1-8-21
 	 */
-	const DIRECTORY  = __DIR__ . '/';
+	const DIRECTORY = __DIR__ . '/';
 
 	/**
 	 * Content type for our instance.
@@ -285,12 +286,47 @@ class QuickMail {
 	}
 
 	/**
+	 * Validate banned domains before adding them.
+	 *
+	 * @param string $current User entry.
+	 * @return string Validated domain list.
+	 * @since 4.0.5
+	 */
+	public static function validate_banned_domains( $current ) {
+		$option = '';
+		if ( is_multisite() ) {
+			$option = get_blog_option( null, 'quick_mail_banned', '' );
+		} else {
+			$option = get_option( 'quick_mail_banned', '' );
+		} // end if multisite
+
+		$previous  = explode( ' ', $option );
+		$raw       = array_unique( explode( ' ', $current ) );
+		$processed = '';
+		foreach ( $raw as $one ) {
+			if ( function_exists( 'idn_to_ascii' ) ) {
+				$intl = defined( 'INTL_IDNA_VARIANT_UTS46' ) && defined( 'IDNA_NONTRANSITIONAL_TO_ASCII' ) ? idn_to_ascii( $one[1], IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46 ) : idn_to_ascii( $one );
+				if ( ! empty( $intl ) ) {
+					$one = $intl;
+				} // end if we have punycode address.
+			} // end if we have idn_to_ascii
+
+			if ( in_array( $one, $previous, true ) || checkdnsrr( $one, 'MX' ) ) {
+				$processed .= "{$one} ";
+				continue;
+			} // Skip previously validated domains.
+		}
+		return trim( $processed );
+	}
+
+	/**
 	 * Processes quick_mail_banned action to reject banned domains.
 	 *
 	 * @since 4.0.5
 	 */
 	public function quick_mail_banned() {
-		$retval = self::is_banned_domain( $_POST['domain'] ) ? '' : $_POST['domain'];
+		$domain = isset( $_POST['domain'] ) ? sanitize_text_field( $_POST['domain'] ) : '';
+		$retval = self::is_banned_domain( $domain ) ? '' : $domain;
 		wp_die( $retval );
 	}
 
@@ -662,8 +698,7 @@ jQuery(document).ready( function() {
 		} // end if on quick mail form
 
 		if ( strstr( $_SERVER['REQUEST_URI'], 'quick_mail_options' ) ) {
-			wp_enqueue_script( 'qmCount', plugins_url( '/lib/js/quick-mail-addresses.js', __FILE__ ), array( 'jquery' ), null, false );
-
+			wp_enqueue_script( 'qmCount', plugins_url( '/lib/js/quick-mail-addresses.js', __FILE__ ), array( 'jquery' ), self::VERSION, false );
 			$data = array(
 				'one'  => __( 'Clear 1 saved address', 'quick-mail' ),
 				/* translators: number of saved email addresses */
@@ -1887,7 +1922,8 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 					$previous = get_option( 'quick_mail_banned', '' );
 				} // end if multisite
 
-				$current = sanitize_text_field( $_POST['quick_mail_banned'] );
+				$got     = sanitize_text_field( $_POST['quick_mail_banned'] );
+				$current = self::validate_banned_domains( $got );
 				if ( $current !== $previous ) {
 					if ( is_multisite() ) {
 						update_blog_option( $blog, 'quick_mail_banned', $current );
@@ -2272,7 +2308,7 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 <p><input tabindex="80" aria-describedby="qm_verify_desc" aria-labelledby="qm_verify_label" class="qm-input" name="verify_quick_mail_addresses" id="verify_quick_mail_addresses" type="checkbox" <?php echo $check_verify; ?>>
 <label id="qm_verify_label" class="qm-label"><?php esc_html_e( 'Verify recipient email domains', 'quick-mail' ); ?>.</label>
 <span id="qm_verify_desc" class="qm-label"><?php echo $verify_note; ?></span></p>
-<p><label id="qm_banned_label" for="quick_mail_banned" class="qm-label" style="font-weight:bold"><?php esc_html_e( 'Banned domains', 'quick-mail' ); ?></label></p>
+<p><label id="qm_banned_label" for="quick_mail_banned" class="qm-label" style="font-weight:bold"><?php esc_html_e( 'Banned Domains', 'quick-mail' ); ?></label></p>
 <p><textarea name="quick_mail_banned" id="quick_mail_banned" cols="60" rows="3" tabindex="82" aria-describedby="qm_banned_label"><?php echo $banned_option; ?></textarea></p>
 </fieldset>
 <?php endif; ?>

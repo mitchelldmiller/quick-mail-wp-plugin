@@ -7,8 +7,6 @@
 
 /**
  * Quick Mail utility functions for JavaScript and quick-mail-cli.php
- *
- * @package QuickMail
  */
 class QuickMailUtil {
 
@@ -179,10 +177,10 @@ class QuickMailUtil {
 			'action' => 'quick_mail_banned',
 			'domain' => $domain,
 		);
-		$post_str = http_build_query( $args );
+		$content  = http_build_query( $args );
 		$protocol = floatval( substr( $_SERVER['SERVER_PROTOCOL'], -3 ) );
 		$h1       = "Content-type: application/x-www-form-urlencoded\r\n";
-		$dlen     = strlen( $post_str );
+		$dlen     = strlen( $content );
 		$h2       = "Content-Length: {$dlen}\r\n";
 		$header   = $h1 . $h2;
 		$options  = array(
@@ -192,7 +190,7 @@ class QuickMailUtil {
 					'header'     => $header,
 					'user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0',
 					'protocol'   => $protocol,
-					'content'    => $post_str,
+					'content'    => $content,
 				),
 		);
 

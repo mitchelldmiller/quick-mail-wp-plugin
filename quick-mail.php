@@ -325,6 +325,7 @@ class QuickMail {
 	 * @since 4.0.5
 	 */
 	public function quick_mail_banned() {
+		check_ajax_referer( 'quick_mail_banned', 'security' ); // Dies on error.
 		$domain = isset( $_POST['domain'] ) ? sanitize_text_field( $_POST['domain'] ) : '';
 		$retval = self::is_banned_domain( $domain ) ? '' : $domain;
 		wp_die( $retval );

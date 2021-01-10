@@ -2773,6 +2773,10 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			$content    .= "<dd>{$z} {$dnserr_link}</dd>";
 			$content    .= '<dd class="wp-ui-text-highlight">' . __( 'Addresses selected from user list are validated by WordPress, when user is added or updated.', 'quick-mail' ) . '</dd>';
 			$content    .= '<dd class="wp-ui-text-highlight">' . __( 'Turn verification off if Quick Mail rejects a valid address.', 'quick-mail' ) . '</dd>';
+			$content    .= '<dt><strong>' . __( 'Banned Domains', 'quick-mail' ) . '</strong></dt>';
+			$content    .= '<dd>' . __( 'Prevent users from sending email to selected domains.', 'quick-mail' ) . '</dd>';
+			$content    .= '<dd>' . __( 'Enter domains. Use a space to separate each domain.', 'quick-mail' ) . '</dd>';
+			$content    .= '<dd>' . __( 'Quick Mail verifies domain before adding it.', 'quick-mail' ) . '</dd>';
 			$content    .= '</dl>';
 			$screen->add_help_tab(
 				array(

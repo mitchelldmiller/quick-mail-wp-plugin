@@ -51,7 +51,7 @@ __Features__
 
 * Select recipient from users or commenters.
 
-* Banned domains: administrators can prevent users from sending mail to arbitrary domains.
+* [Banned domains](https://wheredidmybraingo.com/quick-mail-4-0-5-blocks-domains/): administrators can prevent users from sending mail to arbitrary domains.
 
 ### Installation ###
 

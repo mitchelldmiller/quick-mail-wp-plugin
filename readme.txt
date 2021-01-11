@@ -18,7 +18,7 @@ Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds 
 
 Send a Web page, file, or message from the command line with quick-mail command for [WP-CLI](https://wp-cli.org/).
 
-** Does not use the Gutenberg editor. **
+** Does not use the Gutenberg editor or REST API. **
 
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
@@ -55,6 +55,9 @@ Multiple files from up to six directories (folders) can be attached to a message
 * Option to add paragraphs and line breaks to HTML messages with [wpauto](https:/codex.wordpress.org/Function_Reference/wpautop).
 
 * Select recipient from users or commenters.
+
+* Banned domains: administrators can prevent users from sending mail to arbitrary domains.
+
 
 = Learn More =
 
@@ -174,6 +177,10 @@ File uploads are disabled for ancient IOS 5 devices. Please [add a support messa
 
    `wp_mail` rejected an address. Seen when Quick Mail verification is off.
    
+* "Invalid or blocked mail address."
+
+	You tried sending mail to a Banned Domain.
+
 * Error: Invalid Role (WP-CLI error)
 
 	You tried sending mail to an unknown WordPress role. Use `wp list roles` to get role names.

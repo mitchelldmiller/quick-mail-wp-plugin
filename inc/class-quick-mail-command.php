@@ -209,12 +209,12 @@ class Quick_Mail_Command extends WP_CLI_Command {
 				$to = '';
 			} elseif ( QuickMail::is_banned_domain( $a_split[1] ) ) {
 				$to       = '';
-				$temp_msg = sprintf( '%s : %s', __( 'Recipient address is blocked', 'quick-mail' ), $args[1] );
+				$temp_msg = sprintf( '%s : %s', __( 'Blocked recipient address', 'quick-mail' ), $args[1] );
 			}
 
 			if ( empty( $to ) || ! QuickMailUtil::qm_valid_email_domain( $to, $verify_domain ) ) {
 				if ( empty( $temp_msg ) ) {
-					$temp_msg = sprintf( '%s : %s', __( 'Invalid Recipient Address', 'quick-mail' ), $args[1] );
+					$temp_msg = sprintf( '%s : %s', __( 'Invalid recipient address', 'quick-mail' ), $args[1] );
 				}
 				WP_CLI::error( $temp_msg ); // Exit.
 			} // end if invalid recipient.

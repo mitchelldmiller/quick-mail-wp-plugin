@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-01-10T18:28:00-05:00\n"
+"POT-Creation-Date: 2021-01-10T23:52:30-05:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: quick-mail\n"
@@ -77,11 +77,11 @@ msgid "No users for role"
 msgstr ""
 
 #: inc/class-quick-mail-command.php:212
-msgid "Recipient address is blocked"
+msgid "Blocked recipient address"
 msgstr ""
 
 #: inc/class-quick-mail-command.php:217
-msgid "Invalid Recipient Address"
+msgid "Invalid recipient address"
 msgstr ""
 
 #: inc/class-quick-mail-command.php:231

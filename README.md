@@ -55,10 +55,16 @@ __Features__
 
 ### Installation ###
 
+#### Legacy ####
 1. Download the [latest release](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases/latest) and unpack in your `/wp-content/plugins` directory.
 2. Activate the plugin through the WordPress _Plugins_ menu.
 
-#### Configuration ####
+#### WP-CLI ####
+* How to install and activate the latest version of Quick Mail with [WP-CLI](https://wp-cli.org/) :
+
+	`wp plugin install https://github.com/mitchelldmiller/quick-mail-wp-plugin/archive/master.zip --activate`
+
+### Configuration ###
 1. Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
 2. Optional: Install [WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
 3. Optional: Install [Mailgun](https://wordpress.org/extend/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.

@@ -202,8 +202,20 @@ class Quick_Mail_Command extends WP_CLI_Command {
 				$to = $data[0];
 			} // end if got results
 
+			$temp_msg = '';
+			$a_split  = explode( '@', $to );
+			$j        = count( $a_split );
+			if ( 2 !== $j ) {
+				$to = '';
+			} elseif ( QuickMail::is_banned_domain( $a_split[1] ) ) {
+				$to       = '';
+				$temp_msg = sprintf( '%s : %s', __( 'Blocked recipient address', 'quick-mail' ), $args[1] );
+			}
+
 			if ( empty( $to ) || ! QuickMailUtil::qm_valid_email_domain( $to, $verify_domain ) ) {
-				$temp_msg = sprintf( '%s : %s', __( 'Invalid Recipient Address', 'quick-mail' ), $args[1] );
+				if ( empty( $temp_msg ) ) {
+					$temp_msg = sprintf( '%s : %s', __( 'Invalid recipient address', 'quick-mail' ), $args[1] );
+				}
 				WP_CLI::error( $temp_msg ); // Exit.
 			} // end if invalid recipient.
 		} // end if recipient is a role.
@@ -218,7 +230,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 			if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
 				$temp_msg = __( 'Invalid URL', 'quick-mail' );
 				$hurl     = htmlspecialchars( $url, ENT_QUOTES, self::$charset, false );
-				WP_CLI::error( "$temp_msg: {$hurl}" ); // Exit.
+				WP_CLI::error( "{$temp_msg}: {$hurl}" ); // Exit.
 			} // end if invalid URL.
 
 			$domain = wp_parse_url( $url, PHP_URL_HOST );
@@ -313,7 +325,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 
 			if ( ! $sending_file && empty( $subject ) ) {
 				$pattern = '/title>(.+)<\/title>/';
-				$found = array();
+				$found   = array();
 				preg_match( $pattern, $message, $found );
 				if ( ! empty( $found ) && ! empty( $found[1] ) ) {
 					$subject = html_entity_decode( $found[1], ENT_QUOTES, self::$charset );

@@ -9,8 +9,8 @@ require_once 'class-quickmailutil.php';
 
 $verify = ! empty( $_REQUEST['quick-mail-verify'] ) ? trim( $_REQUEST['quick-mail-verify'] ) : '';
 if ( empty( $verify ) ) {
-    http_response_code(204); // Failed input test.
-	exit();
+	http_response_code( 204 ); // Failed input test.
+	exit;
 } // end if not logged in or missing verify.
 
 header( 'Content-type: text/plain' );

@@ -7,8 +7,6 @@
 
 /**
  * Quick Mail utility functions for JavaScript and quick-mail-cli.php
- *
- * @package QuickMail
  */
 class QuickMailUtil {
 
@@ -167,6 +165,46 @@ class QuickMailUtil {
 	} // end filter_user_emails
 
 	/**
+	 * Reject arbitrary recipient domains. Uses qm_rejected_domains filter.
+	 *
+	 * @param string $domain recipient domain.
+	 * @return boolean|string empty value is rejected.
+	 * @since 4.0.5
+	 */
+	public static function acceptable_domain( $domain ) {
+		$url      = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['SERVER_NAME']}/wp-admin/admin-ajax.php";
+		$hash     = password_hash( $domain, PASSWORD_DEFAULT );
+		$args     = array(
+			'action'   => 'quick_mail_banned',
+			'security' => $hash,
+			'domain'   => $domain,
+		);
+		$content  = http_build_query( $args );
+		$protocol = floatval( substr( $_SERVER['SERVER_PROTOCOL'], -3 ) );
+		$h1       = "Content-type: application/x-www-form-urlencoded\r\n";
+		$dlen     = strlen( $content );
+		$h2       = "Content-Length: {$dlen}\r\n";
+		$header   = $h1 . $h2;
+		$options  = array(
+			'http' =>
+				array(
+					'method'     => 'POST',
+					'header'     => $header,
+					'user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0',
+					'protocol'   => $protocol,
+					'content'    => $content,
+				),
+		);
+
+		$stream_context = stream_context_create( $options );
+		$result         = file_get_contents( $url, false, $stream_context );
+		if ( false !== $result ) {
+			$domain = $result;
+		}
+		return $domain;
+	}
+
+	/**
 	 * Validate email domain with DNS record.
 	 * Translate domain if validation on and idn_to_ascii is available.
 	 * Rejects length greater than 255 or less than 5.
@@ -191,6 +229,12 @@ class QuickMailUtil {
 		if ( ! filter_var( $qm_address, FILTER_VALIDATE_EMAIL ) ) {
 			return false;
 		} // end if PHP rejects address
+
+		if ( ! empty( $_SERVER['SERVER_ADDR'] ) ) {
+			if ( ! self::acceptable_domain( $a_split[1] ) ) {
+				return false;
+			}
+		} // does not work with WP-CLI
 
 		if ( filter_var( $a_split[1], FILTER_VALIDATE_IP ) ) {
 			return ( 'N' === $validate_option ) ? true : checkdnsrr( $a_split[1], 'MX' );

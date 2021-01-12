@@ -1,5 +1,5 @@
 @CHARSET "UTF-8";
-/* quick-mail.css 3.5.6 */
+/* Welcome to quick-mail.css 4.0.5 */
 
 fieldset {
 border: 1px solid #d1d1d1;
@@ -79,7 +79,7 @@ label.qm-label, a:link, a:link:visited {
 	color: #11169b;
 }
 
-label#qmbcc_label { 
+label#qmbcc_label {
 	padding-left: 2em;
 }
 span.qm-label {
@@ -94,14 +94,14 @@ span.mock-qm-label {
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
 }
 
-input.qm-input { 
+input.qm-input, textarea {
 	font-size: 16px !important;
 	line-height: 1;
 }
 
 input#qm-submit:focus { color: #11169b; }
 
-input#qm-email:focus, input#qm-cc:focus, input#qm-subject:focus, textarea#quickmailmessage:focus {
+input:focus, textarea:focus {
 	background-color: #ffc;
 }
 legend.recipients {
@@ -148,7 +148,7 @@ button.qm-button {
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
 }
 
-button.qm-button:hover { 
+button.qm-button:hover {
 	color: #c33;
 }
 

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 4.0.4
+ * Version: 4.0.5
  * Author: Mitchell D. Miller
  * Author URI: https://badmarriages.net/author/mitchell-d-miller/
  * Plugin URI: https://mitchelldmiller.github.io/quick-mail-wp-plugin/
@@ -17,22 +17,27 @@
 
 /*
  * Quick Mail WordPress Plugin - Send mail from WordPress using Quick Mail
- * Copyright (C) 2014-2020 Mitchell D. Miller
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * Copyright (C) 2014-2021 Mitchell D. Miller
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+*/
 
 require_once 'inc/class-quickmailutil.php';
 require_once 'inc/class-quickmailsender.php';
@@ -54,7 +59,17 @@ class QuickMail {
 	 * @var string version
 	 * @since 3.5.5 10-3-19
 	 */
-	const VERSION = '4.0.4';
+	const VERSION = '4.0.5';
+
+	/**
+	 * Current directory for Quick Mail helper plugins.
+	 *
+	 * Replaces QuickMail::$directory
+	 *
+	 * @var string current directory.
+	 * @since 4.0.5 1-8-21
+	 */
+	const DIRECTORY = __DIR__ . '/';
 
 	/**
 	 * Content type for our instance.
@@ -68,6 +83,8 @@ class QuickMail {
 	 * Our directory for Quick Mail helper plugins.
 	 *
 	 * @var string directory name
+	 * @deprecated 4.0.5
+	 * @see QuickMail::DIRECTORY for replacement.
 	 */
 	public $directory = '';
 
@@ -132,11 +149,6 @@ class QuickMail {
 	 * @since 1.2.0
 	 */
 	public function __construct() {
-	   /**
-		 * If not called by WordPress, exit without error message.
-		 *
-		 * @since 1.2.5
-		 */
 		if ( ! function_exists( 'register_activation_hook' ) ) {
 			exit;
 		}
@@ -155,6 +167,9 @@ class QuickMail {
 		add_action( 'plugins_loaded', array( $this, 'show_qm_pointer' ), 10, 0 );
 		add_action( 'wp_ajax_qm_get_comment', array( $this, 'qm_get_comment' ) );
 		add_action( 'wp_ajax_qm_get_title', array( $this, 'qm_get_title' ) );
+		add_action( 'wp_ajax_nopriv_quick_mail_banned', array( $this, 'quick_mail_banned' ) );
+		add_action( 'wp_ajax_quick_mail_banned', array( $this, 'quick_mail_banned' ) );
+
 		add_filter( 'comment_row_actions', array( $this, 'qm_filter_comment_link' ), 10, 2 );
 		add_filter( 'comment_notification_text', array( $this, 'qm_comment_reply' ), 10, 2 );
 		add_filter( 'plugin_action_links', array( $this, 'qm_action_links' ), 10, 2 );
@@ -180,17 +195,17 @@ class QuickMail {
 			);
 		} // end if
 
-		$github      = __( 'Follow development on Github', 'quick-mail' );
-		$glink       = "<a target='_blank' href='https://github.com/mitchelldmiller/quick-mail-wp-plugin/'>{$github}</a>.";
-		$faq         = __( 'FAQ', 'quick-mail' );
-		$flink       = '<a href="https://mitchelldmiller.github.io/quick-mail-wp-plugin/#frequently-asked-questions" target="_blank">' . $faq . '</a>';
-		$slink       = '<a href="https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues" target="_blank">' . __( 'Github Issues', 'quick-mail' ) . '</a>';
-		$resources   = __( 'Resources', 'quick-mail' );
-		$more_info   = __( 'has more information.', 'quick-mail' );
-		$use_str     = __( 'Please use', 'quick-mail' );
-		$to_ask      = __( 'to ask questions and report problems.', 'quick-mail' );
-		$qm_top      = "<p>{$qm_desc}</p><h4>{$resources}</h4><ul><li>{$flink} {$more_info}</li><li>{$glink}</li><li>{$use_str} {$slink} {$to_ask}</li></ul>";
-		$qm_content  = $qm_top;
+		$github     = __( 'Follow development on Github', 'quick-mail' );
+		$glink      = "<a target='_blank' href='https://github.com/mitchelldmiller/quick-mail-wp-plugin/'>{$github}</a>.";
+		$faq        = __( 'FAQ', 'quick-mail' );
+		$flink      = '<a href="https://mitchelldmiller.github.io/quick-mail-wp-plugin/#frequently-asked-questions" target="_blank">' . $faq . '</a>';
+		$slink      = '<a href="https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues" target="_blank">' . __( 'Github Issues', 'quick-mail' ) . '</a>';
+		$resources  = __( 'Resources', 'quick-mail' );
+		$more_info  = __( 'has more information.', 'quick-mail' );
+		$use_str    = __( 'Please use', 'quick-mail' );
+		$to_ask     = __( 'to ask questions and report problems.', 'quick-mail' );
+		$qm_top     = "<p>{$qm_desc}</p><h4>{$resources}</h4><ul><li>{$flink} {$more_info}</li><li>{$glink}</li><li>{$use_str} {$slink} {$to_ask}</li></ul>";
+		$qm_content = $qm_top;
 		return array(
 			'id'      => 'qm_intro',
 			'title'   => __( 'Quick Mail', 'quick-mail' ),
@@ -226,6 +241,134 @@ class QuickMail {
 			'content' => $help . $support,
 		);
 	} // end get_qm_comment_help_tab
+
+	/**
+	 * Got Banned Domains? Used for invalid message.
+	 *
+	 * @return boolean
+	 * @since 4.0.5
+	 */
+	public static function got_banned_domains() {
+		$banning = '';
+		if ( is_multisite() ) {
+			$banning = get_blog_option( null, 'quick_mail_banned', '' );
+		} else {
+			$banning = get_option( 'quick_mail_banned', '' );
+		}
+		return ( ! empty( $banning ) );
+	}
+
+	/**
+	 * Is this domain banned? Static for WP-CLI.
+	 *
+	 * @param string $domain domain name.
+	 * @return boolean
+	 * @since 4.0.5
+	 */
+	public static function is_banned_domain( $domain ) {
+		$option = '';
+		if ( is_multisite() ) {
+			$option = get_blog_option( null, 'quick_mail_banned', '' );
+		} else {
+			$option = get_option( 'quick_mail_banned', '' );
+		} // end if multisite
+		$banned = explode( ' ', $option );
+		foreach ( $banned as $one ) {
+			if ( ! empty( $one ) && stristr( $domain, $one ) ) {
+				$domain = '';
+				break;
+			}
+		}
+		if ( empty( $domain ) ) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Validate banned domains before adding them.
+	 *
+	 * @param string $entry User entry.
+	 * @return string Validated domain list.
+	 * @since 4.0.5
+	 */
+	public static function validate_banned_domains( $entry ) {
+		$option = '';
+		if ( is_multisite() ) {
+			$option = get_blog_option( null, 'quick_mail_banned', '' );
+		} else {
+			$option = get_option( 'quick_mail_banned', '' );
+		} // end if multisite
+
+		$previous  = explode( ' ', $option );
+		$current   = array_unique( explode( ' ', $entry ) );
+		$processed = '';
+		foreach ( $current as $one ) {
+			if ( is_string( strstr( $one, '@' ) ) ) {
+				$a_split = explode( '@', $one );
+				if ( 2 === count( $a_split ) ) {
+					$one = $a_split[1];
+				}
+			}
+
+			$a_split = explode( '.', $one );
+			$j       = count( $a_split );
+			if ( $j > 2 ) {
+				$one = $a_split[ $j - 2 ] . '.' . $a_split[ $j - 1 ];
+			} // Remove subdomains.
+
+			if ( function_exists( 'idn_to_ascii' ) ) {
+				$intl = defined( 'INTL_IDNA_VARIANT_UTS46' ) && defined( 'IDNA_NONTRANSITIONAL_TO_ASCII' ) ? idn_to_ascii( $one[1], IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46 ) : idn_to_ascii( $one );
+				if ( ! empty( $intl ) ) {
+					$one = $intl;
+				} // end if we have punycode address.
+			} // end if we have idn_to_ascii
+
+			if ( in_array( $one, $previous, true ) || checkdnsrr( $one, 'MX' ) ) {
+				$processed .= "{$one} ";
+			}
+		}
+		return trim( $processed );
+	}
+
+	/**
+	 * Get count of banned domains.
+	 *
+	 * @return integer
+	 * @since 4.0.5
+	 */
+	public function get_banned_count() {
+		if ( is_multisite() ) {
+			$banned = get_blog_option( get_current_blog_id(), 'quick_mail_banned', '' );
+		} else {
+			$banned = get_option( 'quick_mail_banned', '' );
+		}
+
+		$a = explode( ' ', $banned );
+		return empty( $banned ) ? 0 : count( $a );
+	}
+
+	/**
+	 * Processes quick_mail_banned action to reject banned domains.
+	 *
+	 * @since 4.0.5
+	 */
+	public function quick_mail_banned() {
+		$domain = isset( $_POST['domain'] ) ? sanitize_text_field( $_POST['domain'] ) : '';
+		$hash   = password_hash( $domain, PASSWORD_DEFAULT );
+		$maybe  = password_verify( $domain, $hash );
+		if ( empty( $domain ) || empty( $maybe ) ) {
+			http_response_code( 204 );
+			exit;
+		}
+
+		if ( $this->get_banned_count() ) {
+			$retval = self::is_banned_domain( $domain ) ? '' : $domain;
+		} else {
+			$retval = $domain; // No banned domains.
+		}
+		wp_die( $retval );
+	}
 
 	/**
 	 * Get user role.
@@ -453,20 +596,21 @@ class QuickMail {
 
 		$blog       = is_multisite() ? get_current_blog_id() : 0;
 		$qm_options = array(
-			'authors_quick_mail_privilege',
-			'editors_quick_mail_privilege' .
-			'hide_quick_mail_admin',
-			'quick_mail_cannot_reply',
-			'quick_mail_logging',
-			'replace_quick_mail_sender',
-			'verify_quick_mail_addresses',
+			'authors_quick_mail_privilege' => 'N',
+			'editors_quick_mail_privilege' => 'N',
+			'hide_quick_mail_admin'        => 'N',
+			'quick_mail_cannot_reply'      => 'N',
+			'quick_mail_logging'           => 'N',
+			'replace_quick_mail_sender'    => 'N',
+			'verify_quick_mail_addresses'  => 'N',
+			'quick_mail_banned'            => '',
 		);
 
-		foreach ( $qm_options as $option ) {
+		foreach ( $qm_options as $option => $value ) {
 			if ( is_multisite() ) {
-				add_blog_option( $blog, $option, 'N' );
+				add_blog_option( $blog, $option, $value );
 			} else {
-				add_option( $option, 'N', '', 'no' );
+				add_option( $option, $value, '', 'no' );
 			} // end if multisite
 		} // end foreach
 
@@ -594,8 +738,7 @@ jQuery(document).ready( function() {
 		} // end if on quick mail form
 
 		if ( strstr( $_SERVER['REQUEST_URI'], 'quick_mail_options' ) ) {
-			wp_enqueue_script( 'qmCount', plugins_url( '/lib/js/quick-mail-addresses.js', __FILE__ ), array( 'jquery' ), null, false );
-
+			wp_enqueue_script( 'qmCount', plugins_url( '/lib/js/quick-mail-addresses.js', __FILE__ ), array( 'jquery' ), self::VERSION, false );
 			$data = array(
 				'one'  => __( 'Clear 1 saved address', 'quick-mail' ),
 				/* translators: number of saved email addresses */
@@ -979,7 +1122,7 @@ jQuery(document).ready( function() {
 	 */
 	public function get_formatted_comment( $text ) {
 		if ( user_can_richedit() ) {
-			$css       = $this->get_comment_style();
+			$css = $this->get_comment_style();
 			return "<div {$css}>{$text}</div><br>";
 		} // end if rich editor
 		if ( is_rtl() ) {
@@ -1092,17 +1235,17 @@ jQuery(document).ready( function() {
 		$message      = '';
 		$raw_msg      = '';
 		$want_privacy = get_user_option( 'want_quick_mail_privacy', get_current_user_id() );
+		$direction    = is_rtl() ? 'rtl' : 'ltr';
 		if ( 'N' !== $want_privacy ) {
 			$want_privacy = 'Y';
 		} // end if not set
 		if ( 'Y' === $want_privacy ) {
-			$direction = is_rtl() ? 'rtl' : 'ltr';
-			$args      = array(
+			$args    = array(
 				'response'       => 200,
 				'back_link'      => false,
 				'text_direction' => $direction,
 			);
-			$qm_link   = admin_url( 'options-general.php?page=quick_mail_options' );
+			$qm_link = admin_url( 'options-general.php?page=quick_mail_options' );
 			wp_die( sprintf( '<span role="alert" class="quick-mail-title highlight"><a class="highlight" href="%s">%s</a></span>', $qm_link, esc_html__( 'Please grant permission to use your email address.', 'quick-mail' ) ), esc_html__( 'Privacy Error', 'quick-mail' ), $args );
 		} // end if
 
@@ -1127,8 +1270,7 @@ jQuery(document).ready( function() {
 
 		if ( ! empty( $_REQUEST['comment_id'] ) ) {
 			if ( ! $this->user_can_reply_to_comments( true ) ) {
-				$direction = is_rtl() ? 'rtl' : 'ltr';
-				$args      = array(
+				$args = array(
 					'response'       => 200,
 					'back_link'      => true,
 					'text_direction' => $direction,
@@ -1136,10 +1278,10 @@ jQuery(document).ready( function() {
 				wp_die( sprintf( '<h1 role="alert">%s</h1>', __( 'Comments disabled by system administrator.', 'quick-mail' ) ), __( 'Mail Error', 'quick-mail' ), $args );
 			} // end if check site has permission to reply
 
-			$id       = intval( $_REQUEST['comment_id'] );
-			$info     = get_comment( $id, ARRAY_A );
-			$text     = $info['comment_content'];
-			$raw_msg  = $this->get_formatted_comment( $text );
+			$id      = intval( $_REQUEST['comment_id'] );
+			$info    = get_comment( $id, ARRAY_A );
+			$text    = $info['comment_content'];
+			$raw_msg = $this->get_formatted_comment( $text );
 			if ( ! empty( $info['comment_author'] ) && ! empty( $info['comment_author_email'] ) ) {
 				$commenter = "\"{$info['comment_author']}\" <{$info['comment_author_email']}>";
 				$to        = $info['comment_author_email'];
@@ -1281,8 +1423,7 @@ jQuery(document).ready( function() {
 				wp_die( '<h1 role="alert">' . esc_html( __( 'Login Expired. Refresh Page.', 'quick-mail' ) ) . '</h1>' );
 			}
 			if ( empty( $commenter ) && empty( $_POST['qm-email'] ) ) {
-				$direction = is_rtl() ? 'rtl' : 'ltr';
-				$args      = array(
+				$args = array(
 					'response'       => 200,
 					'back_link'      => true,
 					'text_direction' => $direction,
@@ -1303,7 +1444,7 @@ jQuery(document).ready( function() {
 			} // end if multiple selection
 
 			if ( empty( $to ) ) {
-			    $raw_email = array();
+				$raw_email = array();
 				if ( preg_match( '/<(.+@.+[.].+)>/', urldecode( $_POST['qm-email'] ), $raw_email ) ) {
 					$to = trim( $raw_email[1] );
 				} else {
@@ -1441,15 +1582,14 @@ jQuery(document).ready( function() {
 
 				$recipients = QuickMailUtil::count_recipients( $headers );
 				if ( 100 < $recipients ) {
-					$direction = is_rtl() ? 'rtl' : 'ltr';
-					$padding   = is_rtl() ? 'padding-right: 2em;' : 'padding-left: 2em;';
-					$error     = sprintf(
+					$padding = is_rtl() ? 'padding-right: 2em;' : 'padding-left: 2em;';
+					$error   = sprintf(
 						'%s <a class="wp-ui-text-highlight" style="%s" href="javascript:history.back()">%s</a>',
 						esc_html( __( 'Cannot send mail to over 100 recipients.', 'quick-mail' ) ),
 						esc_attr( $padding ),
 						esc_html( __( 'Edit mail.', 'quick-mail' ) )
 					);
-					$args      = array(
+					$args    = array(
 						'response'       => 200,
 						'back_link'      => false,
 						'text_direction' => $direction,
@@ -1564,11 +1704,18 @@ jQuery(document).ready( function() {
 			} // end if adjusted display
 		} // end if might adjust display
 		echo "<script>var qm_validate = '{$link}', val_option = '{$verify}';</script>";
-		$qm_link     = admin_url( 'tools.php?page=quick_mail_form' );
-		$invalid_msg = ( 'Y' === $verify ) ? __( 'Cannot verify address', 'quick-mail' ) : __( 'Invalid mail address', 'quick-mail' );
-		// Inform user that Quick Mail is verifying addresses.
-		?>
+		$qm_link = admin_url( 'tools.php?page=quick_mail_form' );
 
+		// Tell user if Quick Mail is verifying or blocking addresses.
+		$invalid_msg = '';
+		if ( 'Y' === $verify ) {
+			$invalid_msg = __( 'Cannot verify address', 'quick-mail' );
+		} elseif ( self::got_banned_domains() ) {
+			$invalid_msg = __( 'Invalid or blocked mail address', 'quick-mail' );
+		} else {
+			$invalid_msg = __( 'Invalid mail address', 'quick-mail' );
+		}
+		?>
 		<?php if ( defined( 'QUICK_MAIL_TESTING' ) && QUICK_MAIL_TESTING ) : ?>
 <h1 id="quick-mail-title" class="quick-mail-title"><?php esc_html_e( 'Quick Mail', 'quick-mail' ); ?> <span class="wp-ui-text-highlight"><?php esc_html_e( 'TEST MODE', 'quick-mail' ); ?></span></h1>
 		<?php else : ?>
@@ -1735,6 +1882,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 		$you           = wp_get_current_user();
 		$you_are_admin = $this->qm_is_admin( $you->ID, $blog );
 		$want_privacy  = get_user_option( 'want_quick_mail_privacy', $you->ID );
+		$direction     = is_rtl() ? 'rtl' : 'ltr';
 		if ( empty( $want_privacy ) ) {
 			$want_privacy = 'Y';
 		}
@@ -1748,7 +1896,6 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			update_user_meta( $you->ID, 'limit_quick_mail_commenters', 7, $previous );
 		} // end if new value was not set 3.2.6
 
-		// Check new roles.
 		$previous       = $this->qm_get_display_option( $blog );
 		$cur_want_roles = ! empty( $_POST['show_quick_mail_roles'] );
 		if ( ! empty( $_POST['show_quick_mail_users'] ) && 1 === strlen( $_POST['show_quick_mail_users'] ) ) {
@@ -1806,6 +1953,25 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			} // end if wpauto changed
 
 			if ( ! empty( $_POST['showing_quick_mail_admin'] ) ) {
+				$previous = '';
+				if ( is_multisite() ) {
+					$previous = get_blog_option( $blog, 'quick_mail_banned', '' );
+				} else {
+					$previous = get_option( 'quick_mail_banned', '' );
+				} // end if multisite
+
+				$got     = sanitize_text_field( $_POST['quick_mail_banned'] );
+				$current = self::validate_banned_domains( $got );
+				if ( $current !== $previous ) {
+					if ( is_multisite() ) {
+						update_blog_option( $blog, 'quick_mail_banned', $current );
+					} else {
+						update_option( 'quick_mail_banned', $current );
+					} // end if multisite
+
+					$updated = true;
+				} // end if value changed
+
 				$previous = '';
 				if ( is_multisite() ) {
 					$previous = get_blog_option( $blog, 'hide_quick_mail_admin', 'N' );
@@ -1968,6 +2134,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 		$author_option   = '';
 		$verify_option   = '';
 		$sendgrid_option = '';
+		$banned_option   = '';
 		if ( is_multisite() ) {
 			$admin_option        = get_blog_option( $blog, 'hide_quick_mail_admin', 'N' );
 			$editor_option       = get_blog_option( $blog, 'editors_quick_mail_privilege', 'N' );
@@ -1975,6 +2142,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			$cannot_reply_option = get_blog_option( $blog, 'quick_mail_cannot_reply', 'N' );
 			$verify_option       = get_blog_option( $blog, 'verify_quick_mail_addresses', 'N' );
 			$sendgrid_option     = get_blog_option( $blog, 'replace_quick_mail_sender', 'N' );
+			$banned_option       = get_blog_option( $blog, 'quick_mail_banned', '' );
 		} else {
 			$admin_option        = get_option( 'hide_quick_mail_admin', 'N' );
 			$editor_option       = get_option( 'editors_quick_mail_privilege', 'N' );
@@ -1982,6 +2150,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			$cannot_reply_option = get_option( 'quick_mail_cannot_reply', 'N' );
 			$verify_option       = get_option( 'verify_quick_mail_addresses', 'N' );
 			$sendgrid_option     = get_option( 'replace_quick_mail_sender', 'N' );
+			$banned_option       = get_option( 'quick_mail_banned', '' );
 		} // end if multisite
 
 		$check_admin        = ( 'Y' === $admin_option ) ? 'checked="checked"' : '';
@@ -2009,15 +2178,15 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 			$faq            = __( 'Please read', 'quick-mail' ) . ' ' . $faq_link . '.';
 			$verify_problem = '<br><br><span role="alert">' . $cannot . $nf . '<br>' . $faq . '</span>';
 		} // end if idn_to_ascii is available
-		$verify_note    = $verify_message . $verify_problem;
-		$wam            = sprintf(
+		$verify_note   = $verify_message . $verify_problem;
+		$wam           = sprintf(
 			'%s %s %s',
 			__( 'Apply', 'quick-mail' ),
 			'<a target="_blank" href="https://codex.wordpress.org/Function_Reference/wpautop">wpautop</a>',
 			__( 'to HTML messages.', 'quick-mail' )
 		);
-		$space          = '';
-		$comment_label  = '';
+		$space         = '';
+		$comment_label = '';
 		if ( QuickMailUtil::user_has_comments( $you->ID ) ) {
 			if ( ! $this->multiple_matching_users( 'A', $blog ) ) {
 				$space         = ' style="margin-top:2em;" ';
@@ -2110,6 +2279,10 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 				} // end if not admin
 			} // end if
 		} // end if got replacement API
+		$banned = $this->get_banned_count();
+		$css    = ( $banned > 1 ) ? 'color: #11169b; font-weight: bold;' : 'display: none;';
+		$bhtml  = "<span style='{$css}' id='banned'>{$banned}</span>";
+
 		if ( is_multisite() ) {
 			$verify = get_blog_option( get_current_blog_id(), 'verify_quick_mail_addresses', 'N' );
 		} else {
@@ -2118,7 +2291,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 		if ( 'Y' === $verify && 'X' !== $this->qm_get_display_option( $blog ) ) {
 			$verify = 'N';
 		} // end if verify disabled, because not displaying user list.
-		// Setup uses val_option since 3.5.6
+		// Setup uses val_option since 3.5.6.
 		echo "<script>val_option = '{$verify}';</script>";
 		?>
 <h1 id="quick-mail-title" class="quick-mail-title"><?php esc_html_e( 'Quick Mail Options', 'quick-mail' ); ?></h1>
@@ -2177,6 +2350,12 @@ name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?
 <p><input tabindex="80" aria-describedby="qm_verify_desc" aria-labelledby="qm_verify_label" class="qm-input" name="verify_quick_mail_addresses" id="verify_quick_mail_addresses" type="checkbox" <?php echo $check_verify; ?>>
 <label id="qm_verify_label" class="qm-label"><?php esc_html_e( 'Verify recipient email domains', 'quick-mail' ); ?>.</label>
 <span id="qm_verify_desc" class="qm-label"><?php echo $verify_note; ?></span></p>
+			<?php if ( 'ltr' === $direction ) : ?>
+<p><label id="qm_banned_label" for="quick_mail_banned" class="qm-label" style="font-weight:bold"><?php echo $bhtml; ?> <?php esc_html_e( 'Banned Domains', 'quick-mail' ); ?></label></p>
+			<?php else : ?>
+<p><label id="qm_banned_label" for="quick_mail_banned" class="qm-label" style="font-weight:bold"><?php esc_html_e( 'Banned Domains', 'quick-mail' ); ?> <?php echo $bhtml; ?></label></p>
+			<?php endif; ?>
+<p><textarea name="quick_mail_banned" id="quick_mail_banned" cols="60" rows="3" tabindex="82" aria-describedby="qm_banned_label"><?php echo $banned_option; ?></textarea></p>
 </fieldset>
 <?php endif; ?>
 		<?php
@@ -2562,7 +2741,7 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			}
 		} // end if multisite
 
-			$content             = '';
+			$content = '';
 		if ( ( ! $you_are_admin && ! $is_editor_user ) || ( 'N' === $editors && ! $you_are_admin ) ) {
 			if ( is_multisite() ) {
 				$content .= '<p>' . $note . __( 'You do not have sufficient privileges to access user lists on this site.' ) . '.</p>';
@@ -2639,6 +2818,10 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			$content    .= "<dd>{$z} {$dnserr_link}</dd>";
 			$content    .= '<dd class="wp-ui-text-highlight">' . __( 'Addresses selected from user list are validated by WordPress, when user is added or updated.', 'quick-mail' ) . '</dd>';
 			$content    .= '<dd class="wp-ui-text-highlight">' . __( 'Turn verification off if Quick Mail rejects a valid address.', 'quick-mail' ) . '</dd>';
+			$content    .= '<dt><strong>' . __( 'Banned Domains', 'quick-mail' ) . '</strong></dt>';
+			$content    .= '<dd>' . __( 'Prevent users from sending email to selected domains.', 'quick-mail' ) . '</dd>';
+			$content    .= '<dd>' . __( 'Enter domains. Use a space to separate each domain.', 'quick-mail' ) . '</dd>';
+			$content    .= '<dd>' . __( 'Quick Mail verifies domain before adding it.', 'quick-mail' ) . '</dd>';
 			$content    .= '</dl>';
 			$screen->add_help_tab(
 				array(
@@ -2652,7 +2835,7 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			);
 		} // end if
 
-			$slink = '<a href="https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues" target="_blank">' . __( 'Github Issues', 'quick-mail' ) . '</a>';
+			$slink   = '<a href="https://github.com/mitchelldmiller/quick-mail-wp-plugin/issues" target="_blank">' . __( 'Github Issues', 'quick-mail' ) . '</a>';
 			$use_str = __( 'Please use', 'quick-mail' );
 			$to_ask  = __( 'to ask questions and report problems', 'quick-mail' );
 			$rc5     = "<dt class='qm-help'>{$use_str} {$slink} {$to_ask}.</dt>";
@@ -2911,8 +3094,8 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 	 * @since 2.0.0
 	 */
 	public function add_qm_help() {
-		$blog       = is_multisite() ? get_current_blog_id() : 0;
-		$screen     = get_current_screen();
+		$blog           = is_multisite() ? get_current_blog_id() : 0;
+		$screen         = get_current_screen();
 		$blog           = is_multisite() ? get_current_blog_id() : 0;
 		$display_option = $this->qm_get_display_option( $blog );
 		$cc_title       = __( 'Adding CC', 'quick-mail' );

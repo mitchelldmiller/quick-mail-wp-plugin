@@ -4,7 +4,7 @@ Send text or html email with attachments and shortcodes from WP Dashboard or com
 
 * Requires: [WordPress 4.6](https://wordpress.org/support/wordpress-version/version-4-6/)
 * Tested with: [WordPress 5.6](https://wordpress.org/support/wordpress-version/version-5-6/)
-* Stable version: [4.0.4](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases/latest)
+* Stable version: [4.0.5](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases/latest)
 
 Description
 -----------
@@ -15,7 +15,7 @@ Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds 
 
 Send a Web page, file, or message from the command line with quick-mail command for [WP-CLI](https://wp-cli.org/).
 
-** Does not use the Gutenberg editor. **
+** Does not use the Gutenberg editor or REST API. **
 
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
@@ -51,12 +51,20 @@ __Features__
 
 * Select recipient from users or commenters.
 
+* [Banned domains](https://wheredidmybraingo.com/quick-mail-4-0-5-blocks-domains/): administrators can prevent users from sending mail to arbitrary domains.
+
 ### Installation ###
 
+#### Legacy ####
 1. Download the [latest release](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases/latest) and unpack in your `/wp-content/plugins` directory.
 2. Activate the plugin through the WordPress _Plugins_ menu.
 
-#### Configuration ####
+#### WP-CLI ####
+* How to install and activate the latest version of Quick Mail with [WP-CLI](https://wp-cli.org/) :
+
+	`wp plugin install https://github.com/mitchelldmiller/quick-mail-wp-plugin/archive/master.zip --activate`
+
+### Configuration ###
 1. Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
 2. Optional: Install [WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
 3. Optional: Install [Mailgun](https://wordpress.org/extend/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
@@ -163,7 +171,7 @@ __Address Validation__
 
 
   An MX record tells senders how to send mail to the domain.
-  
+
   *This is not always accurate. Turn verification off if Quick Mail rejects a valid address.*
 
 __Mail Errors__
@@ -176,10 +184,14 @@ __Mail Errors__
 
 	`wp_mail` rejected an address. Seen when Quick Mail verification is off.
 
+* "Invalid or blocked mail address."
+
+	You tried sending mail to a Banned Domain.
+
 * Error: Invalid Role (WP-CLI error)
 
 	You tried sending mail to an unknown WordPress role. Use `wp list roles` to get role names.
-   
+
 __Incompatible Plugins__
 
 * [Stop Emails](https://wordpress.org/plugins/stop-emails/)
@@ -196,14 +208,14 @@ __Customizing Quick Mail__
 
 `replace_quick_mail_sender`
 
-  Replace sender credentials. Expects an associative array with values for `name` and `email`.
+  Replace sender credentials. Expects associative array with values for `name` and `email`.
 
   See [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender) plugin for examples.
 
 `quick_mail_cli_attachment_message`
 
   Replace default CLI attachment message.
-  
+
 `quick_mail_cli_attachment_subject`
 
   Replace default CLI attachment subject.
@@ -211,9 +223,9 @@ __Customizing Quick Mail__
 `quick_mail_comment_style`
 
   Replace quick mail comment style.
-  
+
 `quick_mail_reply_title`
-  
+
   Replace title for private comment reply on comments list.
 
 `quick_mail_user_capability`
@@ -227,14 +239,14 @@ __Customizing Quick Mail__
 __Additional Information__
 
 * [42 articles about Quick Mail](https://wheredidmybraingo.com/tag/quick-mail/)
-  
+
 __Translators and Programmers__
 
 * A .pot file is included for translators.
 
 __License__
 
-Quick Mail is free for personal or commercial use. Encourage future development with a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY).
+Quick Mail is licensed under the MIT License. Encourage future development with a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY).
 
 __Credits__
 

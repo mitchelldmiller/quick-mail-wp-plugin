@@ -172,20 +172,20 @@ class QuickMailUtil {
 	 * @since 4.0.5
 	 */
 	public static function acceptable_domain( $domain ) {
-		$url        = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['SERVER_NAME']}/wp-admin/admin-ajax.php";
-		$ajax_nonce = wp_create_nonce( 'quick_mail_banned' );
-		$args       = array(
+		$url      = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['SERVER_NAME']}/wp-admin/admin-ajax.php";
+		$hash     = password_hash( $domain, PASSWORD_DEFAULT );
+		$args     = array(
 			'action'   => 'quick_mail_banned',
-			'security' => $ajax_nonce,
+			'security' => $hash,
 			'domain'   => $domain,
 		);
-		$content    = http_build_query( $args );
-		$protocol   = floatval( substr( $_SERVER['SERVER_PROTOCOL'], -3 ) );
-		$h1         = "Content-type: application/x-www-form-urlencoded\r\n";
-		$dlen       = strlen( $content );
-		$h2         = "Content-Length: {$dlen}\r\n";
-		$header     = $h1 . $h2;
-		$options    = array(
+		$content  = http_build_query( $args );
+		$protocol = floatval( substr( $_SERVER['SERVER_PROTOCOL'], -3 ) );
+		$h1       = "Content-type: application/x-www-form-urlencoded\r\n";
+		$dlen     = strlen( $content );
+		$h2       = "Content-Length: {$dlen}\r\n";
+		$header   = $h1 . $h2;
+		$options  = array(
 			'http' =>
 				array(
 					'method'     => 'POST',

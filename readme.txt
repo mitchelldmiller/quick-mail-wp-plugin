@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Requires at least: 4.6
 Tested up to: 5.6
 Requires PHP: 5.3
-Stable tag: 4.0.5
+Stable tag: 4.0.6
 License: MIT
 License URI: https://github.com/mitchelldmiller/quick-mail-wp-plugin/blob/master/LICENSE
 
@@ -242,6 +242,9 @@ If you are using an email delivery service, you can ignore this message.
 
 == Changelog ==
 
+= 4.0.6 =
+* Use cURL to check for an banned domain.
+
 = 4.0.5 =
 * Added option to reject arbitrary domains.
 * New error message: Invalid or blocked mail address.
@@ -259,6 +262,9 @@ If you are using an email delivery service, you can ignore this message.
 Please refer to changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 4.0.6 =
+* Upgrade recommended.
 
 = 4.0.5 =
 * Upgrade recommended.

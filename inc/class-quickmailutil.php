@@ -172,32 +172,23 @@ class QuickMailUtil {
 	 * @since 4.0.5
 	 */
 	public static function acceptable_domain( $domain ) {
-		$url      = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['SERVER_NAME']}/wp-admin/admin-ajax.php";
-		$hash     = password_hash( $domain, PASSWORD_DEFAULT );
-		$args     = array(
+		$url     = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['SERVER_NAME']}/wp-admin/admin-ajax.php";
+		$hash    = password_hash( $domain, PASSWORD_DEFAULT );
+		$args    = array(
 			'action'   => 'quick_mail_banned',
 			'security' => $hash,
 			'domain'   => $domain,
 		);
-		$content  = http_build_query( $args );
-		$protocol = floatval( substr( $_SERVER['SERVER_PROTOCOL'], -3 ) );
-		$h1       = "Content-type: application/x-www-form-urlencoded\r\n";
-		$dlen     = strlen( $content );
-		$h2       = "Content-Length: {$dlen}\r\n";
-		$header   = $h1 . $h2;
-		$options  = array(
-			'http' =>
-				array(
-					'method'     => 'POST',
-					'header'     => $header,
-					'user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0',
-					'protocol'   => $protocol,
-					'content'    => $content,
-				),
-		);
-
-		$stream_context = stream_context_create( $options );
-		$result         = file_get_contents( $url, false, $stream_context );
+		$content = http_build_query( $args );
+		$moz     = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0';
+		$ch      = curl_init();
+		curl_setopt( $ch, CURLOPT_URL, $url );
+		curl_setopt( $ch, CURLOPT_POST, true );
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, $content );
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt( $ch, CURLOPT_USERAGENT, $moz );
+		$result = curl_exec( $ch );
+		curl_close( $ch );
 		if ( false !== $result ) {
 			$domain = $result;
 		}

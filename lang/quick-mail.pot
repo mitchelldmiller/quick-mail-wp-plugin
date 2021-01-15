@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Quick Mail plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Quick Mail 4.0.5\n"
+"Project-Id-Version: Quick Mail 4.0.6\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/quick-mail\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-01-11T21:17:28-05:00\n"
+"POT-Creation-Date: 2021-01-15T17:52:10-05:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: quick-mail\n"
@@ -192,8 +192,8 @@ msgid "Unknown Mail Service"
 msgstr ""
 
 #: inc/class-quickmailsender.php:93
-#: inc/class-quickmailutil.php:309
-#: inc/class-quickmailutil.php:334
+#: inc/class-quickmailutil.php:300
+#: inc/class-quickmailutil.php:325
 #: quick-mail.php:561
 #: quick-mail.php:1278
 #: quick-mail.php:1431
@@ -201,8 +201,8 @@ msgstr ""
 msgid "Mail Error"
 msgstr ""
 
-#: inc/class-quickmailutil.php:310
-#: inc/class-quickmailutil.php:335
+#: inc/class-quickmailutil.php:301
+#: inc/class-quickmailutil.php:326
 #: quick-mail.php:1418
 msgid "Error: Incomplete User Profile"
 msgstr ""

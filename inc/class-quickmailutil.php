@@ -181,18 +181,23 @@ class QuickMailUtil {
 		);
 		$content = http_build_query( $args );
 		$moz     = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0';
-		$ch      = curl_init();
-		curl_setopt( $ch, CURLOPT_URL, $url );
-		curl_setopt( $ch, CURLOPT_POST, true );
-		curl_setopt( $ch, CURLOPT_POSTFIELDS, $content );
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-		curl_setopt( $ch, CURLOPT_USERAGENT, $moz );
-		$result = curl_exec( $ch );
-		curl_close( $ch );
-		if ( false !== $result ) {
-			$domain = $result;
-		}
-		return $domain;
+		$result  = '';
+		try {
+			$ch = curl_init();
+			curl_setopt( $ch, CURLOPT_URL, $url );
+			curl_setopt( $ch, CURLOPT_POST, true );
+			curl_setopt( $ch, CURLOPT_POSTFIELDS, $content );
+			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+			curl_setopt( $ch, CURLOPT_USERAGENT, $moz );
+			$result = curl_exec( $ch );
+			$code   = curl_getinfo( $ch, CURLINFO_RESPONSE_CODE );
+			curl_close( $ch );
+			if ( 200 !== $code || ! is_string( $result ) ) {
+				$result = $domain;
+			} // Allow until user submits form.
+		} catch ( \Exception $e ) {
+			$result = $domain; }
+			return $result;
 	}
 
 	/**

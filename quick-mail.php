@@ -144,37 +144,48 @@ class QuickMail {
 	} // end get_instance
 
 	/**
-	 * Create object. Add actions.
+	 * Initialize class for WordPress.
 	 *
-	 * @since 1.2.0
+	 * @return QuickMail
+	 * @since 4.0.6
 	 */
-	public function __construct() {
+	public static function init() {
 		if ( ! function_exists( 'register_activation_hook' ) ) {
 			exit;
 		}
 
-		$this->directory = plugin_dir_path( __FILE__ );
-		$this->charset   = is_multisite() ? get_blog_option( get_current_blog_id(), 'blog_charset', 'UTF-8' ) : get_option( 'blog_charset', 'UTF-8' );
-		register_activation_hook( __FILE__, array( $this, 'check_wp_version' ) );
-		add_action( 'activated_plugin', array( $this, 'install_quick_mail' ), 10, 2 );
-		add_action( 'admin_footer', array( $this, 'qm_get_comment_script' ) );
-		add_action( 'admin_footer', array( $this, 'qm_get_title_script' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'add_email_scripts' ), 10, 0 );
-		add_action( 'admin_menu', array( $this, 'init_quick_mail_menu' ) );
-		add_action( 'deactivated_plugin', array( $this, 'deactivate_quick_mail_plugin' ), 10, 2 );
-		add_action( 'load-tools_page_quick_mail_form', array( $this, 'add_qm_help' ), 20, 0 );
-		add_action( 'plugins_loaded', array( $this, 'init_quick_mail_translation' ) );
-		add_action( 'plugins_loaded', array( $this, 'show_qm_pointer' ), 10, 0 );
-		add_action( 'wp_ajax_qm_get_comment', array( $this, 'qm_get_comment' ) );
-		add_action( 'wp_ajax_qm_get_title', array( $this, 'qm_get_title' ) );
-		add_action( 'wp_ajax_nopriv_quick_mail_banned', array( $this, 'quick_mail_banned' ) );
-		add_action( 'wp_ajax_quick_mail_banned', array( $this, 'quick_mail_banned' ) );
+		$qm            = new self();
+		$qm->directory = plugin_dir_path( __FILE__ );
+		$qm->charset   = is_multisite() ? get_blog_option( get_current_blog_id(), 'blog_charset', 'UTF-8' ) : get_option( 'blog_charset', 'UTF-8' );
+		register_activation_hook( __FILE__, array( $qm, 'check_wp_version' ) );
+		add_action( 'activated_plugin', array( $qm, 'install_quick_mail' ), 10, 2 );
+		add_action( 'admin_footer', array( $qm, 'qm_get_comment_script' ) );
+		add_action( 'admin_footer', array( $qm, 'qm_get_title_script' ) );
+		add_action( 'admin_enqueue_scripts', array( $qm, 'add_email_scripts' ), 10, 0 );
+		add_action( 'admin_menu', array( $qm, 'init_quick_mail_menu' ) );
+		add_action( 'deactivated_plugin', array( $qm, 'deactivate_quick_mail_plugin' ), 10, 2 );
+		add_action( 'load-tools_page_quick_mail_form', array( $qm, 'add_qm_help' ), 20, 0 );
+		add_action( 'plugins_loaded', array( $qm, 'init_quick_mail_translation' ) );
+		add_action( 'plugins_loaded', array( $qm, 'show_qm_pointer' ), 10, 0 );
+		add_action( 'wp_ajax_qm_get_comment', array( $qm, 'qm_get_comment' ) );
+		add_action( 'wp_ajax_qm_get_title', array( $qm, 'qm_get_title' ) );
+		add_action( 'wp_ajax_nopriv_quick_mail_banned', array( $qm, 'quick_mail_banned' ) );
+		add_action( 'wp_ajax_quick_mail_banned', array( $qm, 'quick_mail_banned' ) );
 
-		add_filter( 'comment_row_actions', array( $this, 'qm_filter_comment_link' ), 10, 2 );
-		add_filter( 'comment_notification_text', array( $this, 'qm_comment_reply' ), 10, 2 );
-		add_filter( 'plugin_action_links', array( $this, 'qm_action_links' ), 10, 2 );
-		add_filter( 'plugin_row_meta', array( $this, 'qm_plugin_links' ), 10, 2 );
-		add_filter( 'quick_mail_setup_capability', array( $this, 'let_editor_set_quick_mail_option' ) );
+		add_filter( 'comment_row_actions', array( $qm, 'qm_filter_comment_link' ), 10, 2 );
+		add_filter( 'comment_notification_text', array( $qm, 'qm_comment_reply' ), 10, 2 );
+		add_filter( 'plugin_action_links', array( $qm, 'qm_action_links' ), 10, 2 );
+		add_filter( 'plugin_row_meta', array( $qm, 'qm_plugin_links' ), 10, 2 );
+		add_filter( 'quick_mail_setup_capability', array( $qm, 'let_editor_set_quick_mail_option' ) );
+		return $qm;
+	}
+
+	/**
+	 * Not used since 4.0.6.
+	 *
+	 * @since 1.2.0
+	 */
+	public function __construct() {
 	} // end constructor
 
 	/**
@@ -2606,10 +2617,10 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			return $text;
 		} // end if comments disabled by administrator.
 
-		$qm         = admin_url( "tools.php?page=quick_mail_form&comment_id={$id}\r\n" );
+		$qmc        = admin_url( "tools.php?page=quick_mail_form&comment_id={$id}\r\n" );
 		$title      = apply_filters( 'quick_mail_reply_title', __( 'Private Reply', 'quick-mail' ) ); // Was Reply with Quick Mail.
-		$left_link  = "{$title}: {$qm}";
-		$right_link = "{$qm} : {$title}";
+		$left_link  = "{$title}: {$qmc}";
+		$right_link = "{$qmc} : {$title}";
 		$text      .= is_rtl() ? $right_link : $left_link;
 		return $text;
 	} // end qm_comment_reply.
@@ -3283,4 +3294,4 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 	} // end user_has_replaced_sender
 
 } // end class
-QuickMail::get_instance();
+QuickMail::init();

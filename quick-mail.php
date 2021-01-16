@@ -319,12 +319,12 @@ class QuickMail {
 
 			if ( function_exists( 'idn_to_ascii' ) ) {
 				$intl = defined( 'INTL_IDNA_VARIANT_UTS46' ) && defined( 'IDNA_NONTRANSITIONAL_TO_ASCII' ) ? idn_to_ascii( $one[1], IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46 ) : idn_to_ascii( $one );
-				if ( ! empty( $intl ) && 4 < strlen( $intl ) && 'xn--' == substr( $intl, 0, 4 ) ) {
+				if ( ! empty( $intl ) && 4 < strlen( $intl ) && 'xn--' === substr( $intl, 0, 4 ) ) {
 					$one = $intl;
 				} // end if we have punycode address.
 			} // end if we have idn_to_ascii
 
-			if ( in_array( $one, $previous, true ) || checkdnsrr( $one, 'MX' ) ) {
+			if ( ( ! strstr( $processed, $one ) ) && ( in_array( $one, $previous, true ) || checkdnsrr( $one, 'MX' ) ) ) {
 				$processed .= "{$one} ";
 			}
 		}

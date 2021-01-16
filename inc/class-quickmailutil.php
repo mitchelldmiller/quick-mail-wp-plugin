@@ -237,7 +237,7 @@ class QuickMailUtil {
 
 		if ( function_exists( 'idn_to_ascii' ) ) {
 			$intl = defined( 'INTL_IDNA_VARIANT_UTS46' ) && defined( 'IDNA_NONTRANSITIONAL_TO_ASCII' ) ? idn_to_ascii( $a_split[1], IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46 ) : idn_to_ascii( $a_split[1] );
-			if ( ! empty( $intl ) && 4 < strlen( $intl ) && 'xn--' == substr( $intl, 0, 4 ) ) {
+			if ( ! empty( $intl ) && 4 < strlen( $intl ) && 'xn--' === substr( $intl, 0, 4 ) ) {
 				$a_split[1] = $intl;
 			} // end if we have punycode address. xn--mrens-bsa.club = mérens.club.
 		} // end if we have idn_to_ascii

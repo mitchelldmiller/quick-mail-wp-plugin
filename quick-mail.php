@@ -572,11 +572,16 @@ class QuickMail {
 	 */
 	public function check_wp_version() {
 		global $wp_version;
-		if ( version_compare( $wp_version, '5.0', 'lt' ) ) {
+		if ( version_compare( $wp_version, '4.6', 'lt' ) ) {
 			deactivate_plugins( basename( __FILE__ ) );
-			echo sprintf( "<div class='notice notice-error' role='alert'>%s</div>", esc_html( __( 'Quick Mail requires WordPress 5.0 or greater.', 'quick-mail' ) ) );
+			echo sprintf( "<div class='notice notice-error' role='alert'>%s</div>", esc_html( __( 'Quick Mail requires WordPress 4.6 or greater.', 'quick-mail' ) ) );
 			exit;
 		} // end if
+		if ( ! extension_loaded( 'curl' ) ) {
+			deactivate_plugins( basename( __FILE__ ) );
+			echo sprintf( "<div class='notice notice-error' role='alert'>%s</div>", esc_html( __( 'Quick Mail requires cURL extension.', 'quick-mail' ) ) );
+			exit;
+		}
 	} // end check_wp_version
 
 	/**

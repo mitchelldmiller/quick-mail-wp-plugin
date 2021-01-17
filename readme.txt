@@ -243,7 +243,9 @@ If you are using an email delivery service, you can ignore this message.
 == Changelog ==
 
 = 4.0.6 =
-* Use cURL to check for an banned domain.
+* Use cURL to check for a banned domain.
+* Fixed bug converting international domain name to Punycode.
+* Updated design to improve testing.
 
 = 4.0.5 =
 * Added option to reject arbitrary domains.

@@ -172,36 +172,32 @@ class QuickMailUtil {
 	 * @since 4.0.5
 	 */
 	public static function acceptable_domain( $domain ) {
-		$url      = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['SERVER_NAME']}/wp-admin/admin-ajax.php";
-		$hash     = password_hash( $domain, PASSWORD_DEFAULT );
-		$args     = array(
+		$url     = "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['SERVER_NAME']}/wp-admin/admin-ajax.php";
+		$hash    = password_hash( $domain, PASSWORD_DEFAULT );
+		$args    = array(
 			'action'   => 'quick_mail_banned',
 			'security' => $hash,
 			'domain'   => $domain,
 		);
-		$content  = http_build_query( $args );
-		$protocol = floatval( substr( $_SERVER['SERVER_PROTOCOL'], -3 ) );
-		$h1       = "Content-type: application/x-www-form-urlencoded\r\n";
-		$dlen     = strlen( $content );
-		$h2       = "Content-Length: {$dlen}\r\n";
-		$header   = $h1 . $h2;
-		$options  = array(
-			'http' =>
-				array(
-					'method'     => 'POST',
-					'header'     => $header,
-					'user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0',
-					'protocol'   => $protocol,
-					'content'    => $content,
-				),
-		);
-
-		$stream_context = stream_context_create( $options );
-		$result         = file_get_contents( $url, false, $stream_context );
-		if ( false !== $result ) {
-			$domain = $result;
-		}
-		return $domain;
+		$content = http_build_query( $args );
+		$moz     = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0';
+		$result  = '';
+		try {
+			$ch = curl_init();
+			curl_setopt( $ch, CURLOPT_URL, $url );
+			curl_setopt( $ch, CURLOPT_POST, true );
+			curl_setopt( $ch, CURLOPT_POSTFIELDS, $content );
+			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+			curl_setopt( $ch, CURLOPT_USERAGENT, $moz );
+			$result = curl_exec( $ch );
+			$code   = curl_getinfo( $ch, CURLINFO_RESPONSE_CODE );
+			curl_close( $ch );
+			if ( 200 !== $code || ! is_string( $result ) ) {
+				$result = $domain;
+			} // Allow until user submits form.
+		} catch ( \Exception $e ) {
+			$result = $domain; }
+			return $result;
 	}
 
 	/**
@@ -246,7 +242,7 @@ class QuickMailUtil {
 
 		if ( function_exists( 'idn_to_ascii' ) ) {
 			$intl = defined( 'INTL_IDNA_VARIANT_UTS46' ) && defined( 'IDNA_NONTRANSITIONAL_TO_ASCII' ) ? idn_to_ascii( $a_split[1], IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46 ) : idn_to_ascii( $a_split[1] );
-			if ( ! empty( $intl ) ) {
+			if ( ! empty( $intl ) && 4 < strlen( $intl ) && 'xn--' === substr( $intl, 0, 4 ) ) {
 				$a_split[1] = $intl;
 			} // end if we have punycode address. xn--mrens-bsa.club = mérens.club.
 		} // end if we have idn_to_ascii

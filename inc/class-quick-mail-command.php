@@ -1,6 +1,6 @@
 <?php
 /**
- * Welcome to class-quickmailutil.php.
+ * Welcome to Quick_Mail_Command.
  *
  * @package QuickMail
  */
@@ -8,7 +8,7 @@
 /**
  * Mail a Web page or file with quick-mail and WP-CLI.
  */
-class Quick_Mail_Command extends WP_CLI_Command {
+class Quick_Mail_Command {
 
 	/**
 	 * Sender email address.
@@ -60,6 +60,18 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 * @var array
 	 */
 	public static $valid_mime = array( 'text/plain', 'text/html' ); // 'text/x-php'
+
+	/**
+	 * Common args for GET requests.
+	 *
+	 * @var array
+	 * @since 4.1.0
+	 */
+	public static $get_args = array(
+		'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0',
+		'blocking'   => true,
+		'timeout'    => 30,
+	);
 
 	/**
 	 * Mail the contents of a URL or file.
@@ -614,9 +626,8 @@ class Quick_Mail_Command extends WP_CLI_Command {
 	 * @return mixed WP_Error or array with site data.
 	 */
 	private function get_wp_site_data( $site ) {
-		$chrome = 'Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3';
-		$args   = array( 'user-agent' => $chrome );
-		$data   = wp_remote_get( $site, $args );
+		$args = self::$get_args;
+		$data = wp_remote_get( $site, $args );
 		if ( is_wp_error( $data ) ) {
 			return $data;
 		} // end if WP Error

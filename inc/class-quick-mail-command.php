@@ -1,8 +1,12 @@
 <?php
 /**
- * Mail a Web page or file with quick-mail and WP-CLI.
+ * Welcome to class-quickmailutil.php.
  *
  * @package QuickMail
+ */
+
+/**
+ * Mail a Web page or file with quick-mail and WP-CLI.
  */
 class Quick_Mail_Command extends WP_CLI_Command {
 
@@ -226,7 +230,7 @@ class Quick_Mail_Command extends WP_CLI_Command {
 		$sending_file = false;
 		$file         = '';
 		if ( 'http' === substr( $args[2], 0, 4 ) ) {
-			$url = str_replace( '&#038;', '&', esc_url( $args[2] ) );
+			$url = str_replace( '&#038;', '&', esc_url_raw( $args[2] ) );
 			if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
 				$temp_msg = __( 'Invalid URL', 'quick-mail' );
 				$hurl     = htmlspecialchars( $url, ENT_QUOTES, self::$charset, false );

@@ -132,7 +132,6 @@ class Quick_Mail_Command {
 	 * @synopsis <from> <to> <url|filename> [<subject>] [<message_attachment_file>]
 	 */
 	public function __invoke( $args, $assoc_args ) {
-		require_once plugin_dir_path( __FILE__ ) . 'class-quickmailutil.php';
 		self::$charset = get_bloginfo( 'charset' );
 		$temp_msg      = '';
 		$active        = '';

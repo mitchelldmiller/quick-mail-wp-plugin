@@ -255,8 +255,8 @@ class Quick_Mail_Command {
 			$sending_file = true;
 		} // end if URL.
 
-		$zq = $sending_file ? 'SENDING FILE' : 'not sending file';
-		WP_CLI::warning( $zq );
+
+
 		$subject = isset( $args[3] ) ? html_entity_decode( $args[3], ENT_QUOTES, self::$charset ) : '';
 
 		// Get sender info.

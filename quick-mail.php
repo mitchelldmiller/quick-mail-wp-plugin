@@ -59,7 +59,7 @@ class QuickMail {
 	 * @var string version
 	 * @since 3.5.5 10-3-19
 	 */
-	const VERSION = '4.0.6';
+	const VERSION = '4.1.0';
 
 	/**
 	 * Current directory for Quick Mail helper plugins.

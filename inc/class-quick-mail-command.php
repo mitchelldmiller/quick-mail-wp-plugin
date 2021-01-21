@@ -61,17 +61,6 @@ class Quick_Mail_Command {
 	 */
 	public static $valid_mime = array( 'text/plain', 'text/html' ); // 'text/x-php'
 
-	/**
-	 * Common args for GET requests.
-	 *
-	 * @var array
-	 * @since 4.1.0
-	 */
-	public static $get_args = array(
-		'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0',
-		'blocking'   => true,
-		'timeout'    => 30,
-	);
 
 	/**
 	 * Mail the contents of a URL or file.
@@ -135,6 +124,8 @@ class Quick_Mail_Command {
 		self::$charset = get_bloginfo( 'charset' );
 		$temp_msg      = '';
 		$active        = '';
+		$sending_file  = false;
+		$message       = '';
 		foreach ( self::$services as $k ) {
 			$s                    = strtolower( $k );
 			$func                 = array( 'QuickMailUtil', "got_{$s}_info" );
@@ -235,11 +226,10 @@ class Quick_Mail_Command {
 			} // end if invalid recipient.
 		} // end if recipient is a role.
 
-		$url          = '';
-		$subject      = '';
-		$domain       = '';
-		$sending_file = false;
-		$file         = '';
+		$url     = '';
+		$subject = '';
+		$domain  = '';
+		$file    = '';
 		if ( 'http' === substr( $args[2], 0, 4 ) ) {
 			$url = str_replace( '&#038;', '&', esc_url_raw( $args[2] ) );
 			if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
@@ -265,6 +255,8 @@ class Quick_Mail_Command {
 			$sending_file = true;
 		} // end if URL.
 
+		$zq = $sending_file ? 'SENDING FILE' : 'not sending file';
+		WP_CLI::warning( $zq );
 		$subject = isset( $args[3] ) ? html_entity_decode( $args[3], ENT_QUOTES, self::$charset ) : '';
 
 		// Get sender info.
@@ -305,9 +297,8 @@ class Quick_Mail_Command {
 			$this->name = "{$user->user_firstname} {$user->user_lastname}";
 		} // end if missing first or last name
 
-		$message   = '';
-		$mime_type = '';
-
+		$message     = '';
+		$mime_type   = '';
 		$attachments = array();
 		if ( ! $sending_file ) {
 			$data = $this->get_wp_site_data( $url );
@@ -326,11 +317,14 @@ class Quick_Mail_Command {
 			$fdata = explode( ';', $finfo->buffer( $message ) );
 			$fmime = is_array( $fdata ) ? $fdata[0] : '';
 			if ( ! in_array( $fmime, self::$valid_mime, true ) ) {
-				$ext   = str_replace( '+', '_', explode( '/', $fmime ) ); // No + allowed in file name.
-				$fext  = ( ! is_array( $ext ) || empty( $ext[1] ) ) ? __( 'unknown', 'quick-mail' ) : $ext[1];
-				$temp  = QuickMailUtil::qm_get_temp_path();
-				$fname = $temp . 'qm' . strval( time() ) . ".{$fext}"; // Temp file name.
-				if ( empty( file_put_contents( $fname, $message ) ) ) {
+				$ext    = str_replace( '+', '_', explode( '/', $fmime ) ); // No + allowed in file name.
+				$fext   = ( ! is_array( $ext ) || empty( $ext[1] ) ) ? __( 'unknown', 'quick-mail' ) : $ext[1];
+				$temp   = QuickMailUtil::qm_get_temp_path();
+				$fname  = $temp . 'qm' . strval( time() ) . ".{$fext}"; // Temp file name.
+				$handle = fopen( $fname, 'w' );
+				$data   = fwrite( $handle, $message );
+				fclose( $handle );
+				if ( $data === false || $data != strlen( $message ) ) {
 					$temp_msg = __( 'Error saving content', 'quick-mail' ) . ' : ' . $fmime;
 					WP_CLI::error( $temp_msg );
 				} // end if cannot save temp file
@@ -351,7 +345,6 @@ class Quick_Mail_Command {
 		} // end if getting Web page
 
 		if ( $sending_file ) {
-			$mime_type = mime_content_type( $url );
 			// Note: only checking for replaced attachment title, if sending file.
 			if ( ! in_array( $mime_type, self::$valid_mime, true ) ) {
 				$attachments = array( $url );
@@ -370,7 +363,23 @@ class Quick_Mail_Command {
 					$message = apply_filters( 'quick_mail_cli_attachment_message', $amsg );
 				} // end if got separate attachment for message
 			} else {
-				$message            = file_get_contents( $url );
+				if ( $sending_file ) {
+					$handle  = fopen( $url, 'r' );
+					$message = fread( $handle, filesize( $url ) );
+					fclose( $handle );
+				} else {
+					$data = $this->get_wp_site_data( $url );
+					if ( is_wp_error( $data ) ) {
+						$temp_msg = preg_replace( '/curl error .+: /i', '', WP_CLI::error_to_string( $data ) );
+						WP_CLI::error( $temp_msg );
+					} // end if error
+				}
+				$message = wp_remote_retrieve_body( $data );
+				if ( empty( $message ) ) {
+					$temp_msg = __( 'No content', 'quick-mail' );
+					WP_CLI::error( $temp_msg );
+				} // end if no content
+
 				$this->content_type = ( 'text/html' === $mime_type ) ? $mime_type : 'text/plain';
 			} // end if not text file
 
@@ -499,7 +508,9 @@ class Quick_Mail_Command {
 	 */
 	public function valid_attachment_message( $filename ) {
 		if ( file_exists( $filename ) && ! empty( filesize( $filename ) ) ) {
-			$data  = file_get_contents( $filename );
+			$handle = fopen( $filename, 'r' );
+			$data   = fread( $handle, filesize( $filename ) );
+			fclose( $handle );
 			$finfo = new finfo( FILEINFO_MIME );
 			$fdata = explode( ';', $finfo->buffer( $data ) );
 			$fmime = is_array( $fdata ) ? $fdata[0] : '';
@@ -524,7 +535,9 @@ class Quick_Mail_Command {
 	public function quick_mail_cli_attachment_message( $orig_msg ) {
 		$message = __( 'You have an attachment.', 'quick-mail' );
 		if ( file_exists( $orig_msg ) ) {
-			$data  = file_get_contents( $orig_msg );
+			$handle = fopen( $orig_msg, 'r' );
+			$data   = fread( $handle, filesize( $orig_msg ) );
+			fclose( $handle );
 			$finfo = new finfo( FILEINFO_MIME );
 			$fdata = explode( ';', $finfo->buffer( $data ) );
 			$fmime = is_array( $fdata ) ? $fdata[0] : '';
@@ -625,7 +638,11 @@ class Quick_Mail_Command {
 	 * @return mixed WP_Error or array with site data.
 	 */
 	private function get_wp_site_data( $site ) {
-		$args = self::$get_args;
+		$args = array(
+			'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0',
+			'blocking'   => true,
+			'timeout'    => 30,
+		);
 		$data = wp_remote_get( $site, $args );
 		if ( is_wp_error( $data ) ) {
 			return $data;

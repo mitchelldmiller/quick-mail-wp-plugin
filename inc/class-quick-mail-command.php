@@ -255,8 +255,6 @@ class Quick_Mail_Command {
 			$sending_file = true;
 		} // end if URL.
 
-
-
 		$subject = isset( $args[3] ) ? html_entity_decode( $args[3], ENT_QUOTES, self::$charset ) : '';
 
 		// Get sender info.
@@ -324,7 +322,7 @@ class Quick_Mail_Command {
 				$handle = fopen( $fname, 'w' );
 				$data   = fwrite( $handle, $message );
 				fclose( $handle );
-				if ( $data === false || $data != strlen( $message ) ) {
+				if ( false === $data || strlen( $message ) !== $data ) {
 					$temp_msg = __( 'Error saving content', 'quick-mail' ) . ' : ' . $fmime;
 					WP_CLI::error( $temp_msg );
 				} // end if cannot save temp file

@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-01-20T19:23:40-05:00\n"
+"POT-Creation-Date: 2021-02-02T18:28:54-05:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: quick-mail\n"
@@ -89,7 +89,7 @@ msgid "Invalid URL"
 msgstr ""
 
 #: inc/class-quick-mail-command.php:244
-#: inc/class-quick-mail-command.php:524
+#: inc/class-quick-mail-command.php:522
 msgid "File not found"
 msgstr ""
 
@@ -97,51 +97,51 @@ msgstr ""
 msgid "Empty file"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:278
-#: inc/class-quick-mail-command.php:290
+#: inc/class-quick-mail-command.php:276
+#: inc/class-quick-mail-command.php:288
 msgid "Invalid user"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:312
-#: inc/class-quick-mail-command.php:379
+#: inc/class-quick-mail-command.php:310
+#: inc/class-quick-mail-command.php:377
 msgid "No content"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:321
+#: inc/class-quick-mail-command.php:319
 msgid "unknown"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:328
+#: inc/class-quick-mail-command.php:326
 msgid "Error saving content"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:359
+#: inc/class-quick-mail-command.php:357
 msgid "Replaced attachment message."
 msgstr ""
 
-#: inc/class-quick-mail-command.php:362
+#: inc/class-quick-mail-command.php:360
 msgid "Please see attachment"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:387
+#: inc/class-quick-mail-command.php:385
 msgid "For Your Eyes Only"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:391
+#: inc/class-quick-mail-command.php:389
 msgid "Not sending file. Attachment message ignored."
 msgstr ""
 
-#: inc/class-quick-mail-command.php:424
+#: inc/class-quick-mail-command.php:422
 #: quick-mail.php:1604
 msgid "Cannot send mail to over 100 recipients."
 msgstr ""
 
-#: inc/class-quick-mail-command.php:434
+#: inc/class-quick-mail-command.php:432
 #: quick-mail.php:1736
 msgid "TEST MODE"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:434
+#: inc/class-quick-mail-command.php:432
 #: quick-mail.php:1637
 #: quick-mail.php:1642
 #: quick-mail.php:1644
@@ -150,41 +150,41 @@ msgstr ""
 msgid "To"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:440
+#: inc/class-quick-mail-command.php:438
 #: quick-mail.php:1653
 #: quick-mail.php:1655
 msgid "Error sending mail"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:456
+#: inc/class-quick-mail-command.php:454
 msgid "Sent"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:458
+#: inc/class-quick-mail-command.php:456
 msgid "to"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:462
+#: inc/class-quick-mail-command.php:460
 msgid "Sent email to"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:519
+#: inc/class-quick-mail-command.php:517
 msgid "Invalid message type"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:536
+#: inc/class-quick-mail-command.php:534
 msgid "You have an attachment."
 msgstr ""
 
-#: inc/class-quick-mail-command.php:654
+#: inc/class-quick-mail-command.php:652
 msgid "Not found"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:658
+#: inc/class-quick-mail-command.php:656
 msgid "Cannot connect to"
 msgstr ""
 
-#: inc/class-quick-mail-command.php:659
+#: inc/class-quick-mail-command.php:657
 msgid "Error"
 msgstr ""
 

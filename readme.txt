@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Requires at least: 4.6
 Tested up to: 5.6
 Requires PHP: 5.3
-Stable tag: 4.0.6
+Stable tag: 4.1.0
 License: MIT
 License URI: https://github.com/mitchelldmiller/quick-mail-wp-plugin/blob/master/LICENSE
 
@@ -242,6 +242,9 @@ If you are using an email delivery service, you can ignore this message.
 
 == Changelog ==
 
+= 4.1.0 =
+* Replaced file_get_contents, file_put_contents in WP-CLI command.
+
 = 4.0.6 =
 * Use cURL to check for a banned domain.
 * Fixed bug converting international domain name to Punycode.
@@ -264,6 +267,9 @@ If you are using an email delivery service, you can ignore this message.
 Please refer to changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 4.1.0 =
+* Upgrade recommended.
 
 = 4.0.6 =
 * Upgrade recommended.

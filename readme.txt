@@ -3,9 +3,9 @@ Contributors: brainiac
 Tags: mail, email, comments, wp-cli, mailgun, sparkpost, attachment, sendgrid, accessibility, idn, multisite
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Requires at least: 4.6
-Tested up to: 5.6
+Tested up to: 5.7
 Requires PHP: 5.3
-Stable tag: 4.1.0
+Stable tag: 4.1.1
 License: MIT
 License URI: https://github.com/mitchelldmiller/quick-mail-wp-plugin/blob/master/LICENSE
 
@@ -242,6 +242,10 @@ If you are using an email delivery service, you can ignore this message.
 
 == Changelog ==
 
+= 4.1.1 =
+* Restored directory value for helper plugins.
+* Tested with WordPress 5.7.
+
 = 4.1.0 =
 * Replaced file_get_contents, file_put_contents in WP-CLI command.
 
@@ -267,6 +271,9 @@ If you are using an email delivery service, you can ignore this message.
 Please refer to changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 4.1.1 =
+* Upgrade recommended.
 
 = 4.1.0 =
 * Upgrade recommended.

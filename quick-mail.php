@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: Quick Mail
- * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters.
- * Version: 4.1.1
+ * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters. Includes WP-CLI command.
+ * Version: 4.1.2
  * Author: Mitchell D. Miller
  * Author URI: https://mitchelldmiller.com/
  * Plugin URI: https://mitchelldmiller.github.io/quick-mail-wp-plugin/
@@ -16,7 +16,7 @@
  */
 
 /*
- * Quick Mail WordPress Plugin - Send mail from WordPress using Quick Mail
+ * Quick Mail WordPress Plugin - Send email from WordPress using Quick Mail
  *
  * Copyright (C) 2014-2021 Mitchell D. Miller
  *
@@ -59,7 +59,7 @@ class QuickMail {
 	 * @var string version
 	 * @since 3.5.5 10-3-19
 	 */
-	const VERSION = '4.1.1';
+	const VERSION = '4.1.2';
 
 	/**
 	 * Current directory for Quick Mail helper plugins.
@@ -86,7 +86,7 @@ class QuickMail {
 	 * @deprecated 4.0.5 QuickMail::DIRECTORY
 	 * @see QuickMail::DIRECTORY for replacement.
 	 */
-	public $directory = self::DIRECTORY;
+	public $directory = '';
 
 	/**
 	 * Your character set for multibyte functions.

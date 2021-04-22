@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Requires at least: 4.6
 Tested up to: 5.7
 Requires PHP: 5.3
-Stable tag: 4.1.1
+Stable tag: 4.1.2
 License: MIT
 License URI: https://github.com/mitchelldmiller/quick-mail-wp-plugin/blob/master/LICENSE
 

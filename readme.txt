@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Requires at least: 4.6
 Tested up to: 5.7
 Requires PHP: 5.3
-Stable tag: 4.1.2
+Stable tag: 4.1.3
 License: MIT
 License URI: https://github.com/mitchelldmiller/quick-mail-wp-plugin/blob/master/LICENSE
 
@@ -242,6 +242,9 @@ If you are using an email delivery service, you can ignore this message.
 
 == Changelog ==
 
+= 4.1.3 =
+* Fixed "empty needle" after new installation.
+
 = 4.1.1 =
 * Restored directory value for helper plugins.
 * Tested with WordPress 5.7.
@@ -271,6 +274,9 @@ If you are using an email delivery service, you can ignore this message.
 Please refer to changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 4.1.3 =
+* Upgrade recommended.
 
 = 4.1.1 =
 * Upgrade recommended.

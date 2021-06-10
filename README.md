@@ -4,7 +4,7 @@ Send text or html email with attachments and shortcodes from WP Dashboard or com
 
 * Requires: [WordPress 4.6](https://wordpress.org/support/wordpress-version/version-4-6/)
 * Tested with: [WordPress 5.7](https://wordpress.org/support/wordpress-version/version-5-7/)
-* Stable version: [4.1.2](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases/latest)
+* Stable version: [4.1.3](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases/latest)
 
 Description
 -----------

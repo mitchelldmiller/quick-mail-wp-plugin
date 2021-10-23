@@ -3,7 +3,7 @@ Contributors: brainiac
 Tags: mail, email, comments, wp-cli, mailgun, sparkpost, attachment, sendgrid, accessibility, idn, multisite
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Requires at least: 4.6
-Tested up to: 5.7
+Tested up to: 5.8.1
 Requires PHP: 5.3
 Stable tag: 4.1.3
 License: MIT
@@ -241,6 +241,9 @@ If you are using an email delivery service, you can ignore this message.
 7. User list with roles.
 
 == Changelog ==
+= 4.1.4 =
+* Added Update URI header for WordPress 5.8.
+* Tested with WordPress 5.8.1.
 
 = 4.1.3 =
 * Fixed "empty needle" after new installation.
@@ -274,6 +277,9 @@ If you are using an email delivery service, you can ignore this message.
 Please refer to changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 4.1.4 =
+* Upgrade recommended.
 
 = 4.1.3 =
 * Upgrade recommended.

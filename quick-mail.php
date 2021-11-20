@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Quick Mail
  * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters. Includes WP-CLI command.
- * Version: 4.1.4
+ * Version: 4.1.5
  * Author: Mitchell D. Miller
  * Author URI: https://mitchelldmiller.com/
  * Update URI: https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases/latest
@@ -60,7 +60,7 @@ class QuickMail {
 	 * @var string version
 	 * @since 3.5.5 10-3-19
 	 */
-	const VERSION = '4.1.4';
+	const VERSION = '4.1.5';
 
 	/**
 	 * Current directory for Quick Mail helper plugins.
@@ -311,10 +311,6 @@ class QuickMail {
 		} else {
 			$option = get_option( 'quick_mail_banned', '' );
 		} // end if multisite
-
-		if ( empty( $option) ) {
-		    return $option;
-		}
 
 		$previous  = explode( ' ', $option );
 		$current   = array_unique( explode( ' ', $entry ) );
@@ -1973,7 +1969,7 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 				$updated = true;
 			} // end if wpauto changed
 
-			if ( ! empty( $_POST['showing_quick_mail_admin'] ) ) {
+			if ( $you_are_admin ) {
 				$previous = '';
 				if ( is_multisite() ) {
 					$previous = get_blog_option( $blog, 'quick_mail_banned', '' );
@@ -1981,7 +1977,8 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 					$previous = get_option( 'quick_mail_banned', '' );
 				} // end if multisite
 
-				$got     = sanitize_text_field( $_POST['quick_mail_banned'] );
+				$no_commas = str_replace( ',', ' ', $_POST['quick_mail_banned'] );
+				$got     = sanitize_text_field( $no_commas );
 				$current = self::validate_banned_domains( $got );
 				if ( $current !== $previous ) {
 					if ( is_multisite() ) {
@@ -2356,7 +2353,6 @@ value="<?php esc_html_e( 'Send Mail', 'quick-mail' ); ?>"></p>
 				echo sprintf( '<span id="qm_hide_desc" class="qm-label">%s %s</span>', __( 'User list will not include', 'quick-mail' ), " {$profile}." );
 				?>
 			<?php endif; ?>
-<input name="showing_quick_mail_admin" type="hidden" value="Y"></p>
 <p><input tabindex="50" aria-describedby="quick_mail_cannot_reply_desc" id="quick_mail_cannot_reply"
 aria-labelledby="quick_mail_cannot_reply_label" class="qm-input"
 name="quick_mail_cannot_reply" type="checkbox" <?php echo $check_cannot_reply; ?>>
@@ -2841,7 +2837,7 @@ class="qm-label"><?php esc_html_e( 'Show user roles', 'quick-mail' ); ?></label>
 			$content    .= '<dd class="wp-ui-text-highlight">' . __( 'Turn verification off if Quick Mail rejects a valid address.', 'quick-mail' ) . '</dd>';
 			$content    .= '<dt><strong>' . __( 'Banned Domains', 'quick-mail' ) . '</strong></dt>';
 			$content    .= '<dd>' . __( 'Prevent users from sending email to selected domains.', 'quick-mail' ) . '</dd>';
-			$content    .= '<dd>' . __( 'Enter domains. Use a space to separate each domain.', 'quick-mail' ) . '</dd>';
+			$content    .= '<dd>' . __( 'Enter domains. Use a space or comma to separate each domain.', 'quick-mail' ) . '</dd>';
 			$content    .= '<dd>' . __( 'Quick Mail verifies domain before adding it.', 'quick-mail' ) . '</dd>';
 			$content    .= '</dl>';
 			$screen->add_help_tab(

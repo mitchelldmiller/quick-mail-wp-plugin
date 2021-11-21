@@ -3,9 +3,9 @@ Contributors: brainiac
 Tags: mail, email, comments, wp-cli, mailgun, sparkpost, attachment, sendgrid, accessibility, idn, multisite
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Requires at least: 4.6
-Tested up to: 5.8.1
+Tested up to: 5.8.2
 Requires PHP: 5.3
-Stable tag: 4.1.3
+Stable tag: 4.1.5
 License: MIT
 License URI: https://github.com/mitchelldmiller/quick-mail-wp-plugin/blob/master/LICENSE
 
@@ -241,6 +241,10 @@ If you are using an email delivery service, you can ignore this message.
 7. User list with roles.
 
 == Changelog ==
+= 4.1.5 =
+* Replace commas with spaces on banned domains.
+* Tested with WordPress 5.8.2.
+
 = 4.1.4 =
 * Added Update URI header for WordPress 5.8.
 * Tested with WordPress 5.8.1.
@@ -277,6 +281,9 @@ If you are using an email delivery service, you can ignore this message.
 Please refer to changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 4.1.5 =
+* Upgrade recommended.
 
 = 4.1.4 =
 * Upgrade recommended.

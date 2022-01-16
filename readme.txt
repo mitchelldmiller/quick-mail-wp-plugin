@@ -3,9 +3,9 @@ Contributors: brainiac
 Tags: mail, email, comments, wp-cli, mailgun, sparkpost, attachment, sendgrid, accessibility, idn, multisite
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Requires at least: 4.6
-Tested up to: 5.8.2
+Tested up to: 5.8.3
 Requires PHP: 5.3
-Stable tag: 4.1.5
+Stable tag: 4.1.6
 License: MIT
 License URI: https://github.com/mitchelldmiller/quick-mail-wp-plugin/blob/master/LICENSE
 
@@ -108,8 +108,6 @@ Multiple files from up to six directories (folders) can be attached to a message
 * You should be able to find sent emails in your email account's Sent Mail folder.
 
 * Delivery services like [Mailgun](https://www.mailgun.com/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://sendgrid.com/) also provide this information.
-
-* [WP Mail Logging](https://wordpress.org/plugins/wp-mail-logging/) plugin saves a list of sent emails, with content of message. Plugin shows number of attachments, but does not save attachments or file names.
 
 = Selecting Recipients =
 
@@ -241,6 +239,11 @@ If you are using an email delivery service, you can ignore this message.
 7. User list with roles.
 
 == Changelog ==
+
+= 4.1.6 =
+* Fixed "empty needle" after banned addresses are cleared.
+* Tested with WordPress 5.8.3.
+
 = 4.1.5 =
 * Replace commas with spaces on banned domains.
 * Tested with WordPress 5.8.2.
@@ -281,6 +284,9 @@ If you are using an email delivery service, you can ignore this message.
 Please refer to changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
+
+= 4.1.6 =
+* Upgrade recommended.
 
 = 4.1.5 =
 * Upgrade recommended.

@@ -3,8 +3,8 @@ Quick Mail WordPress Plugin
 Send text or html email with attachments and shortcodes from WP Dashboard or command line. Send private replies to comments. Select recipient from users or commenters. Includes WP-CLI command.
 
 * Requires: [WordPress 4.6](https://wordpress.org/support/wordpress-version/version-4-6/)
-* Tested with: [WordPress 5.8.2](https://wordpress.org/support/wordpress-version/version-5-8-2/)
-* Stable version: [4.1.5](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases/latest)
+* Tested with: [WordPress 5.8.3](https://wordpress.org/support/wordpress-version/version-5-8-3/)
+* Stable version: [4.1.6](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases/latest)
 
 Description
 -----------
@@ -101,8 +101,6 @@ __Where Do I Find Sent Emails?__
 * You should be able to find sent emails in your email account's Sent Mail folder.
 
 * Delivery services like [Mailgun](https://www.mailgun.com/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://sendgrid.com/) also provide this information. 
-
-* [WP Mail Logging](https://wordpress.org/plugins/wp-mail-logging/) plugin saves a list of sent emails, with content of message. Plugin shows number of attachments, but does not save attachments or file names.
 
 __Selecting Recipients__
 

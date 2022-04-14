@@ -3,8 +3,8 @@ Quick Mail WordPress Plugin
 Send text or html email with attachments and shortcodes from WP Dashboard or command line. Send private replies to comments. Select recipient from users or commenters. Includes WP-CLI command.
 
 * Requires: [WordPress 4.6](https://wordpress.org/support/wordpress-version/version-4-6/)
-* Tested with: [WordPress 5.6](https://wordpress.org/support/wordpress-version/version-5-6/)
-* Stable version: [4.0.5](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases/latest)
+* Tested with: [WordPress 5.9.3](https://wordpress.org/support/wordpress-version/version-5-9-3/)
+* Stable version: [4.1.6](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases/latest)
 
 Description
 -----------
@@ -19,7 +19,7 @@ Send a Web page, file, or message from the command line with quick-mail command 
 
 Edit messages with [TinyMCE](https://codex.wordpress.org/TinyMCE) to add images, rich text and [shortcodes](https://codex.wordpress.org/Shortcode).
 
-Uses sender's name, sets reply to sender's address. Recognizes settings from [Mailgun](https://wordpress.org/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugins.
+Uses sender's name, sets reply to sender's address. Recognizes settings from [Mailgun](https://wordpress.org/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://github.com/frc/sendgrid-email-delivery-simplified/releases/latest) plugins.
 
 Multiple files from up to six directories (folders) can be attached to a message.
 
@@ -67,7 +67,7 @@ __Features__
 ### Configuration ###
 1. Visit the settings page at `Settings -> Quick Mail` to configure the plugin for your site.
 2. Optional: Install [WP-CLI](https://wp-cli.org/#installing) to send mail from the command line.
-3. Optional: Install [Mailgun](https://wordpress.org/extend/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](https://wordpress.org/plugins/sendgrid-email-delivery-simplified/) plugin to send reliable email.
+3. Optional: Install [Mailgun](https://wordpress.org/extend/plugins/mailgun/), [SparkPost](https://wordpress.org/plugins/sparkpost/) or [Sendgrid](https://github.com/frc/sendgrid-email-delivery-simplified/releases/latest) plugin to send reliable email.
 4. Optional: Install experimental [Replace Quick Mail Sender](https://github.com/mitchelldmiller/replace-quick-mail-sender/releases/latest) plugin, to change administrator's credentials.
 
 #### Updates ####
@@ -101,8 +101,6 @@ __Where Do I Find Sent Emails?__
 * You should be able to find sent emails in your email account's Sent Mail folder.
 
 * Delivery services like [Mailgun](https://www.mailgun.com/), [SparkPost](https://wordpress.org/plugins/sparkpost/) and [Sendgrid](https://sendgrid.com/) also provide this information. 
-
-* [WP Mail Logging](http://wordpress.org/extend/plugins/wp-mail-logging/) plugin saves a list of sent emails, with content of message. Plugin shows number of attachments, but does not save attachments or file names.
 
 __Selecting Recipients__
 

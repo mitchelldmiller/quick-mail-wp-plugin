@@ -3,7 +3,7 @@ Contributors: brainiac
 Tags: mail, email, comments, wp-cli, mailgun, sparkpost, attachment, sendgrid, accessibility, idn, multisite
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Requires at least: 4.6
-Tested up to: 5.9.3
+Tested up to: 6.1
 Requires PHP: 5.3
 Stable tag: 4.1.6
 License: MIT
@@ -57,7 +57,6 @@ Multiple files from up to six directories (folders) can be attached to a message
 * Select recipient from users or commenters.
 
 * Banned domains: administrators can prevent users from sending mail to arbitrary domains.
-
 
 = Learn More =
 

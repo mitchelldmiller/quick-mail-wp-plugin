@@ -3,9 +3,9 @@ Contributors: brainiac
 Tags: mail, email, comments, wp-cli, mailgun, sparkpost, attachment, sendgrid, accessibility, idn, multisite
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY
 Requires at least: 4.6
-Tested up to: 6.1
+Tested up to: 6.2
 Requires PHP: 5.3
-Stable tag: 4.1.6
+Stable tag: 4.1.9
 License: MIT
 License URI: https://github.com/mitchelldmiller/quick-mail-wp-plugin/blob/master/LICENSE
 
@@ -239,6 +239,10 @@ If you are using an email delivery service, you can ignore this message.
 
 == Changelog ==
 
+= 4.1.9 =
+* Updated versions, readme.
+* Tested with WordPress 6.2
+
 = 4.1.6 =
 * Fixed "empty needle" after banned addresses are cleared.
 * Tested with WordPress 5.8.3.
@@ -284,6 +288,9 @@ Please refer to changelog.txt for changes of previous versions.
 
 == Upgrade Notice ==
 
+= 4.1.9 =
+* Upgrade optional.
+
 = 4.1.6 =
 * Upgrade recommended.
 
@@ -313,7 +320,7 @@ Please refer to changelog.txt for changes of previous versions.
 
 == License ==
 
-Quick Mail is free for personal or commercial use. Please support future development with a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY).
+Quick Mail is free for personal or commercial use. Please support future development with a [donation](https://mitchelldmiller.com/donate).
 
 == Credits ==
 

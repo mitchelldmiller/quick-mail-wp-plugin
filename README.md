@@ -3,8 +3,8 @@ Quick Mail WordPress Plugin
 Send text or html email with attachments and shortcodes from WP Dashboard or command line. Send private replies to comments. Select recipient from users or commenters. Includes WP-CLI command.
 
 * Requires: [WordPress 4.6](https://wordpress.org/support/wordpress-version/version-4-6/)
-* Tested with: [WordPress 6.1](https://wordpress.org/support/wordpress-version/version-6-1/)
-* Stable version: [4.1.6](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases/latest)
+* Tested with: [WordPress 6.2](https://wordpress.org/documentation/wordpress-version/version-6-2/)
+* Stable version: [4.1.9](https://github.com/mitchelldmiller/quick-mail-wp-plugin/releases/latest)
 
 Description
 -----------
@@ -244,7 +244,7 @@ __Translators and Programmers__
 
 __License__
 
-Quick Mail is licensed under the MIT License. Encourage future development with a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4AAGBFXRAPFJY).
+Quick Mail is licensed under the MIT License. Encourage future development with a [donation](https://mitchelldmiller.com/donate).
 
 __Credits__
 

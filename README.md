@@ -1,6 +1,6 @@
 Quick Mail WordPress Plugin
 ====================
-Send text or html email with attachments and shortcodes from WP Dashboard or command line. Send private replies to comments. Select recipient from users or commenters. Includes WP-CLI command.
+Send text or html email with attachments and shortcodes from WP Dashboard or command line. Send private replies to comments. Select recipient from users or commenters. Compatible with multisite. Includes WP-CLI command.
 
 * Requires: [WordPress 4.6](https://wordpress.org/support/wordpress-version/version-4-6/)
 * Tested up to: [WordPress 6.3](https://wordpress.org/documentation/wordpress-version/version-6-3/)
@@ -9,7 +9,7 @@ Send text or html email with attachments and shortcodes from WP Dashboard or com
 Description
 -----------
 
->Quick Mail is the easiest way to send email with attachments to WordPress users on your site, or send private replies to comments. Compatible with multisite.
+>Quick Mail is the easiest way to send email with attachments to WordPress users on your site, or send private replies to comments.
 
 Send a quick email from WordPress Dashboard to WordPress users, or anyone. Adds Quick Mail to Tools menu and comment replies.
 
@@ -87,8 +87,8 @@ __Who can send mail?__
 
 * Users must be able to [publish a post](http://codex.wordpress.org/Roles_and_Capabilities#publish_posts) to send an email.
 
-* WP-CLI: By default, only administrators can send mail with the `quick-mail` WP-CLI command. Use the
-the [quick_mail_cli_admin_only](https://wheredidmybraingo.com/whats-new-in-quick-mail-4-0-1) filter to change this.
+* WP-CLI: By default, only administrators can send mail with the `quick-mail` WP-CLI command. Use 
+the [quick_mail_cli_admin_only](https://wheredidmybraingo.com/whats-new-in-quick-mail-4-0-1) filter to let other users send mail.
 
 __Who can send rich text messages?__
 
@@ -141,7 +141,7 @@ __Limitations__
 
 * Additional recipients can be either `CC` or `BCC` but not both.
 
-* 99 recipients for [Gmail](https://support.google.com/a/answer/166852), others.
+* Up to 99 recipients for [Gmail](https://support.google.com/a/answer/166852), others.
 
 * Multiple files can be uploaded from up to 6 folders (directories).
 

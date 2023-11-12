@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Quick Mail
- * Description: Send text or html email with attachments from user's credentials. Select recipient from users or commenters. Includes WP-CLI command.
+ * Description: Quick Mail is the easiest way to send email with attachments and shortcodes from your WordPress dashboard or command line. Send private replies to comments. Select recipients from users or commenters. Compatible with multisite. Includes versatile WP-CLI command.
  * Version: 4.1.9
  * Author: Mitchell D. Miller
  * Author URI: https://mitchelldmiller.com/

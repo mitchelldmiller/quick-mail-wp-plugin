@@ -3,13 +3,13 @@ Contributors: brainiac
 Tags: mail, email, comments, wp-cli, mailgun, sparkpost, attachment, sendgrid, accessibility, idn, multisite
 Donate link: https://mitchelldmiller.com/donate
 Requires at least: 4.6
-Tested up to: 6.5
+Tested up to: 6.6
 Requires PHP: 5.3
 Stable tag: 4.1.9
 License: MIT
 License URI: https://github.com/mitchelldmiller/quick-mail-wp-plugin/blob/master/LICENSE
 
-Send text or HTML emails with attachments and shortcodes from your WordPress dashboard or command line. Send private replies to comments. Select recipients from users or commenters. Compatible with multisite. Includes WP-CLI command.
+Quick Mail makes it easy to send email with attachments and shortcodes from your WP dashboard or command line. Reply privately to comments. Choose recipients from users or commenters. Multisite compatible. Includes powerful WP-CLI command.
 
 == Description ==
 >Quick Mail is the easiest way to send emails with attachments to WordPress users on your site, or to send private replies to comments.

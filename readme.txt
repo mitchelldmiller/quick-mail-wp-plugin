@@ -3,7 +3,7 @@ Contributors: brainiac
 Tags: mail, email, comments, wp-cli, mailgun, sparkpost, attachment, sendgrid, accessibility, idn, multisite
 Donate link: https://mitchelldmiller.com/donate
 Requires at least: 4.6
-Tested up to: 6.6
+Tested up to: 6.7
 Requires PHP: 5.3
 Stable tag: 4.1.9
 License: MIT
@@ -253,7 +253,7 @@ If you are using an email delivery service, you can ignore this message.
 
 = 4.1.9 =
 * Updated versions, readme.
-* Tested with WordPress 6.2
+* Tested with WordPress 6.7
 
 = 4.1.6 =
 * Fixed "empty needle" after banned addresses are cleared.
